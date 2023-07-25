@@ -1,0 +1,24 @@
+-otest
+-w3
+-es2
+-gui
+-mt
+gtwvg.hbc
+#-gtwvt do not works same way
+
+hbct.hbc
+hbwin.hbc
+
+../../hwgui.hbc
+
+menu.prg
+dlgauto.prg
+dlgautobtn.prg
+dlgautodata.prg
+dlgautodbf.prg
+dlgautoedit.prg
+dlgautomain.prg
+dlgautomenu.prg
+dlgautoprint.prg
+test.rc
+\fontes\integra\libjpa\prg\errorsys.prg

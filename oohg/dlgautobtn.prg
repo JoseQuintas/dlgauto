@@ -1,0 +1,167 @@
+#include "hbclass.ch"
+#include "dlgauto.ch"
+#include "oohg.ch"
+
+CREATE CLASS DlgAutoBtn
+
+   VAR cOptions     INIT "IED"
+   VAR aOptionList  INIT {}
+   VAR aControlList INIT {}
+   VAR nButtonSize  INIT 50
+   VAR nButtonSpace INIT 3
+   VAR nTextSize    INIT 20
+   METHOD ButtonCreate()
+   METHOD ButtonSaveOn()
+   METHOD ButtonSaveOff()
+
+   ENDCLASS
+
+METHOD ButtonCreate() CLASS DlgAutoBtn
+
+   LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
+
+   IF "I" $ ::cOptions
+      AAdd( aList, { "Insert",   { || ::Insert() } } )
+   ENDIF
+   IF "E" $ ::cOptions
+      AAdd( aList, { "Edit", { || ::Edit() } } )
+   ENDIF
+   IF "D" $ ::cOptions
+      AAdd( aList, { "Delete",   { || ::Delete() } } )
+   ENDIF
+   AAdd( aList, { "View",     { || ::View() } } )
+   AAdd( aList, { "First",    { || ::First() } } )
+   AAdd( aList, { "Previous", { || ::Previous() } } )
+   AAdd( aList, { "Next",     { || ::Next() } } )
+   AAdd( aList, { "Last",     { || ::Last() } } )
+   IF "E" $ ::cOptions
+      AAdd( aList, { "Save",     { || ::Save() } } )
+      AAdd( aList, { "Cancel",   { || ::Cancel() } } )
+   ENDIF
+   IF "P" $ ::cOptions
+      AAdd( aList, { "Print",    { || ::Print() } } )
+   ENDIF
+   FOR EACH aItem IN ::aOptionList
+      AAdd( aList, { aItem[1], aItem[2] } )
+   NEXT
+   AAdd( aList, { "Exit",     { || ::Exit() } } )
+
+   nCol := 10
+   nRow := 10
+   FOR EACH aItem IN aList
+      AAdd( ::aControlList, CFG_EDITEMPTY )
+      Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
+      Atail( ::aControlList )[ CFG_NAME ]    := aItem[1]
+      Atail( ::aControlList )[ CFG_ACTION ]  := aItem[ 2 ]
+   NEXT
+   FOR EACH aItem IN ::aControlList
+      aItem[ CFG_OBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
+      DEFINE BUTTON &( aItem[ CFG_OBJ ] )
+         PICTURE "icobook.ico"
+         COL nCol
+         ROW nRow
+         WIDTH ::nButtonSize
+         HEIGHT ::nButtonSize
+         CAPTION aItem[ CFG_NAME ]
+         ACTION Eval( aItem[ CFG_ACTION ] )
+         FONTNAME "verdana"
+         FONTSIZE 10
+         FONTBOLD .T.
+         FONTCOLOR GRAY
+         VERTICAL .T.
+         BACKCOLOR WHITE
+         //FLAT .T.
+         //NOXPSTYLE .T.
+      END BUTTON
+
+      //@ nCol, nRow BUTTON aItem[ CFG_OBJ ] ;
+         //CAPTION Nil ;
+         //OF ::oDlg SIZE ::nButtonSize, ::nButtonSize ;
+         //STYLE BS_TOP ;
+         //ON CLICK aItem[ CFG_ACTION ] ;
+         //ON INIT { || ;
+         //   BtnSetImageText( aItem[ CFG_OBJ ]:Handle, aItem[ CFG_NAME ], Self ) } ;
+         //   TOOLTIP aItem[ CFG_NAME ]
+      IF nCol > ::nDlgWidth - ( ::nButtonSize - ::nButtonSpace ) * 2
+         nRowLine += 1
+         nRow += ::nButtonSize + ::nButtonSpace
+         nCol := ::nDlgWidth - ::nButtonSize - ::nButtonSpace
+      ENDIF
+      nCol += iif( nRowLine == 1, 1, -1 ) * ( ::nButtonSize + ::nButtonSpace )
+   NEXT
+   (nRowLine)
+   (nCol)
+   (aList)
+   (nRow)
+
+   RETURN Nil
+
+METHOD ButtonSaveOn() CLASS DlgAutoBtn
+
+   LOCAL aItem
+
+   FOR EACH aItem IN ::aControlList
+      IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
+         IF aItem[ CFG_NAME ] $ "Save,Cancel"
+            aItem[ CFG_OBJ ]:Enable()
+         ELSE
+            aItem[ CFG_OBJ ]:Disable()
+         ENDIF
+      ENDIF
+   NEXT
+
+   RETURN Nil
+
+METHOD ButtonSaveOff() CLASS DlgAutoBtn
+
+   LOCAL aItem
+
+   FOR EACH aItem IN ::aControlList
+      IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
+         IF aItem[ CFG_NAME ] $ "Save,Cancel"
+            aItem[ CFG_OBJ ]:Disable()
+         ELSE
+            aItem[ CFG_OBJ ]:Enable()
+         ENDIF
+      ENDIF
+   NEXT
+
+   RETURN Nil
+
+/* STATIC */ FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
+
+   //LOCAL oIcon, nPos, cResName, hIcon
+   LOCAL aList := { ;
+      { "Insert",   "AppIcon" }, ;
+      { "Edit",     "AppIcon" }, ;
+      { "View",     "AppIcon" }, ;
+      { "Delete",   "AppIcon" }, ;
+      { "First",    "AppIcon" }, ;
+      { "Previous", "AppIcon" }, ;
+      { "Next",     "AppIcon" }, ;
+      { "Last",     "AppIcon" }, ;
+      { "Save",     "AppIcon" }, ;
+      { "Cancel",   "AppIcon" }, ;
+      { "Mail",     "AppIcon" }, ;
+      { "Print",    "AppIcon" }, ;
+      { "CtlList",  "AppIcon" }, ;
+      { "Exit",     "AppIcon" } }
+
+/*
+   IF ( nPos := hb_AScan( aList, { | e | e[1] == cCaption } ) ) != 0
+      cResName := aList[ nPos, 2 ]
+      oIcon := HICON():AddResource( cResName, oAuto:nButtonSize - oAuto:nTextSize, oAuto:nButtonSize - oAuto:nTextSize )
+      IF ValType( oIcon ) == "O"
+         hIcon := oIcon:Handle
+      ENDIF
+   ENDIF
+   hwg_SendMessage( hHandle, BM_SETIMAGE, IMAGE_ICON, hIcon )
+   hwg_SendMessage( hHandle, WM_SETTEXT, 0, cCaption )
+*/
+
+   (hHandle)
+   (cCaption)
+   (oAuto)
+   (aList)
+
+   RETURN Nil
