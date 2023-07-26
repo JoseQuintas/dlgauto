@@ -28,7 +28,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
    hwg_SetColorInFocus(.T., , hwg_ColorRGB2N(255,255,0) )
 #endif
 #ifdef HBMK_HAS_HMGE
-   LOCAL cTextA, cTextB, cTextC
+   LOCAL cMacro
 #endif
 
    FOR EACH aItem IN ::aEditList
@@ -109,18 +109,14 @@ METHOD EditCreate() CLASS DlgAutoEdit
          @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, 20 COLOR STYLE_FORE TRANSPARENT
 #endif
 #ifdef HBMK_HAS_HMGE
-         cTextA := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
-         DEFINE LABEL &cTextA
+         cMacro := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
+         DEFINE LABEL &cMacro
             PARENT ::oDlg
             COL nCol
             ROW nRow
+            WIDTH nLen * 12
+            HEIGHT 20
             VALUE aItem[ CFG_CAPTION ]
-            AUTOSIZE .T.
-            FONTNAME "verdana"
-            FONTSIZE 10
-            FONTBOLD .T.
-            TRANSPARENT .T.
-            // FONTCOLOR _CINZA_001
          END LABEL
 #endif
 
@@ -133,10 +129,10 @@ METHOD EditCreate() CLASS DlgAutoEdit
             MAXLENGTH aItem[ CFG_LEN ] ;
             PICTURE PictureFromValue( aItem )
 #endif
-#if HBMK_HAS_HMGE
-         cTextB := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-         aItem[ CFG_CTLNAME ] := cTextB
-         @ nRow2, nCol2 TEXTBOX &cTextB ;
+#ifdef HBMK_HAS_HMGE
+         cMacro := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
+         aItem[ CFG_CTLNAME ] := cMacro
+         @ nRow2, nCol2 TEXTBOX &cMacro ;
             OF ::oDlg ;
             HEIGHT 20 ;
             WIDTH aItem[ CFG_LEN ] * 12 ;
@@ -145,8 +141,6 @@ METHOD EditCreate() CLASS DlgAutoEdit
             FONT "verdana" SIZE 12 ;
             UPPERCASE
             ON CHANGE Nil
-            //BACKCOLOR _FUNDO_GET ;
-            //FONTCOLOR _LETRA_GET_1 ;
 #endif
 
             nCol += ( nLen * 12 ) + 30
@@ -165,19 +159,16 @@ METHOD EditCreate() CLASS DlgAutoEdit
                STYLE WS_BORDER TRANSPARENT
 #endif
 #ifdef HBMK_HAS_HMGE
-            cTextC := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
-            aItem[ CFG_VCTLNAME ] := cTextC
-            DEFINE LABEL &cTextC
+            cMacro := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
+            aItem[ CFG_VCTLNAME ] := cMacro
+            DEFINE LABEL &cMacro
                PARENT ::oDlg
-               COL 100 /* nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ) */
-               ROW 500 /* nRow2 */
-               VALUE "testo exemplo" /* aItem[ CFG_VVALUE ] */
-               AUTOSIZE .T.
-               FONTNAME "verdana"
-               FONTSIZE 10
-               FONTBOLD .T.
+               COL nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 )
+               ROW nRow2
+               VALUE aItem[ CFG_VVALUE ]
+               WIDTH Len( aItem[ CFG_VVALUE ] ) * 12
+               HEIGHT 20
                BORDER .T.
-               TRANSPARENT .T.
 #endif
          ENDIF
       ENDIF

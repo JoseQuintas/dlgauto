@@ -54,6 +54,7 @@ METHOD Print() CLASS DlgAutoPrint
    SET PRINTER TO
 
    DlgAutoPreview( "rel.lst" )
+   fErase( "rel.lst" )
 
    RETURN Nil
 

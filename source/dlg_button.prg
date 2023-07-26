@@ -67,15 +67,17 @@ METHOD ButtonCreate() CLASS DlgAutoBtn
 #ifdef HBMK_HAS_HMGE
       aItem[ CFG_OBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       DEFINE BUTTONEX &( aItem[ CFG_OBJ ] )
-         /* PICTURE "icobook.ico" */
-         COL nCol
-         ROW nRow
          WIDTH ::nButtonSize
          HEIGHT ::nButtonSize
+         PICTURE "icobook.ico"
+         IMAGEWIDTH ::nButtonSize - 20
+         IMAGEHEIGHT ::nButtonSize - 20
+         COL nCol
+         ROW nRow
          CAPTION aItem[ CFG_NAME ]
          ACTION Eval( aItem[ CFG_ACTION ] )
          FONTNAME "verdana"
-         FONTSIZE 10
+         FONTSIZE 9
          FONTBOLD .T.
          FONTCOLOR GRAY
          VERTICAL .T.
