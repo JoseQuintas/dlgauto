@@ -27,6 +27,9 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
    hwg_SetColorInFocus(.T., , hwg_ColorRGB2N(255,255,0) )
 #endif
+#ifdef HBMK_HAS_HMGE
+   LOCAL cTextA, cTextB, cTextC
+#endif
 
    FOR EACH aItem IN ::aEditList
       AAdd( ::aControlList, CFG_EDITEMPTY )
@@ -73,13 +76,16 @@ METHOD EditCreate() CLASS DlgAutoEdit
          IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + ( nLen * 12 ) > ::nDlgWidth - 40 ) .OR. nRow > ::nPageLimit
             IF ::lWithTab .AND. nRow > ::nPageLimit
                IF nPageCount > 0
+
 #ifdef HBMK_HAS_HWGUI
+                  //ghost for getlist
                   AAdd( ::aControlList, CFG_EDITEMPTY )
                   @ nCol, nRow GET Atail( ::aControlList )[ CFG_OBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
                      OF oTab SIZE 0, 0 STYLE WS_DISABLED
                   AAdd( Atail( aList ), Atail( ::aControlList )[ CFG_OBJ ] )
                   END PAGE OF oTab
 #endif
+
                ENDIF
                nPageCount += 1
 #ifdef HBMK_HAS_HWGUI
@@ -98,29 +104,86 @@ METHOD EditCreate() CLASS DlgAutoEdit
             nRow2 := nRow + ::nLineHeight
             nCol2 := nCol
          ENDIF
+
 #ifdef HBMK_HAS_HWGUI
          @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, 20 COLOR STYLE_FORE TRANSPARENT
+#endif
+#ifdef HBMK_HAS_HMGE
+         cTextA := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
+         DEFINE LABEL &cTextA
+            PARENT ::oDlg
+            COL nCol
+            ROW nRow
+            VALUE aItem[ CFG_CAPTION ]
+            AUTOSIZE .T.
+            FONTNAME "verdana"
+            FONTSIZE 10
+            FONTBOLD .T.
+            TRANSPARENT .T.
+            // FONTCOLOR _CINZA_001
+         END LABEL
+#endif
+
+
+#ifdef HBMK_HAS_HWGUI
          @ nCol2, nRow2 GET aItem[ CFG_OBJ ] ;
             VAR aItem[ CFG_VALUE ] OF iif( ::lWithTab, oTab, ::oDlg ) ;
             SIZE aItem[ CFG_LEN ] * 12, 20 ;
             STYLE WS_DISABLED + iif( aItem[ CFG_VALTYPE ] == "N", ES_RIGHT, ES_LEFT ) ;
             MAXLENGTH aItem[ CFG_LEN ] ;
             PICTURE PictureFromValue( aItem )
+#endif
+#if HBMK_HAS_HMGE
+         cTextB := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
+         aItem[ CFG_CTLNAME ] := cTextB
+         @ nRow2, nCol2 TEXTBOX &cTextB ;
+            OF ::oDlg ;
+            HEIGHT 20 ;
+            WIDTH aItem[ CFG_LEN ] * 12 ;
+            VALUE "" ; // aItem[ CFG_VALUE ] ;
+            MAXLENGTH aItem[ CFG_LEN ] ;
+            FONT "verdana" SIZE 12 ;
+            UPPERCASE
+            ON CHANGE Nil
+            //BACKCOLOR _FUNDO_GET ;
+            //FONTCOLOR _LETRA_GET_1 ;
+#endif
+
             nCol += ( nLen * 12 ) + 30
+
+#ifdef HBMK_HAS_HWGUI
          IF ::lWithTab
             AAdd( Atail( aList ), aItem[ CFG_OBJ ] )
          ENDIF
 #endif
+
+
          IF ! Empty( aItem[ CFG_VTABLE ] )
 #ifdef HBMK_HAS_HWGUI
             @ nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION aItem[ CFG_VVALUE ] OF ;
                iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR STYLE_FORE ;
                STYLE WS_BORDER TRANSPARENT
 #endif
+#ifdef HBMK_HAS_HMGE
+            cTextC := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
+            aItem[ CFG_VCTLNAME ] := cTextC
+            DEFINE LABEL &cTextC
+               PARENT ::oDlg
+               COL 100 /* nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ) */
+               ROW 500 /* nRow2 */
+               VALUE "testo exemplo" /* aItem[ CFG_VVALUE ] */
+               AUTOSIZE .T.
+               FONTNAME "verdana"
+               FONTSIZE 10
+               FONTBOLD .T.
+               BORDER .T.
+               TRANSPARENT .T.
+#endif
          ENDIF
       ENDIF
    NEXT
 #ifdef HBMK_HAS_HWGUI
+   // ghost for Getlist
    AAdd( ::aControlList, CFG_EDITEMPTY )
    @ nCol, nRow GET Atail( ::aControlList )[ CFG_OBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
       OF iif( ::lWithTab, oTab, ::oDlg ) SIZE 0, 0 STYLE WS_DISABLED
@@ -170,26 +233,39 @@ METHOD EditOff() CLASS DlgAutoEdit
 
 METHOD EditUpdate() CLASS DlgAutoEdit
 
-#ifdef HBMK_HAS_HWGUI
    LOCAL aItem, nSelect
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ! Empty( aItem[ CFG_NAME ] )
+
+#ifdef HBMK_HAS_HWGUI
             aItem[ CFG_OBJ ]:Value := FieldGet( FieldNum( aItem[ CFG_NAME ] ) )
             aItem[ CFG_OBJ ]:Refresh()
+#endif
+#ifdef HBMK_HAS_HMGE
+//            SetProperty( "::Dlg", aItem[ CFG_CTLNAME ], "VALUE", FieldGet( FieldNum( aItem[ CFG_NAME ] ) ) )
+#endif
+
          ENDIF
          IF ! Empty( aItem[ CFG_VTABLE ] )
             nSelect := Select()
             SELECT ( Select( aItem[ CFG_VTABLE ] ) )
+
+#ifdef HBMK_HAS_HWGUI
             SEEK aItem[ CFG_OBJ ]:Value
             aItem[ CFG_VOBJ ]:SetText( &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) ) )
             aItem[ CFG_VOBJ ]:Refresh()
+#endif
+#ifdef HBMK_HAS_HMGE
+            //SEEK GetProperty( "::Dlg", aItem[ CFG_CTLNAME ], "VALUE" )
+            //SetProperty( "::Dlg", aItem[ CFG_VCTLNAME ], "VALUE", &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) ) )
+#endif
+
             SELECT ( nSelect )
          ENDIF
       ENDIF
    NEXT
-#endif
 
    RETURN Nil
 
