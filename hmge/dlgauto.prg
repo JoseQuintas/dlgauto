@@ -3,7 +3,6 @@ REQUEST DBFCDX
 #include "directry.ch"
 #include "dbstruct.ch"
 #include "dlgauto.ch"
-#include "hmg.ch"
 
 PROCEDURE Main()
 

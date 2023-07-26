@@ -1,7 +1,6 @@
 #include "dbstruct.ch"
 #include "directry.ch"
 #include "hbclass.ch"
-#include "hmg.ch"
 
 CREATE CLASS DlgAutoPrint
 

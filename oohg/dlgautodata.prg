@@ -76,20 +76,22 @@ METHOD Execute() CLASS DlgAutoData
    NEXT
    SELECT ( Select( ::cFileDbf ) )
 
-   DEFINE WINDOW ::oDlg ;
-      AT 1000, 500 ;
-      WIDTH ::nDlgWidth ;
-      HEIGHT ::nDlgHeight ;
-      TITLE ::cFileDBF ;
-      MODAL ;
-      ON INIT ::EditUpdate()
+   WITH OBJECT ::oDlg := TForm():Define()
+      :Col := 1000
+      :Row := 500
+      :Width := ::nDlgWidth
+      :Height := ::nDlgHeight
+      :Title := ::cFileDBF
+      //MODAL ;
+      //ON INIT ::EditUpdate()
 
       ::ButtonCreate()
       ::EditCreate()
 
-   END WINDOW
-   ::oDlg.CENTER
-   ::oDlg.ACTIVATE
+      :EndWindow()
+      :Center()
+      :Activate()
+   ENDWITH
    CLOSE DATABASES
 
    RETURN Nil

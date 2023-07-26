@@ -30,3 +30,9 @@
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
 #endif
+#ifdef HBMK_HAS_OOHG
+   #include "oohg.ch"
+#endif
+#ifdef HBMK_HAS_HWGUI
+   #include "hwgui.ch"
+#endif

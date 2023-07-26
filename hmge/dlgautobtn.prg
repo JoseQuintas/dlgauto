@@ -1,6 +1,5 @@
 #include "hbclass.ch"
 #include "dlgauto.ch"
-#include "hmg.ch"
 
 CREATE CLASS DlgAutoBtn
 

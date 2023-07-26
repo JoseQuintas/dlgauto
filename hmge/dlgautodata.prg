@@ -1,7 +1,6 @@
 #include "hbclass.ch"
 #include "dbstruct.ch"
 #include "dlgauto.ch"
-#include "hmg.ch"
 
 CREATE CLASS DlgAutoData INHERIT DlgAutoBtn, DlgAutoEdit, DlgAutoPrint
 
