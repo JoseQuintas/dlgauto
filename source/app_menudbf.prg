@@ -48,6 +48,7 @@ FUNCTION DlgAutoMenu( aAllSetup )
       AT 1000, 500 ;
       WIDTH 512 ;
       HEIGHT 384 ;
+      TITLE "Example" ;
       WINDOWTYPE MAIN
 
       DEFINE MAIN MENU OF Form_Main

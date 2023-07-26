@@ -18,7 +18,12 @@ CREATE CLASS DlgAutoData INHERIT DlgAutoBtn, DlgAutoEdit, DlgAutoPrint
    METHOD Last()        INLINE &( ::cFileDbf )->( dbgobottom() ), ::EditUpdate()
    METHOD Next()        INLINE &( ::cFileDbf )->( dbSkip() ),     ::EditUpdate()
    METHOD Previous()    INLINE &( ::cFileDbf )->( dbSkip( -1 ) ), ::EditUpdate()
+#ifdef HBMK_HAS_HWGUI
    METHOD Exit()        INLINE ::oDlg:Close()
+#endif
+#ifdef HBMK_HAS_HMGE
+   METHOD Exit()        INLINE DoMethod( "::oDlg", "Release" )
+#endif
    METHOD Save()
    METHOD Cancel()      INLINE ::EditOff(), ::EditUpdate()
    VAR oDlg
@@ -84,4 +89,22 @@ METHOD Execute() CLASS DlgAutoData
    ::EditCreate()
    ACTIVATE DIALOG ::oDlg CENTER
 #endif
+#ifdef HBMK_HAS_HMGE
+   DEFINE WINDOW ::oDlg ;
+      AT 1000, 500 ;
+      WIDTH ::nDlgWidth ;
+      HEIGHT ::nDlgHeight ;
+      TITLE ::cFileDBF ;
+      MODAL ;
+      ON INIT ::EditUpdate()
+
+      ::ButtonCreate()
+      ::EditCreate()
+
+   END WINDOW
+   ::oDlg.CENTER
+   ::oDlg.ACTIVATE
+#endif
+   CLOSE DATABASES
+
    RETURN Nil

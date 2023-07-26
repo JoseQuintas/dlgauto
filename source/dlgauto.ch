@@ -24,8 +24,11 @@
 #define TYPE_TABPAGE  4
 #define TYPE_PANEL    5
 
-#define STYLE_BACK    hwg_ColorRGB2N( 13, 16, 51 )
-#define STYLE_FORE    hwg_ColorRGB2N( 255, 255, 255 )
+#ifndef WIN_RGB
+   #define WIN_RGB( r, g, b ) ( r * 256 ) + ( b * 16 ) + c
+#endif
+#define STYLE_BACK    WIN_RGB( 13, 16, 51 )
+#define STYLE_FORE    WIN_RGB( 255, 255, 255 )
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"

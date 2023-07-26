@@ -51,7 +51,7 @@ METHOD ButtonCreate() CLASS DlgAutoBtn
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
       Atail( ::aControlList )[ CFG_NAME ]    := aItem[1]
-      Atail( ::aCOntrolList )[ CFG_ACTION ]  := aItem[ 2 ]
+      Atail( ::aControlList )[ CFG_ACTION ]  := aItem[ 2 ]
    NEXT
    FOR EACH aItem IN ::aControlList
 #ifdef HBMK_HAS_HWGUI
@@ -63,6 +63,26 @@ METHOD ButtonCreate() CLASS DlgAutoBtn
          ON INIT { || ;
             BtnSetImageText( aItem[ CFG_OBJ ]:Handle, aItem[ CFG_NAME ], Self ) } ;
             TOOLTIP aItem[ CFG_NAME ]
+#endif
+#ifdef HBMK_HAS_HMGE
+      aItem[ CFG_OBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
+      DEFINE BUTTONEX &( aItem[ CFG_OBJ ] )
+         /* PICTURE "icobook.ico" */
+         COL nCol
+         ROW nRow
+         WIDTH ::nButtonSize
+         HEIGHT ::nButtonSize
+         CAPTION aItem[ CFG_NAME ]
+         ACTION Eval( aItem[ CFG_ACTION ] )
+         FONTNAME "verdana"
+         FONTSIZE 10
+         FONTBOLD .T.
+         FONTCOLOR GRAY
+         VERTICAL .T.
+         BACKCOLOR WHITE
+         FLAT .T.
+         NOXPSTYLE .T.
+      END BUTTONEX
 #endif
       IF nCol > ::nDlgWidth - ( ::nButtonSize - ::nButtonSpace ) * 2
          nRowLine += 1

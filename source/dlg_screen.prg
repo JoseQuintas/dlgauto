@@ -170,6 +170,7 @@ METHOD EditOff() CLASS DlgAutoEdit
 
 METHOD EditUpdate() CLASS DlgAutoEdit
 
+#ifdef HBMK_HAS_HWGUI
    LOCAL aItem, nSelect
 
    FOR EACH aItem IN ::aControlList
@@ -188,6 +189,7 @@ METHOD EditUpdate() CLASS DlgAutoEdit
          ENDIF
       ENDIF
    NEXT
+#endif
 
    RETURN Nil
 
