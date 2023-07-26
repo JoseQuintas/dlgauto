@@ -130,7 +130,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
             nCol2 := nCol
          ENDIF
          cLabel := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
-         DEFINE LABEL &( cLabel )
+         DEFINE LABEL &cLabel
             PARENT ::oDlg
             COL nCol
             ROW nRow
@@ -169,11 +169,11 @@ METHOD EditCreate() CLASS DlgAutoEdit
          ENDIF
          IF ! Empty( aItem[ CFG_VTABLE ] )
             cLabel := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
-            DEFINE LABEL &( cLabel )
+            DEFINE LABEL &cLabel
                PARENT ::oDlg
-               COL nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 )
-               ROW nRow2
-               VALUE aItem[ CFG_VVALUE ]
+               COL 100 /* nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ) */
+               ROW 500 /* nRow2 */
+               VALUE "testo exemplo" /* aItem[ CFG_VVALUE ] */
                AUTOSIZE .T.
                FONTNAME "verdana"
                FONTSIZE 10

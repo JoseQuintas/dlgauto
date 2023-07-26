@@ -13,8 +13,10 @@
 #define CFG_VSHOW     12
 #define CFG_VOBJ      13
 #define CFG_VVALUE    14
+#define CFG_CTLNAME   15
+#define CFG_VCTLNAME  16
 
-#define CFG_EDITEMPTY { TYPE_EDIT, Nil, "", "C", 1, 0, "", "", "", "", "", "", Nil, "" }
+#define CFG_EDITEMPTY { TYPE_EDIT, Nil, "", "C", 1, 0, "", "", "", "", "", "", Nil, "", "", "" }
 
 #define TYPE_BUTTON   1
 #define TYPE_EDIT     2
@@ -24,3 +26,13 @@
 
 #define STYLE_BACK    hwg_ColorRGB2N( 13, 16, 51 )
 #define STYLE_FORE    hwg_ColorRGB2N( 255, 255, 255 )
+
+#ifdef HBMK_HAS_HWGUI
+   #include "hwgui.ch"
+#endif
+#ifdef HBMK_HAS_HMGE
+   #include "hmg.ch"
+#endif
+#ifdef HBMK_HAS_OOHG
+   #include "oohg.ch"
+#endif

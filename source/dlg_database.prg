@@ -1,5 +1,4 @@
 #include "hbclass.ch"
-#include "hwgui.ch"
 #include "dbstruct.ch"
 #include "dlgauto.ch"
 
@@ -28,6 +27,7 @@ CREATE CLASS DlgAutoData INHERIT DlgAutoBtn, DlgAutoEdit, DlgAutoPrint
 
 METHOD Delete() CLASS DlgAutoData
 
+#ifdef HBMK_HAS_HWGUI
    IF hwg_MsgYesNo( "Delete" )
       IF rLock()
          DELETE
@@ -35,7 +35,7 @@ METHOD Delete() CLASS DlgAutoData
          UNLOCK
       ENDIF
    ENDIF
-
+#endif
    RETURN Nil
 
 METHOD Save() CLASS DlgAutoData
@@ -74,6 +74,7 @@ METHOD Execute() CLASS DlgAutoData
    NEXT
    SELECT ( Select( ::cFileDbf ) )
 
+#ifdef HBMK_HAS_HWGUI
    INIT DIALOG ::oDlg CLIPPER NOEXIT TITLE ::cTitle ;
       AT 0, 0 SIZE ::nDlgWidth, ::nDlgHeight ;
       BACKCOLOR STYLE_BACK ;
@@ -82,5 +83,5 @@ METHOD Execute() CLASS DlgAutoData
    ::ButtonCreate()
    ::EditCreate()
    ACTIVATE DIALOG ::oDlg CENTER
-
+#endif
    RETURN Nil

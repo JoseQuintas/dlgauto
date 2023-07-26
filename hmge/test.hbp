@@ -4,8 +4,7 @@
 -gui
 -mt
 -gtgui
--L\github\oohg
-oohg.hbc
+hmge.hbc
 
 hbct.hbc
 hbwin.hbc

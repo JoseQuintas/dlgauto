@@ -38,6 +38,7 @@ CREATE CLASS ThisDlg INHERIT DlgAutoData
 
 METHOD ShowCtlList() CLASS ThisDlg
 
+#ifdef HBMK_HAS_HWGUI
    LOCAL oControl, cTxt := "", cTxtTmp := ""
 
    FOR EACH oControl IN ::oDlg:aControlList
@@ -49,5 +50,6 @@ METHOD ShowCtlList() CLASS ThisDlg
    NEXT
    cTxt += cTxtTmp
    hwg_MsgInfo( cTxt )
+#endif
 
    RETURN Nil

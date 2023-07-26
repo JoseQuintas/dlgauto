@@ -8,14 +8,13 @@
 hbct.hbc
 hbwin.hbc
 
-../../hwgui.hbc
-
-dlgauto.prg
-dlgautobtn.prg
-dlgautodata.prg
-dlgautodbf.prg
-dlgautoedit.prg
-dlgautomain.prg
-dlgautomenu.prg
-dlgautoprint.prg
+test.prg
+test_dbf.prg
+app_menudbf.prg
+app_print.prg
+app_preview.prg
+dlg_begin.prg
+dlg_button.prg
+dlg_database.prg
+dlg_screen.prg
 test.rc

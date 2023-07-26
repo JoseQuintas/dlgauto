@@ -1,5 +1,4 @@
 #include "hbclass.ch"
-#include "hwgui.ch"
 #include "dlgauto.ch"
 
 CREATE CLASS DlgAutoBtn
@@ -55,6 +54,7 @@ METHOD ButtonCreate() CLASS DlgAutoBtn
       Atail( ::aCOntrolList )[ CFG_ACTION ]  := aItem[ 2 ]
    NEXT
    FOR EACH aItem IN ::aControlList
+#ifdef HBMK_HAS_HWGUI
       @ nCol, nRow BUTTON aItem[ CFG_OBJ ] ;
          CAPTION Nil ;
          OF ::oDlg SIZE ::nButtonSize, ::nButtonSize ;
@@ -63,6 +63,7 @@ METHOD ButtonCreate() CLASS DlgAutoBtn
          ON INIT { || ;
             BtnSetImageText( aItem[ CFG_OBJ ]:Handle, aItem[ CFG_NAME ], Self ) } ;
             TOOLTIP aItem[ CFG_NAME ]
+#endif
       IF nCol > ::nDlgWidth - ( ::nButtonSize - ::nButtonSpace ) * 2
          nRowLine += 1
          nRow += ::nButtonSize + ::nButtonSpace
@@ -105,6 +106,7 @@ METHOD ButtonSaveOff() CLASS DlgAutoBtn
 
    RETURN Nil
 
+#ifdef HBMK_HAS_HWGUI
 STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
 
    LOCAL oIcon, nPos, cResName, hIcon
@@ -135,3 +137,4 @@ STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
    hwg_SendMessage( hHandle, WM_SETTEXT, 0, cCaption )
 
    RETURN Nil
+#endif

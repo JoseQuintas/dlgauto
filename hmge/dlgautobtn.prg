@@ -56,7 +56,7 @@ METHOD ButtonCreate() CLASS DlgAutoBtn
    FOR EACH aItem IN ::aControlList
       aItem[ CFG_OBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       DEFINE BUTTONEX &( aItem[ CFG_OBJ ] )
-         PICTURE "icobook.ico"
+         /* PICTURE "icobook.ico" */
          COL nCol
          ROW nRow
          WIDTH ::nButtonSize
