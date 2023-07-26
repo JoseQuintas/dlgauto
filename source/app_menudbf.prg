@@ -24,9 +24,7 @@ FUNCTION DlgAutoMenu( aAllSetup )
    NEXT
 
 #ifdef HBMK_HAS_HWGUI
-   INIT WINDOW oDlg TITLE "Example" ;
-     AT 0, 0 SIZE 512, 384
-
+   INIT WINDOW oDlg TITLE "Example" AT 0, 0 SIZE 512, 384
    MENU OF oDlg
       FOR EACH aGrupoList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
@@ -39,7 +37,6 @@ FUNCTION DlgAutoMenu( aAllSetup )
          MENUITEM "&Exit" ACTION oDlg:Close()
       ENDMENU
    ENDMENU
-
    ACTIVATE WINDOW oDlg CENTER
 #endif
 
@@ -52,7 +49,6 @@ FUNCTION DlgAutoMenu( aAllSetup )
       WINDOWTYPE MAIN
 
       DEFINE MAIN MENU OF Form_Main
-
          FOR EACH aGrupoList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
                FOR EACH cOpcao IN aGrupoList
@@ -94,4 +90,5 @@ FUNCTION DlgAutoMenu( aAllSetup )
       :Activate()
    ENDWITH
 #endif
+
    RETURN Nil
