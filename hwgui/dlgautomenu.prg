@@ -6,7 +6,7 @@ FUNCTION DlgAutoMenu( aAllSetup )
 
    LOCAL oDlg, aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cOpcao
 
-   hb_gtReload( "WVG" )
+   //hb_gtReload( "WVG" )
 
    FOR EACH aItem IN aAllSetup
       IF ! cName == aItem[1]

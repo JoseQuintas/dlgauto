@@ -4,7 +4,7 @@
 
 PROCEDURE DlgAutoMain( cDBF, aAllSetup )
 
-   hb_gtReload( "WVG" )
+   //hb_gtReload( "WVG" )
    Execute( cDBF, aAllSetup )
 
    RETURN

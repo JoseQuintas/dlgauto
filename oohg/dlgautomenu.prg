@@ -19,7 +19,6 @@ FUNCTION DlgAutoMenu( aAllSetup )
          nQtd += 1
       ENDIF
    NEXT
-#if HBMK_HAS_OOHG
    WITH OBJECT oDlg := TFormMain():Define()
       :Col := 1000
       :Row := 500
@@ -35,14 +34,13 @@ FUNCTION DlgAutoMenu( aAllSetup )
             oMenuGroup:EndPopup()
          NEXT
          oMenuGroup := TMenuItem():DefinePopup( "Sair" )
-            TMenuItem():DefineItem( "Sair", { || oDlg:End() } )
+            TMenuItem():DefineItem( "Sair", { || oDlg:Release() } )
          oMenuGroup:EndPopup()
       oMenuMain:EndMenu()
       :EndWindow()
       :Center()
       :Activate()
    ENDWITH
-#endif
 
    RETURN Nil
 

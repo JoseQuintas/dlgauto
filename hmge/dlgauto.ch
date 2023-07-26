@@ -26,3 +26,7 @@
 #define STYLE_BACK    hwg_ColorRGB2N( 13, 16, 51 )
 #define STYLE_FORE    hwg_ColorRGB2N( 255, 255, 255 )
 */
+
+#ifdef HBMK_HAS_HMGE
+   #include "hmg.ch"
+#endif

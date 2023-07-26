@@ -1,6 +1,6 @@
 #include "hbgtinfo.ch"
 #include "directry.ch"
-#include "hmg.ch"
+#include "dlgauto.ch"
 
 FUNCTION DlgAutoMenu( aAllSetup )
 
@@ -16,6 +16,7 @@ FUNCTION DlgAutoMenu( aAllSetup )
          nQtd += 1
       ENDIF
    NEXT
+#ifdef HBMK_HAS_HMGE
    DEFINE WINDOW Form_Main ;
       AT 1000, 500 ;
       WIDTH 512 ;
@@ -39,6 +40,7 @@ FUNCTION DlgAutoMenu( aAllSetup )
 
    form_Main.CENTER
    form_Main.ACTIVATE
+#endif
 
    RETURN Nil
 

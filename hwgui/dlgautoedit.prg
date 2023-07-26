@@ -20,37 +20,6 @@ CREATE CLASS DlgAutoEdit
 
    ENDCLASS
 
-METHOD EditOn() CLASS DlgAutoEdit
-
-   LOCAL aItem, oFirstEdit, lFound := .F.
-
-   FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         aItem[ CFG_OBJ ]:Enable()
-         IF ! lFound
-            lFound := .T.
-            oFirstEdit := aItem[ CFG_OBJ ]
-         ENDIF
-      ENDIF
-   NEXT
-   ::ButtonSaveOn()
-   oFirstEdit:SetFocus()
-
-   RETURN Nil
-
-METHOD EditOff() CLASS DlgAutoEdit
-
-   LOCAL aItem
-
-   FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         aItem[ CFG_OBJ ]:Disable()
-      ENDIF
-   NEXT
-   ::ButtonSaveOff()
-
-   RETURN Nil
-
 METHOD EditCreate() CLASS DlgAutoEdit
 
    LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, oPanel, nLen, aList := {}
@@ -134,7 +103,8 @@ METHOD EditCreate() CLASS DlgAutoEdit
          ENDIF
          IF ! Empty( aItem[ CFG_VTABLE ] )
             @ nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION aItem[ CFG_VVALUE ] OF ;
-               iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR STYLE_FORE TRANSPARENT
+               iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR STYLE_FORE ;
+               STYLE WS_BORDER TRANSPARENT
          ENDIF
       ENDIF
    NEXT
@@ -152,9 +122,34 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
    RETURN Nil
 
-STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
+METHOD EditOn() CLASS DlgAutoEdit
 
-   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), oEditNext:SetFocus(), .T. }
+   LOCAL aItem, oFirstEdit, lFound := .F.
+
+   FOR EACH aItem IN ::aControlList
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+         aItem[ CFG_OBJ ]:Enable()
+         IF ! lFound
+            lFound := .T.
+            oFirstEdit := aItem[ CFG_OBJ ]
+         ENDIF
+      ENDIF
+   NEXT
+   ::ButtonSaveOn()
+   oFirstEdit:SetFocus()
+
+   RETURN Nil
+
+METHOD EditOff() CLASS DlgAutoEdit
+
+   LOCAL aItem
+
+   FOR EACH aItem IN ::aControlList
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+         aItem[ CFG_OBJ ]:Disable()
+      ENDIF
+   NEXT
+   ::ButtonSaveOff()
 
    RETURN Nil
 
@@ -178,6 +173,12 @@ METHOD EditUpdate() CLASS DlgAutoEdit
          ENDIF
       ENDIF
    NEXT
+
+   RETURN Nil
+
+STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
+
+   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), oEditNext:SetFocus(), .T. }
 
    RETURN Nil
 

@@ -169,8 +169,8 @@ METHOD EditCreate() CLASS DlgAutoEdit
             AAdd( Atail( aList ), aItem[ CFG_OBJ ] )
          ENDIF
          IF ! Empty( aItem[ CFG_VTABLE ] )
-            cText := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
-            DEFINE LABEL &( cText )
+            cLabel := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
+            DEFINE LABEL &( cLabel )
                PARENT ::oDlg
                COL nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 )
                ROW nRow2

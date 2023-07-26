@@ -2,16 +2,14 @@
 -w3
 -es2
 -gui
+-gtgui
 -mt
-gtwvg.hbc
-#-gtwvt do not works same way
 
 hbct.hbc
 hbwin.hbc
 
 ../../hwgui.hbc
 
-menu.prg
 dlgauto.prg
 dlgautobtn.prg
 dlgautodata.prg
@@ -21,4 +19,3 @@ dlgautomain.prg
 dlgautomenu.prg
 dlgautoprint.prg
 test.rc
-\fontes\integra\libjpa\prg\errorsys.prg
