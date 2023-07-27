@@ -33,7 +33,13 @@ PROCEDURE Main()
          aItem[ CFG_CAPTION ] := aField[ DBS_NAME ]
          /* above retrieve value from related dbf */
          DO CASE
+         CASE cFile == "PRODUCT" .AND. aField[ DBS_NAME ] == "IDPRODUCT"
+            aItem[ CFG_KEY ] := .T.
+         CASE cFile == "PEOPLE" .AND. aField[ DBS_NAME ] == "IDPEOPLE"
+            aItem[ CFG_KEY ] := .T.
          CASE ! cFile == "ACCOUNT"
+         CASE aField[ DBS_NAME ] == "IDACCOUNT"
+            aItem[ CFG_KEY ] := .T.
          CASE aField[ DBS_NAME ] == "IDPRODUCT"
             aItem[ CFG_VTABLE ] := "PRODUCT"
             aItem[ CFG_VFIELD ] := "IDPRODUCT"

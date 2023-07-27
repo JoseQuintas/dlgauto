@@ -109,20 +109,19 @@ METHOD Execute() CLASS DlgAutoData
    ::oDlg.ACTIVATE
 #endif
 #ifdef HBMK_HAS_OOHG
-   DEFINE WINDOW ::oDlg ;
-      AT 1000, 500 ;
-      WIDTH ::nDlgWidth ;
-      HEIGHT ::nDlgHeight ;
-      TITLE ::cFileDBF ;
-      MODAL ;
-      ON INIT ::EditUpdate()
-
+   WITH OBJECT ::oDlg := TForm():Define()
+      :Row := 500
+      :Col := 1000
+      :Width := ::nDlgWidth
+      :Height := ::nDlgHeight
+      :Title := ::cFileDbf
+      // :Init := ::EditUpdate()
+   ENDWITH
+    _EndWindow()
       ::ButtonCreate()
       ::EditCreate()
-
-   END WINDOW
-   ::oDlg.CENTER
-   ::oDlg.ACTIVATE
+   ::oDlg:Center()
+   ::oDlg:Activate()
 #endif
    CLOSE DATABASES
 

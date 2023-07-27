@@ -31,7 +31,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
    LOCAL cMacro
 #endif
 #ifdef HBMK_HAS_OOHG
-   LOCAL cMacro
+   LOCAL oControl
 #endif
 
    FOR EACH aItem IN ::aEditList
@@ -111,15 +111,16 @@ METHOD EditCreate() CLASS DlgAutoEdit
             HEIGHT 20
             VALUE aItem[ CFG_CAPTION ]
          END LABEL
-         //cTxt += ;
-         //   "DEFINE LABEL " + cMacro + hb_Eol() + ;
-         //   "   PARENT ThisForm" + hb_Eol() + ;
-         //   "   COL " + Ltrim( Str( nCol ) ) + hb_Eol() + ;
-         //   "   ROW " + Ltrim( Str( nRow ) ) + hb_Eol() + ;
-         //   "   WIDTH " + Ltrim( Str( nLen * 12 ) ) + ;
-         //   "   HEIGHT 20 " + hb_Eol() + ;
-         //   "   VALUE " + aItem[ CFG_CAPTION ] + hb_Eol() + ;
-         //   "END LABEL" + hb_Eol()
+#endif
+#ifdef HBMK_HAS_OOHG
+         WITH OBJECT oControl := TLabel():Define()
+            :Row := nRow
+            :Col := nCol
+            :Value := aItem[ CFG_CAPTION ]
+            :AutoSize := .T.
+            :Height := 20
+            :Width := nLen * 12
+         ENDWITH
 #endif
 
 
@@ -135,43 +136,30 @@ METHOD EditCreate() CLASS DlgAutoEdit
          cMacro := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
          aItem[ CFG_CTLNAME ] := cMacro
          @ nRow2, nCol2 TEXTBOX &cMacro ;
-            PARENT ::oDlg ;
-            HEIGHT 20 ;
-            WIDTH aItem[ CFG_LEN ] * 12 ;
-            VALUE "" ; // aItem[ CFG_VALUE ] ;
+            PARENT    ::oDlg ;
+            HEIGHT    20 ;
+            WIDTH     aItem[ CFG_LEN ] * 12 ;
+            VALUE     aItem[ CFG_VALUE ] ;
             MAXLENGTH aItem[ CFG_LEN ] ;
-            FONT "verdana" SIZE 12 ;
+            FONT      "verdana" SIZE 12 ;
             UPPERCASE
             ON CHANGE Nil
-         //cTxt += "@ " + Ltrim( Str( nRow2 ) ) + "," + Ltrim( Str( nCol2 ) ) + " TEXTBOX " + cMacro + ";" + hb_Eol() + ;
-         //   " PARENT ThisForm ;" + hb_Eol() + ;
-         //   " HEIGHT 20 ;" + hb_Eol() + ;
-         //   " WIDTH " + Ltrim( Str( aItem[ CFG_LEN ] * 12 ) ) + ";" + ;
-         //   " VALUE " + [""] + ";" + hb_Eol() + ;
-         //   " MAXLENGTH " + Ltrim( str( aItem[ CFG_LEN ] ) ) + ";" + hb_Eol() + ;
-         //   " FONT " + ["Verdana"] + " SIZE 12;" + hb_Eol() + ;
-         //   " UPPERCASE " + hb_Eol() + ;
-         //   " ON CHANGE Nil" + hb_Eol()
 #endif
 #ifdef HBMK_HAS_OOHG
-         cMacro := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-         aItem[ CFG_CTLNAME ] := cMacro
-         @ nRow2, nCol2 TEXTBOX &cMacro ;
-            PARENT ::oDlg ;
-            HEIGHT 20 ;
-            WIDTH aItem[ CFG_LEN ] * 12 ;
-            VALUE "" ; // aItem[ CFG_VALUE ] ;
-            MAXLENGTH aItem[ CFG_LEN ] ;
-            FONT "verdana" SIZE 12 ;
-            UPPERCASE
-            ON CHANGE Nil
+         WITH OBJECT aItem[ CFG_OBJ ] := TText():Define()
+            :Row    := nRow2
+            :Col    := nCol2
+            :Width  := aItem[ CFG_LEN ] * 12
+            :Height := 20
+            :Value  := aItem[ CFG_VALUE ]
+         ENDWITH
 #endif
 
          nCol += ( nLen + 3 ) * 12
 
 #ifdef HBMK_HAS_HWGUI
          IF ::lWithTab
-            AAdd( Atail( aList ), aItem[ CFG_OBJ ] )
+            AAdd( Atail( aList ), aItem[ CFG_CTLOBJ ] )
          ENDIF
 #endif
 
@@ -195,16 +183,14 @@ METHOD EditCreate() CLASS DlgAutoEdit
                BORDER .T.
 #endif
 #ifdef HBMK_HAS_OOHG
-            cMacro := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
-            aItem[ CFG_VCTLNAME ] := cMacro
-            DEFINE LABEL &cMacro
-               PARENT ::oDlg
-               COL nCol2 + ( ( nLen + 3 ) * 12 )
-               ROW nRow2
-               VALUE aItem[ CFG_VVALUE ]
-               WIDTH Len( aItem[ CFG_VVALUE ] ) * 12
-               HEIGHT 20
-               BORDER .T.
+            WITH OBJECT aItem[ CFG_VOBJ ] := TLabel():Define()
+               :Row := nRow2
+               :Col := nCol2 + ( ( nLen + 3 ) * 12 )
+               :Value := aItem[ CFG_VVALUE ]
+               :Height := 20
+               :Width := Len( aItem[ CFG_VVALUE ] ) * 12
+               :Border := .T.
+            ENDWITH
 #endif
             nCol += ( Len( aItem[ CFG_VVALUE ] ) + 3 ) * 12
          ENDIF
@@ -226,6 +212,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
 #endif
    (nRow2)
    (nCol2)
+   (oControl)
    //hb_MemoWrit( "tela.txt", cTxt )
 
    RETURN Nil

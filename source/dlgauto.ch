@@ -8,15 +8,16 @@
 #define CFG_CAPTION   7
 #define CFG_VALUE     8
 #define CFG_VALID     9
-#define CFG_VTABLE    10
-#define CFG_VFIELD    11
-#define CFG_VSHOW     12
-#define CFG_VOBJ      13
-#define CFG_VVALUE    14
-#define CFG_CTLNAME   15
-#define CFG_VCTLNAME  16
+#define CFG_KEY       10
+#define CFG_VTABLE    11
+#define CFG_VFIELD    12
+#define CFG_VSHOW     13
+#define CFG_VOBJ      14
+#define CFG_VVALUE    15
+#define CFG_CTLNAME   16
+#define CFG_VCTLNAME  17
 
-#define CFG_EDITEMPTY { TYPE_EDIT, Nil, "", "C", 1, 0, "", "", "", "", "", "", Nil, "", "", "" }
+#define CFG_EDITEMPTY { TYPE_EDIT, Nil, "", "C", 1, 0, "", "", "", .F., "", "", "", Nil, "", "", "" }
 
 #define TYPE_BUTTON   1
 #define TYPE_EDIT     2
