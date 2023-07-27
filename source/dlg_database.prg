@@ -108,6 +108,22 @@ METHOD Execute() CLASS DlgAutoData
    ::oDlg.CENTER
    ::oDlg.ACTIVATE
 #endif
+#ifdef HBMK_HAS_OOHG
+   DEFINE WINDOW ::oDlg ;
+      AT 1000, 500 ;
+      WIDTH ::nDlgWidth ;
+      HEIGHT ::nDlgHeight ;
+      TITLE ::cFileDBF ;
+      MODAL ;
+      ON INIT ::EditUpdate()
+
+      ::ButtonCreate()
+      ::EditCreate()
+
+   END WINDOW
+   ::oDlg.CENTER
+   ::oDlg.ACTIVATE
+#endif
    CLOSE DATABASES
 
    RETURN Nil

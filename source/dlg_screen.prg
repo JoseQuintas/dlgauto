@@ -30,6 +30,9 @@ METHOD EditCreate() CLASS DlgAutoEdit
 #ifdef HBMK_HAS_HMGE
    LOCAL cMacro
 #endif
+#ifdef HBMK_HAS_OOHG
+   LOCAL cMacro
+#endif
 
    FOR EACH aItem IN ::aEditList
       AAdd( ::aControlList, AClone( aItem ) )
@@ -133,7 +136,20 @@ METHOD EditCreate() CLASS DlgAutoEdit
          cMacro := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
          aItem[ CFG_CTLNAME ] := cMacro
          @ nRow2, nCol2 TEXTBOX &cMacro ;
-            OF ::oDlg ;
+            PARENT ::oDlg ;
+            HEIGHT 20 ;
+            WIDTH aItem[ CFG_LEN ] * 12 ;
+            VALUE "" ; // aItem[ CFG_VALUE ] ;
+            MAXLENGTH aItem[ CFG_LEN ] ;
+            FONT "verdana" SIZE 12 ;
+            UPPERCASE
+            ON CHANGE Nil
+#endif
+#ifdef HBMK_HAS_OOHG
+         cMacro := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
+         aItem[ CFG_CTLNAME ] := cMacro
+         @ nRow2, nCol2 TEXTBOX &cMacro ;
+            PARENT ::oDlg ;
             HEIGHT 20 ;
             WIDTH aItem[ CFG_LEN ] * 12 ;
             VALUE "" ; // aItem[ CFG_VALUE ] ;
@@ -159,6 +175,18 @@ METHOD EditCreate() CLASS DlgAutoEdit
                STYLE WS_BORDER TRANSPARENT
 #endif
 #ifdef HBMK_HAS_HMGE
+            cMacro := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
+            aItem[ CFG_VCTLNAME ] := cMacro
+            DEFINE LABEL &cMacro
+               PARENT ::oDlg
+               COL nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 )
+               ROW nRow2
+               VALUE aItem[ CFG_VVALUE ]
+               WIDTH Len( aItem[ CFG_VVALUE ] ) * 12
+               HEIGHT 20
+               BORDER .T.
+#endif
+#ifdef HBMK_HAS_OOHG
             cMacro := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
             aItem[ CFG_VCTLNAME ] := cMacro
             DEFINE LABEL &cMacro
