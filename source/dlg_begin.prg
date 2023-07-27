@@ -10,7 +10,7 @@ PROCEDURE DlgAutoMain( cDBF, aAllSetup )
 
 FUNCTION Execute( cDBF, aAllSetup )
 
-   LOCAL oDlg, aItem
+   LOCAL oDlg, nPos
 
    oDlg := ThisDlg():New()
    oDlg:cFileDBF   := cDBF
@@ -20,12 +20,11 @@ FUNCTION Execute( cDBF, aAllSetup )
    oDlg:nEditStyle := 3 // from 1 to 3
    AAdd( oDlg:aOptionList, { "Mail", { || Nil } } )
    AAdd( oDlg:aOptionList, { "CtlList",  { || oDlg:ShowCtlList() } } )
-   oDlg:aEditList := {}
-   FOR EACH aItem IN aAllSetup
-      IF cDBF == aItem[1]
-         AAdd( oDlg:aEditList, { aItem[2], aItem[3], aItem[4], aItem[5], aItem[6], aItem[7], aItem[8], aItem[9], aItem[10], aItem[11] } )
-      ENDIF
-   NEXT
+   AAdd( oDlg:aOptionList, { "ThisDlg", { || oDlg:ShowDlgName() } } )
+
+   nPos := hb_ASCan( aAllSetup, { | e | e[ 1 ] == cDBF } )
+
+   oDlg:aEditList := aAllSetup[ nPos, 2 ]
    oDlg:Execute()
 
    RETURN Nil
@@ -33,6 +32,7 @@ FUNCTION Execute( cDBF, aAllSetup )
 CREATE CLASS ThisDlg INHERIT DlgAutoData
 
    METHOD ShowCtlList()
+   METHOD ShowDlgName()
 
    ENDCLASS
 
@@ -51,5 +51,9 @@ METHOD ShowCtlList() CLASS ThisDlg
    cTxt += cTxtTmp
    hwg_MsgInfo( cTxt )
 #endif
+
+   RETURN Nil
+
+METHOD ShowDlgName() CLASS ThisDlg
 
    RETURN Nil

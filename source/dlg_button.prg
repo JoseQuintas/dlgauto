@@ -146,6 +146,7 @@ STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
       { "Mail",     "AppIcon" }, ;
       { "Print",    "AppIcon" }, ;
       { "CtlList",  "AppIcon" }, ;
+      { "ThisDlg",  "AppIcon" }, ;
       { "Exit",     "AppIcon" } }
 
    IF ( nPos := hb_AScan( aList, { | e | e[1] == cCaption } ) ) != 0

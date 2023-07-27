@@ -32,18 +32,18 @@ METHOD EditCreate() CLASS DlgAutoEdit
 #endif
 
    FOR EACH aItem IN ::aEditList
-      AAdd( ::aControlList, CFG_EDITEMPTY )
-      Atail( ::aControlList )[ CFG_NAME ]    := aItem[ DBS_NAME ]
-      Atail( ::aControlList )[ CFG_VALTYPE ] := aItem[ DBS_TYPE ]
-      Atail( ::aControlList )[ CFG_LEN ]     := aItem[ DBS_LEN ]
-      Atail( ::aControlList )[ CFG_DEC ]     := aItem[ DBS_DEC ]
-      Atail( ::aControlList )[ CFG_CAPTION ] := aItem[ 5 ]
+      AAdd( ::aControlList, AClone( aItem ) )
+      //Atail( ::aControlList )[ CFG_NAME ]    := aItem[ DBS_NAME ]
+      //Atail( ::aControlList )[ CFG_VALTYPE ] := aItem[ DBS_TYPE ]
+      //Atail( ::aControlList )[ CFG_LEN ]     := aItem[ DBS_LEN ]
+      //Atail( ::aControlList )[ CFG_DEC ]     := aItem[ DBS_DEC ]
+      //Atail( ::aControlList )[ CFG_CAPTION ] := aItem[ 5 ]
       Atail( ::aControlList )[ CFG_VALUE ]   := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ DBS_NAME ] ) ) )
-      Atail( ::aControlList )[ CFG_VALID ]   := aItem[ 6 ]
-      Atail( ::aControlList )[ CFG_VTABLE ]  := aItem[ 7 ]
-      Atail( ::aControlList )[ CFG_VFIELD ]  := aItem[ 8 ]
-      Atail( ::aControlList )[ CFG_VSHOW ]   := aItem[ 9 ]
-      Atail( ::aControlList )[ CFG_VVALUE ]  := aItem[ 10 ]
+      //Atail( ::aControlList )[ CFG_VALID ]   := aItem[ 6 ]
+      //Atail( ::aControlList )[ CFG_VTABLE ]  := aItem[ 7 ]
+      //Atail( ::aControlList )[ CFG_VFIELD ]  := aItem[ 8 ]
+      //Atail( ::aControlList )[ CFG_VSHOW ]   := aItem[ 9 ]
+      //Atail( ::aControlList )[ CFG_VVALUE ]  := aItem[ 10 ]
    NEXT
    IF ::lWithTab
 #ifdef HBMK_HAS_HWGUI

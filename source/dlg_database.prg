@@ -71,11 +71,11 @@ METHOD Execute() CLASS DlgAutoData
    SELECT 0
    USE ( ::cFileDBF )
    FOR EACH aItem IN ::aEditList
-      IF ! Empty( aItem[ 7 ] )
-         IF Select( aItem[ 7 ] ) == 0
+      IF ! Empty( aItem[ CFG_VTABLE ] )
+         IF Select( aItem[ CFG_VTABLE ] ) == 0
             SELECT 0
-            USE ( aItem[ 7 ] )
-            SET INDEX TO ( aItem[ 7 ] )
+            USE ( aItem[ CFG_VTABLE ] )
+            SET INDEX TO ( aItem[ CFG_VTABLE ] )
             SET ORDER TO 1
          ENDIF
       ENDIF

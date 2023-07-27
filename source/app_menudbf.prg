@@ -4,7 +4,7 @@
 
 FUNCTION DlgAutoMenu( aAllSetup )
 
-   LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cOpcao
+   LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cDBF
 #ifdef HBMK_HAS_HWGUI
    LOCAL oDlg
 #endif
@@ -17,8 +17,8 @@ FUNCTION DlgAutoMenu( aAllSetup )
          IF Mod( nQtd, 15 ) == 0
             AAdd( aMenuList, {} )
          ENDIF
-         cName := aItem[1]
-         AAdd( Atail( aMenuList ), cName )
+         cDBF := aItem[1]
+         AAdd( Atail( aMenuList ), cDBF )
          nQtd += 1
       ENDIF
    NEXT
@@ -28,8 +28,8 @@ FUNCTION DlgAutoMenu( aAllSetup )
    MENU OF oDlg
       FOR EACH aGrupoList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
-            FOR EACH cOpcao IN aGrupoList
-               MENUITEM cOpcao ACTION DlgAutoMain( cOpcao, @aAllSetup )
+            FOR EACH cDBF IN aGrupoList
+               MENUITEM cDBF ACTION DlgAutoMain( cDBF, aAllSetup )
             NEXT
          ENDMENU
       NEXT
@@ -51,8 +51,8 @@ FUNCTION DlgAutoMenu( aAllSetup )
       DEFINE MAIN MENU OF Form_Main
          FOR EACH aGrupoList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
-               FOR EACH cOpcao IN aGrupoList
-                  MENUITEM cOpcao ACTION DlgAutoMain( cOpcao, @aAllSetup )
+               FOR EACH cDBF IN aGrupoList
+                  MENUITEM cDBF ACTION DlgAutoMain( cDBF, aAllSetup )
                NEXT
             END POPUP
          NEXT
@@ -76,8 +76,8 @@ FUNCTION DlgAutoMenu( aAllSetup )
       oMenuMain := TMenuMain():Define(,"MyMenu")
          FOR EACH aGrupoList IN aMenuList
             oMenuGroup:= TMenuItem():DefinePopup( "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) ) )
-            FOR EACH cOpcao IN aGrupoList
-               TMenuItem():DefineItem( cOpcao, { || DlgAutoMain( cOpcao, @aAllSetup ) } )
+            FOR EACH cDBF IN aGrupoList
+               TMenuItem():DefineItem( cDBF, { || DlgAutoMain( cDBF, aAllSetup ) } )
             NEXT
             oMenuGroup:EndPopup()
          NEXT

@@ -1,6 +1,8 @@
 #include "dbstruct.ch"
 #include "directry.ch"
 #include "hbclass.ch"
+#define CFG_NAME      3
+#define CFG_CAPTION   7
 
 CREATE CLASS DlgAutoPrint
 
@@ -26,24 +28,24 @@ METHOD Print() CLASS DlgAutoPrint
          nLin := 2
          nCol := 0
          FOR EACH aItem IN ::aEditList // need additional adjust
-            nLen = Max( Len( aItem[ DBS_NAME ] ), Len( Transform( FieldGet( FieldNum( aItem[ DBS_NAME ] ) ), "" ) ) )
+            nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_NAME ] ) ), "" ) ) )
             IF nCol != 0 .AND. nCol + nLen > 79
                nLin += 1
                nCol := 0
             ENDIF
-            @ nLin, nCol SAY aItem[ DBS_NAME ]
+            @ nLin, nCol SAY aItem[ CFG_NAME ]
             nCol += nLen + 2
          NEXT
          nLin += 1
       ENDIF
       nCol := 0
       FOR EACH aItem IN ::aEditList // need additional adjust
-         nLen = Max( Len( aItem[ DBS_NAME ] ), Len( Transform( FieldGet( FieldNum( aItem[ DBS_NAME ] ) ), "" ) ) )
+         nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_NAME ] ) ), "" ) ) )
          IF nCol != 0 .AND. nCol + nLen > 79
             nLin += 1
             nCol := 0
          ENDIF
-         @ nLin, nCol SAY Transform( FieldGet( FieldNum( aItem[ DBS_NAME ] ) ), "" )
+         @ nLin, nCol SAY Transform( FieldGet( FieldNum( aItem[ CFG_NAME ] ) ), "" )
          nCol += nLen + 2
       NEXT
       nLin += 1
