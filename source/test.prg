@@ -25,10 +25,11 @@ PROCEDURE Main()
       aStru := dbStruct()
       FOR EACH aField IN aStru
          aItem := CFG_EDITEMPTY
-         aItem[ CFG_NAME ] := aField[ DBS_NAME ]
+         aItem[ CFG_NAME ]    := aField[ DBS_NAME ]
          aItem[ CFG_VALTYPE ] := aField[ DBS_TYPE ]
-         aItem[ CFG_LEN ] := aField[ DBS_LEN ]
-         aItem[ CFG_DEC ] := aField[ DBS_DEC ]
+         aItem[ CFG_LEN ]     := aField[ DBS_LEN ]
+         aItem[ CFG_DEC ]     := aField[ DBS_DEC ]
+         aItem[ CFG_VALUE ]   := aField[ DBS_NAME ]
          aItem[ CFG_CAPTION ] := aField[ DBS_NAME ]
          /* above retrieve value from related dbf */
          DO CASE
@@ -36,11 +37,11 @@ PROCEDURE Main()
          CASE aField[ DBS_NAME ] == "IDPRODUCT"
             aItem[ CFG_VTABLE ] := "PRODUCT"
             aItem[ CFG_VFIELD ] := "IDPRODUCT"
-            aItem[ CFG_VSHOW ] := "NAME"
+            aItem[ CFG_VSHOW ]  := "NAME"
          CASE aField[ DBS_NAME ] == "IDPEOPLE"
             aItem[ CFG_VTABLE ] := "PEOPLE"
             aItem[ CFG_VFIELD ] := "IDPEOPLE"
-            aItem[ CFG_VSHOW ] := "NAME"
+            aItem[ CFG_VSHOW ]  := "NAME"
          ENDCASE
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT

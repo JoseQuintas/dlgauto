@@ -36,17 +36,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
    FOR EACH aItem IN ::aEditList
       AAdd( ::aControlList, AClone( aItem ) )
-      //Atail( ::aControlList )[ CFG_NAME ]    := aItem[ DBS_NAME ]
-      //Atail( ::aControlList )[ CFG_VALTYPE ] := aItem[ DBS_TYPE ]
-      //Atail( ::aControlList )[ CFG_LEN ]     := aItem[ DBS_LEN ]
-      //Atail( ::aControlList )[ CFG_DEC ]     := aItem[ DBS_DEC ]
-      //Atail( ::aControlList )[ CFG_CAPTION ] := aItem[ 5 ]
-      Atail( ::aControlList )[ CFG_VALUE ]   := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ DBS_NAME ] ) ) )
-      //Atail( ::aControlList )[ CFG_VALID ]   := aItem[ 6 ]
-      //Atail( ::aControlList )[ CFG_VTABLE ]  := aItem[ 7 ]
-      //Atail( ::aControlList )[ CFG_VFIELD ]  := aItem[ 8 ]
-      //Atail( ::aControlList )[ CFG_VSHOW ]   := aItem[ 9 ]
-      //Atail( ::aControlList )[ CFG_VVALUE ]  := aItem[ 10 ]
+      Atail( ::aControlList )[ CFG_VALUE ] := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ DBS_NAME ] ) ) )
    NEXT
    IF ::lWithTab
 #ifdef HBMK_HAS_HWGUI
@@ -55,7 +45,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_TAB
       Atail( ::aControlList )[ CFG_OBJ ]     := oTab
 
-      @ 1, 23 PANEL oPanel OF oTab SIZE ::nDlgWidth - 12, ::nDlgHeight - 165 BACKCOLOR STYLE_BACK
+      @ 1, 23 PANEL oPanel OF oTab SIZE ::nDlgWidth - 12, ::nDlgHeight - 165 BACKCOLOR COLOR_BACK
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
       Atail( ::aControlList )[ CFG_OBJ ]     := oPanel
@@ -109,7 +99,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
          ENDIF
 
 #ifdef HBMK_HAS_HWGUI
-         @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, 20 COLOR STYLE_FORE TRANSPARENT
+         @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, 20 COLOR COLOR_FORE TRANSPARENT
 #endif
 #ifdef HBMK_HAS_HMGE
          cMacro := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
@@ -188,9 +178,9 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
          IF ! Empty( aItem[ CFG_VTABLE ] )
 #ifdef HBMK_HAS_HWGUI
-            @ nCol2 + ( ( nLen + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION aItem[ CFG_VVALUE ] OF ;
-               iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR STYLE_FORE ;
-               STYLE WS_BORDER TRANSPARENT
+            @ nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION aItem[ CFG_VVALUE ] OF ;
+               iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR COLOR_FORE ;
+               TRANSPARENT
 #endif
 #ifdef HBMK_HAS_HMGE
             cMacro := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
@@ -273,14 +263,15 @@ METHOD EditOff() CLASS DlgAutoEdit
 
 METHOD EditUpdate() CLASS DlgAutoEdit
 
-   LOCAL aItem, nSelect
+   LOCAL aItem, nSelect, xValue, cText
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ! Empty( aItem[ CFG_NAME ] )
+            xValue := FieldGet( FieldNum( aItem[ CFG_NAME ] ) )
 
 #ifdef HBMK_HAS_HWGUI
-            aItem[ CFG_OBJ ]:Value := FieldGet( FieldNum( aItem[ CFG_NAME ] ) )
+            aItem[ CFG_OBJ ]:Value := xValue
             aItem[ CFG_OBJ ]:Refresh()
 #endif
 #ifdef HBMK_HAS_HMGE
@@ -291,10 +282,17 @@ METHOD EditUpdate() CLASS DlgAutoEdit
          IF ! Empty( aItem[ CFG_VTABLE ] )
             nSelect := Select()
             SELECT ( Select( aItem[ CFG_VTABLE ] ) )
+            SEEK xValue
+            cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
 
 #ifdef HBMK_HAS_HWGUI
-            SEEK aItem[ CFG_OBJ ]:Value
-            aItem[ CFG_VOBJ ]:SetText( &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) ) )
+            aItem[ CFG_VOBJ ]:SetText( cText )
+            //hwg_MsgInfo( "nome " + aItem[ CFG_NAME ] + hb_Eol() + ;
+            //    "valor " + Transform( aItem[ CFG_OBJ ]:Value, "" ) + hb_Eol() + ;
+            //   "tipo " + ValType( aItem[ CFG_OBJ ]:Value ) + hb_Eol() + ;
+            //   "eof() " + Transform( Eof(), "" ) + hb_Eol() + ;
+            //   "obtido " + cText + hb_Eol() + ;
+            //   "salvo " + aItem[ CFG_VOBJ ]:Title )
             aItem[ CFG_VOBJ ]:Refresh()
 #endif
 #ifdef HBMK_HAS_HMGE
@@ -306,6 +304,7 @@ METHOD EditUpdate() CLASS DlgAutoEdit
          ENDIF
       ENDIF
    NEXT
+   (cText)
 
    RETURN Nil
 

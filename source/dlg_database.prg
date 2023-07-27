@@ -85,7 +85,7 @@ METHOD Execute() CLASS DlgAutoData
 #ifdef HBMK_HAS_HWGUI
    INIT DIALOG ::oDlg CLIPPER NOEXIT TITLE ::cTitle ;
       AT 0, 0 SIZE ::nDlgWidth, ::nDlgHeight ;
-      BACKCOLOR STYLE_BACK ;
+      BACKCOLOR COLOR_BACK ;
       ON EXIT hwg_EndDialog() ;
       ON INIT { || ::EditUpdate() }
    ::ButtonCreate()
