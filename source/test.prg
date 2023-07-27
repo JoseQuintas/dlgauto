@@ -6,7 +6,7 @@ REQUEST DBFCDX
 
 PROCEDURE Main()
 
-   LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF
+   LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nPos1, nPos2
 
    SET EXCLUSIVE OFF
 #ifdef HBMK_HAS_HMGE
@@ -24,32 +24,37 @@ PROCEDURE Main()
       USE ( cFile )
       aStru := dbStruct()
       FOR EACH aField IN aStru
-         AAdd( Atail( aAllSetup )[ 2 ], CFG_EDITEMPTY )
-         Atail( Atail( aAllSetup )[ 2 ] )[ CFG_NAME ] := aField[ DBS_NAME ]
-         Atail( Atail( aAllSetup )[ 2 ] )[ CFG_VALTYPE ] := aField[ DBS_TYPE ]
-         Atail( Atail( aAllSetup )[ 2 ] )[ CFG_LEN ] := aField[ DBS_LEN ]
-         Atail( Atail( aAllSetup )[ 2 ] )[ CFG_DEC ] := aField[ DBS_DEC ]
-         Atail( Atail( aAllSetup )[ 2 ] )[ CFG_CAPTION ] := aField[ DBS_NAME ]
+         aItem := CFG_EDITEMPTY
+         aItem[ CFG_NAME ] := aField[ DBS_NAME ]
+         aItem[ CFG_VALTYPE ] := aField[ DBS_TYPE ]
+         aItem[ CFG_LEN ] := aField[ DBS_LEN ]
+         aItem[ CFG_DEC ] := aField[ DBS_DEC ]
+         aItem[ CFG_CAPTION ] := aField[ DBS_NAME ]
+         /* above retrieve value from related dbf */
          DO CASE
          CASE ! cFile == "ACCOUNT"
          CASE aField[ DBS_NAME ] == "IDPRODUCT"
-            ATail( Atail( aAllSetup )[ 2 ] )[ CFG_VTABLE ] := "PRODUCT"
-            ATail( Atail( aAllSetup )[ 2 ] )[ CFG_VFIELD ] := "IDPRODUCT"
-            ATail( Atail( aAllSetup )[ 2 ] )[ CFG_VSHOW ] := "NAME"
+            aItem[ CFG_VTABLE ] := "PRODUCT"
+            aItem[ CFG_VFIELD ] := "IDPRODUCT"
+            aItem[ CFG_VSHOW ] := "NAME"
          CASE aField[ DBS_NAME ] == "IDPEOPLE"
-            ATail( Atail( aAllSetup )[ 2 ] )[ CFG_VTABLE ] := "PEOPLE"
-            ATail( Atail( aAllSetup )[ 2 ] )[ CFG_VFIELD ] := "IDPEOPLE"
-            ATail( Atail( aAllSetup )[ 2 ] )[ CFG_VSHOW ] := "NAME"
+            aItem[ CFG_VTABLE ] := "PEOPLE"
+            aItem[ CFG_VFIELD ] := "IDPEOPLE"
+            aItem[ CFG_VSHOW ] := "NAME"
          ENDCASE
+         AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT
       USE
    NEXT
    FOR EACH aDBF IN aAllSetup
       FOR EACH aItem IN aDBF[ 2 ]
          IF ! Empty( aItem[ CFG_VTABLE ] )
-            USE ( aDBF[ 1 ] )
-            aItem[ CFG_VVALUE ] := Space( FieldLen( aItem[ CFG_VSHOW ] ) )
-            USE
+            IF ( nPos1 := hb_AScan( aAllSetup, { | e | e[ 1 ] == aItem[ CFG_VTABLE ] } ) ) != 0
+               nPos2 := hb_AScan( aAllSetup[ nPos1, 2 ], { | e | e[ CFG_NAME ] == aItem[ CFG_VSHOW ] } )
+               IF nPos2 != 0
+                  aItem[ CFG_VVALUE ] := Space( aAllSetup[ nPos1, 2, nPos2, CFG_LEN ] )
+               ENDIF
+            ENDIF
          ENDIF
       NEXT
    NEXT

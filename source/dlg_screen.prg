@@ -21,7 +21,7 @@ CREATE CLASS DlgAutoEdit
 
 METHOD EditCreate() CLASS DlgAutoEdit
 
-   LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, nLen, aList := {}, nLenList, nRow2, nCol2
+   LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, nLen, aList := {}, nLenList, nRow2, nCol2 // , cTxt := ""
 #ifdef HBMK_HAS_HWGUI
    LOCAL oPanel, nTab, nPageNext
 
@@ -121,6 +121,15 @@ METHOD EditCreate() CLASS DlgAutoEdit
             HEIGHT 20
             VALUE aItem[ CFG_CAPTION ]
          END LABEL
+         //cTxt += ;
+         //   "DEFINE LABEL " + cMacro + hb_Eol() + ;
+         //   "   PARENT ThisForm" + hb_Eol() + ;
+         //   "   COL " + Ltrim( Str( nCol ) ) + hb_Eol() + ;
+         //   "   ROW " + Ltrim( Str( nRow ) ) + hb_Eol() + ;
+         //   "   WIDTH " + Ltrim( Str( nLen * 12 ) ) + ;
+         //   "   HEIGHT 20 " + hb_Eol() + ;
+         //   "   VALUE " + aItem[ CFG_CAPTION ] + hb_Eol() + ;
+         //   "END LABEL" + hb_Eol()
 #endif
 
 
@@ -144,6 +153,15 @@ METHOD EditCreate() CLASS DlgAutoEdit
             FONT "verdana" SIZE 12 ;
             UPPERCASE
             ON CHANGE Nil
+         //cTxt += "@ " + Ltrim( Str( nRow2 ) ) + "," + Ltrim( Str( nCol2 ) ) + " TEXTBOX " + cMacro + ";" + hb_Eol() + ;
+         //   " PARENT ThisForm ;" + hb_Eol() + ;
+         //   " HEIGHT 20 ;" + hb_Eol() + ;
+         //   " WIDTH " + Ltrim( Str( aItem[ CFG_LEN ] * 12 ) ) + ";" + ;
+         //   " VALUE " + [""] + ";" + hb_Eol() + ;
+         //   " MAXLENGTH " + Ltrim( str( aItem[ CFG_LEN ] ) ) + ";" + hb_Eol() + ;
+         //   " FONT " + ["Verdana"] + " SIZE 12;" + hb_Eol() + ;
+         //   " UPPERCASE " + hb_Eol() + ;
+         //   " ON CHANGE Nil" + hb_Eol()
 #endif
 #ifdef HBMK_HAS_OOHG
          cMacro := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
@@ -159,7 +177,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
             ON CHANGE Nil
 #endif
 
-            nCol += ( nLen * 12 ) + 30
+         nCol += ( nLen + 3 ) * 12
 
 #ifdef HBMK_HAS_HWGUI
          IF ::lWithTab
@@ -170,7 +188,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
          IF ! Empty( aItem[ CFG_VTABLE ] )
 #ifdef HBMK_HAS_HWGUI
-            @ nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION aItem[ CFG_VVALUE ] OF ;
+            @ nCol2 + ( ( nLen + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION aItem[ CFG_VVALUE ] OF ;
                iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR STYLE_FORE ;
                STYLE WS_BORDER TRANSPARENT
 #endif
@@ -179,7 +197,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
             aItem[ CFG_VCTLNAME ] := cMacro
             DEFINE LABEL &cMacro
                PARENT ::oDlg
-               COL nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 )
+               COL nCol2 + ( ( nLen + 3 ) * 12 )
                ROW nRow2
                VALUE aItem[ CFG_VVALUE ]
                WIDTH Len( aItem[ CFG_VVALUE ] ) * 12
@@ -191,13 +209,14 @@ METHOD EditCreate() CLASS DlgAutoEdit
             aItem[ CFG_VCTLNAME ] := cMacro
             DEFINE LABEL &cMacro
                PARENT ::oDlg
-               COL nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 )
+               COL nCol2 + ( ( nLen + 3 ) * 12 )
                ROW nRow2
                VALUE aItem[ CFG_VVALUE ]
                WIDTH Len( aItem[ CFG_VVALUE ] ) * 12
                HEIGHT 20
                BORDER .T.
 #endif
+            nCol += ( Len( aItem[ CFG_VVALUE ] ) + 3 ) * 12
          ENDIF
       ENDIF
    NEXT
@@ -217,6 +236,8 @@ METHOD EditCreate() CLASS DlgAutoEdit
 #endif
    (nRow2)
    (nCol2)
+   //hb_MemoWrit( "tela.txt", cTxt )
+
    RETURN Nil
 
 METHOD EditOn() CLASS DlgAutoEdit
