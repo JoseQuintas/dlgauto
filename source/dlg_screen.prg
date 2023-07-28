@@ -163,8 +163,8 @@ METHOD EditCreate() CLASS DlgAutoEdit
          IF ! Empty( aItem[ CFG_VTABLE ] )
 #ifdef HBMK_HAS_HWGUI
             @ nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION aItem[ CFG_VVALUE ] OF ;
-               iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR COLOR_FORE ;
-               TRANSPARENT
+               iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
+               STYLE WS_BORDER
 #endif
 #ifdef HBMK_HAS_HMGE
             aItem[ CFG_VOBJ ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )

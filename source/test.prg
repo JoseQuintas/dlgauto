@@ -4,6 +4,8 @@ REQUEST DBFCDX
 #include "dbstruct.ch"
 #include "dlgauto.ch"
 
+// not in use, only a note: #ifdef HBMK_HAS_HMGE || ! USER_ROUTINE
+
 PROCEDURE Main()
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nPos1, nPos2
