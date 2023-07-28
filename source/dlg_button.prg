@@ -55,18 +55,18 @@ METHOD ButtonCreate() CLASS DlgAutoBtn
    NEXT
    FOR EACH aItem IN ::aControlList
 #ifdef HBMK_HAS_HWGUI
-      @ nCol, nRow BUTTON aItem[ CFG_OBJ ] ;
+      @ nCol, nRow BUTTON aItem[ CFG_TOBJ ] ;
          CAPTION Nil ;
          OF ::oDlg SIZE ::nButtonSize, ::nButtonSize ;
          STYLE BS_TOP ;
          ON CLICK aItem[ CFG_ACTION ] ;
          ON INIT { || ;
-            BtnSetImageText( aItem[ CFG_OBJ ]:Handle, aItem[ CFG_NAME ], Self ) } ;
+            BtnSetImageText( aItem[ CFG_TOBJ ]:Handle, aItem[ CFG_NAME ], Self ) } ;
             TOOLTIP aItem[ CFG_NAME ]
 #endif
 #ifdef HBMK_HAS_HMGE
-      aItem[ CFG_OBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
-      DEFINE BUTTONEX &( aItem[ CFG_OBJ ] )
+      aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
+      DEFINE BUTTONEX &( aItem[ CFG_TOBJ ] )
          WIDTH ::nButtonSize
          HEIGHT ::nButtonSize
          PICTURE "icobook.ico"
@@ -103,9 +103,9 @@ METHOD ButtonSaveOn() CLASS DlgAutoBtn
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_NAME ] $ "Save,Cancel"
-            aItem[ CFG_OBJ ]:Enable()
+            aItem[ CFG_TOBJ ]:Enable()
          ELSE
-            aItem[ CFG_OBJ ]:Disable()
+            aItem[ CFG_TOBJ ]:Disable()
          ENDIF
       ENDIF
    NEXT
@@ -119,9 +119,9 @@ METHOD ButtonSaveOff() CLASS DlgAutoBtn
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_NAME ] $ "Save,Cancel"
-            aItem[ CFG_OBJ ]:Disable()
+            aItem[ CFG_TOBJ ]:Disable()
          ELSE
-            aItem[ CFG_OBJ ]:Enable()
+            aItem[ CFG_TOBJ ]:Enable()
          ENDIF
       ENDIF
    NEXT

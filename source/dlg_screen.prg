@@ -27,9 +27,6 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
    hwg_SetColorInFocus(.T., , hwg_ColorRGB2N(255,255,0) )
 #endif
-#ifdef HBMK_HAS_HMGE
-   LOCAL cMacro
-#endif
 #ifdef HBMK_HAS_OOHG
    LOCAL oControl
 #endif
@@ -43,12 +40,12 @@ METHOD EditCreate() CLASS DlgAutoEdit
       @ 5, 70 TAB oTab ITEMS {} OF ::oDlg ID 101 SIZE ::nDlgWidth - 10, ::nDlgHeight - 140 STYLE WS_CHILD + WS_VISIBLE
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_TAB
-      Atail( ::aControlList )[ CFG_OBJ ]     := oTab
+      Atail( ::aControlList )[ CFG_TOBJ ]     := oTab
 
       @ 1, 23 PANEL oPanel OF oTab SIZE ::nDlgWidth - 12, ::nDlgHeight - 165 BACKCOLOR COLOR_BACK
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
-      Atail( ::aControlList )[ CFG_OBJ ]     := oPanel
+      Atail( ::aControlList )[ CFG_TOBJ ]     := oPanel
 #endif
       nRow := 999
    ELSE
@@ -73,9 +70,9 @@ METHOD EditCreate() CLASS DlgAutoEdit
 #ifdef HBMK_HAS_HWGUI
                   //ghost for getlist
                   AAdd( ::aControlList, CFG_EDITEMPTY )
-                  @ nCol, nRow GET Atail( ::aControlList )[ CFG_OBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
+                  @ nCol, nRow GET Atail( ::aControlList )[ CFG_TOBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
                      OF oTab SIZE 0, 0 STYLE WS_DISABLED
-                  AAdd( Atail( aList ), Atail( ::aControlList )[ CFG_OBJ ] )
+                  AAdd( Atail( aList ), Atail( ::aControlList )[ CFG_TOBJ ] )
                   END PAGE OF oTab
 #endif
 
@@ -102,9 +99,9 @@ METHOD EditCreate() CLASS DlgAutoEdit
          @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, 20 COLOR COLOR_FORE TRANSPARENT
 #endif
 #ifdef HBMK_HAS_HMGE
-         cMacro := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
-         DEFINE LABEL &cMacro
-            PARENT ::oDlg
+         aItem[ CFG_TOBJ ] := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
+         DEFINE LABEL ( aItem[ CFG_TOBJ ] )
+            PARENT ( ::oDlg )
             COL nCol
             ROW nRow
             WIDTH nLen * 12
@@ -125,7 +122,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
 
 #ifdef HBMK_HAS_HWGUI
-         @ nCol2, nRow2 GET aItem[ CFG_OBJ ] ;
+         @ nCol2, nRow2 GET aItem[ CFG_TOBJ ] ;
             VAR aItem[ CFG_VALUE ] OF iif( ::lWithTab, oTab, ::oDlg ) ;
             SIZE aItem[ CFG_LEN ] * 12, 20 ;
             STYLE WS_DISABLED + iif( aItem[ CFG_VALTYPE ] == "N", ES_RIGHT, ES_LEFT ) ;
@@ -133,10 +130,9 @@ METHOD EditCreate() CLASS DlgAutoEdit
             PICTURE PictureFromValue( aItem )
 #endif
 #ifdef HBMK_HAS_HMGE
-         cMacro := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-         aItem[ CFG_CTLNAME ] := cMacro
-         @ nRow2, nCol2 TEXTBOX &cMacro ;
-            PARENT    ::oDlg ;
+         aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
+         @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_TOBJ ] ) ;
+            PARENT    ( ::oDlg ) ;
             HEIGHT    20 ;
             WIDTH     aItem[ CFG_LEN ] * 12 ;
             VALUE     aItem[ CFG_VALUE ] ;
@@ -146,7 +142,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
             ON CHANGE Nil
 #endif
 #ifdef HBMK_HAS_OOHG
-         WITH OBJECT aItem[ CFG_OBJ ] := TText():Define()
+         WITH OBJECT aItem[ CFG_TOBJ ] := TText():Define()
             :Row    := nRow2
             :Col    := nCol2
             :Width  := aItem[ CFG_LEN ] * 12
@@ -159,7 +155,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
 #ifdef HBMK_HAS_HWGUI
          IF ::lWithTab
-            AAdd( Atail( aList ), aItem[ CFG_CTLOBJ ] )
+            AAdd( Atail( aList ), aItem[ CFG_TOBJ ] )
          ENDIF
 #endif
 
@@ -171,16 +167,11 @@ METHOD EditCreate() CLASS DlgAutoEdit
                TRANSPARENT
 #endif
 #ifdef HBMK_HAS_HMGE
-            cMacro := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
-            aItem[ CFG_VCTLNAME ] := cMacro
-            DEFINE LABEL &cMacro
-               PARENT ::oDlg
-               COL nCol2 + ( ( nLen + 3 ) * 12 )
-               ROW nRow2
-               VALUE aItem[ CFG_VVALUE ]
-               WIDTH Len( aItem[ CFG_VVALUE ] ) * 12
-               HEIGHT 20
-               BORDER .T.
+            aItem[ CFG_VOBJ ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
+            @ nRow2, nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VOBJ ] ) ;
+               PARENT ( ::oDlg ) ;
+               VALUE aItem[ CFG_VVALUE ] WIDTH Len( aItem[ CFG_VVALUE ] ) * 12 HEIGHT 20 ;
+               BORDER
 #endif
 #ifdef HBMK_HAS_OOHG
             WITH OBJECT aItem[ CFG_VOBJ ] := TLabel():Define()
@@ -199,10 +190,10 @@ METHOD EditCreate() CLASS DlgAutoEdit
 #ifdef HBMK_HAS_HWGUI
    // ghost for Getlist
    AAdd( ::aControlList, CFG_EDITEMPTY )
-   @ nCol, nRow GET Atail( ::aControlList )[ CFG_OBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
+   @ nCol, nRow GET Atail( ::aControlList )[ CFG_TOBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
       OF iif( ::lWithTab, oTab, ::oDlg ) SIZE 0, 0 STYLE WS_DISABLED
    IF ::lWithTab
-      AAdd( ATail( aList ), Atail( ::aControlList )[ CFG_OBJ ] )
+      AAdd( ATail( aList ), Atail( ::aControlList )[ CFG_TOBJ ] )
       END PAGE OF oTab
       FOR nTab = 1 TO Len( aList )
          nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
@@ -212,7 +203,9 @@ METHOD EditCreate() CLASS DlgAutoEdit
 #endif
    (nRow2)
    (nCol2)
+#ifdef HBMK_HAS_OOHG
    (oControl)
+#endif
    //hb_MemoWrit( "tela.txt", cTxt )
 
    RETURN Nil
@@ -223,10 +216,10 @@ METHOD EditOn() CLASS DlgAutoEdit
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         aItem[ CFG_OBJ ]:Enable()
+         aItem[ CFG_TOBJ ]:Enable()
          IF ! lFound
             lFound := .T.
-            oFirstEdit := aItem[ CFG_OBJ ]
+            oFirstEdit := aItem[ CFG_TOBJ ]
          ENDIF
       ENDIF
    NEXT
@@ -241,7 +234,7 @@ METHOD EditOff() CLASS DlgAutoEdit
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         aItem[ CFG_OBJ ]:Disable()
+         aItem[ CFG_TOBJ ]:Disable()
       ENDIF
    NEXT
    ::ButtonSaveOff()
@@ -258,11 +251,11 @@ METHOD EditUpdate() CLASS DlgAutoEdit
             xValue := FieldGet( FieldNum( aItem[ CFG_NAME ] ) )
 
 #ifdef HBMK_HAS_HWGUI
-            aItem[ CFG_OBJ ]:Value := xValue
-            aItem[ CFG_OBJ ]:Refresh()
+            aItem[ CFG_TOBJ ]:Value := xValue
+            aItem[ CFG_TOBJ ]:Refresh()
 #endif
 #ifdef HBMK_HAS_HMGE
-//            SetProperty( "::Dlg", aItem[ CFG_CTLNAME ], "VALUE", FieldGet( FieldNum( aItem[ CFG_NAME ] ) ) )
+            SetProperty( ::oDlg, aItem[ CFG_TOBJ ], "VALUE", iif( ValType( xValue ) == "N", Ltrim( Str( xValue ) ), xValue ) )
 #endif
 
          ENDIF
@@ -274,17 +267,10 @@ METHOD EditUpdate() CLASS DlgAutoEdit
 
 #ifdef HBMK_HAS_HWGUI
             aItem[ CFG_VOBJ ]:SetText( cText )
-            //hwg_MsgInfo( "nome " + aItem[ CFG_NAME ] + hb_Eol() + ;
-            //    "valor " + Transform( aItem[ CFG_OBJ ]:Value, "" ) + hb_Eol() + ;
-            //   "tipo " + ValType( aItem[ CFG_OBJ ]:Value ) + hb_Eol() + ;
-            //   "eof() " + Transform( Eof(), "" ) + hb_Eol() + ;
-            //   "obtido " + cText + hb_Eol() + ;
-            //   "salvo " + aItem[ CFG_VOBJ ]:Title )
             aItem[ CFG_VOBJ ]:Refresh()
 #endif
 #ifdef HBMK_HAS_HMGE
-            //SEEK GetProperty( "::Dlg", aItem[ CFG_CTLNAME ], "VALUE" )
-            //SetProperty( "::Dlg", aItem[ CFG_VCTLNAME ], "VALUE", &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) ) )
+            SetProperty( ::oDlg, aItem[ CFG_VOBJ ], "VALUE", cText )
 #endif
 
             SELECT ( nSelect )

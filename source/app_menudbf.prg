@@ -41,14 +41,14 @@ FUNCTION DlgAutoMenu( aAllSetup )
 #endif
 
 #ifdef HBMK_HAS_HMGE
-   DEFINE WINDOW Form_Main ;
+   DEFINE WINDOW ("Main") ;
       AT 1000, 500 ;
       WIDTH 512 ;
       HEIGHT 384 ;
       TITLE "Example" ;
       WINDOWTYPE MAIN
 
-      DEFINE MAIN MENU OF Form_Main
+      DEFINE MAIN MENU OF ("Main")
          FOR EACH aGrupoList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
                FOR EACH cDBF IN aGrupoList
@@ -57,13 +57,13 @@ FUNCTION DlgAutoMenu( aAllSetup )
             END POPUP
          NEXT
          DEFINE POPUP "Sair"
-            MENUITEM "Sair" ACTION Form_Main.Release
+            MENUITEM "Sair" ACTION ("Main").Release
          END POPUP
       END MENU
    END WINDOW
 
-   form_Main.CENTER
-   form_Main.ACTIVATE
+   ("Main").CENTER
+   ("Main").ACTIVATE
 #endif
 
 #ifdef HBMK_HAS_OOHG

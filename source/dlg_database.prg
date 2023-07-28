@@ -24,7 +24,7 @@ CREATE CLASS DlgAutoData INHERIT DlgAutoBtn, DlgAutoEdit, DlgAutoPrint
 #endif
 
 #ifdef HBMK_HAS_HMGE
-   METHOD Exit()        INLINE DoMethod( "::oDlg", "Release" )
+   METHOD Exit()        INLINE DoMethod( ::oDlg, "Release" )
 #endif
 
    METHOD Save()
@@ -93,7 +93,8 @@ METHOD Execute() CLASS DlgAutoData
    ACTIVATE DIALOG ::oDlg CENTER
 #endif
 #ifdef HBMK_HAS_HMGE
-   DEFINE WINDOW ::oDlg ;
+   ::oDlg := "FRM" + ::cFileDBF
+   DEFINE WINDOW ( ::oDlg ) ;
       AT 1000, 500 ;
       WIDTH ::nDlgWidth ;
       HEIGHT ::nDlgHeight ;
@@ -105,8 +106,8 @@ METHOD Execute() CLASS DlgAutoData
       ::EditCreate()
 
    END WINDOW
-   ::oDlg.CENTER
-   ::oDlg.ACTIVATE
+   ( ::oDlg ).CENTER
+   ( ::oDlg ).ACTIVATE
 #endif
 #ifdef HBMK_HAS_OOHG
    WITH OBJECT ::oDlg := TForm():Define()

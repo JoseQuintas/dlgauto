@@ -1,5 +1,5 @@
 #define CFG_CTLTYPE   1
-#define CFG_OBJ       2
+#define CFG_TOBJ      2
 #define CFG_NAME      3
 #define CFG_ACTION    4
 #define CFG_VALTYPE   4
