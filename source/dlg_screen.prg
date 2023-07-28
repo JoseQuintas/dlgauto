@@ -252,7 +252,6 @@ METHOD EditUpdate() CLASS DlgAutoEdit
 
 #ifdef HBMK_HAS_HWGUI
             aItem[ CFG_TOBJ ]:Value := xValue
-            aItem[ CFG_TOBJ ]:Refresh()
 #endif
 #ifdef HBMK_HAS_HMGE
             SetProperty( ::oDlg, aItem[ CFG_TOBJ ], "VALUE", iif( ValType( xValue ) == "N", Ltrim( Str( xValue ) ), xValue ) )
