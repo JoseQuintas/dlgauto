@@ -35,7 +35,7 @@ FUNCTION Dlg_CreateButton( Self )
    FOR EACH aItem IN aList
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
-      Atail( ::aControlList )[ CFG_NAME ]    := aItem[1]
+      Atail( ::aControlList )[ CFG_FNAME ]    := aItem[1]
       Atail( ::aControlList )[ CFG_ACTION ]  := aItem[ 2 ]
    NEXT
    FOR EACH aItem IN ::aControlList
@@ -46,8 +46,8 @@ FUNCTION Dlg_CreateButton( Self )
          STYLE BS_TOP ;
          ON CLICK aItem[ CFG_ACTION ] ;
          ON INIT { || ;
-            BtnSetImageText( aItem[ CFG_TOBJ ]:Handle, aItem[ CFG_NAME ], Self ) } ;
-            TOOLTIP aItem[ CFG_NAME ]
+            BtnSetImageText( aItem[ CFG_TOBJ ]:Handle, aItem[ CFG_FNAME ], Self ) } ;
+            TOOLTIP aItem[ CFG_FNAME ]
 #endif
 #ifdef HBMK_HAS_HMGE
       aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
@@ -59,7 +59,7 @@ FUNCTION Dlg_CreateButton( Self )
          IMAGEHEIGHT ::nButtonSize - 20
          COL nCol
          ROW nRow
-         CAPTION aItem[ CFG_NAME ]
+         CAPTION aItem[ CFG_FNAME ]
          ACTION Eval( aItem[ CFG_ACTION ] )
          FONTNAME "verdana"
          FONTSIZE 9

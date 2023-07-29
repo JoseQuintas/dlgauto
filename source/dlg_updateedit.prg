@@ -6,8 +6,8 @@ FUNCTION Dlg_UpdateEdit( Self )
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF ! Empty( aItem[ CFG_NAME ] )
-            xValue := FieldGet( FieldNum( aItem[ CFG_NAME ] ) )
+         IF ! Empty( aItem[ CFG_FNAME ] )
+            xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
 
 #ifdef HBMK_HAS_HWGUI
             aItem[ CFG_TOBJ ]:Value := xValue

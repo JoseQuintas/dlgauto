@@ -27,10 +27,10 @@ PROCEDURE Main()
       aStru := dbStruct()
       FOR EACH aField IN aStru
          aItem := CFG_EDITEMPTY
-         aItem[ CFG_NAME ]    := aField[ DBS_NAME ]
-         aItem[ CFG_VALTYPE ] := aField[ DBS_TYPE ]
-         aItem[ CFG_LEN ]     := aField[ DBS_LEN ]
-         aItem[ CFG_DEC ]     := aField[ DBS_DEC ]
+         aItem[ CFG_FNAME ]    := aField[ DBS_NAME ]
+         aItem[ CFG_FTYPE ] := aField[ DBS_TYPE ]
+         aItem[ CFG_FLEN ]     := aField[ DBS_LEN ]
+         aItem[ CFG_FDEC ]    := aField[ DBS_DEC ]
          aItem[ CFG_VALUE ]   := aField[ DBS_NAME ]
          aItem[ CFG_CAPTION ] := aField[ DBS_NAME ]
          /* above retrieve value from related dbf */
@@ -59,9 +59,9 @@ PROCEDURE Main()
       FOR EACH aItem IN aDBF[ 2 ]
          IF ! Empty( aItem[ CFG_VTABLE ] )
             IF ( nPos1 := hb_AScan( aAllSetup, { | e | e[ 1 ] == aItem[ CFG_VTABLE ] } ) ) != 0
-               nPos2 := hb_AScan( aAllSetup[ nPos1, 2 ], { | e | e[ CFG_NAME ] == aItem[ CFG_VSHOW ] } )
+               nPos2 := hb_AScan( aAllSetup[ nPos1, 2 ], { | e | e[ CFG_FNAME ] == aItem[ CFG_VSHOW ] } )
                IF nPos2 != 0
-                  aItem[ CFG_VVALUE ] := Space( aAllSetup[ nPos1, 2, nPos2, CFG_LEN ] )
+                  aItem[ CFG_VLEN ] := aAllSetup[ nPos1, 2, nPos2, CFG_FLEN ]
                ENDIF
             ENDIF
          ENDIF

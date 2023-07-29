@@ -1,4 +1,4 @@
-#define CFG_NAME      3
+#define CFG_FNAME      3
 #define CFG_CAPTION   7
 
 FUNCTION Dlg_Print( Self )
@@ -19,24 +19,24 @@ FUNCTION Dlg_Print( Self )
          nLin := 2
          nCol := 0
          FOR EACH aItem IN ::aEditList // need additional adjust
-            nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_NAME ] ) ), "" ) ) )
+            nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" ) ) )
             IF nCol != 0 .AND. nCol + nLen > 79
                nLin += 1
                nCol := 0
             ENDIF
-            @ nLin, nCol SAY aItem[ CFG_NAME ]
+            @ nLin, nCol SAY aItem[ CFG_FNAME ]
             nCol += nLen + 2
          NEXT
          nLin += 1
       ENDIF
       nCol := 0
       FOR EACH aItem IN ::aEditList // need additional adjust
-         nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_NAME ] ) ), "" ) ) )
+         nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" ) ) )
          IF nCol != 0 .AND. nCol + nLen > 79
             nLin += 1
             nCol := 0
          ENDIF
-         @ nLin, nCol SAY Transform( FieldGet( FieldNum( aItem[ CFG_NAME ] ) ), "" )
+         @ nLin, nCol SAY Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" )
          nCol += nLen + 2
       NEXT
       nLin += 1

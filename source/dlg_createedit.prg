@@ -15,7 +15,7 @@ FUNCTION Dlg_CreateEdit( Self )
 
    FOR EACH aItem IN ::aEditList
       AAdd( ::aControlList, AClone( aItem ) )
-      Atail( ::aControlList )[ CFG_VALUE ] := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_NAME ] ) ) )
+      Atail( ::aControlList )[ CFG_VALUE ] := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
    NEXT
    IF ::lWithTab
 #ifdef HBMK_HAS_HWGUI
@@ -41,9 +41,9 @@ FUNCTION Dlg_CreateEdit( Self )
       ENDIF
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
-            nLen := Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_LEN ] + 3 + iif( Empty( aItem[ CFG_VTABLE ] ), 0, Len( aItem[ CFG_VVALUE ] ) + 3 )
+            nLen := Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 + iif( Empty( aItem[ CFG_VTABLE ] ), 0, aItem[ CFG_VLEN ] + 3 )
          ELSE
-            nLen := Max( aItem[ CFG_LEN ] + iif( Empty( aItem[ CFG_VTABLE ] ), 0, Len( aItem[ CFG_VVALUE ] ) + 3 ), Len( aItem[ CFG_CAPTION ] ) )
+            nLen := Max( aItem[ CFG_FLEN ] + iif( Empty( aItem[ CFG_VTABLE ] ), 0, aItem[ CFG_VLEN ] + 3 ), Len( aItem[ CFG_CAPTION ] ) )
          ENDIF
          IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + ( nLen * 12 ) > ::nDlgWidth - 40 ) .OR. nRow > ::nPageLimit
             IF ::lWithTab .AND. nRow > ::nPageLimit
@@ -106,9 +106,9 @@ FUNCTION Dlg_CreateEdit( Self )
 #ifdef HBMK_HAS_HWGUI
          @ nCol2, nRow2 GET aItem[ CFG_TOBJ ] ;
             VAR aItem[ CFG_VALUE ] OF iif( ::lWithTab, oTab, ::oDlg ) ;
-            SIZE aItem[ CFG_LEN ] * 12, 20 ;
-            STYLE WS_DISABLED + iif( aItem[ CFG_VALTYPE ] == "N", ES_RIGHT, ES_LEFT ) ;
-            MAXLENGTH aItem[ CFG_LEN ] ;
+            SIZE aItem[ CFG_FLEN ] * 12, 20 ;
+            STYLE WS_DISABLED + iif( aItem[ CFG_FTYPE ] == "N", ES_RIGHT, ES_LEFT ) ;
+            MAXLENGTH aItem[ CFG_FLEN ] ;
             PICTURE PictureFromValue( aItem )
 #endif
 #ifdef HBMK_HAS_HMGE
@@ -116,9 +116,9 @@ FUNCTION Dlg_CreateEdit( Self )
          @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_TOBJ ] ) ;
             PARENT    ( ::oDlg ) ;
             HEIGHT    20 ;
-            WIDTH     aItem[ CFG_LEN ] * 12 ;
+            WIDTH     aItem[ CFG_FLEN ] * 12 ;
             VALUE     aItem[ CFG_VALUE ] ;
-            MAXLENGTH aItem[ CFG_LEN ] ;
+            MAXLENGTH aItem[ CFG_FLEN ] ;
             FONT      "verdana" SIZE 12 ;
             UPPERCASE
             ON CHANGE Nil
@@ -127,7 +127,7 @@ FUNCTION Dlg_CreateEdit( Self )
          WITH OBJECT aItem[ CFG_TOBJ ] := TText():Define()
             :Row    := nRow2
             :Col    := nCol2
-            :Width  := aItem[ CFG_LEN ] * 12
+            :Width  := aItem[ CFG_FLEN ] * 12
             :Height := 20
             :Value  := aItem[ CFG_VALUE ]
          ENDWITH
@@ -144,28 +144,28 @@ FUNCTION Dlg_CreateEdit( Self )
 
          IF ! Empty( aItem[ CFG_VTABLE ] )
 #ifdef HBMK_HAS_HWGUI
-            @ nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION aItem[ CFG_VVALUE ] OF ;
-               iif( ::lWithTab, oTab, ::oDlg ) SIZE Len( aItem[ CFG_VVALUE ] ) * 12, 20 COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
+            @ nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION Space( aItem[ CFG_VLEN ] ) OF ;
+               iif( ::lWithTab, oTab, ::oDlg ) SIZE aItem[ CFG_VLEN ] * 12, 20 COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
                STYLE WS_BORDER
 #endif
 #ifdef HBMK_HAS_HMGE
             aItem[ CFG_VOBJ ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
-            @ nRow2, nCol2 + ( ( aItem[ CFG_LEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VOBJ ] ) ;
+            @ nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VOBJ ] ) ;
                PARENT ( ::oDlg ) ;
-               VALUE aItem[ CFG_VVALUE ] WIDTH Len( aItem[ CFG_VVALUE ] ) * 12 HEIGHT 20 ;
+               VALUE Space( aItem[ CFG_VLEN ] ) WIDTH aItem[ CFG_VLEN ] * 12 HEIGHT 20 ;
                BORDER
 #endif
 #ifdef HBMK_HAS_OOHG
             WITH OBJECT aItem[ CFG_VOBJ ] := TLabel():Define()
                :Row := nRow2
                :Col := nCol2 + ( ( nLen + 3 ) * 12 )
-               :Value := aItem[ CFG_VVALUE ]
+               :Value := Space( aItem[ CFG_VLEN ] )
                :Height := 20
-               :Width := Len( aItem[ CFG_VVALUE ] ) * 12
+               :Width := aItem[ CFG_VLEN ] * 12
                :Border := .T.
             ENDWITH
 #endif
-            nCol += ( Len( aItem[ CFG_VVALUE ] ) + 3 ) * 12
+            nCol += ( aItem[ CFG_VLEN ] + 3 ) * 12
          ENDIF
       ENDIF
    NEXT
@@ -205,9 +205,9 @@ STATIC FUNCTION PictureFromValue( oValue )
 
    LOCAL cPicture, cType, nLen, nDec
 
-   cType := oValue[ CFG_VALTYPE ]
-   nLen  := oValue[ CFG_LEN ]
-   nDec  := oValue[ CFG_DEC ]
+   cType := oValue[ CFG_FTYPE ]
+   nLen  := oValue[ CFG_FLEN ]
+   nDec  := oValue[ CFG_FDEC ]
    DO CASE
    CASE cType == "D"
       cPicture := "@D"

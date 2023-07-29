@@ -52,7 +52,7 @@ METHOD ButtonSaveOn() CLASS Dlg_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF aItem[ CFG_NAME ] $ "Save,Cancel"
+         IF aItem[ CFG_FNAME ] $ "Save,Cancel"
             aItem[ CFG_TOBJ ]:Enable()
          ELSE
             aItem[ CFG_TOBJ ]:Disable()
@@ -68,7 +68,7 @@ METHOD ButtonSaveOff() CLASS Dlg_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF aItem[ CFG_NAME ] $ "Save,Cancel"
+         IF aItem[ CFG_FNAME ] $ "Save,Cancel"
             aItem[ CFG_TOBJ ]:Disable()
          ELSE
             aItem[ CFG_TOBJ ]:Enable()
@@ -130,8 +130,8 @@ METHOD Save() CLASS dlg_Class
    RLock()
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF ! Empty( aItem[ CFG_NAME ] )
-            FieldPut( FieldNum( aItem[ CFG_NAME ] ), aItem[ CFG_VALUE ] )
+         IF ! Empty( aItem[ CFG_FNAME ] )
+            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), aItem[ CFG_VALUE ] )
          ENDIF
       ENDIF
    NEXT
