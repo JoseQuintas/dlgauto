@@ -10,11 +10,13 @@ hbwin.hbc
 
 test.prg
 test_dbf.prg
-app_menudbf.prg
-app_print.prg
-app_preview.prg
-dlg_begin.prg
-dlg_button.prg
-dlg_database.prg
-dlg_screen.prg
+test_menu.prg
+test_dlg.prg
+dlg_class.prg
+dlg_createdlg.prg
+dlg_createbutton.prg
+dlg_createedit.prg
+dlg_updateedit.prg
+dlg_print.prg
+dlg_preview.prg
 test.rc

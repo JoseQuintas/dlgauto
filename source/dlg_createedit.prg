@@ -1,25 +1,7 @@
 #include "hbclass.ch"
-#include "dbstruct.ch"
-#include "dlgauto.ch"
+#include "dlg_class.ch"
 
-CREATE CLASS DlgAutoEdit
-
-   VAR cTitle
-   VAR cFileDBF
-   VAR aEditList   INIT {}
-   VAR lWithTab    INIT .F.
-   VAR nLineHeight INIT 25
-   VAR nEditStyle  INIT 1
-   VAR nPageLimit  INIT 300
-   METHOD EditUpdate()
-   METHOD EditCreate()
-   METHOD EditOn()
-   METHOD EditOff()
-   VAR oDlg
-
-   ENDCLASS
-
-METHOD EditCreate() CLASS DlgAutoEdit
+FUNCTION Dlg_CreateEdit( Self )
 
    LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, nLen, aList := {}, nLenList, nRow2, nCol2 // , cTxt := ""
 #ifdef HBMK_HAS_HWGUI
@@ -33,7 +15,7 @@ METHOD EditCreate() CLASS DlgAutoEdit
 
    FOR EACH aItem IN ::aEditList
       AAdd( ::aControlList, AClone( aItem ) )
-      Atail( ::aControlList )[ CFG_VALUE ] := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ DBS_NAME ] ) ) )
+      Atail( ::aControlList )[ CFG_VALUE ] := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_NAME ] ) ) )
    NEXT
    IF ::lWithTab
 #ifdef HBMK_HAS_HWGUI
@@ -207,76 +189,6 @@ METHOD EditCreate() CLASS DlgAutoEdit
    (oControl)
 #endif
    //hb_MemoWrit( "tela.txt", cTxt )
-
-   RETURN Nil
-
-METHOD EditOn() CLASS DlgAutoEdit
-
-   LOCAL aItem, oFirstEdit, lFound := .F.
-
-   FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         aItem[ CFG_TOBJ ]:Enable()
-         IF ! lFound
-            lFound := .T.
-            oFirstEdit := aItem[ CFG_TOBJ ]
-         ENDIF
-      ENDIF
-   NEXT
-   ::ButtonSaveOn()
-   oFirstEdit:SetFocus()
-
-   RETURN Nil
-
-METHOD EditOff() CLASS DlgAutoEdit
-
-   LOCAL aItem
-
-   FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         aItem[ CFG_TOBJ ]:Disable()
-      ENDIF
-   NEXT
-   ::ButtonSaveOff()
-
-   RETURN Nil
-
-METHOD EditUpdate() CLASS DlgAutoEdit
-
-   LOCAL aItem, nSelect, xValue, cText
-
-   FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF ! Empty( aItem[ CFG_NAME ] )
-            xValue := FieldGet( FieldNum( aItem[ CFG_NAME ] ) )
-
-#ifdef HBMK_HAS_HWGUI
-            aItem[ CFG_TOBJ ]:Value := xValue
-#endif
-#ifdef HBMK_HAS_HMGE
-            SetProperty( ::oDlg, aItem[ CFG_TOBJ ], "VALUE", iif( ValType( xValue ) == "N", Ltrim( Str( xValue ) ), xValue ) )
-#endif
-
-         ENDIF
-         IF ! Empty( aItem[ CFG_VTABLE ] )
-            nSelect := Select()
-            SELECT ( Select( aItem[ CFG_VTABLE ] ) )
-            SEEK xValue
-            cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
-
-#ifdef HBMK_HAS_HWGUI
-            aItem[ CFG_VOBJ ]:SetText( cText )
-            aItem[ CFG_VOBJ ]:Refresh()
-#endif
-#ifdef HBMK_HAS_HMGE
-            SetProperty( ::oDlg, aItem[ CFG_VOBJ ], "VALUE", cText )
-#endif
-
-            SELECT ( nSelect )
-         ENDIF
-      ENDIF
-   NEXT
-   (cText)
 
    RETURN Nil
 

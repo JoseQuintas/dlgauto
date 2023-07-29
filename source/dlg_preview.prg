@@ -1,14 +1,12 @@
-#include "dbstruct.ch"
 #include "directry.ch"
-#include "hbclass.ch"
-#include "dlgauto.ch"
+#include "dlg_class.ch"
 
 #ifndef HBMK_HAS_HWGUI
-   FUNCTION DlgAutoPreview()
+   FUNCTION Dlg_Preview()
    RETURN Nil
 #endif
 #ifdef HBMK_HAS_HWGUI
-FUNCTION DlgAutoPreview( cFileMask )
+FUNCTION Dlg_Preview( cFileMask )
 
    LOCAL aFileList, nIndex
    LOCAL oDlg, oEdit, oFont := HFont():Add( "Courier New", 0, -13 )

@@ -2,7 +2,7 @@ REQUEST DBFCDX
 
 #include "directry.ch"
 #include "dbstruct.ch"
-#include "dlgauto.ch"
+#include "dlg_class.ch"
 
 // not in use, only a note: #ifdef HBMK_HAS_HMGE || ! USER_ROUTINE
 
@@ -36,12 +36,12 @@ PROCEDURE Main()
          /* above retrieve value from related dbf */
          DO CASE
          CASE cFile == "PRODUCT" .AND. aField[ DBS_NAME ] == "IDPRODUCT"
-            aItem[ CFG_KEY ] := .T.
+            aItem[ CFG_ISKEY ] := .T.
          CASE cFile == "PEOPLE" .AND. aField[ DBS_NAME ] == "IDPEOPLE"
-            aItem[ CFG_KEY ] := .T.
+            aItem[ CFG_ISKEY ] := .T.
          CASE ! cFile == "ACCOUNT"
          CASE aField[ DBS_NAME ] == "IDACCOUNT"
-            aItem[ CFG_KEY ] := .T.
+            aItem[ CFG_ISKEY ] := .T.
          CASE aField[ DBS_NAME ] == "IDPRODUCT"
             aItem[ CFG_VTABLE ] := "PRODUCT"
             aItem[ CFG_VFIELD ] := "IDPRODUCT"
@@ -67,7 +67,7 @@ PROCEDURE Main()
          ENDIF
       NEXT
    NEXT
-   DlgAutoMenu( @aAllSetup )
+   test_menu( @aAllSetup )
 
    RETURN
 

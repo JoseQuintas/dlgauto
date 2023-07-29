@@ -1,8 +1,8 @@
 #include "hbgtinfo.ch"
 #include "directry.ch"
-#include "dlgauto.ch"
+#include "dlg_class.ch"
 
-FUNCTION DlgAutoMenu( aAllSetup )
+FUNCTION test_menu( aAllSetup )
 
    LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cDBF
 #ifdef HBMK_HAS_HWGUI
@@ -29,7 +29,7 @@ FUNCTION DlgAutoMenu( aAllSetup )
       FOR EACH aGrupoList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
             FOR EACH cDBF IN aGrupoList
-               MENUITEM cDBF ACTION DlgAutoMain( cDBF, aAllSetup )
+               MENUITEM cDBF ACTION Test_Dlg( cDBF, aAllSetup )
             NEXT
          ENDMENU
       NEXT
@@ -52,7 +52,7 @@ FUNCTION DlgAutoMenu( aAllSetup )
          FOR EACH aGrupoList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
                FOR EACH cDBF IN aGrupoList
-                  MENUITEM cDBF ACTION DlgAutoMain( cDBF, aAllSetup )
+                  MENUITEM cDBF ACTION Test_Dlg( cDBF, aAllSetup )
                NEXT
             END POPUP
          NEXT
@@ -77,7 +77,7 @@ FUNCTION DlgAutoMenu( aAllSetup )
          FOR EACH aGrupoList IN aMenuList
             oMenuGroup:= TMenuItem():DefinePopup( "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) ) )
             FOR EACH cDBF IN aGrupoList
-               TMenuItem():DefineItem( cDBF, { || DlgAutoMain( cDBF, aAllSetup ) } )
+               TMenuItem():DefineItem( cDBF, { || Test_Dlg( cDBF, aAllSetup ) } )
             NEXT
             oMenuGroup:EndPopup()
          NEXT

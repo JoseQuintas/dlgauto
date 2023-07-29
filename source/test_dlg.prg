@@ -1,14 +1,8 @@
 #include "hbclass.ch"
 #include "directry.ch"
-#include "dlgauto.ch"
+#include "dlg_class.ch"
 
-PROCEDURE DlgAutoMain( cDBF, aAllSetup )
-
-   Execute( cDBF, aAllSetup )
-
-   RETURN
-
-FUNCTION Execute( cDBF, aAllSetup )
+FUNCTION Test_Dlg( cDBF, aAllSetup )
 
    LOCAL oDlg, nPos
 
@@ -29,7 +23,7 @@ FUNCTION Execute( cDBF, aAllSetup )
 
    RETURN Nil
 
-CREATE CLASS ThisDlg INHERIT DlgAutoData
+CREATE CLASS ThisDlg INHERIT Dlg_Class
 
    METHOD ShowCtlList()
    METHOD ShowDlgName()

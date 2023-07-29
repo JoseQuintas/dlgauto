@@ -1,21 +1,6 @@
-#include "hbclass.ch"
-#include "dlgauto.ch"
+#include "dlg_class.ch"
 
-CREATE CLASS DlgAutoBtn
-
-   VAR cOptions     INIT "IED"
-   VAR aOptionList  INIT {}
-   VAR aControlList INIT {}
-   VAR nButtonSize  INIT 50
-   VAR nButtonSpace INIT 3
-   VAR nTextSize    INIT 20
-   METHOD ButtonCreate()
-   METHOD ButtonSaveOn()
-   METHOD ButtonSaveOff()
-
-   ENDCLASS
-
-METHOD ButtonCreate() CLASS DlgAutoBtn
+FUNCTION Dlg_CreateButton( Self )
 
    LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
 
@@ -92,38 +77,6 @@ METHOD ButtonCreate() CLASS DlgAutoBtn
          nCol := ::nDlgWidth - ::nButtonSize - ::nButtonSpace
       ENDIF
       nCol += iif( nRowLine == 1, 1, -1 ) * ( ::nButtonSize + ::nButtonSpace )
-   NEXT
-
-   RETURN Nil
-
-METHOD ButtonSaveOn() CLASS DlgAutoBtn
-
-   LOCAL aItem
-
-   FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF aItem[ CFG_NAME ] $ "Save,Cancel"
-            aItem[ CFG_TOBJ ]:Enable()
-         ELSE
-            aItem[ CFG_TOBJ ]:Disable()
-         ENDIF
-      ENDIF
-   NEXT
-
-   RETURN Nil
-
-METHOD ButtonSaveOff() CLASS DlgAutoBtn
-
-   LOCAL aItem
-
-   FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF aItem[ CFG_NAME ] $ "Save,Cancel"
-            aItem[ CFG_TOBJ ]:Disable()
-         ELSE
-            aItem[ CFG_TOBJ ]:Enable()
-         ENDIF
-      ENDIF
    NEXT
 
    RETURN Nil

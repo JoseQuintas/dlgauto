@@ -1,16 +1,7 @@
-#include "dbstruct.ch"
-#include "directry.ch"
-#include "hbclass.ch"
 #define CFG_NAME      3
 #define CFG_CAPTION   7
 
-CREATE CLASS DlgAutoPrint
-
-   METHOD Print()
-
-   ENDCLASS
-
-METHOD Print() CLASS DlgAutoPrint
+FUNCTION Dlg_Print( Self )
 
    LOCAL aItem, nPag, nLin, nCol, nLen
 
@@ -55,7 +46,7 @@ METHOD Print() CLASS DlgAutoPrint
    SET DEVICE TO SCREEN
    SET PRINTER TO
 
-   DlgAutoPreview( "rel.lst" )
+   Dlg_Preview( "rel.lst" )
    fErase( "rel.lst" )
 
    RETURN Nil

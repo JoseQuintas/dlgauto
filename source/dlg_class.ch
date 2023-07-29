@@ -1,14 +1,14 @@
 #define CFG_CTLTYPE   1
 #define CFG_TOBJ      2
-#define CFG_NAME      3
+#define CFG_NAME      3  // defined on dlg_print
 #define CFG_ACTION    4
 #define CFG_VALTYPE   4
 #define CFG_LEN       5
 #define CFG_DEC       6
-#define CFG_CAPTION   7
+#define CFG_CAPTION   7   // defined on dlg_print
 #define CFG_VALUE     8
 #define CFG_VALID     9
-#define CFG_KEY       10
+#define CFG_ISKEY     10
 #define CFG_VTABLE    11
 #define CFG_VFIELD    12
 #define CFG_VSHOW     13
