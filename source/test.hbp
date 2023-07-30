@@ -9,9 +9,9 @@ hbct.hbc
 hbwin.hbc
 
 test.prg
-test_dbf.prg
+dlg_createdbf.prg
 test_menu.prg
-test_dlg.prg
+dlg_main.prg
 dlg_class.prg
 dlg_createdlg.prg
 dlg_createbutton.prg

@@ -1,4 +1,4 @@
-FUNCTION DlgAutoDBF()
+FUNCTION dlg_CreateDBF()
 
    LOCAL nCont
 
@@ -33,6 +33,7 @@ FUNCTION DlgAutoDBF()
          { "IDACCOUNT", "N", 6, 0 }, ;
          { "IDPEOPLE",  "N", 6, 0 }, ;
          { "IDPRODUCT", "N", 6, 0 }, ;
+         { "DATEMOV",   "D", 8, 0 }, ;
          { "VALUE",     "N", 14, 2 } } )
       USE account
       FOR nCont = 1 TO 9

@@ -1,11 +1,11 @@
 #include "directry.ch"
 #include "dlg_class.ch"
 
-#ifndef HBMK_HAS_HWGUI
+#ifndef THIS_HWGUI
    FUNCTION Dlg_Preview()
    RETURN Nil
 #endif
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
 FUNCTION Dlg_Preview( cFileMask )
 
    LOCAL aFileList, nIndex

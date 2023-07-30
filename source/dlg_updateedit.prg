@@ -9,11 +9,11 @@ FUNCTION Dlg_UpdateEdit( Self )
          IF ! Empty( aItem[ CFG_FNAME ] )
             xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
 
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
             aItem[ CFG_TOBJ ]:Value := xValue
 #endif
-#ifdef HBMK_HAS_HMGE
-            SetProperty( ::oDlg, aItem[ CFG_TOBJ ], "VALUE", iif( ValType( xValue ) == "N", Ltrim( Str( xValue ) ), xValue ) )
+#ifdef THIS_HMGE
+            SetProperty( ::oDlg, aItem[ CFG_TOBJ ], "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
 #endif
 
          ENDIF
@@ -23,11 +23,11 @@ FUNCTION Dlg_UpdateEdit( Self )
             SEEK xValue
             cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
 
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
             aItem[ CFG_VOBJ ]:SetText( cText )
             aItem[ CFG_VOBJ ]:Refresh()
 #endif
-#ifdef HBMK_HAS_HMGE
+#ifdef THIS_HMGE
             SetProperty( ::oDlg, aItem[ CFG_VOBJ ], "VALUE", cText )
 #endif
 

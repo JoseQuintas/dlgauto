@@ -18,7 +18,7 @@ FUNCTION Dlg_CreateDlg( Self )
    NEXT
    SELECT ( Select( ::cFileDbf ) )
 
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
    INIT DIALOG ::oDlg CLIPPER NOEXIT TITLE ::cTitle ;
       AT 0, 0 SIZE ::nDlgWidth, ::nDlgHeight ;
       BACKCOLOR COLOR_BACK ;
@@ -27,7 +27,7 @@ FUNCTION Dlg_CreateDlg( Self )
    ::CreateControls()
    ACTIVATE DIALOG ::oDlg CENTER
 #endif
-#ifdef HBMK_HAS_HMGE
+#ifdef THIS_HMGE
    ::oDlg := "FRM" + ::cFileDBF
    DEFINE WINDOW ( ::oDlg ) ;
       AT 1000, 500 ;
@@ -43,7 +43,7 @@ FUNCTION Dlg_CreateDlg( Self )
    ( ::oDlg ).CENTER
    ( ::oDlg ).ACTIVATE
 #endif
-#ifdef HBMK_HAS_OOHG
+#ifdef THIS_OOHG
    WITH OBJECT ::oDlg := TForm():Define()
       :Row := 500
       :Col := 1000

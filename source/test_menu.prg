@@ -5,10 +5,10 @@
 FUNCTION test_menu( aAllSetup )
 
    LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cDBF
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
    LOCAL oDlg
 #endif
-#ifdef HBMK_HAS_OOHG
+#ifdef THIS_OOHG
    LOCAL oDlg, oMenuMain, oMenuGroup
 #endif
 
@@ -23,13 +23,13 @@ FUNCTION test_menu( aAllSetup )
       ENDIF
    NEXT
 
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
    INIT WINDOW oDlg TITLE "Example" AT 0, 0 SIZE 512, 384
    MENU OF oDlg
       FOR EACH aGrupoList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
             FOR EACH cDBF IN aGrupoList
-               MENUITEM cDBF ACTION Test_Dlg( cDBF, aAllSetup )
+               MENUITEM cDBF ACTION Dlg_Main( cDBF, aAllSetup )
             NEXT
          ENDMENU
       NEXT
@@ -40,7 +40,7 @@ FUNCTION test_menu( aAllSetup )
    ACTIVATE WINDOW oDlg CENTER
 #endif
 
-#ifdef HBMK_HAS_HMGE
+#ifdef THIS_HMGE
    DEFINE WINDOW ("Main") ;
       AT 1000, 500 ;
       WIDTH 512 ;
@@ -52,7 +52,7 @@ FUNCTION test_menu( aAllSetup )
          FOR EACH aGrupoList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
                FOR EACH cDBF IN aGrupoList
-                  MENUITEM cDBF ACTION Test_Dlg( cDBF, aAllSetup )
+                  MENUITEM cDBF ACTION Dlg_Main( cDBF, aAllSetup )
                NEXT
             END POPUP
          NEXT
@@ -66,7 +66,7 @@ FUNCTION test_menu( aAllSetup )
    ("Main").ACTIVATE
 #endif
 
-#ifdef HBMK_HAS_OOHG
+#ifdef THIS_OOHG
    WITH OBJECT oDlg := TFormMain():Define()
       :Col := 1000
       :Row := 500
@@ -77,7 +77,7 @@ FUNCTION test_menu( aAllSetup )
          FOR EACH aGrupoList IN aMenuList
             oMenuGroup:= TMenuItem():DefinePopup( "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) ) )
             FOR EACH cDBF IN aGrupoList
-               TMenuItem():DefineItem( cDBF, { || Test_Dlg( cDBF, aAllSetup ) } )
+               TMenuItem():DefineItem( cDBF, { || Dlg_Main( cDBF, aAllSetup ) } )
             NEXT
             oMenuGroup:EndPopup()
          NEXT

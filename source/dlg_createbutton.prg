@@ -39,7 +39,7 @@ FUNCTION Dlg_CreateButton( Self )
       Atail( ::aControlList )[ CFG_ACTION ]  := aItem[ 2 ]
    NEXT
    FOR EACH aItem IN ::aControlList
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
       @ nCol, nRow BUTTON aItem[ CFG_TOBJ ] ;
          CAPTION Nil ;
          OF ::oDlg SIZE ::nButtonSize, ::nButtonSize ;
@@ -49,7 +49,7 @@ FUNCTION Dlg_CreateButton( Self )
             BtnSetImageText( aItem[ CFG_TOBJ ]:Handle, aItem[ CFG_FNAME ], Self ) } ;
             TOOLTIP aItem[ CFG_FNAME ]
 #endif
-#ifdef HBMK_HAS_HMGE
+#ifdef THIS_HMGE
       aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       DEFINE BUTTONEX &( aItem[ CFG_TOBJ ] )
          WIDTH ::nButtonSize
@@ -81,7 +81,7 @@ FUNCTION Dlg_CreateButton( Self )
 
    RETURN Nil
 
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
 STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
 
    LOCAL oIcon, nPos, cResName, hIcon

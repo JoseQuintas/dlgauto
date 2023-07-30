@@ -4,18 +4,18 @@ REQUEST DBFCDX
 #include "dbstruct.ch"
 #include "dlg_class.ch"
 
-// not in use, only a note: #ifdef HBMK_HAS_HMGE || ! USER_ROUTINE
+// not in use, only a note: #ifdef THIS_HMGE || ! USER_ROUTINE
 
 PROCEDURE Main()
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nPos1, nPos2
 
    SET EXCLUSIVE OFF
-#ifdef HBMK_HAS_HMGE
+#ifdef THIS_HMGE
    SET OOP ON
 #endif
    RddSetDefault( "DBFCDX" )
-   DlgAutoDBF( @aAllSetup )
+   Dlg_CreateDBF()
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )

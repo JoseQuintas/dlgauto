@@ -111,7 +111,7 @@ METHOD EditOff() CLASS Dlg_Class
 
 METHOD Delete() CLASS dlg_Class
 
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
    IF hwg_MsgYesNo( "Delete" )
       IF rLock()
          DELETE
@@ -143,11 +143,11 @@ METHOD Save() CLASS dlg_Class
 
 METHOD Exit() CLASS dlg_Class
 
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
    ::oDlg:Close()
 #endif
 
-#ifdef HBMK_HAS_HMGE
+#ifdef THIS_HMGE
    DoMethod( ::oDlg, "Release" )
 #endif
 

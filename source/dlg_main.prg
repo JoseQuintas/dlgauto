@@ -2,7 +2,7 @@
 #include "directry.ch"
 #include "dlg_class.ch"
 
-FUNCTION Test_Dlg( cDBF, aAllSetup )
+FUNCTION dlg_main( cDBF, aAllSetup )
 
    LOCAL oDlg, nPos
 
@@ -32,7 +32,7 @@ CREATE CLASS ThisDlg INHERIT Dlg_Class
 
 METHOD ShowCtlList() CLASS ThisDlg
 
-#ifdef HBMK_HAS_HWGUI
+#ifdef THIS_HWGUI
    LOCAL oControl, cTxt := "", cTxtTmp := ""
 
    FOR EACH oControl IN ::oDlg:aControlList
