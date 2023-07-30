@@ -147,7 +147,7 @@ METHOD Exit() CLASS frm_Class
    ::oDlg:Close()
 #endif
 
-#ifdef THIS_HMGE
+#ifdef THIS_HMGE_OR_OOHG
    DoMethod( ::oDlg, "Release" )
 #endif
 

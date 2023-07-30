@@ -12,7 +12,8 @@ FUNCTION frm_UpdateEdit( Self )
 #ifdef THIS_HWGUI
             aItem[ CFG_TOBJ ]:Value := xValue
 #endif
-#ifdef THIS_HMGE
+#ifdef THIS_HMGE_OR_OOHG
+            // NOTE: string value, except if declared different on textbox creation
             SetProperty( ::oDlg, aItem[ CFG_TOBJ ], "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
 #endif
 

@@ -9,9 +9,6 @@ FUNCTION frm_CreateEdit( Self )
 
    hwg_SetColorInFocus(.T., , hwg_ColorRGB2N(255,255,0) )
 #endif
-#ifdef THIS_OOHG
-   LOCAL oControl
-#endif
 
    FOR EACH aItem IN ::aEditList
       AAdd( ::aControlList, AClone( aItem ) )
@@ -92,7 +89,7 @@ FUNCTION frm_CreateEdit( Self )
          END LABEL
 #endif
 #ifdef THIS_OOHG
-         WITH OBJECT oControl := TLabel():Define()
+         WITH OBJECT aItem[ CFG_TOBJ ] := TLabel():Define()
             :Row := nRow
             :Col := nCol
             :Value := aItem[ CFG_CAPTION ]
@@ -111,12 +108,19 @@ FUNCTION frm_CreateEdit( Self )
             MAXLENGTH aItem[ CFG_FLEN ] ;
             PICTURE PictureFromValue( aItem )
 #endif
-#ifdef THIS_HMGE
+#ifdef THIS_HMGE_NOT_VALID_HERE
+         // ATENTION: FAIL
+         @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_OBJ ] ) PARENT ( ::oDlg ) HEIGHT 20 WIDTH aItem[ CFG_LEN ] * 12
+            FONTNAME "verdana" NUMERIC .T. VALUE aItem[ CFG_VALUE ] MAXLENGTH aItem[ CFG_LEN ] ON CHANGE Nil
+#endif
+#ifdef THIS_HMGE_OR_OOHG
          DO CASE
          CASE aItem[ CFG_FTYPE ] == "N"
             aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
             DEFINE TEXTBOX ( aItem[ CFG_TOBJ ] )
                PARENT ( ::oDlg )
+               ROW nRow2
+               COL nCol2
                HEIGHT    20
                WIDTH     aItem[ CFG_FLEN ] * 12
                FONTNAME "verdana"
@@ -150,7 +154,8 @@ FUNCTION frm_CreateEdit( Self )
             END TEXTBOX
          ENDCASE
 #endif
-#ifdef THIS_OOHG
+#ifdef THIS_OOHG_OOP
+         // not confirmed
          WITH OBJECT aItem[ CFG_TOBJ ] := TText():Define()
             :Row    := nRow2
             :Col    := nCol2
@@ -189,7 +194,7 @@ FUNCTION frm_CreateEdit( Self )
                :Value := Space( aItem[ CFG_VLEN ] )
                :Height := 20
                :Width := aItem[ CFG_VLEN ] * 12
-               :Border := .T.
+               //:Border := .T.
             ENDWITH
 #endif
             nCol += ( aItem[ CFG_VLEN ] + 3 ) * 12
@@ -212,9 +217,6 @@ FUNCTION frm_CreateEdit( Self )
 #endif
    (nRow2)
    (nCol2)
-#ifdef THIS_OOHG
-   (oControl)
-#endif
    //hb_MemoWrit( "tela.txt", cTxt )
 
    RETURN Nil

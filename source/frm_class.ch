@@ -36,8 +36,10 @@
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
    #define THIS_HMGE
+   #define THIS_HMGE_OR_OOHG
 #endif
 #ifdef HBMK_HAS_OOHG
    #include "oohg.ch"
    #define THIS_OOHG
+   #define THIS_HMGE_OR_OOHG
 #endif

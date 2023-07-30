@@ -71,6 +71,16 @@ FUNCTION frm_CreateButton( Self )
          NOXPSTYLE .T.
       END BUTTONEX
 #endif
+#ifdef THIS_OOHG
+      aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
+      @ nRow, nCol BUTTON ( aItem[ CFG_TOBJ ] ) ;
+      CAPTION aItem[ CFG_FNAME ] ;
+      PICTURE "icobook.ico" ;
+      ACTION Eval( aItem[ CFG_ACTION ] ) ;
+      WIDTH ::nButtonSize ;
+      HEIGHT ::nButtonSize ;
+      WINDRAW
+#endif
       IF nCol > ::nDlgWidth - ( ::nButtonSize - ::nButtonSpace ) * 2
          nRowLine += 1
          nRow += ::nButtonSize + ::nButtonSpace
