@@ -9,14 +9,14 @@ hbct.hbc
 hbwin.hbc
 
 test.prg
-dlg_createdbf.prg
-test_menu.prg
-dlg_main.prg
-dlg_class.prg
-dlg_createdlg.prg
-dlg_createbutton.prg
-dlg_createedit.prg
-dlg_updateedit.prg
-dlg_print.prg
-dlg_preview.prg
+frm_CreateDbf.prg
+frm_MainMenu.prg
+frm_Main.prg
+frm_class.prg
+frm_CreateFrm.prg
+frm_CreateButton.prg
+frm_CreateEdit.prg
+frm_UpdateEdit.prg
+frm_Print.prg
+frm_Preview.prg
 test.rc

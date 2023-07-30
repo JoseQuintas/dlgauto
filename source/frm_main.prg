@@ -1,8 +1,8 @@
 #include "hbclass.ch"
 #include "directry.ch"
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
-FUNCTION dlg_main( cDBF, aAllSetup )
+FUNCTION frm_main( cDBF, aAllSetup )
 
    LOCAL oDlg, nPos
 
@@ -23,7 +23,7 @@ FUNCTION dlg_main( cDBF, aAllSetup )
 
    RETURN Nil
 
-CREATE CLASS ThisDlg INHERIT Dlg_Class
+CREATE CLASS ThisDlg INHERIT frm_Class
 
    METHOD ShowCtlList()
    METHOD ShowDlgName()

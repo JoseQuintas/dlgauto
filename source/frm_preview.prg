@@ -1,12 +1,12 @@
 #include "directry.ch"
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
 #ifndef THIS_HWGUI
-   FUNCTION Dlg_Preview()
+   FUNCTION frm_Preview()
    RETURN Nil
 #endif
 #ifdef THIS_HWGUI
-FUNCTION Dlg_Preview( cFileMask )
+FUNCTION frm_Preview( cFileMask )
 
    LOCAL aFileList, nIndex
    LOCAL oDlg, oEdit, oFont := HFont():Add( "Courier New", 0, -13 )
@@ -18,7 +18,7 @@ FUNCTION Dlg_Preview( cFileMask )
 
    INIT DIALOG oDlg CLIPPER TITLE "Text view"  ;
       AT 0,0  SIZE 800, 600 ;
-      ON INIT { || Dlg_SetText( oEdit, aFileList, nIndex ) }
+      ON INIT { || frm_SetText( oEdit, aFileList, nIndex ) }
 
    FOR EACH cCaption IN aButtonList
       CreateButton( cCaption, { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } )
@@ -30,7 +30,7 @@ FUNCTION Dlg_Preview( cFileMask )
 
    RETURN Nil
 
-STATIC FUNCTION Dlg_SetText( oEdit, aFileList, nIndex )
+STATIC FUNCTION frm_SetText( oEdit, aFileList, nIndex )
 
    LOCAL cTxt
 
@@ -67,20 +67,20 @@ STATIC FUNCTION Button_Click( cCaption, aFileList, nIndex, oDlg, oEdit )
    DO CASE
    CASE cCaption == "First"
       nIndex := 1
-      Dlg_SetText( oEdit, aFileList, nIndex )
+      frm_SetText( oEdit, aFileList, nIndex )
    CASE cCaption == "Previous"
       IF nIndex > 1
          nIndex -= 1
       ENDIF
-      Dlg_SetText( oEdit, aFileList, nIndex )
+      frm_SetText( oEdit, aFileList, nIndex )
    CASE cCaption == "Next"
       IF nIndex < Len( aFileList )
          nIndex += 1
       ENDIF
-      Dlg_SetText( oEdit, aFileList, nIndex )
+      frm_SetText( oEdit, aFileList, nIndex )
    CASE cCaption == "Last"
       nIndex := Len( aFileList )
-      Dlg_SetText( oEdit, aFileList, nIndex )
+      frm_SetText( oEdit, aFileList, nIndex )
    CASE cCaption == "Exit"
       oDlg:Close()
    ENDCASE

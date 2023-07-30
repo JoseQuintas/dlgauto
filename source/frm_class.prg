@@ -1,7 +1,7 @@
 #include "hbclass.ch"
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
-CREATE CLASS Dlg_Class
+CREATE CLASS frm_Class
 
    VAR cTitle
    VAR cFileDBF
@@ -24,14 +24,14 @@ CREATE CLASS Dlg_Class
    VAR oDlg
    VAR aControlList   INIT {}
 
-   METHOD CreateControls()     INLINE Dlg_CreateButton( Self ), Dlg_CreateEdit( Self )
+   METHOD CreateControls()     INLINE frm_CreateButton( Self ), frm_CreateEdit( Self )
    METHOD ButtonSaveOn()
    METHOD ButtonSaveOff()
-   METHOD UpdateEdit()         INLINE Dlg_UpdateEdit( Self )
+   METHOD UpdateEdit()         INLINE frm_UpdateEdit( Self )
    METHOD EditOn()
    METHOD EditOff()
-   METHOD Print()              INLINE Dlg_Print( Self )
-   METHOD Execute()            INLINE Dlg_CreateDlg( Self )
+   METHOD Print()              INLINE frm_Print( Self )
+   METHOD Execute()            INLINE frm_CreateFrm( Self )
    METHOD View()               INLINE Nil
    METHOD Edit()               INLINE ::EditOn()
    METHOD Delete()
@@ -46,7 +46,7 @@ CREATE CLASS Dlg_Class
 
    ENDCLASS
 
-METHOD ButtonSaveOn() CLASS Dlg_Class
+METHOD ButtonSaveOn() CLASS frm_Class
 
    LOCAL aItem
 
@@ -62,7 +62,7 @@ METHOD ButtonSaveOn() CLASS Dlg_Class
 
    RETURN Nil
 
-METHOD ButtonSaveOff() CLASS Dlg_Class
+METHOD ButtonSaveOff() CLASS frm_Class
 
    LOCAL aItem
 
@@ -78,7 +78,7 @@ METHOD ButtonSaveOff() CLASS Dlg_Class
 
    RETURN Nil
 
-METHOD EditOn() CLASS Dlg_Class
+METHOD EditOn() CLASS frm_Class
 
    LOCAL aItem, oFirstEdit, lFound := .F.
 
@@ -96,7 +96,7 @@ METHOD EditOn() CLASS Dlg_Class
 
    RETURN Nil
 
-METHOD EditOff() CLASS Dlg_Class
+METHOD EditOff() CLASS frm_Class
 
    LOCAL aItem
 
@@ -109,7 +109,7 @@ METHOD EditOff() CLASS Dlg_Class
 
    RETURN Nil
 
-METHOD Delete() CLASS dlg_Class
+METHOD Delete() CLASS frm_Class
 
 #ifdef THIS_HWGUI
    IF hwg_MsgYesNo( "Delete" )
@@ -122,7 +122,7 @@ METHOD Delete() CLASS dlg_Class
 #endif
    RETURN Nil
 
-METHOD Save() CLASS dlg_Class
+METHOD Save() CLASS frm_Class
 
    LOCAL aItem
 
@@ -141,7 +141,7 @@ METHOD Save() CLASS dlg_Class
    RETURN Nil
 
 
-METHOD Exit() CLASS dlg_Class
+METHOD Exit() CLASS frm_Class
 
 #ifdef THIS_HWGUI
    ::oDlg:Close()

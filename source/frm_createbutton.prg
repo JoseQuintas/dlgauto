@@ -1,6 +1,6 @@
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
-FUNCTION Dlg_CreateButton( Self )
+FUNCTION frm_CreateButton( Self )
 
    LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
 

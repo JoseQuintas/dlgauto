@@ -1,7 +1,7 @@
 #include "hbclass.ch"
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
-FUNCTION Dlg_CreateEdit( Self )
+FUNCTION frm_CreateEdit( Self )
 
    LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, nLen, aList := {}, nLenList, nRow2, nCol2 // , cTxt := ""
 #ifdef THIS_HWGUI
@@ -115,38 +115,39 @@ FUNCTION Dlg_CreateEdit( Self )
          DO CASE
          CASE aItem[ CFG_FTYPE ] == "N"
             aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-            @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_TOBJ ] ) ;
-               PARENT    ( ::oDlg ) ;
-               HEIGHT    20 ;
-               WIDTH     aItem[ CFG_FLEN ] * 12 ;
-               NUMERIC ;
-               VALUE     aItem[ CFG_VALUE ] ;
-               MAXLENGTH aItem[ CFG_FLEN ] ;
-               FONT      "verdana" SIZE 12 ;
+            DEFINE TEXTBOX ( aItem[ CFG_TOBJ ] )
+               PARENT ( ::oDlg )
+               HEIGHT    20
+               WIDTH     aItem[ CFG_FLEN ] * 12
+               FONTNAME "verdana"
+               NUMERIC .T.
+               VALUE     aItem[ CFG_VALUE ]
+               MAXLENGTH aItem[ CFG_FLEN ]
                ON CHANGE Nil
+            END TEXTBOX
          CASE aItem[ CFG_FTYPE ] == "D"
             aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-            @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_TOBJ ] ) ;
-               PARENT    ( ::oDlg ) ;
-               HEIGHT    20 ;
-               WIDTH     aItem[ CFG_FLEN ] * 12 ;
-               ; // DATE .T. ;
-               VALUE     aItem[ CFG_VALUE ] ;
-               MAXLENGTH aItem[ CFG_FLEN ] ;
-               FONT      "verdana" SIZE 12 ;
-               ON CHANGE Nil
+            DEFINE TEXTBOX ( aItem[ CFG_TOBJ ] )
+               PARENT ( ::oDlg )
+               ROW nRow2
+               COL nCol2
+               HEIGHT    20
+               WIDTH     aItem[ CFG_FLEN ] * 12
+               DATE .T.
+               VALUE     aItem[ CFG_VALUE ]
+            END TEXTBOX
          OTHERWISE
             aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-            @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_TOBJ ] ) ;
-               PARENT    ( ::oDlg ) ;
-               HEIGHT    20 ;
-               WIDTH     aItem[ CFG_FLEN ] * 12 ;
-               ; // CHARACTER ;
-               VALUE     aItem[ CFG_VALUE ] ;
-               MAXLENGTH aItem[ CFG_FLEN ] ;
-               FONT      "verdana" SIZE 12 ;
-               UPPERCASE ;
-               ON CHANGE Nil
+            DEFINE TEXTBOX ( aItem[ CFG_TOBJ ] )
+               PARENT ( ::oDlg )
+               ROW nRow2
+               COL nCol2
+               HEIGHT    20
+               WIDTH     aItem[ CFG_FLEN ] * 12
+               FONTNAME "verdana"
+               VALUE     aItem[ CFG_VALUE ]
+               MAXLENGTH aItem[ CFG_FLEN ]
+            END TEXTBOX
          ENDCASE
 #endif
 #ifdef THIS_OOHG

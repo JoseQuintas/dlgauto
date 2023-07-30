@@ -1,8 +1,8 @@
 #include "hbgtinfo.ch"
 #include "directry.ch"
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
-FUNCTION test_menu( aAllSetup )
+FUNCTION frm_MainMenu( aAllSetup )
 
    LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cDBF
 #ifdef THIS_HWGUI
@@ -29,7 +29,7 @@ FUNCTION test_menu( aAllSetup )
       FOR EACH aGrupoList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
             FOR EACH cDBF IN aGrupoList
-               MENUITEM cDBF ACTION Dlg_Main( cDBF, aAllSetup )
+               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
             NEXT
          ENDMENU
       NEXT
@@ -52,7 +52,7 @@ FUNCTION test_menu( aAllSetup )
          FOR EACH aGrupoList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
                FOR EACH cDBF IN aGrupoList
-                  MENUITEM cDBF ACTION Dlg_Main( cDBF, aAllSetup )
+                  MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
                NEXT
             END POPUP
          NEXT
@@ -77,7 +77,7 @@ FUNCTION test_menu( aAllSetup )
          FOR EACH aGrupoList IN aMenuList
             oMenuGroup:= TMenuItem():DefinePopup( "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) ) )
             FOR EACH cDBF IN aGrupoList
-               TMenuItem():DefineItem( cDBF, { || Dlg_Main( cDBF, aAllSetup ) } )
+               TMenuItem():DefineItem( cDBF, { || frm_Main( cDBF, aAllSetup ) } )
             NEXT
             oMenuGroup:EndPopup()
          NEXT

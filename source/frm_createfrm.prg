@@ -1,6 +1,6 @@
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
-FUNCTION Dlg_CreateDlg( Self )
+FUNCTION frm_CreateFrm( Self )
 
    LOCAL aItem
 

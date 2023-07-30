@@ -1,4 +1,4 @@
-FUNCTION dlg_CreateDBF()
+FUNCTION frm_CreateDBF()
 
    LOCAL nCont
 

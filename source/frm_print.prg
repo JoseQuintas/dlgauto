@@ -1,7 +1,7 @@
 #define CFG_FNAME      3
 #define CFG_CAPTION   7
 
-FUNCTION Dlg_Print( Self )
+FUNCTION frm_Print( Self )
 
    LOCAL aItem, nPag, nLin, nCol, nLen
 
@@ -46,7 +46,7 @@ FUNCTION Dlg_Print( Self )
    SET DEVICE TO SCREEN
    SET PRINTER TO
 
-   Dlg_Preview( "rel.lst" )
+   frm_Preview( "rel.lst" )
    fErase( "rel.lst" )
 
    RETURN Nil

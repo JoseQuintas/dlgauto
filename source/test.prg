@@ -2,7 +2,7 @@ REQUEST DBFCDX
 
 #include "directry.ch"
 #include "dbstruct.ch"
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
 // not in use, only a note: #ifdef THIS_HMGE || ! USER_ROUTINE
 
@@ -15,7 +15,7 @@ PROCEDURE Main()
    SET OOP ON
 #endif
    RddSetDefault( "DBFCDX" )
-   Dlg_CreateDBF()
+   frm_CreateDBF()
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -67,7 +67,7 @@ PROCEDURE Main()
          ENDIF
       NEXT
    NEXT
-   test_menu( @aAllSetup )
+   frm_MainMenu( @aAllSetup )
 
    RETURN
 

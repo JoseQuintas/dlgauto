@@ -1,11 +1,11 @@
 #define CFG_CTLTYPE   1
 #define CFG_TOBJ      2
-#define CFG_FNAME     3  // defined on dlg_print
+#define CFG_FNAME     3  // defined on frm_print
 #define CFG_FTYPE     4
 #define CFG_FLEN      5
 #define CFG_FDEC      6
 #define CFG_ISKEY     7
-#define CFG_CAPTION   8   // defined on dlg_print
+#define CFG_CAPTION   8   // defined on frm_print
 #define CFG_VALUE     9
 #define CFG_VALID     10
 #define CFG_VTABLE    11

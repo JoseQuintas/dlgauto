@@ -1,6 +1,6 @@
-#include "dlg_class.ch"
+#include "frm_class.ch"
 
-FUNCTION Dlg_UpdateEdit( Self )
+FUNCTION frm_UpdateEdit( Self )
 
    LOCAL aItem, nSelect, xValue, cText
 
