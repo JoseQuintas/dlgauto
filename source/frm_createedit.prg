@@ -4,7 +4,7 @@
 FUNCTION frm_CreateEdit( Self )
 
    LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, nLen, aList := {}, nLenList, nRow2, nCol2 // , cTxt := ""
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
    LOCAL oPanel, nTab, nPageNext
 
    hwg_SetColorInFocus(.T., , hwg_ColorRGB2N(255,255,0) )
@@ -15,7 +15,7 @@ FUNCTION frm_CreateEdit( Self )
       Atail( ::aControlList )[ CFG_VALUE ] := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
    NEXT
    IF ::lWithTab
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
       @ 5, 70 TAB oTab ITEMS {} OF ::oDlg ID 101 SIZE ::nDlgWidth - 10, ::nDlgHeight - 140 STYLE WS_CHILD + WS_VISIBLE
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_TAB
@@ -46,7 +46,7 @@ FUNCTION frm_CreateEdit( Self )
             IF ::lWithTab .AND. nRow > ::nPageLimit
                IF nPageCount > 0
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
                   //ghost for getlist
                   AAdd( ::aControlList, CFG_EDITEMPTY )
                   @ nCol, nRow GET Atail( ::aControlList )[ CFG_TOBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
@@ -57,7 +57,7 @@ FUNCTION frm_CreateEdit( Self )
 
                ENDIF
                nPageCount += 1
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
                BEGIN PAGE "Pag." + Str( nPageCount, 2 ) OF oTab
 #endif
                nRow := 40
@@ -74,10 +74,10 @@ FUNCTION frm_CreateEdit( Self )
             nCol2 := nCol
          ENDIF
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
          @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, 20 COLOR COLOR_FORE TRANSPARENT
 #endif
-#ifdef THIS_HMGE
+#ifdef CODE_HMGE
          aItem[ CFG_TOBJ ] := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
          DEFINE LABEL ( aItem[ CFG_TOBJ ] )
             PARENT ( ::oDlg )
@@ -88,7 +88,7 @@ FUNCTION frm_CreateEdit( Self )
             VALUE aItem[ CFG_CAPTION ]
          END LABEL
 #endif
-#ifdef THIS_OOHG
+#ifdef CODE_OOHG
          WITH OBJECT aItem[ CFG_TOBJ ] := TLabel():Define()
             :Row := nRow
             :Col := nCol
@@ -100,7 +100,7 @@ FUNCTION frm_CreateEdit( Self )
 #endif
 
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
          @ nCol2, nRow2 GET aItem[ CFG_TOBJ ] ;
             VAR aItem[ CFG_VALUE ] OF iif( ::lWithTab, oTab, ::oDlg ) ;
             SIZE aItem[ CFG_FLEN ] * 12, 20 ;
@@ -108,12 +108,12 @@ FUNCTION frm_CreateEdit( Self )
             MAXLENGTH aItem[ CFG_FLEN ] ;
             PICTURE PictureFromValue( aItem )
 #endif
-#ifdef THIS_HMGE_NOT_VALID_HERE
+#ifdef CODE_HMGE_NOT_VALID_HERE
          // ATENTION: FAIL
          @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_OBJ ] ) PARENT ( ::oDlg ) HEIGHT 20 WIDTH aItem[ CFG_LEN ] * 12
             FONTNAME "verdana" NUMERIC .T. VALUE aItem[ CFG_VALUE ] MAXLENGTH aItem[ CFG_LEN ] ON CHANGE Nil
 #endif
-#ifdef THIS_HMGE_OR_OOHG
+#ifdef CODE_HMGE_OR_OOHG
          DO CASE
          CASE aItem[ CFG_FTYPE ] == "N"
             aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
@@ -154,7 +154,7 @@ FUNCTION frm_CreateEdit( Self )
             END TEXTBOX
          ENDCASE
 #endif
-#ifdef THIS_OOHG_OOP
+#ifdef CODE_OOHG_OOP
          // not confirmed
          WITH OBJECT aItem[ CFG_TOBJ ] := TText():Define()
             :Row    := nRow2
@@ -167,7 +167,7 @@ FUNCTION frm_CreateEdit( Self )
 
          nCol += ( nLen + 3 ) * 12
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
          IF ::lWithTab
             AAdd( Atail( aList ), aItem[ CFG_TOBJ ] )
          ENDIF
@@ -175,19 +175,19 @@ FUNCTION frm_CreateEdit( Self )
 
 
          IF ! Empty( aItem[ CFG_VTABLE ] )
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
             @ nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION Space( aItem[ CFG_VLEN ] ) OF ;
                iif( ::lWithTab, oTab, ::oDlg ) SIZE aItem[ CFG_VLEN ] * 12, 20 COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
                STYLE WS_BORDER
 #endif
-#ifdef THIS_HMGE
+#ifdef CODE_HMGE
             aItem[ CFG_VOBJ ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
             @ nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VOBJ ] ) ;
                PARENT ( ::oDlg ) ;
                VALUE Space( aItem[ CFG_VLEN ] ) WIDTH aItem[ CFG_VLEN ] * 12 HEIGHT 20 ;
                BORDER
 #endif
-#ifdef THIS_OOHG
+#ifdef CODE_OOHG
             WITH OBJECT aItem[ CFG_VOBJ ] := TLabel():Define()
                :Row := nRow2
                :Col := nCol2 + ( ( nLen + 3 ) * 12 )
@@ -201,7 +201,7 @@ FUNCTION frm_CreateEdit( Self )
          ENDIF
       ENDIF
    NEXT
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
    // ghost for Getlist
    AAdd( ::aControlList, CFG_EDITEMPTY )
    @ nCol, nRow GET Atail( ::aControlList )[ CFG_TOBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
@@ -221,7 +221,7 @@ FUNCTION frm_CreateEdit( Self )
 
    RETURN Nil
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
 STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
 
    oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), oEditNext:SetFocus(), .T. }
@@ -229,7 +229,7 @@ STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
    RETURN Nil
 #endif
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
 STATIC FUNCTION PictureFromValue( oValue )
 
    LOCAL cPicture, cType, nLen, nDec

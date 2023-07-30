@@ -18,7 +18,7 @@ FUNCTION frm_CreateFrm( Self )
    NEXT
    SELECT ( Select( ::cFileDbf ) )
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
    INIT DIALOG ::oDlg CLIPPER NOEXIT TITLE ::cTitle ;
       AT 0, 0 SIZE ::nDlgWidth, ::nDlgHeight ;
       BACKCOLOR COLOR_BACK ;
@@ -27,7 +27,7 @@ FUNCTION frm_CreateFrm( Self )
    ::CreateControls()
    ACTIVATE DIALOG ::oDlg CENTER
 #endif
-#ifdef THIS_HMGE_OR_OOHG
+#ifdef CODE_HMGE_OR_OOHG
    ::oDlg := "FRM" + ::cFileDBF
    DEFINE WINDOW ( ::oDlg ) ;
       AT 1000, 500 ;
@@ -43,7 +43,7 @@ FUNCTION frm_CreateFrm( Self )
    ( ::oDlg ).CENTER
    ( ::oDlg ).ACTIVATE
 #endif
-#ifdef THIS_OOHG_OOP
+#ifdef CODE_OOHG_OOP
    WITH OBJECT ::oDlg := TForm():Define()
       :Row := 500
       :Col := 1000

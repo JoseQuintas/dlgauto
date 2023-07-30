@@ -39,7 +39,7 @@ FUNCTION frm_CreateButton( Self )
       Atail( ::aControlList )[ CFG_ACTION ]  := aItem[ 2 ]
    NEXT
    FOR EACH aItem IN ::aControlList
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
       @ nCol, nRow BUTTON aItem[ CFG_TOBJ ] ;
          CAPTION Nil ;
          OF ::oDlg SIZE ::nButtonSize, ::nButtonSize ;
@@ -49,7 +49,7 @@ FUNCTION frm_CreateButton( Self )
             BtnSetImageText( aItem[ CFG_TOBJ ]:Handle, aItem[ CFG_FNAME ], Self ) } ;
             TOOLTIP aItem[ CFG_FNAME ]
 #endif
-#ifdef THIS_HMGE
+#ifdef CODE_HMGE
       aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       DEFINE BUTTONEX &( aItem[ CFG_TOBJ ] )
          WIDTH ::nButtonSize
@@ -71,7 +71,7 @@ FUNCTION frm_CreateButton( Self )
          NOXPSTYLE .T.
       END BUTTONEX
 #endif
-#ifdef THIS_OOHG
+#ifdef CODE_OOHG
       aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       @ nRow, nCol BUTTON ( aItem[ CFG_TOBJ ] ) ;
       CAPTION aItem[ CFG_FNAME ] ;
@@ -91,7 +91,7 @@ FUNCTION frm_CreateButton( Self )
 
    RETURN Nil
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
 STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
 
    LOCAL oIcon, nPos, cResName, hIcon

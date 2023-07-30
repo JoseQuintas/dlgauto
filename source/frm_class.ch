@@ -31,15 +31,15 @@
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"
-   #define THIS_HWGUI
+   #define CODE_HWGUI
 #endif
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
-   #define THIS_HMGE
-   #define THIS_HMGE_OR_OOHG
+   #define CODE_HMGE
+   #define CODE_HMGE_OR_OOHG
 #endif
 #ifdef HBMK_HAS_OOHG
    #include "oohg.ch"
-   #define THIS_OOHG
-   #define THIS_HMGE_OR_OOHG
+   #define CODE_OOHG
+   #define CODE_HMGE_OR_OOHG
 #endif

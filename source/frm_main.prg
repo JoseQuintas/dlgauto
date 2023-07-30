@@ -32,7 +32,7 @@ CREATE CLASS ThisDlg INHERIT frm_Class
 
 METHOD ShowCtlList() CLASS ThisDlg
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
    LOCAL oControl, cTxt := "", cTxtTmp := ""
 
    FOR EACH oControl IN ::oDlg:aControlList

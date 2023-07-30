@@ -9,10 +9,10 @@ FUNCTION frm_UpdateEdit( Self )
          IF ! Empty( aItem[ CFG_FNAME ] )
             xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
             aItem[ CFG_TOBJ ]:Value := xValue
 #endif
-#ifdef THIS_HMGE_OR_OOHG
+#ifdef CODE_HMGE_OR_OOHG
             // NOTE: string value, except if declared different on textbox creation
             SetProperty( ::oDlg, aItem[ CFG_TOBJ ], "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
 #endif
@@ -24,11 +24,11 @@ FUNCTION frm_UpdateEdit( Self )
             SEEK xValue
             cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
             aItem[ CFG_VOBJ ]:SetText( cText )
             aItem[ CFG_VOBJ ]:Refresh()
 #endif
-#ifdef THIS_HMGE
+#ifdef CODE_HMGE
             SetProperty( ::oDlg, aItem[ CFG_VOBJ ], "VALUE", cText )
 #endif
 

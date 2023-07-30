@@ -5,10 +5,10 @@
 FUNCTION frm_MainMenu( aAllSetup )
 
    LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cDBF
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
    LOCAL oDlg
 #endif
-#ifdef THIS_OOHG
+#ifdef CODE_OOHG
    LOCAL oDlg, oMenuMain, oMenuGroup
 #endif
 
@@ -23,7 +23,7 @@ FUNCTION frm_MainMenu( aAllSetup )
       ENDIF
    NEXT
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
    INIT WINDOW oDlg TITLE "Example" AT 0, 0 SIZE 512, 384
    MENU OF oDlg
       FOR EACH aGrupoList IN aMenuList
@@ -40,7 +40,7 @@ FUNCTION frm_MainMenu( aAllSetup )
    ACTIVATE WINDOW oDlg CENTER
 #endif
 
-#ifdef THIS_HMGE
+#ifdef CODE_HMGE
    DEFINE WINDOW ("Main") ;
       AT 1000, 500 ;
       WIDTH 512 ;
@@ -66,7 +66,7 @@ FUNCTION frm_MainMenu( aAllSetup )
    ("Main").ACTIVATE
 #endif
 
-#ifdef THIS_OOHG
+#ifdef CODE_OOHG
    WITH OBJECT oDlg := TFormMain():Define()
       :Col := 1000
       :Row := 500

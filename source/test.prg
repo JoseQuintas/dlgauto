@@ -4,14 +4,14 @@ REQUEST DBFCDX
 #include "dbstruct.ch"
 #include "frm_class.ch"
 
-// not in use, only a note: #ifdef THIS_HMGE || ! USER_ROUTINE
+// not in use, only a note: #ifdef CODE_HMGE || ! USER_ROUTINE
 
 PROCEDURE Main()
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nPos1, nPos2
 
    SET EXCLUSIVE OFF
-#ifdef THIS_HMGE
+#ifdef CODE_HMGE
    SET OOP ON
 #endif
    RddSetDefault( "DBFCDX" )

@@ -1,11 +1,11 @@
 #include "directry.ch"
 #include "frm_class.ch"
 
-#ifndef THIS_HWGUI
+#ifndef CODE_HWGUI
    FUNCTION frm_Preview()
    RETURN Nil
 #endif
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
 FUNCTION frm_Preview( cFileMask )
 
    LOCAL aFileList, nIndex

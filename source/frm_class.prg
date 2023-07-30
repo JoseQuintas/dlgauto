@@ -111,7 +111,7 @@ METHOD EditOff() CLASS frm_Class
 
 METHOD Delete() CLASS frm_Class
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
    IF hwg_MsgYesNo( "Delete" )
       IF rLock()
          DELETE
@@ -143,11 +143,11 @@ METHOD Save() CLASS frm_Class
 
 METHOD Exit() CLASS frm_Class
 
-#ifdef THIS_HWGUI
+#ifdef CODE_HWGUI
    ::oDlg:Close()
 #endif
 
-#ifdef THIS_HMGE_OR_OOHG
+#ifdef CODE_HMGE_OR_OOHG
    DoMethod( ::oDlg, "Release" )
 #endif
 
