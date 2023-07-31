@@ -1,10 +1,5 @@
 LIB defined by this variables create by HBMK
-
-HBMK_HAS_HWGUI
-HBMK_HAS_HMGE
-HBMK_HAS_OOHG
-
-If do not use HBMK, compile using -Dnome
+At momment may be hwgui, hmge or oohg
 
 About the big array:
 
@@ -32,3 +27,7 @@ on gui the label object ( CFG_VOBJ )
 and need to know len    ( CFG_VLEN )
 
 on gui buttons have action ( CFG_ACTION )
+
+
+check file ch for extra configuration
+
