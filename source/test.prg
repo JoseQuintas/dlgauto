@@ -27,9 +27,9 @@ PROCEDURE Main()
       aStru := dbStruct()
       FOR EACH aField IN aStru
          aItem := CFG_EDITEMPTY
-         aItem[ CFG_FNAME ]    := aField[ DBS_NAME ]
-         aItem[ CFG_FTYPE ] := aField[ DBS_TYPE ]
-         aItem[ CFG_FLEN ]     := aField[ DBS_LEN ]
+         aItem[ CFG_FNAME ]   := aField[ DBS_NAME ]
+         aItem[ CFG_FTYPE ]   := aField[ DBS_TYPE ]
+         aItem[ CFG_FLEN ]    := aField[ DBS_LEN ]
          aItem[ CFG_FDEC ]    := aField[ DBS_DEC ]
          aItem[ CFG_VALUE ]   := aField[ DBS_NAME ]
          aItem[ CFG_CAPTION ] := aField[ DBS_NAME ]

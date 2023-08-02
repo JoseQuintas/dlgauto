@@ -32,10 +32,12 @@
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"
    #define CODE_HWGUI
+   #define CODE_HWGUI_OR_HMGE
 #endif
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
    #define CODE_HMGE
+   #define CODE_HWGUI_OR_HMGE
    #define CODE_HMGE_OR_OOHG
 #endif
 #ifdef HBMK_HAS_OOHG

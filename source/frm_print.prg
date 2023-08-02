@@ -1,5 +1,5 @@
-#define CFG_FNAME      3
-#define CFG_CAPTION   7
+#define CFG_FNAME     3
+#define CFG_CAPTION   8
 
 FUNCTION frm_Print( Self )
 
@@ -46,7 +46,7 @@ FUNCTION frm_Print( Self )
    SET DEVICE TO SCREEN
    SET PRINTER TO
 
-   frm_Preview( "rel.lst" )
+   frm_Preview( "rel.lst", Self )
    fErase( "rel.lst" )
 
    RETURN Nil

@@ -114,8 +114,6 @@ FUNCTION frm_CreateEdit( Self )
             FONTNAME "verdana" NUMERIC .T. VALUE aItem[ CFG_VALUE ] MAXLENGTH aItem[ CFG_LEN ] ON CHANGE Nil
 #endif
 #ifdef CODE_HMGE_OR_OOHG
-         DO CASE
-         CASE aItem[ CFG_FTYPE ] == "N"
             aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
             DEFINE TEXTBOX ( aItem[ CFG_TOBJ ] )
                PARENT ( ::oDlg )
@@ -124,35 +122,22 @@ FUNCTION frm_CreateEdit( Self )
                HEIGHT    20
                WIDTH     aItem[ CFG_FLEN ] * 12
                FONTNAME "verdana"
-               NUMERIC .T.
+               IF aItem[ CFG_FTYPE ] == "N"
+                  NUMERIC .T.
+#ifdef CODE_HMGE
+                  INPUTMASK PictureFromValue( aItem )
+#endif
+               ELSEIF aItem[ CFG_FTYPE ] == "D"
+                  DATE .T.
+#ifdef CODE_HMGE
+                  DATEFORMAT "DD/MM/YY"
+#endif
+               ELSE
+                  MAXLENGTH aItem[ CFG_FLEN ]
+               ENDIF
                VALUE     aItem[ CFG_VALUE ]
-               MAXLENGTH aItem[ CFG_FLEN ]
                ON CHANGE Nil
             END TEXTBOX
-         CASE aItem[ CFG_FTYPE ] == "D"
-            aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-            DEFINE TEXTBOX ( aItem[ CFG_TOBJ ] )
-               PARENT ( ::oDlg )
-               ROW nRow2
-               COL nCol2
-               HEIGHT    20
-               WIDTH     aItem[ CFG_FLEN ] * 12
-               DATE .T.
-               VALUE     aItem[ CFG_VALUE ]
-            END TEXTBOX
-         OTHERWISE
-            aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-            DEFINE TEXTBOX ( aItem[ CFG_TOBJ ] )
-               PARENT ( ::oDlg )
-               ROW nRow2
-               COL nCol2
-               HEIGHT    20
-               WIDTH     aItem[ CFG_FLEN ] * 12
-               FONTNAME "verdana"
-               VALUE     aItem[ CFG_VALUE ]
-               MAXLENGTH aItem[ CFG_FLEN ]
-            END TEXTBOX
-         ENDCASE
 #endif
 #ifdef CODE_OOHG_OOP
          // not confirmed
@@ -229,7 +214,7 @@ STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
    RETURN Nil
 #endif
 
-#ifdef CODE_HWGUI
+#ifdef CODE_HWGUI_OR_HMGE
 STATIC FUNCTION PictureFromValue( oValue )
 
    LOCAL cPicture, cType, nLen, nDec

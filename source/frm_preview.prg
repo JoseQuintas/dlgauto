@@ -1,32 +1,53 @@
 #include "directry.ch"
 #include "frm_class.ch"
 
-#ifndef CODE_HWGUI
-   FUNCTION frm_Preview()
-   RETURN Nil
-#endif
-#ifdef CODE_HWGUI
 FUNCTION frm_Preview( cFileMask )
 
    LOCAL aFileList, nIndex
-   LOCAL oDlg, oEdit, oFont := HFont():Add( "Courier New", 0, -13 )
-   LOCAL aButtonList := { "First", "Previous", "Next", "Last", "Exit" }
+   LOCAL oDlg, oEdit
    LOCAL cCaption
+#ifdef CODE_HWGUI
+   LOCAL oFont
+#endif
 
    aFileList := Directory( cFileMask )
    nIndex := 1
 
-   INIT DIALOG oDlg CLIPPER TITLE "Text view"  ;
+   oDlg := frm_Class():New()
+   oDlg:oDlg := "frm_Preview"
+   oDlg:cOptions := ""
+   oDlg:aOptionList := { ;
+      { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } }, ;
+      { "Previous", { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } }, ;
+      { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } }, ;
+      { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } } }
+
+#ifdef CODE_HWGUI
+   oFont := HFont():Add( "Courier New", 0, -13 )
+   INIT DIALOG oDlg:oDlg CLIPPER TITLE "Preview"  ;
       AT 0,0  SIZE 800, 600 ;
       ON INIT { || frm_SetText( oEdit, aFileList, nIndex ) }
-
-   FOR EACH cCaption IN aButtonList
-      CreateButton( cCaption, { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } )
-   NEXT
-   @ 10, 65 EDITBOX oEdit CAPTION "" SIZE oDlg:nWidth - 40, oDlg:nHeight - 100 FONT oFont ;
+#endif
+#ifdef CODE_HMGE_OR_OOHG
+   DEFINE WINDOW ( oDlg:oDlg ) ;
+      AT 0, 0 ;
+      WIDTH 800 ;
+      HEIGHT 600 ;
+      TITLE "Preview" ;
+      MODAL
+#endif
+   frm_CreateButton( oDlg, .F. )
+#ifdef CODE_HWGUI
+   @ 10, 65 EDITBOX oEdit CAPTION "" SIZE oDlg:nDlgWidth - 40, oDlg:nDlgHeight - 100 FONT oFont ;
        STYLE ES_MULTILINE + ES_AUTOVSCROLL + WS_VSCROLL + WS_HSCROLL
 
-   ACTIVATE DIALOG oDlg
+   ACTIVATE DIALOG oDlg:oDlg
+#endif
+#ifdef CODE_HMGE_OR_OOHG
+   END WINDOW
+   ( oDlg:oDlg ).CENTER
+   ( oDlg:oDlg ).ACTIVATE
+#endif
 
    RETURN Nil
 
@@ -41,24 +62,6 @@ STATIC FUNCTION frm_SetText( oEdit, aFileList, nIndex )
    ENDIF
    oEdit:Value := cTxt
    oEdit:Refresh()
-
-   RETURN Nil
-
-STATIC FUNCTION CreateButton( cCaption, bCode )
-
-   STATIC nCol
-   LOCAL oBtn
-
-   IF cCaption == "First"
-      nCol := 20
-   ELSE
-      nCol += 50
-   ENDIF
-   @  nCol, 10 BUTTON oBtn CAPTION Nil ;
-      SIZE 50, 50 ;
-      STYLE BS_TOP ;
-      ON CLICK bCode ;
-      ON INIT { || BtnSetImageText( oBtn, cCaption ) }
 
    RETURN Nil
 
@@ -82,18 +85,14 @@ STATIC FUNCTION Button_Click( cCaption, aFileList, nIndex, oDlg, oEdit )
       nIndex := Len( aFileList )
       frm_SetText( oEdit, aFileList, nIndex )
    CASE cCaption == "Exit"
+#ifdef CODE_HWGUI
       oDlg:Close()
+#endif
+#ifdef CODE_HMGE_OR_OOHG
+      DoMethod( "frmPreview", "Release" )
+#endif
    ENDCASE
 
-   RETURN Nil
-
-STATIC FUNCTION BtnSetImageText( oBtn, cCaption )
-
-   LOCAL oIcon
-
-   oIcon := HIcon():AddResource( "AppIcon", 30, 30 )
-   hwg_SendMessage( oBtn:Handle, BM_SETIMAGE, IMAGE_ICON, oIcon:Handle )
-   hwg_SendMessage( oBtn:Handle, WM_SETTEXT, 0, cCaption )
+   ( oDlg )
 
    RETURN Nil
-#endif

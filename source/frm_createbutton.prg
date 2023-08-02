@@ -1,9 +1,10 @@
 #include "frm_class.ch"
 
-FUNCTION frm_CreateButton( Self )
+FUNCTION frm_CreateButton( Self, lDefault )
 
    LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
 
+   hb_Default( @lDefault, .T. )
    IF "I" $ ::cOptions
       AAdd( aList, { "Insert",   { || ::Insert() } } )
    ENDIF
@@ -13,11 +14,13 @@ FUNCTION frm_CreateButton( Self )
    IF "D" $ ::cOptions
       AAdd( aList, { "Delete",   { || ::Delete() } } )
    ENDIF
-   AAdd( aList, { "View",     { || ::View() } } )
-   AAdd( aList, { "First",    { || ::First() } } )
-   AAdd( aList, { "Previous", { || ::Previous() } } )
-   AAdd( aList, { "Next",     { || ::Next() } } )
-   AAdd( aList, { "Last",     { || ::Last() } } )
+   IF lDefault
+      AAdd( aList, { "View",     { || ::View() } } )
+      AAdd( aList, { "First",    { || ::First() } } )
+      AAdd( aList, { "Previous", { || ::Previous() } } )
+      AAdd( aList, { "Next",     { || ::Next() } } )
+      AAdd( aList, { "Last",     { || ::Last() } } )
+   ENDIF
    IF "E" $ ::cOptions
       AAdd( aList, { "Save",     { || ::Save() } } )
       AAdd( aList, { "Cancel",   { || ::Cancel() } } )
@@ -51,14 +54,14 @@ FUNCTION frm_CreateButton( Self )
 #endif
 #ifdef CODE_HMGE
       aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
-      DEFINE BUTTONEX &( aItem[ CFG_TOBJ ] )
+      DEFINE BUTTONEX ( aItem[ CFG_TOBJ ] )
+         ROW nRow
+         COL nCol
          WIDTH ::nButtonSize
          HEIGHT ::nButtonSize
          PICTURE "icobook.ico"
          IMAGEWIDTH ::nButtonSize - 20
          IMAGEHEIGHT ::nButtonSize - 20
-         COL nCol
-         ROW nRow
          CAPTION aItem[ CFG_FNAME ]
          ACTION Eval( aItem[ CFG_ACTION ] )
          FONTNAME "verdana"
