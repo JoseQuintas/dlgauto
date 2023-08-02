@@ -5,21 +5,22 @@ CREATE CLASS frm_Class
 
    VAR cTitle
    VAR cFileDBF
-   VAR aEditList      INIT {}
-   VAR cOptions       INIT "IED"
-   VAR aOptionList    INIT {}
+   VAR aEditList       INIT {}
+   VAR cOptions        INIT "IED"
+   VAR aOptionList     INIT {}
+   VAR cSelected       INIT "NONE"
 
-   VAR nEditStyle     INIT 1
-   VAR nPageLimit     INIT 300
-   VAR lWithTab       INIT .F.
+   VAR nEditStyle      INIT 1
+   VAR nPageLimit      INIT 300
+   VAR lWithTab        INIT .F.
 
-   VAR nDlgWidth      INIT 1024
-   VAR nDlgHeight     INIT 768
-   VAR nLineHeight    INIT 25
-   VAR nButtonSize    INIT 50
-   VAR nButtonSpace   INIT 3
-   VAR nTextSize      INIT 20
-   VAR nControlHeight INIT 22
+   VAR nDlgWidth       INIT 1024
+   VAR nDlgHeight      INIT 768
+   VAR nLineHeight     INIT 25
+   VAR nButtonSize     INIT 50
+   VAR nButtonSpace    INIT 3
+   VAR nTextSize       INIT 20
+   VAR nControlHeight  INIT 22
 
    VAR oDlg
    VAR aControlList   INIT {}
@@ -33,7 +34,7 @@ CREATE CLASS frm_Class
    METHOD Print()              INLINE frm_Print( Self )
    METHOD Execute()            INLINE frm_CreateFrm( Self )
    METHOD View()               INLINE Nil
-   METHOD Edit()               INLINE ::EditOn()
+   METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditOn()
    METHOD Delete()
    METHOD Insert()             INLINE Nil
    METHOD First()              INLINE &( ::cFileDbf )->( dbgotop() ),    ::UpdateEdit()
@@ -42,7 +43,7 @@ CREATE CLASS frm_Class
    METHOD Previous()           INLINE &( ::cFileDbf )->( dbSkip( -1 ) ), ::UpdateEdit()
    METHOD Exit()
    METHOD Save()
-   METHOD Cancel()      INLINE ::EditOff(), ::UpdateEdit()
+   METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::UpdateEdit()
 
    ENDCLASS
 
@@ -83,7 +84,7 @@ METHOD EditOn() CLASS frm_Class
    LOCAL aItem, oFirstEdit, lFound := .F.
 
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. aItem[ CFG_ISKEY ]
          aItem[ CFG_TOBJ ]:Enable()
          IF ! lFound
             lFound := .T.
@@ -131,15 +132,17 @@ METHOD Save() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ! Empty( aItem[ CFG_FNAME ] )
-            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), aItem[ CFG_VALUE ] )
+            IF ! aItem[ CFG_ISKEY ] .OR. ::cSelected == "INSERT"
+               FieldPut( FieldNum( aItem[ CFG_FNAME ] ), aItem[ CFG_VALUE ] )
+            ENDIF
          ENDIF
       ENDIF
    NEXT
    SKIP 0
    UNLOCK
+   ::cSelected := "NONE"
 
    RETURN Nil
-
 
 METHOD Exit() CLASS frm_Class
 
