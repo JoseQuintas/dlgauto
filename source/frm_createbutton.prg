@@ -77,12 +77,12 @@ FUNCTION frm_CreateButton( Self, lDefault )
 #ifdef CODE_OOHG
       aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       @ nRow, nCol BUTTON ( aItem[ CFG_TOBJ ] ) ;
-      CAPTION aItem[ CFG_FNAME ] ;
-      PICTURE BtnSetImageText( , aItem[ FNAME ] ) ;
-      ACTION Eval( aItem[ CFG_ACTION ] ) ;
-      WIDTH ::nButtonSize ;
-      HEIGHT ::nButtonSize ;
-      WINDRAW
+         CAPTION aItem[ CFG_FNAME ] ;
+         PICTURE BtnSetImageText( , aItem[ CFG_FNAME ] ) ;
+         ACTION Eval( aItem[ CFG_ACTION ] ) ;
+         WIDTH ::nButtonSize ;
+         HEIGHT ::nButtonSize ;
+         WINDRAW
 #endif
       IF nCol > ::nDlgWidth - ( ::nButtonSize - ::nButtonSpace ) * 2
          nRowLine += 1
@@ -96,7 +96,10 @@ FUNCTION frm_CreateButton( Self, lDefault )
 
 STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
 
-   LOCAL oIcon, nPos, cResName, hIcon
+   LOCAL cResName, nPos
+#ifdef CODE_HWGUI
+   LOCAL oIcon, hIcon
+#endif
    LOCAL aList := { ;
       { "Insert",   "icoPlus" }, ;
       { "Edit",     "icoEdit" }, ;
@@ -127,5 +130,7 @@ STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
    hwg_SendMessage( hHandle, BM_SETIMAGE, IMAGE_ICON, hIcon )
    hwg_SendMessage( hHandle, WM_SETTEXT, 0, cCaption )
 #endif
+   (hHandle)
+   (oAuto)
 
    RETURN cResName
