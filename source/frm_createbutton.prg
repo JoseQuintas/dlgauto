@@ -59,7 +59,7 @@ FUNCTION frm_CreateButton( Self, lDefault )
          COL nCol
          WIDTH ::nButtonSize
          HEIGHT ::nButtonSize
-         PICTURE "icobook.ico"
+         PICTURE BtnSetImageText( , aItem[ CFG_FNAME ] )
          IMAGEWIDTH ::nButtonSize - 20
          IMAGEHEIGHT ::nButtonSize - 20
          CAPTION aItem[ CFG_FNAME ]
@@ -78,7 +78,7 @@ FUNCTION frm_CreateButton( Self, lDefault )
       aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       @ nRow, nCol BUTTON ( aItem[ CFG_TOBJ ] ) ;
       CAPTION aItem[ CFG_FNAME ] ;
-      PICTURE "icobook.ico" ;
+      PICTURE BtnSetImageText( , aItem[ FNAME ] ) ;
       ACTION Eval( aItem[ CFG_ACTION ] ) ;
       WIDTH ::nButtonSize ;
       HEIGHT ::nButtonSize ;
@@ -94,36 +94,38 @@ FUNCTION frm_CreateButton( Self, lDefault )
 
    RETURN Nil
 
-#ifdef CODE_HWGUI
 STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
 
    LOCAL oIcon, nPos, cResName, hIcon
    LOCAL aList := { ;
-      { "Insert",   "AppIcon" }, ;
-      { "Edit",     "AppIcon" }, ;
+      { "Insert",   "icoPlus" }, ;
+      { "Edit",     "icoEdit" }, ;
       { "View",     "AppIcon" }, ;
-      { "Delete",   "AppIcon" }, ;
-      { "First",    "AppIcon" }, ;
-      { "Previous", "AppIcon" }, ;
-      { "Next",     "AppIcon" }, ;
-      { "Last",     "AppIcon" }, ;
-      { "Save",     "AppIcon" }, ;
-      { "Cancel",   "AppIcon" }, ;
-      { "Mail",     "AppIcon" }, ;
-      { "Print",    "AppIcon" }, ;
+      { "Delete",   "icoTrash" }, ;
+      { "First",    "icoGoFirst" }, ;
+      { "Previous", "icoGoLeft" }, ;
+      { "Next",     "icoGoRight" }, ;
+      { "Last",     "icoGoLast" }, ;
+      { "Save",     "icoOk" }, ;
+      { "Cancel",   "icoNoOk" }, ;
+      { "Mail",     "icoMail" }, ;
+      { "Print",    "icoPrint" }, ;
       { "CtlList",  "AppIcon" }, ;
       { "ThisDlg",  "AppIcon" }, ;
-      { "Exit",     "AppIcon" } }
+      { "Exit",     "icoDoor" } }
 
    IF ( nPos := hb_AScan( aList, { | e | e[1] == cCaption } ) ) != 0
       cResName := aList[ nPos, 2 ]
+#ifdef CODE_HWGUI
       oIcon := HICON():AddResource( cResName, oAuto:nButtonSize - oAuto:nTextSize, oAuto:nButtonSize - oAuto:nTextSize )
       IF ValType( oIcon ) == "O"
          hIcon := oIcon:Handle
       ENDIF
+#endif
    ENDIF
+#ifdef CODE_HWGUI
    hwg_SendMessage( hHandle, BM_SETIMAGE, IMAGE_ICON, hIcon )
    hwg_SendMessage( hHandle, WM_SETTEXT, 0, cCaption )
-
-   RETURN Nil
 #endif
+
+   RETURN cResName
