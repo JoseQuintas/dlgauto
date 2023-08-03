@@ -28,7 +28,7 @@ FUNCTION frm_UpdateEdit( Self )
             aItem[ CFG_VOBJ ]:SetText( cText )
             aItem[ CFG_VOBJ ]:Refresh()
 #endif
-#ifdef CODE_HMGE
+#ifdef CODE_HMGE_OR_OOHG
             SetProperty( ::oDlg, aItem[ CFG_VOBJ ], "VALUE", cText )
 #endif
 

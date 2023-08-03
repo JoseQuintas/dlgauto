@@ -165,21 +165,22 @@ FUNCTION frm_CreateEdit( Self )
                iif( ::lWithTab, oTab, ::oDlg ) SIZE aItem[ CFG_VLEN ] * 12, 20 COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
                STYLE WS_BORDER
 #endif
-#ifdef CODE_HMGE
+#ifdef CODE_HMGE_OR_OOHG
             aItem[ CFG_VOBJ ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
             @ nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VOBJ ] ) ;
                PARENT ( ::oDlg ) ;
                VALUE Space( aItem[ CFG_VLEN ] ) WIDTH aItem[ CFG_VLEN ] * 12 HEIGHT 20 ;
                BORDER
 #endif
-#ifdef CODE_OOHG
+#ifdef CODE_OOHG_OOP
             WITH OBJECT aItem[ CFG_VOBJ ] := TLabel():Define()
                :Row := nRow2
-               :Col := nCol2 + ( ( nLen + 3 ) * 12 )
+               :Col := nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 )
                :Value := Space( aItem[ CFG_VLEN ] )
                :Height := 20
                :Width := aItem[ CFG_VLEN ] * 12
                //:Border := .T.
+
             ENDWITH
 #endif
             nCol += ( aItem[ CFG_VLEN ] + 3 ) * 12
