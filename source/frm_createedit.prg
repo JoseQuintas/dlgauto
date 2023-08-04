@@ -106,7 +106,8 @@ FUNCTION frm_CreateEdit( Self )
             SIZE aItem[ CFG_FLEN ] * 12, 20 ;
             STYLE WS_DISABLED + iif( aItem[ CFG_FTYPE ] == "N", ES_RIGHT, ES_LEFT ) ;
             MAXLENGTH aItem[ CFG_FLEN ] ;
-            PICTURE PictureFromValue( aItem )
+            PICTURE PictureFromValue( aItem ) ;
+            VALID { || OkCurrent( aItem, Self ) }
 #endif
 #ifdef CODE_HMGE_NOT_VALID_HERE
          // ATENTION: FAIL
@@ -124,14 +125,14 @@ FUNCTION frm_CreateEdit( Self )
                FONTNAME "verdana"
                IF aItem[ CFG_FTYPE ] == "N"
                   NUMERIC .T.
-#ifdef CODE_HMGE
+   #ifdef CODE_HMGE
                   INPUTMASK PictureFromValue( aItem )
-#endif
+   #endif
                ELSEIF aItem[ CFG_FTYPE ] == "D"
                   DATE .T.
-#ifdef CODE_HMGE
+   #ifdef CODE_HMGE
                   DATEFORMAT "DD/MM/YY"
-#endif
+   #endif
                ELSE
                   MAXLENGTH aItem[ CFG_FLEN ]
                ENDIF
@@ -238,4 +239,47 @@ STATIC FUNCTION PictureFromValue( oValue )
    ENDCASE
 
    RETURN cPicture
+#endif
+#ifdef CODE_HWGUI
+STATIC FUNCTION OkCurrent( aItem, Self )
+
+   LOCAL nSelect, lEof
+
+   IF aItem[ CFG_ISKEY ]
+      SEEK aItem[ CFG_TOBJ ]:Value
+      IF ::cSelected == "INSERT"
+         IF ! Eof()
+            hwg_MsgInfo( "Código já cadastrado" )
+            RETURN .F.
+         ENDIF
+      ELSE
+         IF Eof()
+            hwg_MsgInfo( "Código não cadastrado" )
+            RETURN .F.
+         ENDIF
+      ENDIF
+   ENDIF
+   IF ! Empty( aItem[ CFG_VTABLE ] )
+      nSelect := Select()
+      SELECT ( Select( aItem[ CFG_VTABLE ] ) )
+      SEEK aItem[ CFG_TOBJ ]:Value
+      lEof := Eof()
+      aItem[ CFG_VOBJ ]:Value := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
+      SELECT ( nSelect )
+      IF lEof
+         hwg_MsgInfo( "Código não cadastrado" )
+         RETURN .F.
+      ENDIF
+   ENDIF
+
+   RETURN .T.
+
+
+
+
+
+
+
+
+
 #endif

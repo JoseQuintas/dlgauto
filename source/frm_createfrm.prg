@@ -6,6 +6,7 @@ FUNCTION frm_CreateFrm( Self )
 
    SELECT 0
    USE ( ::cFileDBF )
+   SET INDEX TO ( ::cFileDBF )
    FOR EACH aItem IN ::aEditList
       IF ! Empty( aItem[ CFG_VTABLE ] )
          IF Select( aItem[ CFG_VTABLE ] ) == 0
