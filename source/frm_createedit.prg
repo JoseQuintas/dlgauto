@@ -19,12 +19,12 @@ FUNCTION frm_CreateEdit( Self )
       @ 5, 70 TAB oTab ITEMS {} OF ::oDlg ID 101 SIZE ::nDlgWidth - 10, ::nDlgHeight - 140 STYLE WS_CHILD + WS_VISIBLE
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_TAB
-      Atail( ::aControlList )[ CFG_TOBJ ]     := oTab
+      Atail( ::aControlList )[ CFG_FCONTROL ]     := oTab
 
       @ 1, 23 PANEL oPanel OF oTab SIZE ::nDlgWidth - 12, ::nDlgHeight - 165 BACKCOLOR COLOR_BACK
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
-      Atail( ::aControlList )[ CFG_TOBJ ]     := oPanel
+      Atail( ::aControlList )[ CFG_FCONTROL ]     := oPanel
 #endif
       nRow := 999
    ELSE
@@ -49,9 +49,9 @@ FUNCTION frm_CreateEdit( Self )
 #ifdef CODE_HWGUI
                   //ghost for getlist
                   AAdd( ::aControlList, CFG_EDITEMPTY )
-                  @ nCol, nRow GET Atail( ::aControlList )[ CFG_TOBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
+                  @ nCol, nRow GET Atail( ::aControlList )[ CFG_FCONTROL ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
                      OF oTab SIZE 0, 0 STYLE WS_DISABLED
-                  AAdd( Atail( aList ), Atail( ::aControlList )[ CFG_TOBJ ] )
+                  AAdd( Atail( aList ), Atail( ::aControlList )[ CFG_FCONTROL ] )
                   END PAGE OF oTab
 #endif
 
@@ -78,8 +78,8 @@ FUNCTION frm_CreateEdit( Self )
          @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, 20 COLOR COLOR_FORE TRANSPARENT
 #endif
 #ifdef CODE_HMGE
-         aItem[ CFG_TOBJ ] := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
-         DEFINE LABEL ( aItem[ CFG_TOBJ ] )
+         aItem[ CFG_FCONTROL ] := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
+         DEFINE LABEL ( aItem[ CFG_FCONTROL ] )
             PARENT ( ::oDlg )
             COL nCol
             ROW nRow
@@ -89,7 +89,7 @@ FUNCTION frm_CreateEdit( Self )
          END LABEL
 #endif
 #ifdef CODE_OOHG
-         WITH OBJECT aItem[ CFG_TOBJ ] := TLabel():Define()
+         WITH OBJECT aItem[ CFG_FCONTROL ] := TLabel():Define()
             :Row := nRow
             :Col := nCol
             :Value := aItem[ CFG_CAPTION ]
@@ -101,7 +101,7 @@ FUNCTION frm_CreateEdit( Self )
 
 
 #ifdef CODE_HWGUI
-         @ nCol2, nRow2 GET aItem[ CFG_TOBJ ] ;
+         @ nCol2, nRow2 GET aItem[ CFG_FCONTROL ] ;
             VAR aItem[ CFG_VALUE ] OF iif( ::lWithTab, oTab, ::oDlg ) ;
             SIZE aItem[ CFG_FLEN ] * 12, 20 ;
             STYLE WS_DISABLED + iif( aItem[ CFG_FTYPE ] == "N", ES_RIGHT, ES_LEFT ) ;
@@ -115,8 +115,8 @@ FUNCTION frm_CreateEdit( Self )
             FONTNAME "verdana" NUMERIC .T. VALUE aItem[ CFG_VALUE ] MAXLENGTH aItem[ CFG_LEN ] ON CHANGE Nil
 #endif
 #ifdef CODE_HMGE_OR_OOHG
-            aItem[ CFG_TOBJ ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-            DEFINE TEXTBOX ( aItem[ CFG_TOBJ ] )
+            aItem[ CFG_FCONTROL ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
+            DEFINE TEXTBOX ( aItem[ CFG_FCONTROL ] )
                PARENT ( ::oDlg )
                ROW nRow2
                COL nCol2
@@ -142,7 +142,7 @@ FUNCTION frm_CreateEdit( Self )
 #endif
 #ifdef CODE_OOHG_OOP
          // not confirmed
-         WITH OBJECT aItem[ CFG_TOBJ ] := TText():Define()
+         WITH OBJECT aItem[ CFG_FCONTROL ] := TText():Define()
             :Row    := nRow2
             :Col    := nCol2
             :Width  := aItem[ CFG_FLEN ] * 12
@@ -155,26 +155,26 @@ FUNCTION frm_CreateEdit( Self )
 
 #ifdef CODE_HWGUI
          IF ::lWithTab
-            AAdd( Atail( aList ), aItem[ CFG_TOBJ ] )
+            AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
          ENDIF
 #endif
 
 
          IF ! Empty( aItem[ CFG_VTABLE ] )
 #ifdef CODE_HWGUI
-            @ nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VOBJ ] CAPTION Space( aItem[ CFG_VLEN ] ) OF ;
+            @ nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VCONTROL ] CAPTION Space( aItem[ CFG_VLEN ] ) OF ;
                iif( ::lWithTab, oTab, ::oDlg ) SIZE aItem[ CFG_VLEN ] * 12, 20 COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
                STYLE WS_BORDER
 #endif
 #ifdef CODE_HMGE_OR_OOHG
-            aItem[ CFG_VOBJ ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
-            @ nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VOBJ ] ) ;
+            aItem[ CFG_VCONTROL ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
+            @ nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VCONTROL ] ) ;
                PARENT ( ::oDlg ) ;
                VALUE Space( aItem[ CFG_VLEN ] ) WIDTH aItem[ CFG_VLEN ] * 12 HEIGHT 20 ;
                BORDER
 #endif
 #ifdef CODE_OOHG_OOP
-            WITH OBJECT aItem[ CFG_VOBJ ] := TLabel():Define()
+            WITH OBJECT aItem[ CFG_VCONTROL ] := TLabel():Define()
                :Row := nRow2
                :Col := nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 )
                :Value := Space( aItem[ CFG_VLEN ] )
@@ -191,10 +191,10 @@ FUNCTION frm_CreateEdit( Self )
 #ifdef CODE_HWGUI
    // ghost for Getlist
    AAdd( ::aControlList, CFG_EDITEMPTY )
-   @ nCol, nRow GET Atail( ::aControlList )[ CFG_TOBJ ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
+   @ nCol, nRow GET Atail( ::aControlList )[ CFG_FCONTROL ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
       OF iif( ::lWithTab, oTab, ::oDlg ) SIZE 0, 0 STYLE WS_DISABLED
    IF ::lWithTab
-      AAdd( ATail( aList ), Atail( ::aControlList )[ CFG_TOBJ ] )
+      AAdd( ATail( aList ), Atail( ::aControlList )[ CFG_FCONTROL ] )
       END PAGE OF oTab
       FOR nTab = 1 TO Len( aList )
          nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
@@ -246,7 +246,7 @@ STATIC FUNCTION OkCurrent( aItem, Self )
    LOCAL nSelect, lEof
 
    IF aItem[ CFG_ISKEY ]
-      SEEK aItem[ CFG_TOBJ ]:Value
+      SEEK aItem[ CFG_FCONTROL ]:Value
       IF ::cSelected == "INSERT"
          IF ! Eof()
             hwg_MsgInfo( "Código já cadastrado" )
@@ -262,9 +262,9 @@ STATIC FUNCTION OkCurrent( aItem, Self )
    IF ! Empty( aItem[ CFG_VTABLE ] )
       nSelect := Select()
       SELECT ( Select( aItem[ CFG_VTABLE ] ) )
-      SEEK aItem[ CFG_TOBJ ]:Value
+      SEEK aItem[ CFG_FCONTROL ]:Value
       lEof := Eof()
-      aItem[ CFG_VOBJ ]:SetText( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+      aItem[ CFG_VCONTROL ]:SetText( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
       SELECT ( nSelect )
       IF lEof
          hwg_MsgInfo( "Código não cadastrado" )

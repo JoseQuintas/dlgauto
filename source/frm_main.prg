@@ -40,7 +40,7 @@ METHOD ShowCtlList() CLASS ThisDlg
          cTxt += cTxtTmp + hb_Eol()
          cTxtTmp := ""
       ENDIF
-      cTxtTmp += oControl[ CFG_TOBJ ]:winClass + " " // static não tem id // Ltrim( Str( oControl[2]:id ) ) + " "
+      cTxtTmp += oControl[ CFG_FCONTROL ]:winClass + " " // static não tem id // Ltrim( Str( oControl[2]:id ) ) + " "
    NEXT
    cTxt += cTxtTmp
    hwg_MsgInfo( cTxt )

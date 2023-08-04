@@ -43,18 +43,18 @@ FUNCTION frm_CreateButton( Self, lDefault )
    NEXT
    FOR EACH aItem IN ::aControlList
 #ifdef CODE_HWGUI
-      @ nCol, nRow BUTTON aItem[ CFG_TOBJ ] ;
+      @ nCol, nRow BUTTON aItem[ CFG_FCONTROL ] ;
          CAPTION Nil ;
          OF ::oDlg SIZE ::nButtonSize, ::nButtonSize ;
          STYLE BS_TOP ;
          ON CLICK aItem[ CFG_ACTION ] ;
          ON INIT { || ;
-            BtnSetImageText( aItem[ CFG_TOBJ ]:Handle, aItem[ CFG_FNAME ], Self ) } ;
+            BtnSetImageText( aItem[ CFG_FCONTROL ]:Handle, aItem[ CFG_FNAME ], Self ) } ;
             TOOLTIP aItem[ CFG_FNAME ]
 #endif
 #ifdef CODE_HMGE
-      aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
-      DEFINE BUTTONEX ( aItem[ CFG_TOBJ ] )
+      aItem[ CFG_FCONTROL ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
+      DEFINE BUTTONEX ( aItem[ CFG_FCONTROL ] )
          ROW nRow
          COL nCol
          WIDTH ::nButtonSize
@@ -75,8 +75,8 @@ FUNCTION frm_CreateButton( Self, lDefault )
       END BUTTONEX
 #endif
 #ifdef CODE_OOHG
-      aItem[ CFG_TOBJ ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
-      @ nRow, nCol BUTTON ( aItem[ CFG_TOBJ ] ) ;
+      aItem[ CFG_FCONTROL ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
+      @ nRow, nCol BUTTON ( aItem[ CFG_FCONTROL ] ) ;
          CAPTION aItem[ CFG_FNAME ] ;
          PICTURE BtnSetImageText( , aItem[ CFG_FNAME ] ) ;
          ACTION Eval( aItem[ CFG_ACTION ] ) ;

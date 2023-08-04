@@ -54,9 +54,9 @@ METHOD ButtonSaveOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_FNAME ] $ "Save,Cancel"
-            aItem[ CFG_TOBJ ]:Enable()
+            aItem[ CFG_FCONTROL ]:Enable()
          ELSE
-            aItem[ CFG_TOBJ ]:Disable()
+            aItem[ CFG_FCONTROL ]:Disable()
          ENDIF
       ENDIF
    NEXT
@@ -70,9 +70,9 @@ METHOD ButtonSaveOff() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_FNAME ] $ "Save,Cancel"
-            aItem[ CFG_TOBJ ]:Disable()
+            aItem[ CFG_FCONTROL ]:Disable()
          ELSE
-            aItem[ CFG_TOBJ ]:Enable()
+            aItem[ CFG_FCONTROL ]:Enable()
          ENDIF
       ENDIF
    NEXT
@@ -85,10 +85,10 @@ METHOD EditOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! aItem[ CFG_ISKEY ]
-         aItem[ CFG_TOBJ ]:Enable()
+         aItem[ CFG_FCONTROL ]:Enable()
          IF ! lFound
             lFound := .T.
-            oFirstEdit := aItem[ CFG_TOBJ ]
+            oFirstEdit := aItem[ CFG_FCONTROL ]
          ENDIF
       ENDIF
    NEXT
@@ -103,7 +103,7 @@ METHOD EditOff() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         aItem[ CFG_TOBJ ]:Disable()
+         aItem[ CFG_FCONTROL ]:Disable()
       ENDIF
    NEXT
    ::ButtonSaveOff()
