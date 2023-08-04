@@ -84,7 +84,7 @@ METHOD EditOn() CLASS frm_Class
    LOCAL aItem, oFirstEdit, lFound := .F.
 
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. aItem[ CFG_ISKEY ]
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! aItem[ CFG_ISKEY ]
          aItem[ CFG_TOBJ ]:Enable()
          IF ! lFound
             lFound := .T.

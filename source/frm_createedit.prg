@@ -264,7 +264,7 @@ STATIC FUNCTION OkCurrent( aItem, Self )
       SELECT ( Select( aItem[ CFG_VTABLE ] ) )
       SEEK aItem[ CFG_TOBJ ]:Value
       lEof := Eof()
-      aItem[ CFG_VOBJ ]:Value := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
+      aItem[ CFG_VOBJ ]:SetText( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
       SELECT ( nSelect )
       IF lEof
          hwg_MsgInfo( "Código não cadastrado" )
@@ -273,13 +273,4 @@ STATIC FUNCTION OkCurrent( aItem, Self )
    ENDIF
 
    RETURN .T.
-
-
-
-
-
-
-
-
-
 #endif
