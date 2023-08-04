@@ -47,11 +47,11 @@ FUNCTION frm_CreateEdit( Self )
                IF nPageCount > 0
 
 #ifdef CODE_HWGUI
-                  //ghost for getlist
-                  AAdd( ::aControlList, CFG_EDITEMPTY )
-                  @ nCol, nRow GET Atail( ::aControlList )[ CFG_FCONTROL ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
-                     OF oTab SIZE 0, 0 STYLE WS_DISABLED
-                  AAdd( Atail( aList ), Atail( ::aControlList )[ CFG_FCONTROL ] )
+                  ////ghost for getlist (test using one on dlg)
+                  //AAdd( ::aControlList, CFG_EDITEMPTY )
+                  //@ nCol, nRow GET Atail( ::aControlList )[ CFG_FCONTROL ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
+                  //   OF oTab SIZE 0, 0 STYLE WS_DISABLED
+                  //AAdd( Atail( aList ), Atail( ::aControlList )[ CFG_FCONTROL ] )
                   END PAGE OF oTab
 #endif
 
@@ -192,13 +192,13 @@ FUNCTION frm_CreateEdit( Self )
    // ghost for Getlist
    AAdd( ::aControlList, CFG_EDITEMPTY )
    @ nCol, nRow GET Atail( ::aControlList )[ CFG_FCONTROL ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
-      OF iif( ::lWithTab, oTab, ::oDlg ) SIZE 0, 0 STYLE WS_DISABLED
+      OF iif( .F. .AND. ::lWithTab, oTab, ::oDlg ) SIZE 0, 0 STYLE WS_DISABLED
    IF ::lWithTab
-      AAdd( ATail( aList ), Atail( ::aControlList )[ CFG_FCONTROL ] )
+      // *ghost* AAdd( ATail( aList ), Atail( ::aControlList )[ CFG_FCONTROL ] )
       END PAGE OF oTab
       FOR nTab = 1 TO Len( aList )
          nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
-         SetLostFocus( aList[ nTab, Len( aList[ nTab ] ) - 1 ], oTab, nPageNext, aList[ nPageNext, 1 ] )
+         SetLostFocus( aList[ nTab, Len( aList[ nTab ] ) /* *ghost* - 1 */ ], oTab, nPageNext, aList[ nPageNext, 1 ] )
       NEXT
    ENDIF
 #endif

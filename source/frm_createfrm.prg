@@ -6,7 +6,9 @@ FUNCTION frm_CreateFrm( Self )
 
    SELECT 0
    USE ( ::cFileDBF )
-   SET INDEX TO ( ::cFileDBF )
+   IF hb_ASCan( ::aEditList, { | e | e[ CFG_ISKEY ] } ) != 0
+      SET INDEX TO ( ::cFileDBF )
+   ENDIF
    FOR EACH aItem IN ::aEditList
       IF ! Empty( aItem[ CFG_VTABLE ] )
          IF Select( aItem[ CFG_VTABLE ] ) == 0
