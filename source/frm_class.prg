@@ -16,7 +16,8 @@ CREATE CLASS frm_Class
 
    VAR nDlgWidth       INIT 1024
    VAR nDlgHeight      INIT 768
-   VAR nLineHeight     INIT 25
+   VAR nLineSpacing    INIT 25
+   VAR nLineHeight     INIT 20
    VAR nButtonSize     INIT 50
    VAR nButtonSpace    INIT 3
    VAR nTextSize       INIT 20

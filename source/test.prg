@@ -11,6 +11,7 @@ PROCEDURE Main()
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nPos1, nPos2
 
    SET EXCLUSIVE OFF
+   SET EPOCH TO Year( Date() ) - 90
 #ifdef CODE_HMGE
    SET OOP ON
 #endif
@@ -27,12 +28,13 @@ PROCEDURE Main()
       aStru := dbStruct()
       FOR EACH aField IN aStru
          aItem := CFG_EDITEMPTY
-         aItem[ CFG_FNAME ]   := aField[ DBS_NAME ]
-         aItem[ CFG_FTYPE ]   := aField[ DBS_TYPE ]
-         aItem[ CFG_FLEN ]    := aField[ DBS_LEN ]
-         aItem[ CFG_FDEC ]    := aField[ DBS_DEC ]
-         aItem[ CFG_VALUE ]   := aField[ DBS_NAME ]
-         aItem[ CFG_CAPTION ] := aField[ DBS_NAME ]
+         aItem[ CFG_FNAME ]    := aField[ DBS_NAME ]
+         aItem[ CFG_FTYPE ]    := aField[ DBS_TYPE ]
+         aItem[ CFG_FLEN ]     := aField[ DBS_LEN ]
+         aItem[ CFG_FDEC ]     := aField[ DBS_DEC ]
+         aItem[ CFG_VALUE ]    := aField[ DBS_NAME ]
+         aItem[ CFG_CAPTION ]  := aField[ DBS_NAME ]
+         aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
          /* above retrieve value from related dbf */
          DO CASE
          CASE cFile == "PRODUCT" .AND. aField[ DBS_NAME ] == "IDPRODUCT"
@@ -70,6 +72,29 @@ PROCEDURE Main()
    frm_MainMenu( @aAllSetup )
 
    RETURN
+
+STATIC FUNCTION PictureFromValue( oValue )
+
+   LOCAL cPicture, cType, nLen, nDec
+
+   cType := oValue[ CFG_FTYPE ]
+   nLen  := oValue[ CFG_FLEN ]
+   nDec  := oValue[ CFG_FDEC ]
+   DO CASE
+   CASE cType == "D"
+      cPicture := "@D"
+   CASE cType == "N"
+      cPicture := Replicate( "9", nLen - nDec )
+      IF nDec != 0
+         cPicture += "." + Replicate( "9", nDec )
+      ENDIF
+   CASE cType == "M"
+      cPicture := "@S100"
+   CASE cType == "C"
+      cPicture := iif( nLen > 100, "@S100", "@X" )
+   ENDCASE
+
+   RETURN cPicture
 
 FUNCTION AppVersaoExe(); RETURN ""
 FUNCTION AppUserName(); RETURN ""

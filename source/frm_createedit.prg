@@ -64,18 +64,18 @@ FUNCTION frm_CreateEdit( Self )
                AAdd( aList, {} )
             ENDIF
             nCol := 10
-            nRow += ( ::nLineHeight * 2 )
+            nRow += ( ::nLineSpacing * 2 )
          ENDIF
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 )
          ELSE
-            nRow2 := nRow + ::nLineHeight
+            nRow2 := nRow + ::nLineSpacing
             nCol2 := nCol
          ENDIF
 
 #ifdef CODE_HWGUI
-         @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, 20 COLOR COLOR_FORE TRANSPARENT
+         @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, ::nLineHeight COLOR COLOR_FORE TRANSPARENT
 #endif
 #ifdef CODE_HMGE
          aItem[ CFG_FCONTROL ] := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
@@ -84,7 +84,7 @@ FUNCTION frm_CreateEdit( Self )
             COL nCol
             ROW nRow
             WIDTH nLen * 12
-            HEIGHT 20
+            HEIGHT ::nLineHeight
             VALUE aItem[ CFG_CAPTION ]
          END LABEL
 #endif
@@ -94,7 +94,7 @@ FUNCTION frm_CreateEdit( Self )
             :Col := nCol
             :Value := aItem[ CFG_CAPTION ]
             :AutoSize := .T.
-            :Height := 20
+            :Height := ::nLineHeight
             :Width := nLen * 12
          ENDWITH
 #endif
@@ -103,15 +103,15 @@ FUNCTION frm_CreateEdit( Self )
 #ifdef CODE_HWGUI
          @ nCol2, nRow2 GET aItem[ CFG_FCONTROL ] ;
             VAR aItem[ CFG_VALUE ] OF iif( ::lWithTab, oTab, ::oDlg ) ;
-            SIZE aItem[ CFG_FLEN ] * 12, 20 ;
+            SIZE aItem[ CFG_FLEN ] * 12, ::nLineHeight ;
             STYLE WS_DISABLED + iif( aItem[ CFG_FTYPE ] == "N", ES_RIGHT, ES_LEFT ) ;
             MAXLENGTH aItem[ CFG_FLEN ] ;
-            PICTURE PictureFromValue( aItem ) ;
+            PICTURE aItem[ CFG_FPICTURE ] ;
             VALID { || OkCurrent( aItem, Self ) }
 #endif
 #ifdef CODE_HMGE_NOT_VALID_HERE
          // ATENTION: FAIL
-         @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_OBJ ] ) PARENT ( ::oDlg ) HEIGHT 20 WIDTH aItem[ CFG_LEN ] * 12
+         @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_OBJ ] ) PARENT ( ::oDlg ) HEIGHT ::nLineHeight WIDTH aItem[ CFG_LEN ] * 12
             FONTNAME "verdana" NUMERIC .T. VALUE aItem[ CFG_VALUE ] MAXLENGTH aItem[ CFG_LEN ] ON CHANGE Nil
 #endif
 #ifdef CODE_HMGE_OR_OOHG
@@ -120,18 +120,18 @@ FUNCTION frm_CreateEdit( Self )
                PARENT ( ::oDlg )
                ROW nRow2
                COL nCol2
-               HEIGHT    20
+               HEIGHT    ::nLineHeight
                WIDTH     aItem[ CFG_FLEN ] * 12
                FONTNAME "verdana"
                IF aItem[ CFG_FTYPE ] == "N"
                   NUMERIC .T.
    #ifdef CODE_HMGE
-                  INPUTMASK PictureFromValue( aItem )
+                  INPUTMASK aItem[ CFG_FPICTURE ]
    #endif
                ELSEIF aItem[ CFG_FTYPE ] == "D"
                   DATE .T.
    #ifdef CODE_HMGE
-                  DATEFORMAT "DD/MM/YY"
+                  DATEFORMAT aItem[ CFG_FPICTURE ]
    #endif
                ELSE
                   MAXLENGTH aItem[ CFG_FLEN ]
@@ -146,7 +146,7 @@ FUNCTION frm_CreateEdit( Self )
             :Row    := nRow2
             :Col    := nCol2
             :Width  := aItem[ CFG_FLEN ] * 12
-            :Height := 20
+            :Height := ::nLineHeight
             :Value  := aItem[ CFG_VALUE ]
          ENDWITH
 #endif
@@ -163,14 +163,14 @@ FUNCTION frm_CreateEdit( Self )
          IF ! Empty( aItem[ CFG_VTABLE ] )
 #ifdef CODE_HWGUI
             @ nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VCONTROL ] CAPTION Space( aItem[ CFG_VLEN ] ) OF ;
-               iif( ::lWithTab, oTab, ::oDlg ) SIZE aItem[ CFG_VLEN ] * 12, 20 COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
+               iif( ::lWithTab, oTab, ::oDlg ) SIZE aItem[ CFG_VLEN ] * 12, ::nLineHeight COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
                STYLE WS_BORDER
 #endif
 #ifdef CODE_HMGE_OR_OOHG
             aItem[ CFG_VCONTROL ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
             @ nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VCONTROL ] ) ;
                PARENT ( ::oDlg ) ;
-               VALUE Space( aItem[ CFG_VLEN ] ) WIDTH aItem[ CFG_VLEN ] * 12 HEIGHT 20 ;
+               VALUE Space( aItem[ CFG_VLEN ] ) WIDTH aItem[ CFG_VLEN ] * 12 HEIGHT ::nLineHeight ;
                BORDER
 #endif
 #ifdef CODE_OOHG_OOP
@@ -178,7 +178,7 @@ FUNCTION frm_CreateEdit( Self )
                :Row := nRow2
                :Col := nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 )
                :Value := Space( aItem[ CFG_VLEN ] )
-               :Height := 20
+               :Height := ::nLineHeight
                :Width := aItem[ CFG_VLEN ] * 12
                //:Border := .T.
 
@@ -216,30 +216,6 @@ STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
    RETURN Nil
 #endif
 
-#ifdef CODE_HWGUI_OR_HMGE
-STATIC FUNCTION PictureFromValue( oValue )
-
-   LOCAL cPicture, cType, nLen, nDec
-
-   cType := oValue[ CFG_FTYPE ]
-   nLen  := oValue[ CFG_FLEN ]
-   nDec  := oValue[ CFG_FDEC ]
-   DO CASE
-   CASE cType == "D"
-      cPicture := "@D"
-   CASE cType == "N"
-      cPicture := Replicate( "9", nLen - nDec )
-      IF nDec != 0
-         cPicture += "." + Replicate( "9", nDec )
-      ENDIF
-   CASE cType == "M"
-      cPicture := "@S100"
-   CASE cType == "C"
-      cPicture := iif( nLen > 100, "@S100", "@X" )
-   ENDCASE
-
-   RETURN cPicture
-#endif
 #ifdef CODE_HWGUI
 STATIC FUNCTION OkCurrent( aItem, Self )
 
