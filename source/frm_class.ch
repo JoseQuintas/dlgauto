@@ -24,11 +24,6 @@
 #define TYPE_TABPAGE  4
 #define TYPE_PANEL    5
 
-#ifndef WIN_RGB
-   #define WIN_RGB( r, g, b ) ( r * 256 ) + ( b * 16 ) + c
-#endif
-#define COLOR_BACK    WIN_RGB( 13, 16, 51 )
-#define COLOR_FORE    WIN_RGB( 255, 255, 255 )
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"
@@ -46,3 +41,14 @@
    #define CODE_OOHG
    #define CODE_HMGE_OR_OOHG
 #endif
+
+#ifndef WIN_RGB
+   #ifdef CODE_HWGUI
+      #define WIN_RGB( r, g, b ) hwg_ColorRGB2N( r, g, b )
+   #else
+      #define WIN_RGB( r, g, b ) ( r * 256 ) + ( b * 16 ) + c
+   #endif
+#endif
+#define COLOR_BACK    WIN_RGB( 13, 16, 51 )
+#define COLOR_FORE    WIN_RGB( 255, 255, 255 )
+#define COLOR_FOCUS   WIN_RGB( 255, 255, 0 )

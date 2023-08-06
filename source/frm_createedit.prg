@@ -7,7 +7,7 @@ FUNCTION frm_CreateEdit( Self )
 #ifdef CODE_HWGUI
    LOCAL oPanel, nTab, nPageNext
 
-   hwg_SetColorInFocus(.T., , hwg_ColorRGB2N(255,255,0) )
+   hwg_SetColorInFocus(.T., , COLOR_FOCUS )
 #endif
 
    FOR EACH aItem IN ::aEditList
@@ -74,6 +74,8 @@ FUNCTION frm_CreateEdit( Self )
             nCol2 := nCol
          ENDIF
 
+/* text description */
+
 #ifdef CODE_HWGUI
          @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, ::nLineHeight COLOR COLOR_FORE TRANSPARENT
 #endif
@@ -99,6 +101,7 @@ FUNCTION frm_CreateEdit( Self )
          ENDWITH
 #endif
 
+/* input/show information */
 
 #ifdef CODE_HWGUI
          @ nCol2, nRow2 GET aItem[ CFG_FCONTROL ] ;
@@ -160,6 +163,8 @@ FUNCTION frm_CreateEdit( Self )
 #endif
 
 
+/* related information */
+
          IF ! Empty( aItem[ CFG_VTABLE ] )
 #ifdef CODE_HWGUI
             @ nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VCONTROL ] CAPTION Space( aItem[ CFG_VLEN ] ) OF ;
@@ -208,6 +213,8 @@ FUNCTION frm_CreateEdit( Self )
 
    RETURN Nil
 
+/* tab navigation */
+
 #ifdef CODE_HWGUI
 STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
 
@@ -215,6 +222,8 @@ STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
 
    RETURN Nil
 #endif
+
+/* validation */
 
 #ifdef CODE_HWGUI
 STATIC FUNCTION OkCurrent( aItem, Self )
