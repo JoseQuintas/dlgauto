@@ -59,7 +59,7 @@ FUNCTION frm_CreateButton( Self, lDefault )
          COL nCol
          WIDTH ::nButtonSize
          HEIGHT ::nButtonSize
-         PICTURE BtnSetImageText( , aItem[ CFG_FNAME ] )
+         PICTURE ResourceFromCaption( aItem[ CFG_FNAME ] )
          IMAGEWIDTH ::nButtonSize - 20
          IMAGEHEIGHT ::nButtonSize - 20
          CAPTION aItem[ CFG_FNAME ]
@@ -78,7 +78,7 @@ FUNCTION frm_CreateButton( Self, lDefault )
       aItem[ CFG_FCONTROL ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       @ nRow, nCol BUTTON ( aItem[ CFG_FCONTROL ] ) ;
          CAPTION aItem[ CFG_FNAME ] ;
-         PICTURE BtnSetImageText( , aItem[ CFG_FNAME ] ) ;
+         PICTURE ResourceFromCaption( aItem[ CFG_FNAME ] ) ;
          ACTION Eval( aItem[ CFG_ACTION ] ) ;
          WIDTH ::nButtonSize ;
          HEIGHT ::nButtonSize ;
@@ -94,12 +94,9 @@ FUNCTION frm_CreateButton( Self, lDefault )
 
    RETURN Nil
 
-STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
+STATIC FUNCTION ResourceFromCaption( cCaption )
 
    LOCAL cResName, nPos
-#ifdef CODE_HWGUI
-   LOCAL oIcon, hIcon
-#endif
    LOCAL aList := { ;
       { "Insert",   "icoPlus" }, ;
       { "Edit",     "icoEdit" }, ;
@@ -119,18 +116,22 @@ STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
 
    IF ( nPos := hb_AScan( aList, { | e | e[1] == cCaption } ) ) != 0
       cResName := aList[ nPos, 2 ]
-#ifdef CODE_HWGUI
-      oIcon := HICON():AddResource( cResName, oAuto:nButtonSize - oAuto:nTextSize, oAuto:nButtonSize - oAuto:nTextSize )
-      IF ValType( oIcon ) == "O"
-         hIcon := oIcon:Handle
-      ENDIF
-#endif
    ENDIF
-#ifdef CODE_HWGUI
-   hwg_SendMessage( hHandle, BM_SETIMAGE, IMAGE_ICON, hIcon )
-   hwg_SendMessage( hHandle, WM_SETTEXT, 0, cCaption )
-#endif
-   (hHandle)
-   (oAuto)
 
    RETURN cResName
+
+#ifdef CODE_HWGUI
+STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
+
+   LOCAL cResName, oIcon, hIcon
+
+   cResName := ResourceFromCaption( cCaption )
+   oIcon := HICON():AddResource( cResName, oAuto:nButtonSize - oAuto:nTextSize, oAuto:nButtonSize - oAuto:nTextSize )
+   IF ValType( oIcon ) == "O"
+      hIcon := oIcon:Handle
+   ENDIF
+   hwg_SendMessage( hHandle, BM_SETIMAGE, IMAGE_ICON, hIcon )
+   hwg_SendMessage( hHandle, WM_SETTEXT, 0, cCaption )
+
+   RETURN Nil
+#endif

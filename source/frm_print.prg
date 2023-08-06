@@ -1,5 +1,5 @@
 #define CFG_FNAME     3
-#define CFG_CAPTION   8
+#define CFG_CAPTION   9
 
 FUNCTION frm_Print( Self )
 
