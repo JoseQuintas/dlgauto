@@ -1,6 +1,6 @@
 #include "frm_class.ch"
 
-FUNCTION frm_CreateButton( Self, lDefault )
+FUNCTION frm_Buttons( Self, lDefault )
 
    LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
 
@@ -37,53 +37,15 @@ FUNCTION frm_CreateButton( Self, lDefault )
    nRow := 10
    FOR EACH aItem IN aList
       AAdd( ::aControlList, CFG_EDITEMPTY )
-      Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
-      Atail( ::aControlList )[ CFG_FNAME ]    := aItem[1]
-      Atail( ::aControlList )[ CFG_ACTION ]  := aItem[ 2 ]
+      Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_BUTTON
+      Atail( ::aControlList )[ CFG_CAPTION ] := aItem[1]
+      Atail( ::aControlList )[ CFG_ACTION ]   := aItem[ 2 ]
    NEXT
    FOR EACH aItem IN ::aControlList
-#ifdef CODE_HWGUI
-      @ nCol, nRow BUTTON aItem[ CFG_FCONTROL ] ;
-         CAPTION Nil ;
-         OF ::oDlg SIZE ::nButtonSize, ::nButtonSize ;
-         STYLE BS_TOP ;
-         ON CLICK aItem[ CFG_ACTION ] ;
-         ON INIT { || ;
-            BtnSetImageText( aItem[ CFG_FCONTROL ]:Handle, aItem[ CFG_FNAME ], Self ) } ;
-            TOOLTIP aItem[ CFG_FNAME ]
-#endif
-#ifdef CODE_HMGE
       aItem[ CFG_FCONTROL ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
-      DEFINE BUTTONEX ( aItem[ CFG_FCONTROL ] )
-         ROW nRow
-         COL nCol
-         WIDTH ::nButtonSize
-         HEIGHT ::nButtonSize
-         PICTURE ResourceFromCaption( aItem[ CFG_FNAME ] )
-         IMAGEWIDTH ::nButtonSize - 20
-         IMAGEHEIGHT ::nButtonSize - 20
-         CAPTION aItem[ CFG_FNAME ]
-         ACTION Eval( aItem[ CFG_ACTION ] )
-         FONTNAME "verdana"
-         FONTSIZE 9
-         FONTBOLD .T.
-         FONTCOLOR GRAY
-         VERTICAL .T.
-         BACKCOLOR WHITE
-         FLAT .T.
-         NOXPSTYLE .T.
-      END BUTTONEX
-#endif
-#ifdef CODE_OOHG
-      aItem[ CFG_FCONTROL ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
-      @ nRow, nCol BUTTON ( aItem[ CFG_FCONTROL ] ) ;
-         CAPTION aItem[ CFG_FNAME ] ;
-         PICTURE ResourceFromCaption( aItem[ CFG_FNAME ] ) ;
-         ACTION Eval( aItem[ CFG_ACTION ] ) ;
-         WIDTH ::nButtonSize ;
-         HEIGHT ::nButtonSize ;
-         WINDRAW
-#endif
+      CreateButton( ::oDlg, @aItem[ CFG_FCONTROL ], nRow, nCol, ::nButtonSize, ::nButtonSize, ;
+         aItem[ CFG_CAPTION ], IconFromCaption( aItem[ CFG_CAPTION ] ), aItem[ CFG_ACTION ] )
+
       IF nCol > ::nDlgWidth - ( ::nButtonSize - ::nButtonSpace ) * 2
          nRowLine += 1
          nRow += ::nButtonSize + ::nButtonSpace
@@ -94,7 +56,7 @@ FUNCTION frm_CreateButton( Self, lDefault )
 
    RETURN Nil
 
-STATIC FUNCTION ResourceFromCaption( cCaption )
+STATIC FUNCTION IconFromCaption( cCaption )
 
    LOCAL cResName, nPos
    LOCAL aList := { ;
@@ -119,19 +81,3 @@ STATIC FUNCTION ResourceFromCaption( cCaption )
    ENDIF
 
    RETURN cResName
-
-#ifdef CODE_HWGUI
-STATIC FUNCTION BtnSetImageText( hHandle, cCaption, oAuto )
-
-   LOCAL cResName, oIcon, hIcon
-
-   cResName := ResourceFromCaption( cCaption )
-   oIcon := HICON():AddResource( cResName, oAuto:nButtonSize - oAuto:nTextSize, oAuto:nButtonSize - oAuto:nTextSize )
-   IF ValType( oIcon ) == "O"
-      hIcon := oIcon:Handle
-   ENDIF
-   hwg_SendMessage( hHandle, BM_SETIMAGE, IMAGE_ICON, hIcon )
-   hwg_SendMessage( hHandle, WM_SETTEXT, 0, cCaption )
-
-   RETURN Nil
-#endif

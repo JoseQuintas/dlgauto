@@ -1,3 +1,7 @@
+/*
+frm_CreateFrm - create the dialog for data
+*/
+
 #include "frm_class.ch"
 
 FUNCTION frm_CreateFrm( Self )

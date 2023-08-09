@@ -1,3 +1,6 @@
+/*
+test - main program
+*/
 REQUEST DBFCDX
 
 #include "directry.ch"
@@ -14,9 +17,10 @@ PROCEDURE Main()
    SET EPOCH TO Year( Date() ) - 90
 #ifdef CODE_HMGE
    SET OOP ON
+   SET WINDOW MAIN OFF
 #endif
    RddSetDefault( "DBFCDX" )
-   frm_CreateDBF()
+   frm_DBF()
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )

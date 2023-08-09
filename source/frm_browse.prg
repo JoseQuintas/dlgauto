@@ -1,6 +1,10 @@
-#include "hwgui.ch"
+/*
+browse - browse data
+Work in progress
+*/
+
 #include "inkey.ch"
-#include "hbgtinfo.ch"
+#include "frm_class.ch"
 
 #define BUTTON_SIZE  50
 #define TEXT_SIZE    20
@@ -11,11 +15,17 @@
 #define STYLE_BTN_OVER           HStyle():New( { 16759929, 16771062 }, 1,, 2, 12164479 )
 #define STYLE_BTN_ALL            { STYLE_BTN_NORMAL, STYLE_BTN_CLICK, STYLE_BTN_OVER }
 
-PROCEDURE PTESHWGUIBrowse( cModule, cTitle, ... )
+#ifndef CODE_HWGUI
+   FUNCTION frm_Browse( ... )
+
+   RETURN Nil
+#else
+FUNCTION frm_Browse( Self, cModule, cTitle, ... )
 
    LOCAL cnSQL := ADOLocal(), oTBrowse, cCampoKeyboard := "CODIGO", xValue
 
    hb_Default( @cTitle, "PESQUISA DE CIDADES" )
+   hb_Default( @cModule, "test" )
    WITH OBJECT cnSQL
       :Execute( "SELECT CINOME, CIUF, CIIBGE, IDCIDADE" + ;
          " FROM JPCIDADE" + ;
@@ -25,25 +35,25 @@ PROCEDURE PTESHWGUIBrowse( cModule, cTitle, ... )
          { "UF",   { || :String( "CIUF", 2 ) } }, ;
          { "IBGE", { || :String( "CIIBGE", 7 ) } }, ;
          { "ID",   { || Str( :Number( "IDCIDADE" ), 6 ) } } }
-      xValue := HWGUIBrowse( cTitle, cnSQL, oTBrowse, "CINOME", ;
+      xValue := MakeBrowse( Self, cTitle, cnSQL, oTBrowse, "CINOME", ;
          iif( cCampoKeyboard == "CODIGO", { || Str( :Number( "IDCIDADE" ), 6 ) }, { || :String( "CINOME", Len( GetActive():VarGet ) ) } ) )
       IF xValue != Nil
-         MsgExclamation( Transform( xValue, "" ) )
+         hwg_MsgInfo( Transform( xValue, "" ) )
       ENDIF
       :CloseRecordset()
    ENDWITH
    ( cModule )
 
-   RETURN
+   RETURN Nil
 
-FUNCTION HwguiBrowse( cTitle, cnSQL, oBrowseList, cFilterList, bCode )
+FUNCTION MakeBrowse( Self, cTitle, cnSQL, oBrowseList, cFilterList, bCode )
 
    LOCAL oDlg, oBrowse, cFilter := "", lSelected := .F., xValue := Nil, oBtnList := {}
 
    hb_Default( @cFilter, "" )
 
    INIT DIALOG oDlg ;
-      AT AppWindowRect( 1 ), AppWindowRect( 2 ) SIZE AppWindowRect( 3 ), AppWindowRect( 4 ) ;
+      AT 0, 0 SIZE ::nDlgWidth, ::nDlgHeight ;
       TITLE cTitle ;
       STYLE WS_DLGFRAME + WS_SYSMENU ;
       BACKCOLOR STYLE_BACK
@@ -54,7 +64,7 @@ FUNCTION HwguiBrowse( cTitle, cnSQL, oBrowseList, cFilterList, bCode )
       ON KEYDOWN { | oBrw, nkey | oBrowseKey( oDlg, oBrw, nkey, @cFilter, lSelected, cFilterList ) }
    oBrowse:aArray := cnSQL
    BrowseSet( oBrowse, oBrowseList )
-   CreateButtons( oDlg, oBrowse, @oBtnList )
+   CreateButtons( Self, oDlg, oBrowse, @oBtnList )
 
    ACTIVATE DIALOG oDlg CENTER
 
@@ -143,7 +153,7 @@ STATIC FUNCTION IsAscChar( nKey )
 
    RETURN .T.
 
-STATIC FUNCTION CreateButtons( oDlg, oBrowse, oBtnList )
+STATIC FUNCTION CreateButtons( Self, oDlg, oBrowse, oBtnList )
 
    LOCAL nRow, nCol, oBtn, nRowLine := 1
    LOCAL acOptions := { ;
@@ -163,18 +173,22 @@ STATIC FUNCTION CreateButtons( oDlg, oBrowse, oBtnList )
       @ nCol, nRow OWNERBUTTON oBtn OF oDlg SIZE BUTTON_SIZE, BUTTON_SIZE ;
          ON CLICK oBtn[ 3 ] ;
          BITMAP ;
-         /* AppLoadImage( cIcon, WIN_IMAGE_ICON, 40, 40 ) */ ;
          HICON():AddResource( oBtn[ 2 ], BUTTON_SIZE - TEXT_SIZE, BUTTON_SIZE - TEXT_SIZE ) COORDINATES 1, 1, BUTTON_SIZE - TEXT_SIZE, BUTTON_SIZE - TEXT_SIZE ;
          TEXT oBtn[ 1 ] COORDINATES 5, BUTTON_SIZE - TEXT_SIZE, BUTTON_SIZE - 5, TEXT_SIZE ;
          Tooltip oBtn[ 1 ]
       oBtn:aStyle := STYLE_BTN_ALL
-      IF nCol > AppWindowRect( 3 ) - AppWindowRect( 1 ) - 10 - BUTTON_SIZE - BUTTON_SPACE
+      IF nCol > ::nDlgWidth - 10 - BUTTON_SIZE - BUTTON_SPACE
          nRowLine += 1
          nRow += BUTTON_SIZE + BUTTON_SPACE
-         nCol := AppWindowRect( 3 ) - AppWindowRect( 1 ) - BUTTON_SIZE - BUTTON_SPACE
+         nCol := ::nDlgWidth - BUTTON_SIZE - BUTTON_SPACE
       ENDIF
       AAdd( oBtnList, oBtn )
       nCol += iif( nRowLine == 1, 1, -1 ) * ( BUTTON_SIZE + BUTTON_SPACE )
    NEXT
 
    RETURN Nil
+
+FUNCTION ADOLocal()
+
+   RETURN Nil
+#endif

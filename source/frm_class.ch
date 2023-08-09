@@ -1,22 +1,23 @@
-#define CFG_CTLTYPE   1
-#define CFG_FCONTROL  2
-#define CFG_FNAME     3  // defined on frm_print
-#define CFG_FTYPE     4
-#define CFG_FLEN      5
-#define CFG_FDEC      6
-#define CFG_FPICTURE  7
-#define CFG_ISKEY     8
-#define CFG_CAPTION   9   // defined on frm_print
-#define CFG_VALUE     10
-#define CFG_VALID     11
-#define CFG_VTABLE    12
-#define CFG_VFIELD    13
-#define CFG_VSHOW     14
-#define CFG_VCONTROL  15
-#define CFG_VLEN      16
-#define CFG_ACTION    17
+#define CFG_FNAME     1  // frm_print       // field name
+#define CFG_FTYPE     2                     // field type
+#define CFG_FLEN      3                     // field len
+#define CFG_FDEC      4                     // field decimals
+#define CFG_ISKEY     5                     // if field is the key
+#define CFG_FPICTURE  6                     // picture mask
+#define CFG_CAPTION   7   // frm_print      // text description of field
+#define CFG_VALID     8                     // validation
+#define CFG_VTABLE    9                     // table to make seek
+#define CFG_VFIELD    10                    // field of table to seek
+#define CFG_VSHOW     11                    // field to show information
+#define CFG_VALUE     12                    // app value for edit field
+#define CFG_VLEN      13                    // app len of VSHOW
+#define CFG_CTLTYPE   14                    // app current control type
+#define CFG_FCONTROL  15                    // app control for input
+#define CFG_CCONTROL  16                    // app control for caption
+#define CFG_VCONTROL  17                    // app control for VSHOW
+#define CFG_ACTION    18                    // app action for button
 
-#define CFG_EDITEMPTY { TYPE_EDIT, Nil, "", "C", 1, 0, "", .F., "", "", .F., "", "", "", Nil, 0, Nil }
+#define CFG_EDITEMPTY { "", "C", 1, 0, .F., "", "", .T., "", "", "", Nil, 0, TYPE_EDIT, "", "", "", Nil }
 
 #define TYPE_BUTTON   1
 #define TYPE_EDIT     2

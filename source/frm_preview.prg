@@ -1,3 +1,7 @@
+/*
+frm_preview - preview of report
+*/
+
 #include "directry.ch"
 #include "frm_class.ch"
 
@@ -36,7 +40,7 @@ FUNCTION frm_Preview( cFileMask )
       TITLE "Preview" ;
       MODAL
 #endif
-   frm_CreateButton( oDlg, .F. )
+   frm_Buttons( oDlg, .F. )
 #ifdef CODE_HWGUI
    @ 10, 65 EDITBOX oEdit CAPTION "" SIZE oDlg:nDlgWidth - 40, oDlg:nDlgHeight - 100 FONT oFont ;
        STYLE ES_MULTILINE + ES_AUTOVSCROLL + WS_VSCROLL + WS_HSCROLL

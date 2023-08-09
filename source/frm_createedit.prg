@@ -1,9 +1,14 @@
+/*
+frm_CreateEdit - Create textbox/label on dialog
+*/
+
 #include "hbclass.ch"
 #include "frm_class.ch"
 
 FUNCTION frm_CreateEdit( Self )
 
    LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, nLen, aList := {}, nLenList, nRow2, nCol2 // , cTxt := ""
+
 #ifdef CODE_HWGUI
    LOCAL oPanel, nTab, nPageNext
 
@@ -15,6 +20,7 @@ FUNCTION frm_CreateEdit( Self )
       Atail( ::aControlList )[ CFG_VALUE ] := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
    NEXT
    IF ::lWithTab
+
 #ifdef CODE_HWGUI
       @ 5, 70 TAB oTab ITEMS {} OF ::oDlg ID 101 SIZE ::nDlgWidth - 10, ::nDlgHeight - 140 STYLE WS_CHILD + WS_VISIBLE
       AAdd( ::aControlList, CFG_EDITEMPTY )
@@ -26,6 +32,7 @@ FUNCTION frm_CreateEdit( Self )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
       Atail( ::aControlList )[ CFG_FCONTROL ]     := oPanel
 #endif
+
       nRow := 999
    ELSE
       nRow := 80
@@ -60,6 +67,7 @@ FUNCTION frm_CreateEdit( Self )
 #ifdef CODE_HWGUI
                BEGIN PAGE "Pag." + Str( nPageCount, 2 ) OF oTab
 #endif
+
                nRow := 40
                AAdd( aList, {} )
             ENDIF
@@ -74,85 +82,17 @@ FUNCTION frm_CreateEdit( Self )
             nCol2 := nCol
          ENDIF
 
-/* text description */
+         aItem[ CFG_CCONTROL ] := "LabelC" + Ltrim( Str( aItem:__EnumIndex ) )
 
-#ifdef CODE_HWGUI
-         @ nCol, nRow SAY aItem[ CFG_CAPTION ] OF iif( ::lWithTab, oTab, ::oDlg ) SIZE nLen * 12, ::nLineHeight COLOR COLOR_FORE TRANSPARENT
-#endif
-#ifdef CODE_HMGE
-         aItem[ CFG_FCONTROL ] := "LabelA" + Ltrim( Str( aItem:__EnumIndex ) )
-         DEFINE LABEL ( aItem[ CFG_FCONTROL ] )
-            PARENT ( ::oDlg )
-            COL nCol
-            ROW nRow
-            WIDTH nLen * 12
-            HEIGHT ::nLineHeight
-            VALUE aItem[ CFG_CAPTION ]
-         END LABEL
-#endif
-#ifdef CODE_OOHG
-         WITH OBJECT aItem[ CFG_FCONTROL ] := TLabel():Define()
-            :Row := nRow
-            :Col := nCol
-            :Value := aItem[ CFG_CAPTION ]
-            :AutoSize := .T.
-            :Height := ::nLineHeight
-            :Width := nLen * 12
-         ENDWITH
-#endif
+         CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), aItem[ CFG_CCONTROL ], ;
+            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ] )
 
-/* input/show information */
+         aItem[ CFG_FCONTROL ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
 
-#ifdef CODE_HWGUI
-         @ nCol2, nRow2 GET aItem[ CFG_FCONTROL ] ;
-            VAR aItem[ CFG_VALUE ] OF iif( ::lWithTab, oTab, ::oDlg ) ;
-            SIZE aItem[ CFG_FLEN ] * 12, ::nLineHeight ;
-            STYLE WS_DISABLED + iif( aItem[ CFG_FTYPE ] == "N", ES_RIGHT, ES_LEFT ) ;
-            MAXLENGTH aItem[ CFG_FLEN ] ;
-            PICTURE aItem[ CFG_FPICTURE ] ;
-            VALID { || OkCurrent( aItem, Self ) }
-#endif
-#ifdef CODE_HMGE_NOT_VALID_HERE
-         // ATENTION: FAIL
-         @ nRow2, nCol2 TEXTBOX ( aItem[ CFG_OBJ ] ) PARENT ( ::oDlg ) HEIGHT ::nLineHeight WIDTH aItem[ CFG_LEN ] * 12
-            FONTNAME "verdana" NUMERIC .T. VALUE aItem[ CFG_VALUE ] MAXLENGTH aItem[ CFG_LEN ] ON CHANGE Nil
-#endif
-#ifdef CODE_HMGE_OR_OOHG
-            aItem[ CFG_FCONTROL ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
-            DEFINE TEXTBOX ( aItem[ CFG_FCONTROL ] )
-               PARENT ( ::oDlg )
-               ROW nRow2
-               COL nCol2
-               HEIGHT    ::nLineHeight
-               WIDTH     aItem[ CFG_FLEN ] * 12
-               FONTNAME "verdana"
-               IF aItem[ CFG_FTYPE ] == "N"
-                  NUMERIC .T.
-   #ifdef CODE_HMGE
-                  INPUTMASK aItem[ CFG_FPICTURE ]
-   #endif
-               ELSEIF aItem[ CFG_FTYPE ] == "D"
-                  DATE .T.
-   #ifdef CODE_HMGE
-                  DATEFORMAT aItem[ CFG_FPICTURE ]
-   #endif
-               ELSE
-                  MAXLENGTH aItem[ CFG_FLEN ]
-               ENDIF
-               VALUE     aItem[ CFG_VALUE ]
-               ON CHANGE Nil
-            END TEXTBOX
-#endif
-#ifdef CODE_OOHG_OOP
-         // not confirmed
-         WITH OBJECT aItem[ CFG_FCONTROL ] := TText():Define()
-            :Row    := nRow2
-            :Col    := nCol2
-            :Width  := aItem[ CFG_FLEN ] * 12
-            :Height := ::nLineHeight
-            :Value  := aItem[ CFG_VALUE ]
-         ENDWITH
-#endif
+         CreateTextbox( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
+            nRow2, nCol2, aItem[ CFG_FLEN ] * 12, ::nLineHeight, ;
+            @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
+            { || OkCurrent( aItem, Self ) } )
 
          nCol += ( nLen + 3 ) * 12
 
@@ -162,33 +102,12 @@ FUNCTION frm_CreateEdit( Self )
          ENDIF
 #endif
 
-
-/* related information */
-
          IF ! Empty( aItem[ CFG_VTABLE ] )
-#ifdef CODE_HWGUI
-            @ nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nRow2 SAY aItem[ CFG_VCONTROL ] CAPTION Space( aItem[ CFG_VLEN ] ) OF ;
-               iif( ::lWithTab, oTab, ::oDlg ) SIZE aItem[ CFG_VLEN ] * 12, ::nLineHeight COLOR COLOR_FORE BACKCOLOR COLOR_BACK ;
-               STYLE WS_BORDER
-#endif
-#ifdef CODE_HMGE_OR_OOHG
-            aItem[ CFG_VCONTROL ] := "LabelB" + Ltrim( Str( aItem:__EnumIndex ) )
-            @ nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ) LABEL ( aItem[ CFG_VCONTROL ] ) ;
-               PARENT ( ::oDlg ) ;
-               VALUE Space( aItem[ CFG_VLEN ] ) WIDTH aItem[ CFG_VLEN ] * 12 HEIGHT ::nLineHeight ;
-               BORDER
-#endif
-#ifdef CODE_OOHG_OOP
-            WITH OBJECT aItem[ CFG_VCONTROL ] := TLabel():Define()
-               :Row := nRow2
-               :Col := nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 )
-               :Value := Space( aItem[ CFG_VLEN ] )
-               :Height := ::nLineHeight
-               :Width := aItem[ CFG_VLEN ] * 12
-               //:Border := .T.
+            aItem[ CFG_VCONTROL ] := "LabelV" + Ltrim( Str( aItem:__EnumIndex ) )
 
-            ENDWITH
-#endif
+            CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
+               nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nLen * 12, ;
+               ::nLineHeight, Space( aItem[ CFG_VLEN ] ), .T. )
             nCol += ( aItem[ CFG_VLEN ] + 3 ) * 12
          ENDIF
       ENDIF
@@ -218,14 +137,13 @@ FUNCTION frm_CreateEdit( Self )
 #ifdef CODE_HWGUI
 STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
 
-   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), oEditNext:SetFocus(), .T. }
+   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), SetFocusAny( Nil, oEditNext ), .T. }
 
    RETURN Nil
 #endif
 
 /* validation */
 
-#ifdef CODE_HWGUI
 STATIC FUNCTION OkCurrent( aItem, Self )
 
    LOCAL nSelect, lEof
@@ -234,12 +152,16 @@ STATIC FUNCTION OkCurrent( aItem, Self )
       SEEK aItem[ CFG_FCONTROL ]:Value
       IF ::cSelected == "INSERT"
          IF ! Eof()
+#ifdef HBMK_HAS_HWGUI
             hwg_MsgInfo( "Código já cadastrado" )
+#endif
             RETURN .F.
          ENDIF
       ELSE
          IF Eof()
+#ifdef HBMK_HAS_HWGUI
             hwg_MsgInfo( "Código não cadastrado" )
+#endif
             RETURN .F.
          ENDIF
       ENDIF
@@ -252,10 +174,11 @@ STATIC FUNCTION OkCurrent( aItem, Self )
       aItem[ CFG_VCONTROL ]:SetText( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
       SELECT ( nSelect )
       IF lEof
+#ifdef HBMK_HAS_HWGUI
          hwg_MsgInfo( "Código não cadastrado" )
+#endif
          RETURN .F.
       ENDIF
    ENDIF
 
    RETURN .T.
-#endif

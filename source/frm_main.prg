@@ -1,3 +1,7 @@
+/*
+frm_main - dialog for each data and main use of class
+*/
+
 #include "hbclass.ch"
 #include "directry.ch"
 #include "frm_class.ch"

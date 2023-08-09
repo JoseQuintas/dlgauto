@@ -1,3 +1,7 @@
+/*
+frm_mainmenu - menu of DBF files
+*/
+
 #include "hbgtinfo.ch"
 #include "directry.ch"
 #include "frm_class.ch"

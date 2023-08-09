@@ -1,5 +1,9 @@
-#define CFG_FNAME     3
-#define CFG_CAPTION   9
+/*
+frm_print - single report
+*/
+
+#define CFG_FNAME     1
+#define CFG_CAPTION   7
 
 FUNCTION frm_Print( Self )
 

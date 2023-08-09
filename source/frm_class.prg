@@ -1,3 +1,7 @@
+/*
+frm_Class - Class for data and bypass for functions
+*/
+
 #include "hbclass.ch"
 #include "frm_class.ch"
 
@@ -26,10 +30,10 @@ CREATE CLASS frm_Class
    VAR oDlg
    VAR aControlList   INIT {}
 
-   METHOD CreateControls()     INLINE frm_CreateButton( Self ), frm_CreateEdit( Self )
+   METHOD CreateControls()     INLINE frm_Buttons( Self ), frm_CreateEdit( Self )
    METHOD ButtonSaveOn()
    METHOD ButtonSaveOff()
-   METHOD UpdateEdit()         INLINE frm_UpdateEdit( Self )
+   METHOD UpdateEdit()
    METHOD EditOn()
    METHOD EditOff()
    METHOD Print()              INLINE frm_Print( Self )
@@ -45,6 +49,7 @@ CREATE CLASS frm_Class
    METHOD Exit()
    METHOD Save()
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::UpdateEdit()
+   METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
 
    ENDCLASS
 
@@ -54,10 +59,10 @@ METHOD ButtonSaveOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF aItem[ CFG_FNAME ] $ "Save,Cancel"
-            aItem[ CFG_FCONTROL ]:Enable()
+         IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
+            EnableButton( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          ELSE
-            aItem[ CFG_FCONTROL ]:Disable()
+            EnableButton( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
          ENDIF
       ENDIF
    NEXT
@@ -70,10 +75,10 @@ METHOD ButtonSaveOff() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF aItem[ CFG_FNAME ] $ "Save,Cancel"
-            aItem[ CFG_FCONTROL ]:Disable()
+         IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
+            EnableButton( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
-            aItem[ CFG_FCONTROL ]:Enable()
+            EnableButton( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          ENDIF
       ENDIF
    NEXT
@@ -86,7 +91,7 @@ METHOD EditOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! aItem[ CFG_ISKEY ]
-         aItem[ CFG_FCONTROL ]:Enable()
+         EnableTextbox( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound
             lFound := .T.
             oFirstEdit := aItem[ CFG_FCONTROL ]
@@ -94,7 +99,7 @@ METHOD EditOn() CLASS frm_Class
       ENDIF
    NEXT
    ::ButtonSaveOn()
-   oFirstEdit:SetFocus()
+   SetFocusAny( ::oDlg, oFirstEdit )
 
    RETURN Nil
 
@@ -104,7 +109,7 @@ METHOD EditOff() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         aItem[ CFG_FCONTROL ]:Disable()
+         EnableTextbox( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
    ::ButtonSaveOff()
@@ -124,35 +129,57 @@ METHOD Delete() CLASS frm_Class
 #endif
    RETURN Nil
 
+METHOD UpdateEdit() CLASS frm_Class
+
+   LOCAL aItem, nSelect, xValue, cText
+
+   FOR EACH aItem IN ::aControlList
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+         IF ! Empty( aItem[ CFG_FNAME ] )
+            xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
+            UpdateTextbox( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
+         ENDIF
+         IF ! Empty( aItem[ CFG_VTABLE ] )
+            nSelect := Select()
+            SELECT ( Select( aItem[ CFG_VTABLE ] ) )
+            SEEK xValue
+            cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+            SELECT ( nSelect )
+            UpdateLabel( ::oDlg, aItem[ CFG_VCONTROL ], cText )
+         ENDIF
+      ENDIF
+   NEXT
+   (cText)
+
+   RETURN Nil
+
 METHOD Save() CLASS frm_Class
 
    LOCAL aItem
 
    ::EditOff()
-   RLock()
-   FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF ! Empty( aItem[ CFG_FNAME ] )
-            IF ! aItem[ CFG_ISKEY ] .OR. ::cSelected == "INSERT"
-               FieldPut( FieldNum( aItem[ CFG_FNAME ] ), aItem[ CFG_VALUE ] )
+   IF ::cSelected == "INSERT"
+      APPEND BLANK
+   ENDIF
+   IF RLock()
+      FOR EACH aItem IN ::aControlList
+         IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+            IF ! Empty( aItem[ CFG_FNAME ] )
+               IF ! aItem[ CFG_ISKEY ] .OR. ::cSelected == "INSERT"
+                  FieldPut( FieldNum( aItem[ CFG_FNAME ] ), aItem[ CFG_VALUE ] )
+               ENDIF
             ENDIF
          ENDIF
-      ENDIF
-   NEXT
-   SKIP 0
-   UNLOCK
+      NEXT
+      SKIP 0
+      UNLOCK
+   ENDIF
    ::cSelected := "NONE"
 
    RETURN Nil
 
 METHOD Exit() CLASS frm_Class
 
-#ifdef CODE_HWGUI
-   ::oDlg:Close()
-#endif
-
-#ifdef CODE_HMGE_OR_OOHG
-   DoMethod( ::oDlg, "Release" )
-#endif
+   CloseDlg( ::oDlg )
 
    RETURN Nil

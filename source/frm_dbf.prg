@@ -1,10 +1,14 @@
-FUNCTION frm_CreateDBF()
+/*
+frm_DBF - Create DBF for test
+*/
+
+FUNCTION frm_DBF()
 
    LOCAL nCont
 
    IF ! File( "people.dbf" )
       dbCreate( "people", { ;
-         { "IDPEOPLE", "N", 6, 0 }, ;
+         { "IDPEOPLE", "N+", 6, 0 }, ;
          { "NAME",     "C", 30, 0 }, ;
          { "ADDRESS",  "C", 50, 0 }, ;
          { "CITY",     "C", 30, 0 } } )
@@ -12,7 +16,8 @@ FUNCTION frm_CreateDBF()
       FOR nCont = 1 TO 9
          APPEND BLANK
          REPLACE IDPEOPLE WITH nCont, NAME WITH Replicate( "P" + Str( nCont, 1 ), 15 ), ;
-            ADDRESS WITH Replicate( "P" + Str( nCont, 1 ) , 25 ), CITY WITH Replicate( "P" + Str( nCont, 1 ), 15 )
+            ADDRESS WITH Replicate( "P" + Str( nCont, 1 ) , 25 ), ;
+            CITY WITH Replicate( "P" + Str( nCont, 1 ), 15 )
       NEXT
       INDEX ON field->idPeople TAG primary
       INDEX ON field->Name     TAG name
@@ -20,7 +25,7 @@ FUNCTION frm_CreateDBF()
    ENDIF
    IF ! File( "product.dbf" )
       dbCreate( "product", { ;
-         { "IDPRODUCT", "N", 6, 0 }, ;
+         { "IDPRODUCT", "N+", 6, 0 }, ;
          { "NAME",      "C", 30, 0 }, ;
          { "VALUE",     "N", 14, 2 } } )
       USE product
@@ -34,7 +39,7 @@ FUNCTION frm_CreateDBF()
    ENDIF
    IF ! File( "account.dbf" )
       dbCreate( "account", { ;
-         { "IDACCOUNT", "N", 6, 0 }, ;
+         { "IDACCOUNT", "N+", 6, 0 }, ;
          { "DATEMOV",   "D", 8, 0 }, ;
          { "IDPEOPLE",  "N", 6, 0 }, ;
          { "IDPRODUCT", "N", 6, 0 }, ;
@@ -43,7 +48,9 @@ FUNCTION frm_CreateDBF()
       USE account
       FOR nCont = 1 TO 9
          APPEND BLANK
-         REPLACE IDACCOUNT WITH nCont, IDPEOPLE WITH nCont, IDPRODUCT WITH nCont, VALUE WITH nCont * 1000
+         REPLACE IDACCOUNT WITH nCont, DATEMOV WITH Stod( "20230101" ) + nCont, ;
+            IDPEOPLE WITH nCont, IDPRODUCT WITH nCont, QT WITH nCont, ;
+            VALUE WITH nCont * 1000
       NEXT
       INDEX ON field->IdAccount TAG primary
       USE

@@ -1,14 +1,15 @@
 test.prg
-frm_CreateDbf.prg
+frm_Dbf.prg
 frm_MainMenu.prg
 frm_Main.prg
 frm_class.prg
 frm_CreateFrm.prg
-frm_CreateButton.prg
+frm_Buttons.prg
 frm_CreateEdit.prg
-frm_UpdateEdit.prg
 frm_Print.prg
 frm_Preview.prg
+frm_Browse.prg
+frm_Gui.prg
 test.rc
 
 -otest
