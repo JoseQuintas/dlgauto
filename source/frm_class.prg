@@ -46,7 +46,7 @@ CREATE CLASS frm_Class
    METHOD Last()               INLINE &( ::cFileDbf )->( dbgobottom() ), ::UpdateEdit()
    METHOD Next()               INLINE &( ::cFileDbf )->( dbSkip() ),     ::UpdateEdit()
    METHOD Previous()           INLINE &( ::cFileDbf )->( dbSkip( -1 ) ), ::UpdateEdit()
-   METHOD Exit()
+   METHOD Exit()               INLINE CloseDlg( ::oDlg )
    METHOD Save()
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::UpdateEdit()
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
@@ -175,11 +175,5 @@ METHOD Save() CLASS frm_Class
       UNLOCK
    ENDIF
    ::cSelected := "NONE"
-
-   RETURN Nil
-
-METHOD Exit() CLASS frm_Class
-
-   CloseDlg( ::oDlg )
 
    RETURN Nil

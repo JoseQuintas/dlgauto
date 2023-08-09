@@ -1,5 +1,15 @@
 #include "frm_class.ch"
 
+FUNCTION hwgui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+
+   LOCAL oFont := HFont():Add( "Courier New", 0, -13 )
+
+   (xDlg)
+   @ nRow, nCol EDITBOX xControl CAPTION xValue SIZE nWidth, nHeight FONT oFont ;
+       STYLE ES_MULTILINE + ES_AUTOVSCROLL + WS_VSCROLL + WS_HSCROLL
+
+   RETURN Nil
+
 FUNCTION hwgui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 

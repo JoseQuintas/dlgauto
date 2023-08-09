@@ -2,6 +2,9 @@
 
 #include "gui_hwgui.prg"
 
+FUNCTION CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+   RETURN hwgui_CreateMLTextbox( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @xValue )
+
 FUNCTION CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
    RETURN hwgui_CreateTextbox( xDlg, @xControl, nRow, nCol, nWidth, nHeight, ;
@@ -47,6 +50,9 @@ FUNCTION UpdateLabel( xDlg, xControl, xValue )
 #ifdef HBMK_HAS_HMGE
 
 #include "gui_hmge.prg"
+
+FUNCTION CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+   RETURN hmge_CreateMLTextbox( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @xValue )
 
 FUNCTION CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
@@ -102,6 +108,9 @@ FUNCTION UpdateLabel( xDlg, xControl, xValue )
 #ifdef HBMK_HAS_OOHG
 
 #include "gui_oohg.prg"
+
+FUNCTION CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+   RETURN oohg_CreateMLTextbox( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @xValue )
 
 FUNCTION CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )

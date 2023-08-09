@@ -1,5 +1,17 @@
 #include "frm_class.ch"
 
+FUNCTION hmge_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+
+   (xDlg)
+   (xControl)
+   (nRow)
+   (nCol)
+   (nWidth)
+   (nHeight)
+   (xValue)
+
+   RETURN Nil
+
 FUNCTION hmge_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 

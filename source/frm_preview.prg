@@ -10,9 +10,6 @@ FUNCTION frm_Preview( cFileMask )
    LOCAL aFileList, nIndex
    LOCAL oDlg, oEdit
    LOCAL cCaption
-#ifdef CODE_HWGUI
-   LOCAL oFont
-#endif
 
    aFileList := Directory( cFileMask )
    nIndex := 1
@@ -21,16 +18,15 @@ FUNCTION frm_Preview( cFileMask )
    oDlg:oDlg := "frm_Preview"
    oDlg:cOptions := ""
    oDlg:aOptionList := { ;
-      { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } }, ;
-      { "Previous", { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } }, ;
-      { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } }, ;
-      { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg, oEdit ) } } }
+      { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } }, ;
+      { "Previous", { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } }, ;
+      { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } }, ;
+      { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } } }
 
 #ifdef CODE_HWGUI
-   oFont := HFont():Add( "Courier New", 0, -13 )
    INIT DIALOG oDlg:oDlg CLIPPER TITLE "Preview"  ;
       AT 0,0  SIZE 800, 600 ;
-      ON INIT { || frm_SetText( oEdit, aFileList, nIndex ) }
+      ON INIT { || frm_SetText( oEdit, aFileList, nIndex, oDlg:oDlg ) }
 #endif
 #ifdef CODE_HMGE_OR_OOHG
    DEFINE WINDOW ( oDlg:oDlg ) ;
@@ -41,10 +37,8 @@ FUNCTION frm_Preview( cFileMask )
       MODAL
 #endif
    frm_Buttons( oDlg, .F. )
+   CreateMLTextbox( oDlg:oDlg, @oEdit, 10, 65, oDlg:nDlgWidth - 40, oDlg:nDlgHeight - 100, "" )
 #ifdef CODE_HWGUI
-   @ 10, 65 EDITBOX oEdit CAPTION "" SIZE oDlg:nDlgWidth - 40, oDlg:nDlgHeight - 100 FONT oFont ;
-       STYLE ES_MULTILINE + ES_AUTOVSCROLL + WS_VSCROLL + WS_HSCROLL
-
    ACTIVATE DIALOG oDlg:oDlg
 #endif
 #ifdef CODE_HMGE_OR_OOHG
@@ -55,7 +49,7 @@ FUNCTION frm_Preview( cFileMask )
 
    RETURN Nil
 
-STATIC FUNCTION frm_SetText( oEdit, aFileList, nIndex )
+STATIC FUNCTION frm_SetText( oEdit, aFileList, nIndex, xDlg )
 
    LOCAL cTxt
 
@@ -64,39 +58,31 @@ STATIC FUNCTION frm_SetText( oEdit, aFileList, nIndex )
    ELSE
       cTxt := MemoRead( aFileList[ nIndex, F_NAME ] )
    ENDIF
-   oEdit:Value := cTxt
-   oEdit:Refresh()
+   UpdateTextbox( xDlg, oEdit, cTxt )
 
    RETURN Nil
 
-STATIC FUNCTION Button_Click( cCaption, aFileList, nIndex, oDlg, oEdit )
+STATIC FUNCTION Button_Click( cCaption, aFileList, nIndex, xDlg, oEdit )
 
    DO CASE
    CASE cCaption == "First"
       nIndex := 1
-      frm_SetText( oEdit, aFileList, nIndex )
+      frm_SetText( oEdit, aFileList, nIndex, xDlg )
    CASE cCaption == "Previous"
       IF nIndex > 1
          nIndex -= 1
       ENDIF
-      frm_SetText( oEdit, aFileList, nIndex )
+      frm_SetText( oEdit, aFileList, nIndex, xDlg )
    CASE cCaption == "Next"
       IF nIndex < Len( aFileList )
          nIndex += 1
       ENDIF
-      frm_SetText( oEdit, aFileList, nIndex )
+      frm_SetText( oEdit, aFileList, nIndex, xDlg )
    CASE cCaption == "Last"
       nIndex := Len( aFileList )
-      frm_SetText( oEdit, aFileList, nIndex )
+      frm_SetText( oEdit, aFileList, nIndex, xDlg )
    CASE cCaption == "Exit"
-#ifdef CODE_HWGUI
-      oDlg:Close()
-#endif
-#ifdef CODE_HMGE_OR_OOHG
-      DoMethod( "frmPreview", "Release" )
-#endif
+      CloseDlg( xDlg )
    ENDCASE
-
-   ( oDlg )
 
    RETURN Nil

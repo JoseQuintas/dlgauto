@@ -54,11 +54,6 @@ FUNCTION frm_CreateEdit( Self )
                IF nPageCount > 0
 
 #ifdef CODE_HWGUI
-                  ////ghost for getlist (test using one on dlg)
-                  //AAdd( ::aControlList, CFG_EDITEMPTY )
-                  //@ nCol, nRow GET Atail( ::aControlList )[ CFG_FCONTROL ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
-                  //   OF oTab SIZE 0, 0 STYLE WS_DISABLED
-                  //AAdd( Atail( aList ), Atail( ::aControlList )[ CFG_FCONTROL ] )
                   END PAGE OF oTab
 #endif
 
@@ -115,10 +110,10 @@ FUNCTION frm_CreateEdit( Self )
 #ifdef CODE_HWGUI
    // ghost for Getlist
    AAdd( ::aControlList, CFG_EDITEMPTY )
-   @ nCol, nRow GET Atail( ::aControlList )[ CFG_FCONTROL ] VAR Atail( ::aControlList )[ CFG_VALUE ] ;
-      OF iif( .F. .AND. ::lWithTab, oTab, ::oDlg ) SIZE 0, 0 STYLE WS_DISABLED
+   Atail( ::aControlList )[ CFG_FCONTROL ] := "DummyTextbox"
+   CreateTextbox( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+      nRow, nCol, 0, 0, "", "", 0, { || .T. } )
    IF ::lWithTab
-      // *ghost* AAdd( ATail( aList ), Atail( ::aControlList )[ CFG_FCONTROL ] )
       END PAGE OF oTab
       FOR nTab = 1 TO Len( aList )
          nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
