@@ -1,6 +1,5 @@
 /*
-browse - browse data
-Work in progress
+frm_browse - browse hwgui not in use
 */
 
 #include "inkey.ch"

@@ -33,6 +33,7 @@
 #endif
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
+   #include "i_altsyntax.ch"
    #define CODE_HMGE
    #define CODE_HWGUI_OR_HMGE
    #define CODE_HMGE_OR_OOHG

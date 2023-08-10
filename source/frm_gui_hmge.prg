@@ -1,3 +1,7 @@
+/*
+frm_gui_hmge - HMG Extended source code - included in frm_gui
+*/
+
 #include "frm_class.ch"
 
 FUNCTION hmge_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
@@ -99,7 +103,7 @@ FUNCTION hmge_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaptio
       COL         nCol
       WIDTH       nWidth
       HEIGHT      nHeight
-      PICTURE     cResName
+      ICON        cResName
       IMAGEWIDTH  nWidth - 20
       IMAGEHEIGHT nHeight - 20
       CAPTION     cCaption

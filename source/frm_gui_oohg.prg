@@ -1,3 +1,7 @@
+/*
+frm_gui_oohg - oohg source code included in frm_gui
+*/
+
 #include "frm_class.ch"
 
 FUNCTION oohg_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )

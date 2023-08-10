@@ -44,9 +44,9 @@ FUNCTION frm_CreateFrm( Self )
       MODAL ;
       ON INIT ::UpdateEdit()
 
-      ::CreateControls()
 
    END WINDOW
+      ::CreateControls()
    ( ::oDlg ).CENTER
    ( ::oDlg ).ACTIVATE
 #endif

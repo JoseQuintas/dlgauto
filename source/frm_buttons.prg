@@ -1,3 +1,7 @@
+/*
+frm_buttons - create the buttons
+*/
+
 #include "frm_class.ch"
 
 FUNCTION frm_Buttons( Self, lDefault )

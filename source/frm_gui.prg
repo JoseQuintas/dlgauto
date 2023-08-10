@@ -1,6 +1,10 @@
+/*
+frm_gui - wrapper for lib functions, and #include lib source code
+*/
+
 #ifdef HBMK_HAS_HWGUI
 
-#include "gui_hwgui.prg"
+#include "frm_gui_hwgui.prg"
 
 FUNCTION CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
    RETURN hwgui_CreateMLTextbox( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @xValue )
@@ -49,7 +53,7 @@ FUNCTION UpdateLabel( xDlg, xControl, xValue )
 #endif
 #ifdef HBMK_HAS_HMGE
 
-#include "gui_hmge.prg"
+#include "frm_gui_hmge.prg"
 
 FUNCTION CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
    RETURN hmge_CreateMLTextbox( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @xValue )
@@ -107,7 +111,7 @@ FUNCTION UpdateLabel( xDlg, xControl, xValue )
 
 #ifdef HBMK_HAS_OOHG
 
-#include "gui_oohg.prg"
+#include "frm_gui_oohg.prg"
 
 FUNCTION CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
    RETURN oohg_CreateMLTextbox( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @xValue )

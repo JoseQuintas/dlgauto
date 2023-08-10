@@ -1,3 +1,7 @@
+/*
+frm_gui_hwgui - hwgui source code included in frm_gui
+*/
+
 #include "frm_class.ch"
 
 FUNCTION hwgui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
