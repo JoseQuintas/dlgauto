@@ -25,45 +25,10 @@ FUNCTION frm_CreateFrm( Self )
    NEXT
    SELECT ( Select( ::cFileDbf ) )
 
-#ifdef CODE_HWGUI
-   INIT DIALOG ::oDlg CLIPPER NOEXIT TITLE ::cTitle ;
-      AT 0, 0 SIZE ::nDlgWidth, ::nDlgHeight ;
-      BACKCOLOR COLOR_BACK ;
-      ON EXIT hwg_EndDialog() ;
-      ON INIT { || ::UpdateEdit() }
-   ::CreateControls()
-   ACTIVATE DIALOG ::oDlg CENTER
-#endif
-#ifdef CODE_HMGE_OR_OOHG
    ::oDlg := "FRM" + ::cFileDBF
-   DEFINE WINDOW ( ::oDlg ) ;
-      AT 1000, 500 ;
-      WIDTH ::nDlgWidth ;
-      HEIGHT ::nDlgHeight ;
-      TITLE ::cFileDBF ;
-      MODAL ;
-      ON INIT ::UpdateEdit()
-
-
-   END WINDOW
-      ::CreateControls()
-   ( ::oDlg ).CENTER
-   ( ::oDlg ).ACTIVATE
-#endif
-#ifdef CODE_OOHG_OOP
-   WITH OBJECT ::oDlg := TForm():Define()
-      :Row := 500
-      :Col := 1000
-      :Width := ::nDlgWidth
-      :Height := ::nDlgHeight
-      :Title := ::cFileDbf
-      // :Init := ::UpdateEdit()
-   ENDWITH
-    _EndWindow()
-      ::CreateControls()
-   ::oDlg:Center()
-   ::oDlg:Activate()
-#endif
+   CreateDialog( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle, { || ::UpdateEdit() } )
+   ::CreateControls()
+   ActivateDialog( ::oDlg )
    CLOSE DATABASES
 
    RETURN Nil

@@ -118,7 +118,7 @@ METHOD EditOff() CLASS frm_Class
 
 METHOD Delete() CLASS frm_Class
 
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
    IF hwg_MsgYesNo( "Delete" )
       IF rLock()
          DELETE

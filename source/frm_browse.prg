@@ -14,7 +14,7 @@ frm_browse - browse hwgui not in use
 #define STYLE_BTN_OVER           HStyle():New( { 16759929, 16771062 }, 1,, 2, 12164479 )
 #define STYLE_BTN_ALL            { STYLE_BTN_NORMAL, STYLE_BTN_CLICK, STYLE_BTN_OVER }
 
-#ifndef CODE_HWGUI
+#ifndef HBMK_HAS_HWGUI
    FUNCTION frm_Browse( ... )
 
    RETURN Nil

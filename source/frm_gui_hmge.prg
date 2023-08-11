@@ -4,6 +4,26 @@ frm_gui_hmge - HMG Extended source code - included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION hmge_ActivateDialog( xDlg )
+
+   CENTER WINDOW &xDlg
+   ACTIVATE WINDOW &xDlg
+
+   RETURN Nil
+
+FUNCTION hmge_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+
+   DEFINE WINDOW ( xDlg ) ;
+      AT nCol, nRow ;
+      WIDTH nWidth ;
+      HEIGHT nHeight ;
+      TITLE cTitle ;
+      MODAL ;
+      ON INIT bAction
+   END WINDOW
+
+   RETURN Nil
+
 FUNCTION hmge_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    (xDlg)

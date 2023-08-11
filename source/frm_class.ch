@@ -25,27 +25,20 @@
 #define TYPE_TABPAGE  4
 #define TYPE_PANEL    5
 
-
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"
-   #define CODE_HWGUI
-   #define CODE_HWGUI_OR_HMGE
 #endif
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
    #include "i_altsyntax.ch"
-   #define CODE_HMGE
-   #define CODE_HWGUI_OR_HMGE
-   #define CODE_HMGE_OR_OOHG
 #endif
 #ifdef HBMK_HAS_OOHG
    #include "oohg.ch"
-   #define CODE_OOHG
-   #define CODE_HMGE_OR_OOHG
+   #include "i_altsyntax.ch"
 #endif
 
 #ifndef WIN_RGB
-   #ifdef CODE_HWGUI
+   #ifdef HBMK_HAS_HWGUI
       #define WIN_RGB( r, g, b ) hwg_ColorRGB2N( r, g, b )
    #else
       #define WIN_RGB( r, g, b ) ( r * 256 ) + ( b * 16 ) + c

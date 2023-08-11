@@ -4,6 +4,36 @@ frm_gui_oohg - oohg source code included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION oohg_ActivateDialog( xDlg )
+
+   CENTER WINDOW &xDlg
+   ACTIVATE WINDOW &xDlg
+
+   RETURN Nil
+
+FUNCTION oohg_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+
+   DEFINE WINDOW ( xDlg ) ;
+      AT nCol, nRow ;
+      WIDTH nWidth ;
+      HEIGHT nHeight ;
+      TITLE cTitle ;
+      MODAL ;
+      ON INIT bAction
+   END WINDOW
+
+   RETURN Nil
+
+//   WITH OBJECT ::oDlg := TForm():Define()
+//      :Row := 500
+//      :Col := 1000
+//      :Width := ::nDlgWidth
+//      :Height := ::nDlgHeight
+//      :Title := ::cFileDbf
+//      // :Init := ::UpdateEdit()
+//   ENDWITH
+//    _EndWindow()
+
 FUNCTION oohg_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    (xDlg)
@@ -84,15 +114,23 @@ FUNCTION oohg_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, 
 
    (xDlg)
    (lBorder)
-   WITH OBJECT xControl := TLabel():Define()
-      :Row := nRow
-      :Col := nCol
-      :Value := xValue
-      :AutoSize := .T.
-      :Width := nWidth
-      :Height := nHeight
-      //:Border := lBorder
-   ENDWITH
+   IF lBorder
+      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
+         VALUE xValue WIDTH nWidth HEIGHT nHeight BORDER
+   ELSE
+      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
+         VALUE xValue WIDTH nWidth HEIGHT nHeight
+   ENDIF
+   //WITH OBJECT xControl := TLabel():Define()
+   //   :Parent := xDlg
+   //   :Row := nRow
+   //   :Col := nCol
+   //   :Value := xValue
+   //   :AutoSize := .T.
+   //   :Width := nWidth
+   //   :Height := nHeight
+   //   //:Border := lBorder
+   //ENDWITH
 
    RETURN Nil
 
@@ -101,6 +139,7 @@ FUNCTION oohg_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaptio
    ( xDlg )
 
    @ nRow, nCol BUTTON ( xControl ) ;
+      PARENT ( xDlg ) ;
       CAPTION  cCaption ;
       PICTURE  cResName ;
       ACTION   Eval( bAction ) ;

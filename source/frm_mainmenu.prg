@@ -8,12 +8,9 @@ frm_mainmenu - menu of DBF files
 
 FUNCTION frm_MainMenu( aAllSetup )
 
-   LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cDBF
-#ifdef CODE_HWGUI
-   LOCAL oDlg
-#endif
-#ifdef CODE_OOHG
-   LOCAL oDlg, oMenuMain, oMenuGroup
+   LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cDBF, oDlg := "Main"
+#ifdef HBMK_HAS_OOHG
+   LOCAL oMenuMain, oMenuGroup
 #endif
 
    FOR EACH aItem IN aAllSetup
@@ -27,7 +24,7 @@ FUNCTION frm_MainMenu( aAllSetup )
       ENDIF
    NEXT
 
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
    INIT WINDOW oDlg TITLE "Example" AT 0, 0 SIZE 512, 384
    MENU OF oDlg
       FOR EACH aGrupoList IN aMenuList
@@ -44,8 +41,8 @@ FUNCTION frm_MainMenu( aAllSetup )
    ACTIVATE WINDOW oDlg CENTER
 #endif
 
-#ifdef CODE_HMGE
-   DEFINE WINDOW ("Main") ;
+#ifdef HBMK_HAS_HMGE
+   DEFINE WINDOW ( oDlg ) ;
       AT 1000, 500 ;
       WIDTH 512 ;
       HEIGHT 384 ;
@@ -61,16 +58,15 @@ FUNCTION frm_MainMenu( aAllSetup )
             END POPUP
          NEXT
          DEFINE POPUP "Sair"
-            MENUITEM "Sair" ACTION ("Main").Release
+            MENUITEM "Sair" ACTION DoMethod( oDlg, "Release" )
          END POPUP
       END MENU
    END WINDOW
 
-   ("Main").CENTER
-   ("Main").ACTIVATE
+   ActivateDialog( "Main" )
 #endif
 
-#ifdef CODE_OOHG
+#ifdef HBMK_HAS_OOHG
    WITH OBJECT oDlg := TFormMain():Define()
       :Col := 1000
       :Row := 500

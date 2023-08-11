@@ -4,6 +4,23 @@ frm_gui_hwgui - hwgui source code included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION hwgui_ActivateDialog( xDlg )
+
+   xDlg:Center()
+   xDlg:Activate()
+
+   RETURN Nil
+
+FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+
+   INIT DIALOG xDlg CLIPPER NOEXIT TITLE cTitle ;
+      AT nCol, nRow SIZE nWidth, nHeight ;
+      BACKCOLOR COLOR_BACK ;
+      ON EXIT hwg_EndDialog() ;
+      ON INIT bAction
+
+   RETURN Nil
+
 FUNCTION hwgui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    LOCAL oFont := HFont():Add( "Courier New", 0, -13 )

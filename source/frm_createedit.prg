@@ -9,7 +9,7 @@ FUNCTION frm_CreateEdit( Self )
 
    LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, nLen, aList := {}, nLenList, nRow2, nCol2 // , cTxt := ""
 
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
    LOCAL oPanel, nTab, nPageNext
 
    hwg_SetColorInFocus(.T., , COLOR_FOCUS )
@@ -21,7 +21,7 @@ FUNCTION frm_CreateEdit( Self )
    NEXT
    IF ::lWithTab
 
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
       @ 5, 70 TAB oTab ITEMS {} OF ::oDlg ID 101 SIZE ::nDlgWidth - 10, ::nDlgHeight - 140 STYLE WS_CHILD + WS_VISIBLE
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_TAB
@@ -53,13 +53,13 @@ FUNCTION frm_CreateEdit( Self )
             IF ::lWithTab .AND. nRow > ::nPageLimit
                IF nPageCount > 0
 
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
                   END PAGE OF oTab
 #endif
 
                ENDIF
                nPageCount += 1
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
                BEGIN PAGE "Pag." + Str( nPageCount, 2 ) OF oTab
 #endif
 
@@ -80,7 +80,7 @@ FUNCTION frm_CreateEdit( Self )
          aItem[ CFG_CCONTROL ] := "LabelC" + Ltrim( Str( aItem:__EnumIndex ) )
 
          CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), aItem[ CFG_CCONTROL ], ;
-            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ] )
+            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
 
          aItem[ CFG_FCONTROL ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
 
@@ -91,7 +91,7 @@ FUNCTION frm_CreateEdit( Self )
 
          nCol += ( nLen + 3 ) * 12
 
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
          IF ::lWithTab
             AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
          ENDIF
@@ -107,7 +107,7 @@ FUNCTION frm_CreateEdit( Self )
          ENDIF
       ENDIF
    NEXT
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
    // ghost for Getlist
    AAdd( ::aControlList, CFG_EDITEMPTY )
    Atail( ::aControlList )[ CFG_FCONTROL ] := "DummyTextbox"
@@ -129,7 +129,7 @@ FUNCTION frm_CreateEdit( Self )
 
 /* tab navigation */
 
-#ifdef CODE_HWGUI
+#ifdef HBMK_HAS_HWGUI
 STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
 
    oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), SetFocusAny( Nil, oEditNext ), .T. }

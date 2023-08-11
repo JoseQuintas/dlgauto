@@ -7,15 +7,13 @@ REQUEST DBFCDX
 #include "dbstruct.ch"
 #include "frm_class.ch"
 
-// not in use, only a note: #ifdef CODE_HMGE || ! USER_ROUTINE
-
 PROCEDURE Main()
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nPos1, nPos2
 
    SET EXCLUSIVE OFF
    SET EPOCH TO Year( Date() ) - 90
-#ifdef CODE_HMGE
+#ifdef HBMK_HAS_HMGE
    SET OOP ON
    SET WINDOW MAIN OFF
 #endif

@@ -23,29 +23,10 @@ FUNCTION frm_Preview( cFileMask )
       { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } }, ;
       { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } } }
 
-#ifdef CODE_HWGUI
-   INIT DIALOG oDlg:oDlg CLIPPER TITLE "Preview"  ;
-      AT 0,0  SIZE 800, 600 ;
-      ON INIT { || frm_SetText( oEdit, aFileList, nIndex, oDlg:oDlg ) }
-#endif
-#ifdef CODE_HMGE_OR_OOHG
-   DEFINE WINDOW ( oDlg:oDlg ) ;
-      AT 0, 0 ;
-      WIDTH 800 ;
-      HEIGHT 600 ;
-      TITLE "Preview" ;
-      MODAL
-#endif
-   frm_Buttons( oDlg, .F. )
+   CreateDialog( @oDlg:oDlg, 0, 0, 800, 600, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oDlg:oDlg ) } )
+   frm_Buttons( oDlg:oDlg, .F. )
    CreateMLTextbox( oDlg:oDlg, @oEdit, 10, 65, oDlg:nDlgWidth - 40, oDlg:nDlgHeight - 100, "" )
-#ifdef CODE_HWGUI
-   ACTIVATE DIALOG oDlg:oDlg
-#endif
-#ifdef CODE_HMGE_OR_OOHG
-   END WINDOW
-   ( oDlg:oDlg ).CENTER
-   ( oDlg:oDlg ).ACTIVATE
-#endif
+   ActivateDialog( oDlg:oDlg )
 
    RETURN Nil
 
