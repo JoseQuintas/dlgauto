@@ -1,10 +1,10 @@
 /*
-frm_gui - wrapper for lib functions, and #include lib source code
+lib - wrapper for lib functions, and #include lib source code
 */
 
 #ifdef HBMK_HAS_HWGUI
 
-#include "frm_gui_hwgui.prg"
+#include "lib_hwgui.prg"
 FUNCTION ActivateDialog( ... ); RETURN hwgui_ActivateDialog( ... )
 FUNCTION CreateDialog( ... ); RETURN hwgui_CreateDialog( ... )
 FUNCTION CreateMLTextbox( ... ); RETURN hwgui_CreateMLTextbox( ... )
@@ -21,7 +21,7 @@ FUNCTION UpdateLabel( ... ); RETURN hwgui_UpdateLabel( ... )
 
 #ifdef HBMK_HAS_HMGE
 
-#include "frm_gui_hmge.prg"
+#include "lib_hmge.prg"
 FUNCTION ActivateDialog( ... ); RETURN hmge_ActivateDialog( ... )
 FUNCTION CreateDialog( ... ); RETURN hmge_CreateDialog( ... )
 FUNCTION CreateMLTextbox( ... ); RETURN hmge_CreateMLTextbox( ... )
@@ -41,7 +41,7 @@ FUNCTION UpdateLabel( ... ); RETURN hmge_UpdateLabel( ... )
 
 #ifdef HBMK_HAS_OOHG
 
-#include "frm_gui_oohg.prg"
+#include "lib_oohg.prg"
 FUNCTION ActivateDialog( ... ); RETURN oohg_ActivateDialog( ... )
 FUNCTION CreateDialog( ... ); RETURN oohg_CreateDialog( ... )
 FUNCTION CreateMLTextbox( ... ); RETURN oohg_CreateMLTextbox( ... )

@@ -1,15 +1,15 @@
 test.prg
-frm_Dbf.prg
-frm_MainMenu.prg
-frm_Main.prg
 frm_class.prg
-frm_CreateFrm.prg
-frm_Buttons.prg
-frm_CreateEdit.prg
-frm_Print.prg
-frm_Preview.prg
+frm_Dialog.prg
+frm_Edit.prg
 frm_Browse.prg
-frm_Gui.prg
+frm_Buttons.prg
+frm_Dbf.prg
+lib.prg
+frm_Main.prg
+frm_MainMenu.prg
+frm_Preview.prg
+frm_Print.prg
 test.rc
 
 -otest

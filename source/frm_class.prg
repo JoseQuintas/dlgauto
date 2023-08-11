@@ -37,7 +37,7 @@ CREATE CLASS frm_Class
    METHOD EditOn()
    METHOD EditOff()
    METHOD Print()              INLINE frm_Print( Self )
-   METHOD Execute()            INLINE frm_CreateFrm( Self )
+   METHOD Execute()            INLINE frm_Dialog( Self )
    METHOD View()               INLINE Nil
    METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditOn()
    METHOD Delete()

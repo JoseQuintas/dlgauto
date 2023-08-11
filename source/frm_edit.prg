@@ -1,5 +1,5 @@
 /*
-frm_CreateEdit - Create textbox/label on dialog
+frm_Edit - Create textbox/label on dialog
 */
 
 #include "hbclass.ch"

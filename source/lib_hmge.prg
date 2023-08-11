@@ -1,13 +1,13 @@
 /*
-frm_gui_hmge - HMG Extended source code - included in frm_gui
+lib_hmge - HMG Extended source code - included in frm_gui
 */
 
 #include "frm_class.ch"
 
 FUNCTION hmge_ActivateDialog( xDlg )
 
-   CENTER WINDOW &xDlg
-   ACTIVATE WINDOW &xDlg
+   DoMethod( xDlg, "CENTER" )
+   ACTIVATE WINDOW ( xDlg )
 
    RETURN Nil
 
@@ -19,7 +19,7 @@ FUNCTION hmge_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
       HEIGHT nHeight ;
       TITLE cTitle ;
       MODAL ;
-      ON INIT bAction
+      ON INIT Eval( bAction )
    END WINDOW
 
    RETURN Nil

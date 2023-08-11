@@ -1,5 +1,5 @@
 /*
-hmge_browse - not in use
+lib_hmge_browse - not in use
 */
 
 #include 'hmg.ch'
