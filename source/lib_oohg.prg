@@ -6,23 +6,13 @@ lib_oohg - oohg source code included in frm_gui
 
 FUNCTION oohg_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   (xDlg)
-   (xControl)
-   (nRow)
-   (nCol)
-   (nWidth)
-   (nHeight)
+   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
 
 FUNCTION oohg_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   (xDlg)
-   (xControl)
-   (nRow)
-   (nCol)
-   (nWidth)
-   (nHeight)
+   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
 
@@ -58,13 +48,7 @@ FUNCTION oohg_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
 FUNCTION oohg_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
-   (xDlg)
-   (xControl)
-   (nRow)
-   (nCol)
-   (nWidth)
-   (nHeight)
-   (xValue)
+   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (xValue)
 
    RETURN Nil
 
@@ -104,31 +88,25 @@ FUNCTION oohg_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
 FUNCTION oohg_CloseDlg( xDlg )
 
-   DoMethod( xDlg, "Release" )
+   DoMethod( xDlg, "RELEASE" )
 
    RETURN Nil
 
 FUNCTION oohg_SetFocus( xDlg, xControl )
 
-   (xDlg)
-   (xControl)
-   xControl:SetFocus()
+   DoMethod( xDlg, xControl, "SETFOCUS" )
 
    RETURN Nil
 
 FUNCTION oohg_EnableTextbox( xDlg, xControl, lEnable )
 
-   (xDlg)
-   (xControl)
-   (lEnable)
+   SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 
 FUNCTION oohg_EnableButton( xDlg, xControl, lEnable )
 
-   (xDlg)
-   (xControl)
-   (lEnable)
+   SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 

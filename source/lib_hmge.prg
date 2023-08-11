@@ -6,23 +6,13 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 FUNCTION hmge_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   (xDlg)
-   (xControl)
-   (nRow)
-   (nCol)
-   (nWidth)
-   (nHeight)
+   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
 
 FUNCTION hmge_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   (xDlg)
-   (xControl)
-   (nRow)
-   (nCol)
-   (nWidth)
-   (nHeight)
+   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
 
@@ -89,15 +79,13 @@ FUNCTION hmge_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
 FUNCTION hmge_CloseDlg( xDlg )
 
-   DoMethod( xDlg, "Release" )
+   DoMethod( xDlg, "RELEASE" )
 
    RETURN Nil
 
 FUNCTION hmge_SetFocus( xDlg, xControl )
 
-   (xDlg)
-   (xControl)
-   xControl:SetFocus()
+   DoMethod( xDlg, xControl, "SETFOCUS" )
 
    RETURN Nil
 

@@ -28,7 +28,7 @@ FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction 
    INIT DIALOG xDlg CLIPPER NOEXIT TITLE cTitle ;
       AT nRow, nCol SIZE nWidth, nHeight ;
       BACKCOLOR COLOR_BACK ;
-      ON EXIT hwg_EndDialog() ;
+      ; // ON EXIT hwg_EndDialog() ;
       ON INIT bAction
 
    RETURN Nil
