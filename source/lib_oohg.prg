@@ -4,6 +4,28 @@ lib_oohg - oohg source code included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION oohg_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   (xDlg)
+   (xControl)
+   (nRow)
+   (nCol)
+   (nWidth)
+   (nHeight)
+
+   RETURN Nil
+
+FUNCTION oohg_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   (xDlg)
+   (xControl)
+   (nRow)
+   (nCol)
+   (nWidth)
+   (nHeight)
+
+   RETURN Nil
+
 FUNCTION oohg_ActivateDialog( xDlg )
 
    DoMethod( xDlg, "CENTER" )

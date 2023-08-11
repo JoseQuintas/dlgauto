@@ -8,22 +8,22 @@ frm_main - dialog for each data and main use of class
 
 FUNCTION frm_main( cDBF, aAllSetup )
 
-   LOCAL oDlg, nPos
+   LOCAL oFrm, nPos
 
-   oDlg := ThisDlg():New()
-   oDlg:cFileDBF   := cDBF
-   oDlg:cTitle     := "test of " + cDBF
-   oDlg:cOptions   := "IEDP"
-   oDlg:lWithTab   := .F.
-   oDlg:nEditStyle := 3 // from 1 to 3
-   AAdd( oDlg:aOptionList, { "Mail", { || Nil } } )
-   AAdd( oDlg:aOptionList, { "CtlList",  { || oDlg:ShowCtlList() } } )
-   AAdd( oDlg:aOptionList, { "ThisDlg", { || oDlg:ShowDlgName() } } )
+   oFrm := ThisDlg():New()
+   oFrm:cFileDBF   := cDBF
+   oFrm:cTitle     := "test of " + cDBF
+   oFrm:cOptions   := "IEDP"
+   oFrm:lWithTab   := .F. // .T. to hwgui only
+   oFrm:nEditStyle := 3 // from 1 to 3
+   AAdd( oFrm:aOptionList, { "Mail", { || Nil } } )
+   AAdd( oFrm:aOptionList, { "CtlList",  { || oFrm:ShowCtlList() } } )
+   AAdd( oFrm:aOptionList, { "ThisDlg", { || oFrm:ShowDlgName() } } )
 
    nPos := hb_ASCan( aAllSetup, { | e | e[ 1 ] == cDBF } )
 
-   oDlg:aEditList := aAllSetup[ nPos, 2 ]
-   oDlg:Execute()
+   oFrm:aEditList := aAllSetup[ nPos, 2 ]
+   oFrm:Execute()
 
    RETURN Nil
 

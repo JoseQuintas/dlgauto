@@ -26,7 +26,7 @@ FUNCTION frm_Dialog( Self )
    SELECT ( Select( ::cFileDbf ) )
 
    ::oDlg := "FRM" + ::cFileDBF
-   CreateDialog( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle, { || ::UpdateEdit() } )
+   CreateDialog( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle, { || ::EditOff(), ::UpdateEdit() } )
    ::CreateControls()
    ActivateDialog( ::oDlg )
    CLOSE DATABASES

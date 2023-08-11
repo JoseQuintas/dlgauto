@@ -8,25 +8,25 @@ frm_preview - preview of report
 FUNCTION frm_Preview( cFileMask )
 
    LOCAL aFileList, nIndex
-   LOCAL oDlg, oEdit
+   LOCAL oFrm, oEdit := "EditPreview"
    LOCAL cCaption
 
    aFileList := Directory( cFileMask )
    nIndex := 1
 
-   oDlg := frm_Class():New()
-   oDlg:oDlg := "frm_Preview"
-   oDlg:cOptions := ""
-   oDlg:aOptionList := { ;
-      { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } }, ;
-      { "Previous", { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } }, ;
-      { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } }, ;
-      { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } } }
+   oFrm := frm_Class():New()
+   oFrm:oDlg := "frm_Preview"
+   oFrm:cOptions := ""
+   oFrm:aOptionList := { ;
+      { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } }, ;
+      { "Previous", { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } }, ;
+      { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } }, ;
+      { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } } }
 
-   CreateDialog( @oDlg:oDlg, 0, 0, 800, 600, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oDlg:oDlg ) } )
-   frm_Buttons( oDlg, .F. )
-   CreateMLTextbox( oDlg:oDlg, @oEdit, 10, 65, oDlg:nDlgWidth - 40, oDlg:nDlgHeight - 100, "" )
-   ActivateDialog( oDlg:oDlg )
+   CreateDialog( @oFrm:oDlg, 0, 0, oFrm:nDlgWidth, oFrm:nDlgHeight, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:oDlg ) } )
+   frm_Buttons( oFrm, .F. )
+   CreateMLTextbox( oFrm:oDlg, @oEdit, 65, 10, oFrm:nDlgWidth - 40, oFrm:nDlgHeight - 100, "" )
+   ActivateDialog( oFrm:oDlg )
 
    RETURN Nil
 

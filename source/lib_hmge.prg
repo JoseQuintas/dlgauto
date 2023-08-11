@@ -4,6 +4,28 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION hmge_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   (xDlg)
+   (xControl)
+   (nRow)
+   (nCol)
+   (nWidth)
+   (nHeight)
+
+   RETURN Nil
+
+FUNCTION hmge_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   (xDlg)
+   (xControl)
+   (nRow)
+   (nCol)
+   (nWidth)
+   (nHeight)
+
+   RETURN Nil
+
 FUNCTION hmge_ActivateDialog( xDlg )
 
    DoMethod( xDlg, "CENTER" )
@@ -26,13 +48,16 @@ FUNCTION hmge_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
 FUNCTION hmge_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
-   (xDlg)
-   (xControl)
-   (nRow)
-   (nCol)
-   (nWidth)
-   (nHeight)
-   (xValue)
+   DEFINE EDITBOX ( xControl )
+      PARENT ( xDlg )
+      COL nCol
+      ROW nRow
+      WIDTH nWidth
+      HEIGHT nHeight
+      VALUE xValue
+      TOOLTIP 'EditBox'
+      NOHSCROLLBAR .T.
+   END EDITBOX
 
    RETURN Nil
 
@@ -78,17 +103,13 @@ FUNCTION hmge_SetFocus( xDlg, xControl )
 
 FUNCTION hmge_EnableTextbox( xDlg, xControl, lEnable )
 
-   (xDlg)
-   (xControl)
-   (lEnable)
+   SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 
-FUNCTION hwgui_EnableButton( xDlg, xControl, lEnable )
+FUNCTION hmge_EnableButton( xDlg, xControl, lEnable )
 
-   (xDlg)
-   (xControl)
-   (lEnable)
+   SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 

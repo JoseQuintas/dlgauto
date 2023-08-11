@@ -4,6 +4,18 @@ lib_hwgui - hwgui source code included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION hwgui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   @ nCol, nRow TAB xControl ITEMS {} OF xDlg ID 101 SIZE nWidth, nHeight STYLE WS_CHILD + WS_VISIBLE
+
+   RETURN Nil
+
+FUNCTION hwgui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   @ nCol, nRow PANEL xControl OF xDlg SIZE nWidth, nHeight BACKCOLOR COLOR_BACK
+
+   RETURN Nil
+
 FUNCTION hwgui_ActivateDialog( xDlg )
 
    xDlg:Center()
@@ -14,7 +26,7 @@ FUNCTION hwgui_ActivateDialog( xDlg )
 FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    INIT DIALOG xDlg CLIPPER NOEXIT TITLE cTitle ;
-      AT nCol, nRow SIZE nWidth, nHeight ;
+      AT nRow, nCol SIZE nWidth, nHeight ;
       BACKCOLOR COLOR_BACK ;
       ON EXIT hwg_EndDialog() ;
       ON INIT bAction
@@ -26,7 +38,7 @@ FUNCTION hwgui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xVa
    LOCAL oFont := HFont():Add( "Courier New", 0, -13 )
 
    (xDlg)
-   @ nRow, nCol EDITBOX xControl CAPTION xValue SIZE nWidth, nHeight FONT oFont ;
+   @ nCol, nRow EDITBOX xControl CAPTION xValue SIZE nWidth, nHeight FONT oFont ;
        STYLE ES_MULTILINE + ES_AUTOVSCROLL + WS_VSCROLL + WS_HSCROLL
 
    RETURN Nil

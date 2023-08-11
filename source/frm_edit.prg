@@ -7,10 +7,11 @@ frm_Edit - Create textbox/label on dialog
 
 FUNCTION frm_CreateEdit( Self )
 
-   LOCAL nRow, nCol, aItem, oTab := Nil, nPageCount := 0, nLen, aList := {}, nLenList, nRow2, nCol2 // , cTxt := ""
+   LOCAL nRow, nCol, aItem, oTab, nPageCount := 0, nLen, aList := {}
+   LOCAL nLenList, nRow2, nCol2, oPanel
 
 #ifdef HBMK_HAS_HWGUI
-   LOCAL oPanel, nTab, nPageNext
+   LOCAL nPageNext, nTab
 
    hwg_SetColorInFocus(.T., , COLOR_FOCUS )
 #endif
@@ -21,18 +22,15 @@ FUNCTION frm_CreateEdit( Self )
    NEXT
    IF ::lWithTab
 
-#ifdef HBMK_HAS_HWGUI
-      @ 5, 70 TAB oTab ITEMS {} OF ::oDlg ID 101 SIZE ::nDlgWidth - 10, ::nDlgHeight - 140 STYLE WS_CHILD + WS_VISIBLE
+      CreateTab( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 10 )
       AAdd( ::aControlList, CFG_EDITEMPTY )
-      Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_TAB
-      Atail( ::aControlList )[ CFG_FCONTROL ]     := oTab
+      Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
+      Atail( ::aControlList )[ CFG_FCONTROL ] := oTab
 
-      @ 1, 23 PANEL oPanel OF oTab SIZE ::nDlgWidth - 12, ::nDlgHeight - 165 BACKCOLOR COLOR_BACK
+      CreatePanel( oTab, @oPanel, 23, 1, ::nDlgWidth - 25, ::nDlgHeight - 100 )
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
-      Atail( ::aControlList )[ CFG_FCONTROL ]     := oPanel
-#endif
-
+      Atail( ::aControlList )[ CFG_FCONTROL ] := oPanel
       nRow := 999
    ELSE
       nRow := 80
@@ -90,13 +88,9 @@ FUNCTION frm_CreateEdit( Self )
             { || OkCurrent( aItem, Self ) } )
 
          nCol += ( nLen + 3 ) * 12
-
-#ifdef HBMK_HAS_HWGUI
          IF ::lWithTab
             AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
          ENDIF
-#endif
-
          IF ! Empty( aItem[ CFG_VTABLE ] )
             aItem[ CFG_VCONTROL ] := "LabelV" + Ltrim( Str( aItem:__EnumIndex ) )
 
