@@ -24,7 +24,7 @@ FUNCTION frm_Preview( cFileMask )
       { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oDlg:oDlg, oEdit ) } } }
 
    CreateDialog( @oDlg:oDlg, 0, 0, 800, 600, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oDlg:oDlg ) } )
-   frm_Buttons( oDlg:oDlg, .F. )
+   frm_Buttons( oDlg, .F. )
    CreateMLTextbox( oDlg:oDlg, @oEdit, 10, 65, oDlg:nDlgWidth - 40, oDlg:nDlgHeight - 100, "" )
    ActivateDialog( oDlg:oDlg )
 

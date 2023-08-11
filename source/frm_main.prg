@@ -15,7 +15,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
    oDlg:cTitle     := "test of " + cDBF
    oDlg:cOptions   := "IEDP"
    oDlg:lWithTab   := .F.
-   oDlg:nEditStyle := 1 // from 1 to 3
+   oDlg:nEditStyle := 3 // from 1 to 3
    AAdd( oDlg:aOptionList, { "Mail", { || Nil } } )
    AAdd( oDlg:aOptionList, { "CtlList",  { || oDlg:ShowCtlList() } } )
    AAdd( oDlg:aOptionList, { "ThisDlg", { || oDlg:ShowDlgName() } } )
