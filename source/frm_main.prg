@@ -18,7 +18,6 @@ FUNCTION frm_main( cDBF, aAllSetup )
    oFrm:nEditStyle := 1 // from 1 to 3
    AAdd( oFrm:aOptionList, { "Mail", { || Nil } } )
    AAdd( oFrm:aOptionList, { "CtlList",  { || oFrm:ShowCtlList() } } )
-   AAdd( oFrm:aOptionList, { "ThisDlg", { || oFrm:ShowDlgName() } } )
 
    nPos := hb_ASCan( aAllSetup, { | e | e[ 1 ] == cDBF } )
 
@@ -30,7 +29,6 @@ FUNCTION frm_main( cDBF, aAllSetup )
 CREATE CLASS ThisDlg INHERIT frm_Class
 
    METHOD ShowCtlList()
-   METHOD ShowDlgName()
 
    ENDCLASS
 
@@ -49,9 +47,5 @@ METHOD ShowCtlList() CLASS ThisDlg
    cTxt += cTxtTmp
    hwg_MsgInfo( cTxt )
 #endif
-
-   RETURN Nil
-
-METHOD ShowDlgName() CLASS ThisDlg
 
    RETURN Nil
