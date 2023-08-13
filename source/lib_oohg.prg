@@ -74,7 +74,7 @@ FUNCTION oohg_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          MAXLENGTH nMaxLength
       ENDIF
       VALUE     xValue
-      ON CHANGE Nil
+      ON LOSTFOCUS Eval( bValid )
    END TEXTBOX
 
    RETURN Nil
