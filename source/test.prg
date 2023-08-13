@@ -10,6 +10,7 @@ REQUEST DBFCDX
 PROCEDURE Main()
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nPos1, nPos2
+   LOCAL aKeyList, aTableList
 
    SET EXCLUSIVE OFF
    SET EPOCH TO Year( Date() ) - 90
@@ -19,6 +20,18 @@ PROCEDURE Main()
 #endif
    RddSetDefault( "DBFCDX" )
    frm_DBF()
+   aKeyList := { ;
+      { "JPCADASTRO", "IDCADASTRO" }, ;
+      { "JPPRODUTO", "IDPRODUTO" }, ;
+      { "JPUNIDADE", "IDUNIDADE" }, ;
+      { "JPVENDEDOR", "IDVENDEDOR" }, ;
+      { "JPPORTADOR", "IDPORTADOR" }, ;
+      { "JPGRUPO", "IDGRUPO" } }
+   aTableList := { ;
+      { "JPCADASTRO", "CDVENDEDOR", "JPVENDEDOR", "IDVENDEDOR", "VENDNOME" }, ;
+      { "JPCADASTRO", "CDPORTADOR", "JPPORTADOR", "IDPORTADOR", "PORTNOME" }, ;
+      { "JPPRODUTO", "IEUNIDADE", "JPUNIDADE", "IDUNIDADE", "UNIDNOME" }, ;
+      { "JPPRODUTO", "IEGRUPO", "JPGRUPO", "IDGRUPO", "GRUPONOME" } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -37,28 +50,22 @@ PROCEDURE Main()
          aItem[ CFG_VALUE ]    := aField[ DBS_NAME ]
          aItem[ CFG_CAPTION ]  := aField[ DBS_NAME ]
          aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
-         /* above retrieve value from related dbf */
-         DO CASE
-         CASE cFile == "PRODUCT" .AND. aField[ DBS_NAME ] == "IDPRODUCT"
+         /* additional setup */
+         nPos1 := hb_ASCan( aKeyList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } )
+         nPos2 := hb_ASCan( aTableList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } )
+         IF nPos1 != 0
             aItem[ CFG_ISKEY ] := .T.
-         CASE cFile == "PEOPLE" .AND. aField[ DBS_NAME ] == "IDPEOPLE"
-            aItem[ CFG_ISKEY ] := .T.
-         CASE ! cFile == "ACCOUNT"
-         CASE aField[ DBS_NAME ] == "IDACCOUNT"
-            aItem[ CFG_ISKEY ] := .T.
-         CASE aField[ DBS_NAME ] == "IDPRODUCT"
-            aItem[ CFG_VTABLE ] := "PRODUCT"
-            aItem[ CFG_VFIELD ] := "IDPRODUCT"
-            aItem[ CFG_VSHOW ]  := "NAME"
-         CASE aField[ DBS_NAME ] == "IDPEOPLE"
-            aItem[ CFG_VTABLE ] := "PEOPLE"
-            aItem[ CFG_VFIELD ] := "IDPEOPLE"
-            aItem[ CFG_VSHOW ]  := "NAME"
-         ENDCASE
+         ENDIF
+         IF nPos2 != 0
+            aItem[ CFG_VTABLE ] := aTableList[ nPos2, 3 ]
+            aItem[ CFG_VFIELD ] := aTableList[ nPos2, 4 ]
+            aItem[ CFG_VSHOW ]  := aTableList[ nPos2, 5 ]
+         ENDIF
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT
       USE
    NEXT
+   /* retrieve size of VSHOW */
    FOR EACH aDBF IN aAllSetup
       FOR EACH aItem IN aDBF[ 2 ]
          IF ! Empty( aItem[ CFG_VTABLE ] )

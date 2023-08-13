@@ -6,6 +6,8 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 FUNCTION hmge_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
+   // no tab
+   xControl := xDlg
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
@@ -72,7 +74,7 @@ FUNCTION hmge_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          MAXLENGTH nMaxLength
       ENDIF
       VALUE     xValue
-      ON CHANGE Nil
+      ON LOSTFOCUS Eval( bValid )
    END TEXTBOX
 
    RETURN Nil
@@ -83,7 +85,7 @@ FUNCTION hmge_CloseDlg( xDlg )
 
    RETURN Nil
 
-FUNCTION hmge_SetFocus( xDlg, xControl )
+FUNCTION hmge_SetFocusAny( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "SETFOCUS" )
 
@@ -140,23 +142,23 @@ FUNCTION hmge_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaptio
       FONTNAME    "verdana"
       FONTSIZE    9
       FONTBOLD    .T.
-      FONTCOLOR   GRAY
+      FONTCOLOR   COLOR_BLACK
       VERTICAL   .T.
-      BACKCOLOR  WHITE
+      BACKCOLOR  COLOR_WHITE
       FLAT       .T.
       NOXPSTYLE  .T.
    END BUTTONEX
 
    RETURN Nil
 
-FUNCTION hmge_UpdateTextBox( xDlg, xControl, xValue )
+FUNCTION hmge_SetTextboxValue( xDlg, xControl, xValue )
 
    // NOTE: string value, except if declared different on textbox creation
    SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
 
    RETURN Nil
 
-FUNCTION hmge_UpdateLabel( xDlg, xControl, xValue )
+FUNCTION hmge_SetLabelValue( xDlg, xControl, xValue )
 
    SetProperty( xDlg, xControl, "VALUE", xValue )
 

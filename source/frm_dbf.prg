@@ -4,55 +4,113 @@ frm_DBF - Create DBF for test
 
 FUNCTION frm_DBF()
 
-   LOCAL nCont
+   LOCAL nCont, cTxt
 
-   IF ! File( "people.dbf" )
-      dbCreate( "people", { ;
-         { "IDPEOPLE", "N+", 6, 0 }, ;
-         { "NAME",     "C", 30, 0 }, ;
-         { "ADDRESS",  "C", 50, 0 }, ;
-         { "CITY",     "C", 30, 0 } } )
-      USE people
+   IF ! File( "JPCADASTRO.DBF" )
+      dbCreate( "JPCADASTRO", { ;
+         { "IDCADASTRO", "N+", 6, 0 }, ;
+         { "CDNOME",     "C", 50, 0 }, ;
+         { "CDCNPJ",  "C", 18, 0 }, ;
+         { "CDENDERECO",     "C", 50, 0 }, ;
+         { "CDBAIRRO", "C", 20, 0 }, ;
+         { "CDCIDADE", "C", 20, 0 }, ;
+         { "CDUF", "c", 2, 0 }, ;
+         { "CDCEP", "C", 9, 0 }, ;
+         { "CDTELEFONE", "C", 15, 0 }, ;
+         { "CDEMAIL", "C", 50, 0 }, ;
+         { "CDVENDEDOR", "N", 6, 0 }, ;
+         { "CDPORTADOR", "N", 6, 0 } } )
+      USE JPCADASTRO
       FOR nCont = 1 TO 9
+         cTxt := Replicate( "CADASTRO" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDPEOPLE WITH nCont, NAME WITH Replicate( "P" + Str( nCont, 1 ), 15 ), ;
-            ADDRESS WITH Replicate( "P" + Str( nCont, 1 ) , 25 ), ;
-            CITY WITH Replicate( "P" + Str( nCont, 1 ), 15 )
+         REPLACE IDCADASTRO WITH nCont, CDNOME WITH cTxt, CDCNPJ WITH cTxt, ;
+            CDENDERECO WITH cTxt, CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, ;
+            CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, CDUF WITH cTxt, ;
+            CDCEP WITH cTxt, CDTELEFONE WITH cTxt, CDEMAIL WITH cTxt, ;
+            CDVENDEDOR WITH nCont, CDPORTADOR WITH nCont
       NEXT
-      INDEX ON field->idPeople TAG primary
-      INDEX ON field->Name     TAG name
+      INDEX ON field->idCadastro TAG primary
+      INDEX ON field->cdNome TAG nome
       USE
    ENDIF
-   IF ! File( "product.dbf" )
-      dbCreate( "product", { ;
-         { "IDPRODUCT", "N+", 6, 0 }, ;
-         { "NAME",      "C", 30, 0 }, ;
-         { "VALUE",     "N", 14, 2 } } )
-      USE product
+   IF ! File( "JPPRODUTO.DBF" )
+      dbCreate( "JPPRODUTO", { ;
+         { "IDPRODUTO", "N+", 6, 0 }, ;
+         { "IENOME",    "C", 50, 0 }, ;
+         { "IEUNIDADE", "N", 6, 0 }, ;
+         { "IEGRUPO",   "N", 6, 0 }, ;
+         { "IENCM",     "C", 8, 0 }, ;
+         { "IECEST",    "C", 7, 0 }, ;
+         { "IEQTD",     "N", 6, 0 }, ;
+         { "IEVALOR",   "N", 14, 2 } } )
+      USE jpproduto
       FOR nCont = 1 TO 9
+         cTxt := Replicate( "PRODUTO" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDPRODUCT WITH nCont, NAME WITH Replicate( "U" + Str( nCont, 1 ), 10 ), VALUE WITH nCont
+         REPLACE IDPRODUTO WITH nCont, IENOME WITH cTxt, ieUnidade WITH nCont, ;
+            IEGRUPO WITH nCont, IENCM WITH cTxt, IECEST WITH cTxt, IEQTD WITH nCont, ;
+            IEVALOR WITH nCont
       NEXT
-      INDEX ON field->idProduct TAG primary
-      INDEX ON field->Name      TAG name
+      INDEX ON field->IDPRODUTO TAG primary
+      INDEX ON field->IENOME TAG nome
       USE
    ENDIF
-   IF ! File( "account.dbf" )
-      dbCreate( "account", { ;
-         { "IDACCOUNT", "N+", 6, 0 }, ;
-         { "DATEMOV",   "D", 8, 0 }, ;
-         { "IDPEOPLE",  "N", 6, 0 }, ;
-         { "IDPRODUCT", "N", 6, 0 }, ;
-         { "QT",        "N", 9, 0 }, ;
-         { "VALUE",     "N", 14, 2 } } )
-      USE account
+   IF ! File( "JPUNIDADE.DBF" )
+      dbCreate( "JPUNIDADE", { ;
+         { "IDUNIDADE", "N+", 6, 0 }, ;
+         { "UNIDSIGLA", "C", 8, 0 }, ;
+         { "UNIDNOME",  "C", 30, 0 } } )
+      USE JPUNIDADE
       FOR nCont = 1 TO 9
+         cTxt := Replicate( "UNIDADE" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDACCOUNT WITH nCont, DATEMOV WITH Stod( "20230101" ) + nCont, ;
-            IDPEOPLE WITH nCont, IDPRODUCT WITH nCont, QT WITH nCont, ;
-            VALUE WITH nCont * 1000
+         REPLACE IDUNIDADE WITH nCont, UNIDSIGLA WITH cTxt, UNIDNOME WITH cTxt
       NEXT
-      INDEX ON field->IdAccount TAG primary
+      INDEX ON field->IDUNIDADE TAG primary
+      INDEX ON field->UNIDNOME TAG nome
+      USE
+   ENDIF
+   IF ! File( "JPVENDEDOR.DBF" )
+      dbCreate( "JPVENDEDOR", { ;
+         { "IDVENDEDOR", "N+", 6, 0 }, ;
+         { "VENDNOME",   "C", 30, 0 } } )
+      USE JPVENDEDOR
+      FOR nCont = 1 TO 9
+         cTxt := Replicate( "VENDEDOR" + Str( nCont, 1 ), 10 )
+         APPEND BLANK
+         REPLACE IDVENDEDOR WITH nCont, VENDNOME WITH cTxt
+      NEXT
+      INDEX ON field->IDVENDEDOR TAG primary
+      INDEX ON field->VENDNOME TAG nome
+      USE
+   ENDIF
+   IF ! File( "JPPORTADOR.DBF" )
+      dbCreate( "JPPORTADOR", { ;
+         { "IDPORTADOR", "N+", 6, 0 }, ;
+         { "PORTNOME",   "C", 30, 0 } } )
+      USE JPPORTADOR
+      FOR nCont = 1 TO 9
+         cTxt := Replicate( "PORTADOR" + Str( nCont, 1 ), 10 )
+         APPEND BLANK
+         REPLACE IDPORTADOR WITH nCont, PORTNOME WITH cTxt
+      NEXT
+      INDEX ON field->IDPORTADOR TAG primary
+      INDEX ON field->PORTNOME TAG nome
+      USE
+   ENDIF
+   IF ! File( "JPGRUPO.DBF" )
+      dbCreate( "JPGRUPO", { ;
+         { "IDGRUPO", "N+", 6, 0 }, ;
+         { "GRUPONOME", "C", 30, 0 } } )
+      USE JPGRUPO
+      FOR nCont = 1 TO 9
+         cTxt := Replicate( "GRUPO" + Str( nCont, 1 ), 10 )
+         APPEND BLANK
+         REPLACE IDGRUPO WITH nCont, GRUPONOME WITH cTxt
+      NEXT
+      INDEX ON field->IDGRUPO TAG primary
+      INDEX ON field->GRUPONOME TAG nome
       USE
    ENDIF
 

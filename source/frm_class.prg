@@ -137,7 +137,7 @@ METHOD UpdateEdit() CLASS frm_Class
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ! Empty( aItem[ CFG_FNAME ] )
             xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
-            UpdateTextbox( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
+            SetTextboxValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
          ENDIF
          IF ! Empty( aItem[ CFG_VTABLE ] )
             nSelect := Select()
@@ -145,7 +145,7 @@ METHOD UpdateEdit() CLASS frm_Class
             SEEK xValue
             cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
             SELECT ( nSelect )
-            UpdateLabel( ::oDlg, aItem[ CFG_VCONTROL ], cText )
+            SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
       ENDIF
    NEXT

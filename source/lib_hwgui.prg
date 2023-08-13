@@ -12,7 +12,7 @@ FUNCTION hwgui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
 FUNCTION hwgui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   @ nCol, nRow PANEL xControl OF xDlg SIZE nWidth, nHeight BACKCOLOR COLOR_BACK
+   @ nCol, nRow PANEL xControl OF xDlg SIZE nWidth, nHeight BACKCOLOR COLOR_WHITE
 
    RETURN Nil
 
@@ -27,9 +27,9 @@ FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction 
 
    INIT DIALOG xDlg CLIPPER NOEXIT TITLE cTitle ;
       AT nRow, nCol SIZE nWidth, nHeight ;
-      BACKCOLOR COLOR_BACK ;
-      ; // ON EXIT hwg_EndDialog() ;
+      BACKCOLOR COLOR_WHITE ;
       ON INIT bAction
+   hwg_SetColorInFocus(.T., , COLOR_YELLOW )
 
    RETURN Nil
 
@@ -59,7 +59,7 @@ FUNCTION hwgui_CloseDlg( xDlg )
 
    RETURN xDlg:Close()
 
-FUNCTION hwgui_SetFocus( xDlg, xControl )
+FUNCTION hwgui_SetFocusAny( xDlg, xControl )
 
    (xDlg)
    xControl:SetFocus()
@@ -92,9 +92,9 @@ FUNCTION hwgui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue,
 
    ( xDlg )
    IF lBorder
-      @ nCol, nRow SAY xControl CAPTION xValue OF xDlg SIZE nWidth, nHeight COLOR COLOR_FORE STYLE WS_BORDER TRANSPARENT
+      @ nCol, nRow SAY xControl CAPTION xValue OF xDlg SIZE nWidth, nHeight COLOR COLOR_BLACK STYLE WS_BORDER TRANSPARENT
    ELSE
-      @ nCol, nRow SAY xControl CAPTION xValue OF xDlg SIZE nWidth, nHeight COLOR COLOR_FORE TRANSPARENT
+      @ nCol, nRow SAY xControl CAPTION xValue OF xDlg SIZE nWidth, nHeight COLOR COLOR_BLACK TRANSPARENT
    ENDIF
 
    RETURN Nil
@@ -115,14 +115,14 @@ FUNCTION hwgui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCapti
 
    RETURN Nil
 
-FUNCTION hwgui_UpdateTextBox( xDlg, xControl, xValue )
+FUNCTION hwgui_SetTextboxValue( xDlg, xControl, xValue )
 
    ( xDlg )
    xControl:Value := xValue
 
    RETURN Nil
 
-FUNCTION hwgui_UpdateLabel( xDlg, xControl, xValue )
+FUNCTION hwgui_SetLabelValue( xDlg, xControl, xValue )
 
    (xDlg)
    xControl:SetText( xValue )

@@ -14,8 +14,8 @@ FUNCTION frm_main( cDBF, aAllSetup )
    oFrm:cFileDBF   := cDBF
    oFrm:cTitle     := "test of " + cDBF
    oFrm:cOptions   := "IEDP"
-   oFrm:lWithTab   := .F. // .T. to hwgui only
-   oFrm:nEditStyle := 3 // from 1 to 3
+   oFrm:lWithTab   := .F.
+   oFrm:nEditStyle := 1 // from 1 to 3
    AAdd( oFrm:aOptionList, { "Mail", { || Nil } } )
    AAdd( oFrm:aOptionList, { "CtlList",  { || oFrm:ShowCtlList() } } )
    AAdd( oFrm:aOptionList, { "ThisDlg", { || oFrm:ShowDlgName() } } )

@@ -8,29 +8,31 @@ frm_Edit - Create textbox/label on dialog
 FUNCTION frm_CreateEdit( Self )
 
    LOCAL nRow, nCol, aItem, oTab, nPageCount := 0, nLen, aList := {}
-   LOCAL nLenList, nRow2, nCol2, oPanel
+   LOCAL nLenList, nRow2, nCol2 // oPanel
 
 #ifdef HBMK_HAS_HWGUI
    LOCAL nPageNext, nTab
 
-   hwg_SetColorInFocus(.T., , COLOR_FOCUS )
 #endif
 
    FOR EACH aItem IN ::aEditList
+      aItem[ CFG_VALUE ]    := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
+      aItem[ CFG_CCONTROL ] := "LABEL_C" + Ltrim( Str( aItem:__EnumIndex ) )
+      aItem[ CFG_FCONTROL ] := "TEXT"    + Ltrim( Str( aItem:__EnumIndex ) )
+      aItem[ CFG_VCONTROL ] := "LABEL_V" + Ltrim( Str( aItem:__EnumIndex ) )
       AAdd( ::aControlList, AClone( aItem ) )
-      Atail( ::aControlList )[ CFG_VALUE ] := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
    NEXT
    IF ::lWithTab
 
-      CreateTab( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 10 )
+      CreateTab( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 75 )
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
       Atail( ::aControlList )[ CFG_FCONTROL ] := oTab
 
-      CreatePanel( oTab, @oPanel, 23, 1, ::nDlgWidth - 25, ::nDlgHeight - 100 )
-      AAdd( ::aControlList, CFG_EDITEMPTY )
-      Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
-      Atail( ::aControlList )[ CFG_FCONTROL ] := oPanel
+      //CreatePanel( oTab, @oPanel, 23, 1, ::nDlgWidth - 25, ::nDlgHeight - 100 )
+      //AAdd( ::aControlList, CFG_EDITEMPTY )
+      //Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
+      //Atail( ::aControlList )[ CFG_FCONTROL ] := oPanel
       nRow := 999
    ELSE
       nRow := 80
@@ -75,12 +77,10 @@ FUNCTION frm_CreateEdit( Self )
             nCol2 := nCol
          ENDIF
 
-         aItem[ CFG_CCONTROL ] := "LabelC" + Ltrim( Str( aItem:__EnumIndex ) )
 
          CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), aItem[ CFG_CCONTROL ], ;
             nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
 
-         aItem[ CFG_FCONTROL ] := "Text" + Ltrim( Str( aItem:__EnumIndex ) )
 
          CreateTextbox( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, nCol2, aItem[ CFG_FLEN ] * 12, ::nLineHeight, ;
@@ -92,7 +92,6 @@ FUNCTION frm_CreateEdit( Self )
             AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
          ENDIF
          IF ! Empty( aItem[ CFG_VTABLE ] )
-            aItem[ CFG_VCONTROL ] := "LabelV" + Ltrim( Str( aItem:__EnumIndex ) )
 
             CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
                nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nLen * 12, ;
@@ -138,7 +137,11 @@ STATIC FUNCTION OkCurrent( aItem, Self )
    LOCAL nSelect, lEof
 
    IF aItem[ CFG_ISKEY ]
+#ifdef HBMK_HAS_HWGUI
       SEEK aItem[ CFG_FCONTROL ]:Value
+#else
+      SEEK GetProperty( ::oDlg, aItem[ CFG_FCONTROL ], "VALUE" )
+#endif
       IF ::cSelected == "INSERT"
          IF ! Eof()
 #ifdef HBMK_HAS_HWGUI
@@ -158,9 +161,13 @@ STATIC FUNCTION OkCurrent( aItem, Self )
    IF ! Empty( aItem[ CFG_VTABLE ] )
       nSelect := Select()
       SELECT ( Select( aItem[ CFG_VTABLE ] ) )
+#ifdef HBMK_HAS_HWGUI
       SEEK aItem[ CFG_FCONTROL ]:Value
+#else
+      SEEK GetProperty( ::oDlg, aItem[ CFG_FCONTROL ], "VALUE" )
+#endif
       lEof := Eof()
-      aItem[ CFG_VCONTROL ]:SetText( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+      SetTextboxValue( ::oDlg, aItem[ CFG_VCONTROL ], FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
       SELECT ( nSelect )
       IF lEof
 #ifdef HBMK_HAS_HWGUI

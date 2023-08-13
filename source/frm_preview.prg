@@ -39,7 +39,7 @@ STATIC FUNCTION frm_SetText( oEdit, aFileList, nIndex, xDlg )
    ELSE
       cTxt := MemoRead( aFileList[ nIndex, F_NAME ] )
    ENDIF
-   UpdateTextbox( xDlg, oEdit, cTxt )
+   SetTextboxValue( xDlg, oEdit, cTxt )
 
    RETURN Nil
 

@@ -6,6 +6,8 @@ lib_oohg - oohg source code included in frm_gui
 
 FUNCTION oohg_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
+   // no tab
+   xControl := xDlg
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
@@ -92,7 +94,7 @@ FUNCTION oohg_CloseDlg( xDlg )
 
    RETURN Nil
 
-FUNCTION oohg_SetFocus( xDlg, xControl )
+FUNCTION oohg_SetFocusAny( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "SETFOCUS" )
 
@@ -149,14 +151,14 @@ FUNCTION oohg_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaptio
 
    RETURN Nil
 
-FUNCTION oohg_UpdateTextBox( xDlg, xControl, xValue )
+FUNCTION oohg_SetTextboxValue( xDlg, xControl, xValue )
 
    // NOTE: string value, except if declared different on textbox creation
    SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
 
    RETURN Nil
 
-FUNCTION oohg_UpdateLabel( xDlg, xControl, xValue )
+FUNCTION oohg_SetLabelValue( xDlg, xControl, xValue )
 
    IF .F.
       SetProperty( xDlg, xControl, "VALUE", xValue )
