@@ -65,7 +65,7 @@ FUNCTION oohg_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       COL      nCol
       HEIGHT   nHeight
       WIDTH    nWidth
-      FONTNAME "verdana"
+      FONTNAME DEFAULT_FONTNAME
       IF ValType( xValue ) == "N"
          NUMERIC .T.
       ELSEIF ValType( xValue ) == "D"

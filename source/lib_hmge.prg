@@ -63,7 +63,7 @@ FUNCTION hmge_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       COL nCol
       HEIGHT    nHeight
       WIDTH     nWidth
-      FONTNAME "verdana"
+      FONTNAME DEFAULT_FONTNAME
       IF ValType( xValue ) == "N"
          NUMERIC .T.
          INPUTMASK cPicture
@@ -139,7 +139,7 @@ FUNCTION hmge_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaptio
       IMAGEHEIGHT nHeight - 20
       CAPTION     cCaption
       ACTION      Eval( bAction )
-      FONTNAME    "verdana"
+      FONTNAME    DEFAULT_FONTNAME
       FONTSIZE    9
       FONTBOLD    .T.
       FONTCOLOR   COLOR_BLACK

@@ -35,7 +35,7 @@ FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction 
 
    LOCAL oFont
 
-   oFont := HFont():Add( "MS Sans Serif", 0, -11 )
+   oFont := HFont():Add( DEFAULT_FONTNAME, 0, -11 )
    INIT DIALOG xDlg ;
       CLIPPER ;
       FONT oFont ;
@@ -51,7 +51,7 @@ FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction 
 
 FUNCTION hwgui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
-   LOCAL oFont := HFont():Add( "Courier New", 0, -13 )
+   LOCAL oFont := HFont():Add( "Courier New", 0, -11 )
 
    (xDlg)
    @ nCol, nRow EDITBOX xControl ;

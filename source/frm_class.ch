@@ -44,6 +44,9 @@
       #define WIN_RGB( r, g, b ) ( r * 256 ) + ( b * 16 ) + c
    #endif
 #endif
+
 #define COLOR_BLACK   WIN_RGB( 0, 0, 0 )
 #define COLOR_WHITE   WIN_RGB( 255, 255, 255 )
 #define COLOR_YELLOW  WIN_RGB( 255, 255, 0 )
+
+#define DEFAULT_FONTNAME "MS Sans Serif"
