@@ -28,10 +28,10 @@ FUNCTION oohg_ActivateDialog( xDlg )
 FUNCTION oohg_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    DEFINE WINDOW ( xDlg ) ;
-      AT nCol, nRow ;
-      WIDTH nWidth ;
+      AT     nCol, nRow ;
+      WIDTH  nWidth ;
       HEIGHT nHeight ;
-      TITLE cTitle ;
+      TITLE  cTitle ;
       MODAL ;
       ON INIT Eval( bAction )
    END WINDOW
@@ -61,10 +61,10 @@ FUNCTION oohg_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    (cPicture)
    DEFINE TEXTBOX ( xControl )
       PARENT ( xDlg )
-      ROW nRow
-      COL nCol
-      HEIGHT    nHeight
-      WIDTH     nWidth
+      ROW      nRow
+      COL      nCol
+      HEIGHT   nHeight
+      WIDTH    nWidth
       FONTNAME "verdana"
       IF ValType( xValue ) == "N"
          NUMERIC .T.
@@ -117,8 +117,12 @@ FUNCTION oohg_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, 
    (xDlg)
    (lBorder)
    IF lBorder
-      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
-         VALUE xValue WIDTH nWidth HEIGHT nHeight BORDER
+      @ nRow, nCol LABEL ( xControl ) ;
+         PARENT ( xDlg ) ;
+         VALUE  xValue ;
+         WIDTH  nWidth ;
+         HEIGHT nHeight ;
+         BORDER
    ELSE
       @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
          VALUE xValue WIDTH nWidth HEIGHT nHeight
@@ -160,8 +164,6 @@ FUNCTION oohg_SetTextboxValue( xDlg, xControl, xValue )
 
 FUNCTION oohg_SetLabelValue( xDlg, xControl, xValue )
 
-   IF .F.
-      SetProperty( xDlg, xControl, "VALUE", xValue )
-   ENDIF
+   SetProperty( xDlg, xControl, "VALUE", xValue )
 
    RETURN Nil

@@ -22,16 +22,22 @@ PROCEDURE Main()
    frm_DBF()
    aKeyList := { ;
       { "JPCADASTRO", "IDCADASTRO" }, ;
-      { "JPPRODUTO", "IDPRODUTO" }, ;
-      { "JPUNIDADE", "IDUNIDADE" }, ;
+      { "JPPRODUTO",  "IDPRODUTO" }, ;
+      { "JPUNIDADE",  "IDUNIDADE" }, ;
       { "JPVENDEDOR", "IDVENDEDOR" }, ;
       { "JPPORTADOR", "IDPORTADOR" }, ;
-      { "JPGRUPO", "IDGRUPO" } }
+      { "JPGRUPO",    "IDGRUPO" }, ;
+      { "JPESTOQUE",  "IDESTOQUE" }, ;
+      { "JPFINANC",   "IDFINANC" } }
    aTableList := { ;
       { "JPCADASTRO", "CDVENDEDOR", "JPVENDEDOR", "IDVENDEDOR", "VENDNOME" }, ;
       { "JPCADASTRO", "CDPORTADOR", "JPPORTADOR", "IDPORTADOR", "PORTNOME" }, ;
-      { "JPPRODUTO", "IEUNIDADE", "JPUNIDADE", "IDUNIDADE", "UNIDNOME" }, ;
-      { "JPPRODUTO", "IEGRUPO", "JPGRUPO", "IDGRUPO", "GRUPONOME" } }
+      { "JPPRODUTO",  "IEUNIDADE",  "JPUNIDADE",  "IDUNIDADE",  "UNIDNOME" }, ;
+      { "JPPRODUTO",  "IEGRUPO",    "JPGRUPO",    "IDGRUPO",    "GRUPONOME" }, ;
+      { "JPESTOQUE",  "ESCADASTRO", "JPCADASTRO", "IDCADASTRO", "CDNOME" }, ;
+      { "JPESTOQUE",  "ESPRODUTO",  "JPPRODUTO",  "IDPRODUTO",  "ESNOME" }, ;
+      { "JPFINANC",   "FICADASTRO", "JPCADASTRO", "IDCADASTRO", "CDNOME" }, ;
+      { "JPFINANC",   "FIPORTADOR", "JPPORTADOR", "IDPORTADOR", "PORTNOME" } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )

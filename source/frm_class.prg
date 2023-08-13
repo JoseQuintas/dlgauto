@@ -20,12 +20,11 @@ CREATE CLASS frm_Class
 
    VAR nDlgWidth       INIT 1024
    VAR nDlgHeight      INIT 768
-   VAR nLineSpacing    INIT 25
+   VAR nLineSpacing    INIT 21
    VAR nLineHeight     INIT 20
    VAR nButtonSize     INIT 50
    VAR nButtonSpace    INIT 3
-   VAR nTextSize       INIT 20
-   VAR nControlHeight  INIT 22
+   VAR nTextSize       INIT 15
 
    VAR oDlg
    VAR aControlList   INIT {}
@@ -138,14 +137,14 @@ METHOD UpdateEdit() CLASS frm_Class
          IF ! Empty( aItem[ CFG_FNAME ] )
             xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
             SetTextboxValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
-         ENDIF
-         IF ! Empty( aItem[ CFG_VTABLE ] )
-            nSelect := Select()
-            SELECT ( Select( aItem[ CFG_VTABLE ] ) )
-            SEEK xValue
-            cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
-            SELECT ( nSelect )
-            SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], cText )
+            IF ! Empty( aItem[ CFG_VTABLE ] )
+               nSelect := Select()
+               SELECT ( Select( aItem[ CFG_VTABLE ] ) )
+               SEEK xValue
+               cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+               SELECT ( nSelect )
+               SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], cText )
+            ENDIF
          ENDIF
       ENDIF
    NEXT

@@ -113,5 +113,46 @@ FUNCTION frm_DBF()
       INDEX ON field->GRUPONOME TAG nome
       USE
    ENDIF
+   IF ! File( "JPESTOQUE.DBF" )
+      dbCreate( "JPESTOQUE", { ;
+         { "IDESTOQUE", "N+", 6, 0 }, ;
+         { "ESDATLAN", "D", 8, 0 }, ;
+         { "ESCADASTRO", "N", 6, 0 }, ;
+         { "ESNUMDOC", "C", 10, 0 }, ;
+         { "ESPRODUTO", "N", 6, 0 }, ;
+         { "ESQTDE", "N", 10, 0 } } )
+      USE JPESTOQUE
+      FOR nCont = 1 TO 9
+         cTxt := Replicate( "ESTOQUE" + Str( nCont, 1 ), 10 )
+         APPEND BLANK
+         REPLACE IDESTOQUE WITH nCont, ESDATLAN WITH Date() + nCont, ;
+            ESCADASTRO WITH nCont, ESNUMDOC WITH cTxt, ;
+            ESPRODUTO WITH nCont, ESQTDE WITH nCont
+      NEXT
+      INDEX ON field->IDESTOQUE TAG primary
+      USE
+   ENDIF
+   IF ! File( "JPFINANC.DBF" )
+      dbCreate( "JPFINANC", { ;
+         { "IDFINANC", "N+", 6, 0 }, ;
+         { "FIDATEMI", "D", 8, 0 }, ;
+         { "FICADASTRO", "N", 6, 0 }, ;
+         { "FINUMDOC", "C", 10, 0 }, ;
+         { "FIDATVEN", "D", 8, 0 }, ;
+         { "FIDATPAG", "N", 10, 0 }, ;
+         { "FIVALOR", "N", 14, 2 }, ;
+         { "FIPORTADOR", "N", 6, 0 }, ;
+         { "FIOBS", "C", 100, 0 } } )
+      USE JPFINANC
+      FOR nCont = 1 TO 9
+         cTxt := Replicate( "FINANC" + Str( nCont, 1 ), 10 )
+         APPEND BLANK
+         REPLACE IDFINANC WITH nCont, FIDATEMI WITH Date() + nCont, ;
+            FICADASTRO WITH nCont, FINUMDOC WITH cTxt, ;
+            FIDATVEN WITH DATE() + 30, FIPORTADOR WITH nCont, FIOBS WITH cTxt
+      NEXT
+      INDEX ON field->IDFINANC TAG primary
+      USE
+   ENDIF
 
    RETURN Nil

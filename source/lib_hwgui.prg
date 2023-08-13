@@ -6,13 +6,21 @@ lib_hwgui - hwgui source code included in frm_gui
 
 FUNCTION hwgui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   @ nCol, nRow TAB xControl ITEMS {} OF xDlg ID 101 SIZE nWidth, nHeight STYLE WS_CHILD + WS_VISIBLE
+   @ nCol, nRow TAB xControl ;
+      ITEMS {} ;
+      OF    xDlg ;
+      ID    101 ;
+      SIZE  nWidth, nHeight ;
+      STYLE WS_CHILD + WS_VISIBLE
 
    RETURN Nil
 
 FUNCTION hwgui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   @ nCol, nRow PANEL xControl OF xDlg SIZE nWidth, nHeight BACKCOLOR COLOR_WHITE
+   @ nCol, nRow PANEL xControl ;
+      OF        xDlg ;
+      SIZE      nWidth, nHeight ;
+      BACKCOLOR COLOR_WHITE
 
    RETURN Nil
 
@@ -25,10 +33,18 @@ FUNCTION hwgui_ActivateDialog( xDlg )
 
 FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
-   INIT DIALOG xDlg CLIPPER NOEXIT TITLE cTitle ;
-      AT nRow, nCol SIZE nWidth, nHeight ;
+   LOCAL oFont
+
+   oFont := HFont():Add( "MS Sans Serif", 0, -11 )
+   INIT DIALOG xDlg ;
+      CLIPPER ;
+      FONT oFont ;
+      NOEXIT ;
+      TITLE     cTitle ;
+      AT        nRow, nCol ;
+      SIZE      nWidth, nHeight ;
       BACKCOLOR COLOR_WHITE ;
-      ON INIT bAction
+      ON INIT   bAction
    hwg_SetColorInFocus(.T., , COLOR_YELLOW )
 
    RETURN Nil
@@ -38,8 +54,11 @@ FUNCTION hwgui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xVa
    LOCAL oFont := HFont():Add( "Courier New", 0, -13 )
 
    (xDlg)
-   @ nCol, nRow EDITBOX xControl CAPTION xValue SIZE nWidth, nHeight FONT oFont ;
-       STYLE ES_MULTILINE + ES_AUTOVSCROLL + WS_VSCROLL + WS_HSCROLL
+   @ nCol, nRow EDITBOX xControl ;
+      CAPTION xValue ;
+      SIZE    nWidth, nHeight ;
+      FONT    oFont ;
+      STYLE   ES_MULTILINE + ES_AUTOVSCROLL + WS_VSCROLL + WS_HSCROLL
 
    RETURN Nil
 
@@ -47,11 +66,11 @@ FUNCTION hwgui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    @ nCol, nRow GET xControl VAR xValue OF xDlg ;
-            SIZE nWidth, nHeight ;
-            STYLE WS_DISABLED + iif( ValType( xValue ) $ "N,N+", ES_RIGHT, ES_LEFT ) ;
-            MAXLENGTH nMaxLength ;
-            PICTURE cPicture ;
-            VALID bValid
+      SIZE      nWidth, nHeight ;
+      STYLE     WS_DISABLED + iif( ValType( xValue ) $ "N,N+", ES_RIGHT, ES_LEFT ) ;
+      MAXLENGTH nMaxLength ;
+      PICTURE   cPicture ;
+      VALID     bValid
 
    RETURN Nil
 
@@ -92,9 +111,20 @@ FUNCTION hwgui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue,
 
    ( xDlg )
    IF lBorder
-      @ nCol, nRow SAY xControl CAPTION xValue OF xDlg SIZE nWidth, nHeight COLOR COLOR_BLACK STYLE WS_BORDER TRANSPARENT
+      @ nCol, nRow SAY xControl ;
+         CAPTION xValue ;
+         OF      xDlg ;
+         SIZE    nWidth, nHeight ;
+         COLOR   COLOR_BLACK ;
+         STYLE   WS_BORDER ;
+         TRANSPARENT
    ELSE
-      @ nCol, nRow SAY xControl CAPTION xValue OF xDlg SIZE nWidth, nHeight COLOR COLOR_BLACK TRANSPARENT
+      @ nCol, nRow SAY xControl ;
+         CAPTION xValue ;
+         OF      xDlg ;
+         SIZE    nWidth, nHeight ;
+         COLOR   COLOR_BLACK ;
+         TRANSPARENT
    ENDIF
 
    RETURN Nil
