@@ -25,16 +25,16 @@ FUNCTION frm_Buttons( Self, lDefault )
       AAdd( aList, { "Next",     { || ::Next() } } )
       AAdd( aList, { "Last",     { || ::Last() } } )
    ENDIF
-   IF "E" $ ::cOptions
-      AAdd( aList, { "Save",     { || ::Save() } } )
-      AAdd( aList, { "Cancel",   { || ::Cancel() } } )
-   ENDIF
    IF "P" $ ::cOptions
       AAdd( aList, { "Print",    { || ::Print() } } )
    ENDIF
    FOR EACH aItem IN ::aOptionList
       AAdd( aList, { aItem[1], aItem[2] } )
    NEXT
+   IF "E" $ ::cOptions
+      AAdd( aList, { "Save",     { || ::Save() } } )
+      AAdd( aList, { "Cancel",   { || ::Cancel() } } )
+   ENDIF
    AAdd( aList, { "Exit",     { || ::Exit() } } )
 
    nCol := 10

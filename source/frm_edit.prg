@@ -167,7 +167,7 @@ STATIC FUNCTION OkCurrent( aItem, Self )
       SEEK GetProperty( ::oDlg, aItem[ CFG_FCONTROL ], "VALUE" )
 #endif
       lEof := Eof()
-      SetTextboxValue( ::oDlg, aItem[ CFG_VCONTROL ], FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+      SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
       SELECT ( nSelect )
       IF lEof
 #ifdef HBMK_HAS_HWGUI
