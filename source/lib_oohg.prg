@@ -4,6 +4,12 @@ lib_oohg - oohg source code included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION oohg_GetTextBoxValue( xDlg, xControl )
+
+   (xDlg)
+
+   RETURN GetProperty( xDlg, xControl, "VALUE" )
+
 FUNCTION oohg_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    // no tab

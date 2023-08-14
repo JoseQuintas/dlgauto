@@ -26,7 +26,7 @@ FUNCTION frm_DBF()
          APPEND BLANK
          REPLACE IDCADASTRO WITH nCont, CDNOME WITH cTxt, CDCNPJ WITH cTxt, ;
             CDENDERECO WITH cTxt, CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, ;
-            CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, CDUF WITH cTxt, ;
+            CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, CDUF WITH Str( nCont, 1 ), ;
             CDCEP WITH cTxt, CDTELEFONE WITH cTxt, CDEMAIL WITH cTxt, ;
             CDVENDEDOR WITH nCont, CDPORTADOR WITH nCont
       NEXT
@@ -117,9 +117,9 @@ FUNCTION frm_DBF()
       dbCreate( "JPESTOQUE", { ;
          { "IDESTOQUE", "N+", 6, 0 }, ;
          { "ESDATLAN", "D", 8, 0 }, ;
+         { "ESPRODUTO", "N", 6, 0 }, ;
          { "ESCADASTRO", "N", 6, 0 }, ;
          { "ESNUMDOC", "C", 10, 0 }, ;
-         { "ESPRODUTO", "N", 6, 0 }, ;
          { "ESQTDE", "N", 10, 0 } } )
       USE JPESTOQUE
       FOR nCont = 1 TO 9
@@ -152,6 +152,19 @@ FUNCTION frm_DBF()
             FIDATVEN WITH DATE() + 30, FIPORTADOR WITH nCont, FIOBS WITH cTxt
       NEXT
       INDEX ON field->IDFINANC TAG primary
+      USE
+   ENDIF
+   IF ! File( "JPUF.DBF" )
+      dbCreate( "JPUF", { ;
+         { "UFSIGLA", "C", 2, 0 }, ;
+         { "UFNOME", "C", 30, 0 } } )
+      USE JPUF
+      FOR nCont = 1 TO 9
+         cTxt := Replicate( "UF" + Str( nCont, 1 ), 10 )
+         APPEND BLANK
+         REPLACE UFSIGLA WITH Str( nCont, 1 ), UFNOME WITH cTxt
+      NEXT
+      INDEX ON field->UFSIGLA TAG primary
       USE
    ENDIF
 

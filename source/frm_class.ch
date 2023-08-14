@@ -48,5 +48,5 @@
 #define COLOR_BLACK   WIN_RGB( 0, 0, 0 )
 #define COLOR_WHITE   WIN_RGB( 255, 255, 255 )
 #define COLOR_YELLOW  WIN_RGB( 255, 255, 0 )
-
+#define COLOR_GREEN   12507070
 #define DEFAULT_FONTNAME "MS Sans Serif"

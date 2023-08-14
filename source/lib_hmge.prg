@@ -4,6 +4,12 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION hmge_GetTextBoxValue( xDlg, xControl )
+
+   (xDlg)
+
+   RETURN GetProperty( xDlg, xControl, "VALUE" )
+
 FUNCTION hmge_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    // no tab

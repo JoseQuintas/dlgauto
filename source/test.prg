@@ -9,8 +9,8 @@ REQUEST DBFCDX
 
 PROCEDURE Main()
 
-   LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nPos1, nPos2
-   LOCAL aKeyList, aTableList
+   LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
+   LOCAL aKeyList, aSeekList
 
    SET EXCLUSIVE OFF
    SET EPOCH TO Year( Date() ) - 90
@@ -28,17 +28,20 @@ PROCEDURE Main()
       { "JPPORTADOR", "IDPORTADOR" }, ;
       { "JPGRUPO",    "IDGRUPO" }, ;
       { "JPESTOQUE",  "IDESTOQUE" }, ;
-      { "JPFINANC",   "IDFINANC" } }
-   aTableList := { ;
+      { "JPFINANC",   "IDFINANC" }, ;
+      { "JPUF",       "UFUF" } }
+   aSeekList := { ;
       { "JPCADASTRO", "CDVENDEDOR", "JPVENDEDOR", "IDVENDEDOR", "VENDNOME" }, ;
       { "JPCADASTRO", "CDPORTADOR", "JPPORTADOR", "IDPORTADOR", "PORTNOME" }, ;
+      { "JPCADASTRO", "CDUF",       "JPUF",       "UFUF",       "UFNOME" }, ;
       { "JPPRODUTO",  "IEUNIDADE",  "JPUNIDADE",  "IDUNIDADE",  "UNIDNOME" }, ;
-      { "JPPRODUTO",  "IEGRUPO",    "JPGRUPO",    "IDGRUPO",    "GRUPONOME" }, ;
       { "JPESTOQUE",  "ESCADASTRO", "JPCADASTRO", "IDCADASTRO", "CDNOME" }, ;
       { "JPESTOQUE",  "ESPRODUTO",  "JPPRODUTO",  "IDPRODUTO",  "ESNOME" }, ;
+      { "JPESTOQUE",  "ESGRUPO",    "JPGRUPO",    "IDGRUPO",    "GRUPONOME" }, ;
       { "JPFINANC",   "FICADASTRO", "JPCADASTRO", "IDCADASTRO", "CDNOME" }, ;
       { "JPFINANC",   "FIPORTADOR", "JPPORTADOR", "IDPORTADOR", "PORTNOME" } }
 
+   Altd()
    aAllSetup := {}
    aList := Directory( "*.dbf" )
    FOR EACH aFile IN aList
@@ -57,15 +60,13 @@ PROCEDURE Main()
          aItem[ CFG_CAPTION ]  := aField[ DBS_NAME ]
          aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
          /* additional setup */
-         nPos1 := hb_ASCan( aKeyList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } )
-         nPos2 := hb_ASCan( aTableList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } )
-         IF nPos1 != 0
+         IF hb_ASCan( aKeyList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
             aItem[ CFG_ISKEY ] := .T.
          ENDIF
-         IF nPos2 != 0
-            aItem[ CFG_VTABLE ] := aTableList[ nPos2, 3 ]
-            aItem[ CFG_VFIELD ] := aTableList[ nPos2, 4 ]
-            aItem[ CFG_VSHOW ]  := aTableList[ nPos2, 5 ]
+         IF ( nSeekPos := hb_ASCan( aSeekList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+            aItem[ CFG_VTABLE ] := aSeekList[ nSeekPos, 3 ]
+            aItem[ CFG_VFIELD ] := aSeekList[ nSeekPos, 4 ]
+            aItem[ CFG_VSHOW ]  := aSeekList[ nSeekPos, 5 ]
          ENDIF
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT
@@ -75,10 +76,9 @@ PROCEDURE Main()
    FOR EACH aDBF IN aAllSetup
       FOR EACH aItem IN aDBF[ 2 ]
          IF ! Empty( aItem[ CFG_VTABLE ] )
-            IF ( nPos1 := hb_AScan( aAllSetup, { | e | e[ 1 ] == aItem[ CFG_VTABLE ] } ) ) != 0
-               nPos2 := hb_AScan( aAllSetup[ nPos1, 2 ], { | e | e[ CFG_FNAME ] == aItem[ CFG_VSHOW ] } )
-               IF nPos2 != 0
-                  aItem[ CFG_VLEN ] := aAllSetup[ nPos1, 2, nPos2, CFG_FLEN ]
+            IF ( nKeyPos := hb_AScan( aAllSetup, { | e | e[ 1 ] == aItem[ CFG_VTABLE ] } ) ) != 0
+               IF ( nSeekPos := hb_AScan( aAllSetup[ nKeyPos, 2 ], { | e | e[ CFG_FNAME ] == aItem[ CFG_VSHOW ] } ) ) != 0
+                  aItem[ CFG_VLEN ] := aAllSetup[ nKeyPos, 2, nSeekPos, CFG_FLEN ]
                ENDIF
             ENDIF
          ENDIF

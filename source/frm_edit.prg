@@ -17,9 +17,9 @@ FUNCTION frm_CreateEdit( Self )
 
    FOR EACH aItem IN ::aEditList
       aItem[ CFG_VALUE ]    := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
-      aItem[ CFG_CCONTROL ] := "LABEL_C" + Ltrim( Str( aItem:__EnumIndex ) )
-      aItem[ CFG_FCONTROL ] := "TEXT"    + Ltrim( Str( aItem:__EnumIndex ) )
-      aItem[ CFG_VCONTROL ] := "LABEL_V" + Ltrim( Str( aItem:__EnumIndex ) )
+      aItem[ CFG_CCONTROL ] := "LABEL_C" + StrZero( aItem:__EnumIndex, 4 )
+      aItem[ CFG_FCONTROL ] := "TEXT"    + StrZero( aItem:__EnumIndex, 4 )
+      aItem[ CFG_VCONTROL ] := "LABEL_V" + StrZero( aItem:__EnumIndex, 4 )
       AAdd( ::aControlList, AClone( aItem ) )
    NEXT
    IF ::lWithTab
@@ -77,10 +77,8 @@ FUNCTION frm_CreateEdit( Self )
             nCol2 := nCol
          ENDIF
 
-
          CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), aItem[ CFG_CCONTROL ], ;
             nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
-
 
          CreateTextbox( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, nCol2, aItem[ CFG_FLEN ] * 12, ::nLineHeight, ;
@@ -92,7 +90,6 @@ FUNCTION frm_CreateEdit( Self )
             AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
          ENDIF
          IF ! Empty( aItem[ CFG_VTABLE ] )
-
             CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
                nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nLen * 12, ;
                ::nLineHeight, Space( aItem[ CFG_VLEN ] ), .T. )
@@ -134,26 +131,30 @@ STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
 
 STATIC FUNCTION OkCurrent( aItem, Self )
 
-   LOCAL nSelect, lEof
+   LOCAL nSelect, lFound := .T., xValue, nPos
 
-   IF aItem[ CFG_ISKEY ]
+   nPos := hb_AScan( ::aControlList, { | e | e[ CFG_CTLTYPE ] == TYPE_BUTTON .AND. ;
+      e[ CFG_CAPTION ] == "Cancel" } )
+   IF nPos != 0
 #ifdef HBMK_HAS_HWGUI
-      SEEK aItem[ CFG_FCONTROL ]:Value
-#else
-      SEEK GetProperty( ::oDlg, aItem[ CFG_FCONTROL ], "VALUE" )
+      IF hwg_SelfFocus( ::aControlList[ nPos, CFG_FCONTROL ]:Handle )
+         RETURN .T.
+      ENDIF
 #endif
+   ENDIF
+
+   xValue := GetTextboxValue( ::oDlg, aItem[ CFG_FCONTROL ] )
+   IF aItem[ CFG_ISKEY ]
+      SEEK xValue
       IF ::cSelected == "INSERT"
          IF ! Eof()
-#ifdef HBMK_HAS_HWGUI
-            hwg_MsgInfo( "Código já cadastrado" )
-#endif
+            MsgGeneric( "Código já cadastrado" )
+            SetFocusAny( ::oDlg, aItem[ CFG_FCONTROL ] ) // hwgui do not need this
             RETURN .F.
          ENDIF
       ELSE
          IF Eof()
-#ifdef HBMK_HAS_HWGUI
-            hwg_MsgInfo( "Código não cadastrado" )
-#endif
+            MsgGeneric( "Código não cadastrado" )
             RETURN .F.
          ENDIF
       ENDIF
@@ -161,20 +162,15 @@ STATIC FUNCTION OkCurrent( aItem, Self )
    IF ! Empty( aItem[ CFG_VTABLE ] )
       nSelect := Select()
       SELECT ( Select( aItem[ CFG_VTABLE ] ) )
-#ifdef HBMK_HAS_HWGUI
-      SEEK aItem[ CFG_FCONTROL ]:Value
-#else
-      SEEK GetProperty( ::oDlg, aItem[ CFG_FCONTROL ], "VALUE" )
-#endif
-      lEof := Eof()
-      SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+      SEEK xValue
+      lFound := ! Eof()
+      xValue := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
       SELECT ( nSelect )
-      IF lEof
-#ifdef HBMK_HAS_HWGUI
-         hwg_MsgInfo( "Código não cadastrado" )
-#endif
-         RETURN .F.
+      IF ! lFound
+         MsgGeneric( "Código não cadastrado" )
+         SetFocusAny( ::oDlg, aItem[ CFG_FCONTROL ] ) // hwgui do not need this
       ENDIF
+      SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], xValue )
    ENDIF
 
-   RETURN .T.
+   RETURN lFound

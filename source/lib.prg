@@ -5,6 +5,8 @@ lib - wrapper for lib functions, and #include lib source code
 #ifdef HBMK_HAS_HWGUI
 
 #include "lib_hwgui.prg"
+FUNCTION MsgGeneric( ... ); RETURN hwg_MsgInfo( ... )
+FUNCTION GetTextboxValue( ... ); RETURN hwgui_GetTextboxValue( ... )
 FUNCTION CreateTab( ... ); RETURN hwgui_CreateTab( ... )
 FUNCTION CreatePanel( ... ); RETURN hwgui_CreatePanel( ... )
 FUNCTION ActivateDialog( ... ); RETURN hwgui_ActivateDialog( ... )
@@ -24,6 +26,8 @@ FUNCTION SetLabelValue( ... ); RETURN hwgui_SetLabelValue( ... )
 #ifdef HBMK_HAS_HMGE
 
 #include "lib_hmge.prg"
+FUNCTION MsgGeneric( ... ); RETURN MsgStop( ... )
+FUNCTION GetTextboxValue( ... ); RETURN hmge_GetTextboxValue( ... )
 FUNCTION CreateTab( ... ); RETURN hmge_CreateTab( ... )
 FUNCTION CreatePanel( ... ); RETURN hmge_CreatePanel( ... )
 FUNCTION ActivateDialog( ... ); RETURN hmge_ActivateDialog( ... )
@@ -46,6 +50,8 @@ FUNCTION SetLabelValue( ... ); RETURN hmge_SetLabelValue( ... )
 #ifdef HBMK_HAS_OOHG
 
 #include "lib_oohg.prg"
+FUNCTION MsgGeneric( ... ); RETURN MsgStop( ... )
+FUNCTION GetTextboxValue( ... ); RETURN oohg_GetTextboxValue( ... )
 FUNCTION CreateTab( ... ); RETURN oohg_CreateTab( ... )
 FUNCTION CreatePanel( ... ); RETURN oohg_CreatePanel( ... )
 FUNCTION ActivateDialog( ... ); RETURN oohg_ActivateDialog( ... )

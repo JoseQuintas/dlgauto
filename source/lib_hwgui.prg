@@ -4,6 +4,11 @@ lib_hwgui - hwgui source code included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION hwgui_GetTextBoxValue( xDlg, xControl )
+
+   (xDlg)
+   RETURN xControl:Value
+
 FUNCTION hwgui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    @ nCol, nRow TAB xControl ;
@@ -115,9 +120,9 @@ FUNCTION hwgui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue,
          CAPTION xValue ;
          OF      xDlg ;
          SIZE    nWidth, nHeight ;
-         COLOR   COLOR_BLACK ;
          STYLE   WS_BORDER ;
-         TRANSPARENT
+         COLOR COLOR_BLACK ;
+         BACKCOLOR COLOR_GREEN // TRANSPARENT // DO NOT USE TRANSPARENT WITH BORDER
    ELSE
       @ nCol, nRow SAY xControl ;
          CAPTION xValue ;
