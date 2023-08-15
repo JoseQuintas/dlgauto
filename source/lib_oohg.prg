@@ -4,19 +4,23 @@ lib_oohg - oohg source code included in frm_gui
 
 #include "frm_class.ch"
 
-FUNCTION oohg_IsCurrentFocus( xDlg, xControl )
+FUNCTION gui_MsgGeneric( cText )
+
+   RETURN Msgbox( cText )
+
+FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       (xDlg); (xControl)
 
       RETURN .F.
 
-FUNCTION oohg_GetTextBoxValue( xDlg, xControl )
+FUNCTION gui_GetTextBoxValue( xDlg, xControl )
 
    (xDlg)
 
    RETURN GetProperty( xDlg, xControl, "VALUE" )
 
-FUNCTION oohg_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    // no tab
    xControl := xDlg
@@ -24,20 +28,20 @@ FUNCTION oohg_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION oohg_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
 
-FUNCTION oohg_ActivateDialog( xDlg )
+FUNCTION gui_ActivateDialog( xDlg )
 
    DoMethod( xDlg, "CENTER" )
    ACTIVATE WINDOW ( xDlg )
 
    RETURN Nil
 
-FUNCTION oohg_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    DEFINE WINDOW ( xDlg ) ;
       AT     nCol, nRow ;
@@ -60,13 +64,13 @@ FUNCTION oohg_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 //   ENDWITH
 //    _EndWindow()
 
-FUNCTION oohg_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+FUNCTION gui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (xValue)
 
    RETURN Nil
 
-FUNCTION oohg_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
+FUNCTION gui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    (bValid)
@@ -100,31 +104,31 @@ FUNCTION oohg_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    //    :Value  := aItem[ CFG_VALUE ]
    // ENDWITH
 
-FUNCTION oohg_CloseDlg( xDlg )
+FUNCTION gui_CloseDialog( xDlg )
 
    DoMethod( xDlg, "RELEASE" )
 
    RETURN Nil
 
-FUNCTION oohg_SetFocusAny( xDlg, xControl )
+FUNCTION gui_SetFocus( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "SETFOCUS" )
 
    RETURN Nil
 
-FUNCTION oohg_EnableTextbox( xDlg, xControl, lEnable )
+FUNCTION gui_EnableTextbox( xDlg, xControl, lEnable )
 
    SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 
-FUNCTION oohg_EnableButton( xDlg, xControl, lEnable )
+FUNCTION gui_EnableButton( xDlg, xControl, lEnable )
 
    SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 
-FUNCTION oohg_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    (xDlg)
    (lBorder)
@@ -152,7 +156,7 @@ FUNCTION oohg_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, 
 
    RETURN Nil
 
-FUNCTION oohg_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
+FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    ( xDlg )
 
@@ -167,14 +171,14 @@ FUNCTION oohg_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaptio
 
    RETURN Nil
 
-FUNCTION oohg_SetTextboxValue( xDlg, xControl, xValue )
+FUNCTION gui_SetTextboxValue( xDlg, xControl, xValue )
 
    // NOTE: string value, except if declared different on textbox creation
    SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
 
    RETURN Nil
 
-FUNCTION oohg_SetLabelValue( xDlg, xControl, xValue )
+FUNCTION gui_SetLabelValue( xDlg, xControl, xValue )
 
    SetProperty( xDlg, xControl, "VALUE", xValue )
 

@@ -4,19 +4,23 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 #include "frm_class.ch"
 
-FUNCTION hmge_IsCurrentFocus( xDlg, xControl )
+FUNCTION gui_MsgGeneric( cText )
+
+   RETURN Msgbox( cText )
+
+FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       (xDlg); (xControl)
 
       RETURN .F.
 
-FUNCTION hmge_GetTextBoxValue( xDlg, xControl )
+FUNCTION gui_GetTextBoxValue( xDlg, xControl )
 
    (xDlg)
 
    RETURN GetProperty( xDlg, xControl, "VALUE" )
 
-FUNCTION hmge_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    // no tab
    xControl := xDlg
@@ -24,20 +28,20 @@ FUNCTION hmge_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION hmge_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
 
-FUNCTION hmge_ActivateDialog( xDlg )
+FUNCTION gui_ActivateDialog( xDlg )
 
    DoMethod( xDlg, "CENTER" )
    ACTIVATE WINDOW ( xDlg )
 
    RETURN Nil
 
-FUNCTION hmge_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    DEFINE WINDOW ( xDlg ) ;
       AT nCol, nRow ;
@@ -50,7 +54,7 @@ FUNCTION hmge_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    RETURN Nil
 
-FUNCTION hmge_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+FUNCTION gui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    DEFINE EDITBOX ( xControl )
       PARENT ( xDlg )
@@ -65,7 +69,7 @@ FUNCTION hmge_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xVal
 
    RETURN Nil
 
-FUNCTION hmge_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
+FUNCTION gui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    (bValid)
@@ -91,31 +95,31 @@ FUNCTION hmge_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
    RETURN Nil
 
-FUNCTION hmge_CloseDlg( xDlg )
+FUNCTION gui_CloseDialog( xDlg )
 
    DoMethod( xDlg, "RELEASE" )
 
    RETURN Nil
 
-FUNCTION hmge_SetFocusAny( xDlg, xControl )
+FUNCTION gui_SetFocus( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "SETFOCUS" )
 
    RETURN Nil
 
-FUNCTION hmge_EnableTextbox( xDlg, xControl, lEnable )
+FUNCTION gui_EnableTextbox( xDlg, xControl, lEnable )
 
    SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 
-FUNCTION hmge_EnableButton( xDlg, xControl, lEnable )
+FUNCTION gui_EnableButton( xDlg, xControl, lEnable )
 
    SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 
-FUNCTION hmge_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    // não mostra borda
    //DEFINE LABEL ( xControl )
@@ -138,7 +142,7 @@ FUNCTION hmge_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, 
 
    RETURN Nil
 
-FUNCTION hmge_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
+FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    DEFINE BUTTONEX ( xControl )
       PARENT ( xDlg )
@@ -163,14 +167,14 @@ FUNCTION hmge_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaptio
 
    RETURN Nil
 
-FUNCTION hmge_SetTextboxValue( xDlg, xControl, xValue )
+FUNCTION gui_SetTextboxValue( xDlg, xControl, xValue )
 
    // NOTE: string value, except if declared different on textbox creation
    SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
 
    RETURN Nil
 
-FUNCTION hmge_SetLabelValue( xDlg, xControl, xValue )
+FUNCTION gui_SetLabelValue( xDlg, xControl, xValue )
 
    SetProperty( xDlg, xControl, "VALUE", xValue )
 

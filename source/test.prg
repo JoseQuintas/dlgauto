@@ -41,7 +41,6 @@ PROCEDURE Main()
       { "JPFINANC",   "FICADASTRO", "JPCADASTRO", "IDCADASTRO", "CDNOME" }, ;
       { "JPFINANC",   "FIPORTADOR", "JPPORTADOR", "IDPORTADOR", "PORTNOME" } }
 
-   Altd()
    aAllSetup := {}
    aList := Directory( "*.dbf" )
    FOR EACH aFile IN aList

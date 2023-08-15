@@ -4,17 +4,21 @@ lib_hwgui - hwgui source code included in frm_gui
 
 #include "frm_class.ch"
 
-FUNCTION hwgui_IsCurrentFocus( xDlg, xControl )
+FUNCTION gui_MsgGeneric( cText )
+
+   RETURN hwg_MsgInfo( cText )
+
+FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       (xDlg)
       RETURN hwg_SelfFocus( xControl:Handle )
 
-FUNCTION hwgui_GetTextBoxValue( xDlg, xControl )
+FUNCTION gui_GetTextBoxValue( xDlg, xControl )
 
    (xDlg)
    RETURN xControl:Value
 
-FUNCTION hwgui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    @ nCol, nRow TAB xControl ;
       ITEMS {} ;
@@ -25,7 +29,7 @@ FUNCTION hwgui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION hwgui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    @ nCol, nRow PANEL xControl ;
       OF        xDlg ;
@@ -34,14 +38,14 @@ FUNCTION hwgui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION hwgui_ActivateDialog( xDlg )
+FUNCTION gui_ActivateDialog( xDlg )
 
    xDlg:Center()
    xDlg:Activate()
 
    RETURN Nil
 
-FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    LOCAL oFont
 
@@ -59,7 +63,7 @@ FUNCTION hwgui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction 
 
    RETURN Nil
 
-FUNCTION hwgui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+FUNCTION gui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    LOCAL oFont := HFont():Add( "Courier New", 0, -11 )
 
@@ -72,7 +76,7 @@ FUNCTION hwgui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xVa
 
    RETURN Nil
 
-FUNCTION hwgui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
+FUNCTION gui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    @ nCol, nRow GET xControl VAR xValue OF xDlg ;
@@ -84,18 +88,18 @@ FUNCTION hwgui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
    RETURN Nil
 
-FUNCTION hwgui_CloseDlg( xDlg )
+FUNCTION gui_CloseDialog( xDlg )
 
    RETURN xDlg:Close()
 
-FUNCTION hwgui_SetFocusAny( xDlg, xControl )
+FUNCTION gui_SetFocus( xDlg, xControl )
 
    (xDlg)
    xControl:SetFocus()
 
    RETURN Nil
 
-FUNCTION hwgui_EnableTextbox( xDlg, xControl, lEnable )
+FUNCTION gui_EnableTextbox( xDlg, xControl, lEnable )
 
    (xDlg)
    IF lEnable
@@ -106,7 +110,7 @@ FUNCTION hwgui_EnableTextbox( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION hwgui_EnableButton( xDlg, xControl, lEnable )
+FUNCTION gui_EnableButton( xDlg, xControl, lEnable )
 
    (xDlg)
    IF lEnable
@@ -117,7 +121,7 @@ FUNCTION hwgui_EnableButton( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION hwgui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    ( xDlg )
    IF lBorder
@@ -139,7 +143,7 @@ FUNCTION hwgui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue,
 
    RETURN Nil
 
-FUNCTION hwgui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
+FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    ( xDlg )
 
@@ -155,14 +159,14 @@ FUNCTION hwgui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCapti
 
    RETURN Nil
 
-FUNCTION hwgui_SetTextboxValue( xDlg, xControl, xValue )
+FUNCTION gui_SetTextboxValue( xDlg, xControl, xValue )
 
    ( xDlg )
    xControl:Value := xValue
 
    RETURN Nil
 
-FUNCTION hwgui_SetLabelValue( xDlg, xControl, xValue )
+FUNCTION gui_SetLabelValue( xDlg, xControl, xValue )
 
    (xDlg)
    xControl:SetText( xValue )

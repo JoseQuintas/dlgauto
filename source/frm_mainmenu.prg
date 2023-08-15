@@ -35,10 +35,10 @@ FUNCTION frm_MainMenu( aAllSetup )
          ENDMENU
       NEXT
       MENU TITLE "Exit"
-         MENUITEM "&Exit" ACTION oDlg:Close()
+         MENUITEM "&Exit" ACTION gui_CloseDialog( oDlg )
       ENDMENU
    ENDMENU
-   ACTIVATE WINDOW oDlg CENTER
+   gui_ActivateDialog( oDlg )
 #endif
 
 #ifdef HBMK_HAS_HMGE
@@ -49,7 +49,7 @@ FUNCTION frm_MainMenu( aAllSetup )
       TITLE "Example" ;
       WINDOWTYPE MAIN
 
-      DEFINE MAIN MENU OF ("Main")
+      DEFINE MAIN MENU OF ( oDlg )
          FOR EACH aGrupoList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
                FOR EACH cDBF IN aGrupoList
@@ -58,12 +58,12 @@ FUNCTION frm_MainMenu( aAllSetup )
             END POPUP
          NEXT
          DEFINE POPUP "Sair"
-            MENUITEM "Sair" ACTION DoMethod( oDlg, "Release" )
+            MENUITEM "Sair" ACTION gui_CloseDialog( oDlg )
          END POPUP
       END MENU
    END WINDOW
 
-   ActivateDialog( "Main" )
+   gui_ActivateDialog( oDlg )
 #endif
 
 #ifdef HBMK_HAS_OOHG

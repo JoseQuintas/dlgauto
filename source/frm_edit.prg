@@ -5,7 +5,7 @@ frm_Edit - Create textbox/label on dialog
 #include "hbclass.ch"
 #include "frm_class.ch"
 
-FUNCTION frm_CreateEdit( Self )
+FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, oTab, nPageCount := 0, nLen, aList := {}
    LOCAL nLenList, nRow2, nCol2 // oPanel
@@ -24,7 +24,7 @@ FUNCTION frm_CreateEdit( Self )
    NEXT
    IF ::lWithTab
 
-      CreateTab( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 75 )
+      gui_CreateTab( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 75 )
       AAdd( ::aControlList, CFG_EDITEMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
       Atail( ::aControlList )[ CFG_FCONTROL ] := oTab
@@ -43,65 +43,61 @@ FUNCTION frm_CreateEdit( Self )
       IF aItem:__EnumIndex > nLenList
          EXIT
       ENDIF
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
-            nLen := Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 + iif( Empty( aItem[ CFG_VTABLE ] ), 0, aItem[ CFG_VLEN ] + 3 )
-         ELSE
-            nLen := Max( aItem[ CFG_FLEN ] + iif( Empty( aItem[ CFG_VTABLE ] ), 0, aItem[ CFG_VLEN ] + 3 ), Len( aItem[ CFG_CAPTION ] ) )
-         ENDIF
-         IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + ( nLen * 12 ) > ::nDlgWidth - 40 ) .OR. nRow > ::nPageLimit
-            IF ::lWithTab .AND. nRow > ::nPageLimit
-               IF nPageCount > 0
-
+      IF aItem[ CFG_CTLTYPE ] != TYPE_EDIT
+         LOOP
+      ENDIF
+      IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         nLen := Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 + iif( Empty( aItem[ CFG_VTABLE ] ), 0, aItem[ CFG_VLEN ] + 3 )
+      ELSE
+         nLen := Max( aItem[ CFG_FLEN ] + iif( Empty( aItem[ CFG_VTABLE ] ), 0, aItem[ CFG_VLEN ] + 3 ), Len( aItem[ CFG_CAPTION ] ) )
+      ENDIF
+      IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + ( nLen * 12 ) > ::nDlgWidth - 40 ) .OR. nRow > ::nPageLimit
+         IF ::lWithTab .AND. nRow > ::nPageLimit
+            IF nPageCount > 0
 #ifdef HBMK_HAS_HWGUI
-                  END PAGE OF oTab
+               END PAGE OF oTab
 #endif
-
-               ENDIF
-               nPageCount += 1
-#ifdef HBMK_HAS_HWGUI
-               BEGIN PAGE "Pag." + Str( nPageCount, 2 ) OF oTab
-#endif
-
-               nRow := 40
-               AAdd( aList, {} )
             ENDIF
-            nCol := 10
-            nRow += ( ::nLineSpacing * 2 )
+            nPageCount += 1
+#ifdef HBMK_HAS_HWGUI
+            BEGIN PAGE "Pag." + Str( nPageCount, 2 ) OF oTab
+#endif
+            nRow := 40
+            AAdd( aList, {} )
          ENDIF
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
-            nRow2 := nRow
-            nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 )
-         ELSE
-            nRow2 := nRow + ::nLineSpacing
-            nCol2 := nCol
-         ENDIF
+         nCol := 10
+         nRow += ( ::nLineSpacing * iif( ::nEditStyle < 3, 2, 3 ) )
+      ENDIF
+      IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         nRow2 := nRow
+         nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 )
+      ELSE
+         nRow2 := nRow + ::nLineSpacing
+         nCol2 := nCol
+      ENDIF
+      gui_CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), aItem[ CFG_CCONTROL ], ;
+         nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
 
-         CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), aItem[ CFG_CCONTROL ], ;
-            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
-
-         CreateTextbox( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, aItem[ CFG_FLEN ] * 12, ::nLineHeight, ;
-            @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
-            { || OkCurrent( aItem, Self ) } )
-
-         nCol += ( nLen + 3 ) * 12
-         IF ::lWithTab
-            AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
-         ENDIF
-         IF ! Empty( aItem[ CFG_VTABLE ] )
-            CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
-               nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nLen * 12, ;
-               ::nLineHeight, Space( aItem[ CFG_VLEN ] ), .T. )
-            nCol += ( aItem[ CFG_VLEN ] + 3 ) * 12
-         ENDIF
+      gui_CreateTextbox( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
+         nRow2, nCol2, aItem[ CFG_FLEN ] * 12, ::nLineHeight, ;
+         @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
+         { || ::Validate( aItem ) } )
+      nCol += ( nLen + 3 ) * 12
+      IF ::lWithTab
+         AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
+      ENDIF
+      IF ! Empty( aItem[ CFG_VTABLE ] )
+         gui_CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
+            nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 3 ) * 12 ), nLen * 12, ;
+            ::nLineHeight, Space( aItem[ CFG_VLEN ] ), .T. )
+         nCol += ( aItem[ CFG_VLEN ] + 3 ) * 12
       ENDIF
    NEXT
 #ifdef HBMK_HAS_HWGUI
    // ghost for Getlist
    AAdd( ::aControlList, CFG_EDITEMPTY )
    Atail( ::aControlList )[ CFG_FCONTROL ] := "DummyTextbox"
-   CreateTextbox( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+   gui_CreateTextbox( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
       nRow, nCol, 0, 0, "", "", 0, { || .T. } )
    IF ::lWithTab
       END PAGE OF oTab
@@ -122,53 +118,8 @@ FUNCTION frm_CreateEdit( Self )
 #ifdef HBMK_HAS_HWGUI
 STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
 
-   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), SetFocusAny( Nil, oEditNext ), .T. }
+   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), gui_SetFocus( Nil, oEditNext ), .T. }
 
    RETURN Nil
 #endif
 
-/* validation */
-
-STATIC FUNCTION OkCurrent( aItem, Self )
-
-   LOCAL nSelect, lFound := .T., xValue, nPos
-
-   nPos := hb_AScan( ::aControlList, { | e | e[ CFG_CTLTYPE ] == TYPE_BUTTON .AND. ;
-      e[ CFG_CAPTION ] == "Cancel" } )
-   IF nPos != 0
-      IF IsCurrentFocus( ::oDlg, ::aControlList[ nPos, CFG_FCONTROL ] )
-         RETURN .T.
-      ENDIF
-   ENDIF
-
-   xValue := GetTextboxValue( ::oDlg, aItem[ CFG_FCONTROL ] )
-   IF aItem[ CFG_ISKEY ]
-      SEEK xValue
-      IF ::cSelected == "INSERT"
-         IF ! Eof()
-            MsgGeneric( "Código já cadastrado" )
-            SetFocusAny( ::oDlg, aItem[ CFG_FCONTROL ] ) // hwgui do not need this
-            RETURN .F.
-         ENDIF
-      ELSE
-         IF Eof()
-            MsgGeneric( "Código não cadastrado" )
-            RETURN .F.
-         ENDIF
-      ENDIF
-   ENDIF
-   IF ! Empty( aItem[ CFG_VTABLE ] )
-      nSelect := Select()
-      SELECT ( Select( aItem[ CFG_VTABLE ] ) )
-      SEEK xValue
-      lFound := ! Eof()
-      xValue := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
-      SELECT ( nSelect )
-      IF ! lFound
-         MsgGeneric( "Código não cadastrado" )
-         SetFocusAny( ::oDlg, aItem[ CFG_FCONTROL ] ) // hwgui do not need this
-      ENDIF
-      SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], xValue )
-   ENDIF
-
-   RETURN lFound

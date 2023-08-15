@@ -23,10 +23,10 @@ FUNCTION frm_Preview( cFileMask )
       { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } }, ;
       { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } } }
 
-   CreateDialog( @oFrm:oDlg, 0, 0, oFrm:nDlgWidth, oFrm:nDlgHeight, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:oDlg ) } )
+   gui_CreateDialog( @oFrm:oDlg, 0, 0, oFrm:nDlgWidth, oFrm:nDlgHeight, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:oDlg ) } )
    frm_Buttons( oFrm, .F. )
-   CreateMLTextbox( oFrm:oDlg, @oEdit, 65, 10, oFrm:nDlgWidth - 40, oFrm:nDlgHeight - 100, "" )
-   ActivateDialog( oFrm:oDlg )
+   gui_CreateMLTextbox( oFrm:oDlg, @oEdit, 65, 10, oFrm:nDlgWidth - 40, oFrm:nDlgHeight - 100, "" )
+   gui_ActivateDialog( oFrm:oDlg )
 
    RETURN Nil
 
@@ -39,7 +39,7 @@ STATIC FUNCTION frm_SetText( oEdit, aFileList, nIndex, xDlg )
    ELSE
       cTxt := MemoRead( aFileList[ nIndex, F_NAME ] )
    ENDIF
-   SetTextboxValue( xDlg, oEdit, cTxt )
+   gui_SetTextboxValue( xDlg, oEdit, cTxt )
 
    RETURN Nil
 
@@ -63,7 +63,7 @@ STATIC FUNCTION Button_Click( cCaption, aFileList, nIndex, xDlg, oEdit )
       nIndex := Len( aFileList )
       frm_SetText( oEdit, aFileList, nIndex, xDlg )
    CASE cCaption == "Exit"
-      CloseDlg( xDlg )
+      gui_CloseDialog( xDlg )
    ENDCASE
 
    RETURN Nil
