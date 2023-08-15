@@ -136,11 +136,9 @@ STATIC FUNCTION OkCurrent( aItem, Self )
    nPos := hb_AScan( ::aControlList, { | e | e[ CFG_CTLTYPE ] == TYPE_BUTTON .AND. ;
       e[ CFG_CAPTION ] == "Cancel" } )
    IF nPos != 0
-#ifdef HBMK_HAS_HWGUI
-      IF hwg_SelfFocus( ::aControlList[ nPos, CFG_FCONTROL ]:Handle )
+      IF IsCurrentFocus( ::oDlg, ::aControlList[ nPos, CFG_FCONTROL ] )
          RETURN .T.
       ENDIF
-#endif
    ENDIF
 
    xValue := GetTextboxValue( ::oDlg, aItem[ CFG_FCONTROL ] )

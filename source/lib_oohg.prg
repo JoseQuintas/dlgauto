@@ -4,6 +4,12 @@ lib_oohg - oohg source code included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION oohg_IsCurrentFocus( xDlg, xControl )
+
+      (xDlg); (xControl)
+
+      RETURN .F.
+
 FUNCTION oohg_GetTextBoxValue( xDlg, xControl )
 
    (xDlg)

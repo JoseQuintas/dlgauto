@@ -5,6 +5,7 @@ lib - wrapper for lib functions, and #include lib source code
 #ifdef HBMK_HAS_HWGUI
 
 #include "lib_hwgui.prg"
+FUNCTION IsCurrentFocus( ... ); RETURN hwgui_IsCurrentFocus( ... )
 FUNCTION MsgGeneric( ... ); RETURN hwg_MsgInfo( ... )
 FUNCTION GetTextboxValue( ... ); RETURN hwgui_GetTextboxValue( ... )
 FUNCTION CreateTab( ... ); RETURN hwgui_CreateTab( ... )
@@ -26,6 +27,7 @@ FUNCTION SetLabelValue( ... ); RETURN hwgui_SetLabelValue( ... )
 #ifdef HBMK_HAS_HMGE
 
 #include "lib_hmge.prg"
+FUNCTION IsCurrentFocus( ... ); RETURN hmge_IsCurrentFocus( ... )
 FUNCTION MsgGeneric( ... ); RETURN MsgStop( ... )
 FUNCTION GetTextboxValue( ... ); RETURN hmge_GetTextboxValue( ... )
 FUNCTION CreateTab( ... ); RETURN hmge_CreateTab( ... )
@@ -50,6 +52,7 @@ FUNCTION SetLabelValue( ... ); RETURN hmge_SetLabelValue( ... )
 #ifdef HBMK_HAS_OOHG
 
 #include "lib_oohg.prg"
+FUNCTION IsCurrentFocus( ... ); RETURN oohg_IsCurrentFocus( ... )
 FUNCTION MsgGeneric( ... ); RETURN MsgStop( ... )
 FUNCTION GetTextboxValue( ... ); RETURN oohg_GetTextboxValue( ... )
 FUNCTION CreateTab( ... ); RETURN oohg_CreateTab( ... )

@@ -4,6 +4,12 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION hmge_IsCurrentFocus( xDlg, xControl )
+
+      (xDlg); (xControl)
+
+      RETURN .F.
+
 FUNCTION hmge_GetTextBoxValue( xDlg, xControl )
 
    (xDlg)

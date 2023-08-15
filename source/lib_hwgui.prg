@@ -4,6 +4,11 @@ lib_hwgui - hwgui source code included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION hwgui_IsCurrentFocus( xDlg, xControl )
+
+      (xDlg)
+      RETURN hwg_SelfFocus( xControl:Handle )
+
 FUNCTION hwgui_GetTextBoxValue( xDlg, xControl )
 
    (xDlg)
