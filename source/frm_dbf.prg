@@ -14,7 +14,7 @@ FUNCTION frm_DBF()
          { "CDENDERECO",     "C", 50, 0 }, ;
          { "CDBAIRRO", "C", 20, 0 }, ;
          { "CDCIDADE", "C", 20, 0 }, ;
-         { "CDUF", "c", 2, 0 }, ;
+         { "CDUF", "C", 2, 0 }, ;
          { "CDCEP", "C", 9, 0 }, ;
          { "CDTELEFONE", "C", 15, 0 }, ;
          { "CDEMAIL", "C", 50, 0 }, ;

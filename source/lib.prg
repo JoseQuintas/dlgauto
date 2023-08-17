@@ -1,5 +1,5 @@
 /*
-lib - wrapper for lib functions, and #include lib source code
+lib - select apropriate source code
 */
 
 #ifdef HBMK_HAS_HWGUI

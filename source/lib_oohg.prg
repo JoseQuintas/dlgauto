@@ -2,6 +2,8 @@
 lib_oohg - oohg source code included in frm_gui
 */
 
+STATIC nNumControl := 1
+
 #include "frm_class.ch"
 
 FUNCTION gui_MsgGeneric( cText )
@@ -22,6 +24,10 @@ FUNCTION gui_GetTextBoxValue( xDlg, xControl )
 
 FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
+   IF Empty( xControl )
+      xControl := "Control" + StrZero(nNumControl,10)
+      nNumControl += 1
+   ENDIF
    // no tab
    xControl := xDlg
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
@@ -30,6 +36,10 @@ FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
 FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
+   IF Empty( xControl )
+      xControl := "Control" + StrZero(nNumControl,10)
+      nNumControl += 1
+   ENDIF
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
    RETURN Nil
@@ -42,6 +52,11 @@ FUNCTION gui_ActivateDialog( xDlg )
    RETURN Nil
 
 FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+
+   IF Empty( xDlg )
+      xDlg := "Control" + StrZero(nNumControl,10)
+      nNumControl += 1
+   ENDIF
 
    DEFINE WINDOW ( xDlg ) ;
       AT     nCol, nRow ;
@@ -66,6 +81,10 @@ FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
 FUNCTION gui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
+   IF Empty( xControl )
+      xControl := "Control" + StrZero(nNumControl,10)
+      nNumControl += 1
+   ENDIF
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (xValue)
 
    RETURN Nil
@@ -73,6 +92,10 @@ FUNCTION gui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValu
 FUNCTION gui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
+   IF Empty( xControl )
+      xControl := "Control" + StrZero(nNumControl,10)
+      nNumControl += 1
+   ENDIF
    (bValid)
    (cPicture)
    DEFINE TEXTBOX ( xControl )
@@ -130,6 +153,10 @@ FUNCTION gui_EnableButton( xDlg, xControl, lEnable )
 
 FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
+   IF Empty( xControl )
+      xControl := "Control" + StrZero(nNumControl,10)
+      nNumControl += 1
+   ENDIF
    (xDlg)
    (lBorder)
    IF lBorder
@@ -158,6 +185,10 @@ FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 
 FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
+   IF Empty( xControl )
+      xControl := "Control" + StrZero(nNumControl,10)
+      nNumControl += 1
+   ENDIF
    ( xDlg )
 
    @ nRow, nCol BUTTON ( xControl ) ;
@@ -181,5 +212,11 @@ FUNCTION gui_SetTextboxValue( xDlg, xControl, xValue )
 FUNCTION gui_SetLabelValue( xDlg, xControl, xValue )
 
    SetProperty( xDlg, xControl, "VALUE", xValue )
+
+   RETURN Nil
+
+FUNCTION gui_Browse( nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue )
+
+   (nRow);(nCol);(nWidth);(nHeight);(oTBrowse);(cField);(xValue)
 
    RETURN Nil

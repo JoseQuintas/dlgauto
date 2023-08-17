@@ -28,6 +28,7 @@ CREATE CLASS frm_Class
 
    VAR oDlg
    VAR aControlList   INIT {}
+   VAR aAllSetup      INIT {}
 
    METHOD CreateControls()     INLINE frm_Buttons( Self ), frm_Edit( Self )
    METHOD ButtonSaveOn()
@@ -37,7 +38,7 @@ CREATE CLASS frm_Class
    METHOD EditOff()
    METHOD Print()              INLINE frm_Print( Self )
    METHOD Execute()            INLINE frm_Dialog( Self )
-   METHOD View()               INLINE Nil
+   METHOD View()               INLINE frm_Browse( Self, "", "", ::cFileDbf, Nil ), ::UpdateEdit()
    METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditOn()
    METHOD Delete()
    METHOD Insert()             INLINE Nil

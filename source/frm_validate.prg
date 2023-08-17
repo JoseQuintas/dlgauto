@@ -41,7 +41,7 @@ FUNCTION frm_Validate( aItem, Self )
       xValue := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
       SELECT ( nSelect )
       IF ! lFound
-         gui_MsgGeneric( "Código não cadastrado" )
+         frm_Browse( Self, ::oDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
          gui_SetFocus( ::oDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
       ENDIF
       gui_SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], xValue )

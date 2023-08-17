@@ -17,9 +17,6 @@ FUNCTION frm_Edit( Self )
 
    FOR EACH aItem IN ::aEditList
       aItem[ CFG_VALUE ]    := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
-      aItem[ CFG_CCONTROL ] := "LABEL_C" + StrZero( aItem:__EnumIndex, 4 )
-      aItem[ CFG_FCONTROL ] := "TEXT"    + StrZero( aItem:__EnumIndex, 4 )
-      aItem[ CFG_VCONTROL ] := "LABEL_V" + StrZero( aItem:__EnumIndex, 4 )
       AAdd( ::aControlList, AClone( aItem ) )
    NEXT
    IF ::lWithTab

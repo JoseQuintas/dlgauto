@@ -17,7 +17,7 @@
 #define CFG_VCONTROL  17                    // app control for VSHOW
 #define CFG_ACTION    18                    // app action for button
 
-#define CFG_EDITEMPTY { "", "C", 1, 0, .F., "", "", .T., "", "", "", Nil, 0, TYPE_EDIT, "", "", "", Nil }
+#define CFG_EDITEMPTY { "", "C", 1, 0, .F., "", "", .T., "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil }
 
 #define TYPE_BUTTON   1
 #define TYPE_EDIT     2

@@ -16,6 +16,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
    oFrm:cOptions   := "IEDP"
    oFrm:lWithTab   := .F.
    oFrm:nEditStyle := 3 // from 1 to 3
+   oFrm:aAllSetup  := aAllSetup
    AAdd( oFrm:aOptionList, { "Mail", { || Nil } } )
 
    nPos := hb_ASCan( aAllSetup, { | e | e[ 1 ] == cDBF } )

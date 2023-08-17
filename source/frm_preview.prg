@@ -15,7 +15,6 @@ FUNCTION frm_Preview( cFileMask )
    nIndex := 1
 
    oFrm := frm_Class():New()
-   oFrm:oDlg := "frm_Preview"
    oFrm:cOptions := ""
    oFrm:aOptionList := { ;
       { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } }, ;

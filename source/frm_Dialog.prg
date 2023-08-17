@@ -25,7 +25,6 @@ FUNCTION frm_Dialog( Self )
    NEXT
    SELECT ( Select( ::cFileDbf ) )
 
-   ::oDlg := "FRM" + ::cFileDBF
    gui_CreateDialog( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle, { || ::EditOff(), ::UpdateEdit() } )
    ::CreateControls()
    gui_ActivateDialog( ::oDlg )

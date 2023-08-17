@@ -9,10 +9,6 @@ FUNCTION frm_Buttons( Self, lDefault )
    LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
 
    hb_Default( @lDefault, .T. )
-   IF "E" $ ::cOptions
-      AAdd( aList, { "Save",     { || ::Save() } } )
-      AAdd( aList, { "Cancel",   { || ::Cancel() } } )
-   ENDIF
    IF "I" $ ::cOptions
       AAdd( aList, { "Insert",   { || ::Insert() } } )
    ENDIF
@@ -35,6 +31,10 @@ FUNCTION frm_Buttons( Self, lDefault )
    FOR EACH aItem IN ::aOptionList
       AAdd( aList, { aItem[1], aItem[2] } )
    NEXT
+   IF "E" $ ::cOptions
+      AAdd( aList, { "Save",     { || ::Save() } } )
+      AAdd( aList, { "Cancel",   { || ::Cancel() } } )
+   ENDIF
    AAdd( aList, { "Exit",     { || ::Exit() } } )
 
    nCol := 10
@@ -46,7 +46,6 @@ FUNCTION frm_Buttons( Self, lDefault )
       Atail( ::aControlList )[ CFG_ACTION ]   := aItem[ 2 ]
    NEXT
    FOR EACH aItem IN ::aControlList
-      aItem[ CFG_FCONTROL ] := "btn" + Ltrim( Str( aItem:__EnumIndex ) )
       gui_CreateButton( ::oDlg, @aItem[ CFG_FCONTROL ], nRow, nCol, ::nButtonSize, ::nButtonSize, ;
          aItem[ CFG_CAPTION ], IconFromCaption( aItem[ CFG_CAPTION ] ), aItem[ CFG_ACTION ] )
 
