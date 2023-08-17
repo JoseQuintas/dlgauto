@@ -26,7 +26,7 @@ FUNCTION frm_DBF()
          APPEND BLANK
          REPLACE IDCADASTRO WITH nCont, CDNOME WITH cTxt, CDCNPJ WITH cTxt, ;
             CDENDERECO WITH cTxt, CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, ;
-            CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, CDUF WITH Str( nCont, 1 ), ;
+            CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, CDUF WITH StrZero( nCont, 2 ), ;
             CDCEP WITH cTxt, CDTELEFONE WITH cTxt, CDEMAIL WITH cTxt, ;
             CDVENDEDOR WITH nCont, CDPORTADOR WITH nCont
       NEXT
@@ -162,7 +162,7 @@ FUNCTION frm_DBF()
       FOR nCont = 1 TO 9
          cTxt := Replicate( "UF" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE UFSIGLA WITH Str( nCont, 1 ), UFNOME WITH cTxt
+         REPLACE UFSIGLA WITH StrZero( nCont, 2 ), UFNOME WITH cTxt
       NEXT
       INDEX ON field->UFSIGLA TAG primary
       USE

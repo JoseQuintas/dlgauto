@@ -17,6 +17,7 @@ PROCEDURE Main()
 #ifdef HBMK_HAS_HMGE
    SET OOP ON
    SET WINDOW MAIN OFF
+   SET NAVIGATION EXTENDED
 #endif
    RddSetDefault( "DBFCDX" )
    frm_DBF()

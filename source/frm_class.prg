@@ -92,7 +92,7 @@ METHOD EditOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! aItem[ CFG_ISKEY ]
-         gui_EnableTextbox( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
+         gui_EnableText( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound
             lFound := .T.
             oFirstEdit := aItem[ CFG_FCONTROL ]
@@ -110,7 +110,7 @@ METHOD EditOff() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         gui_EnableTextbox( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
+         gui_EnableText( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
    ::ButtonSaveOff()
@@ -138,7 +138,7 @@ METHOD UpdateEdit() CLASS frm_Class
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ! Empty( aItem[ CFG_FNAME ] )
             xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
-            gui_SetTextboxValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
+            gui_SetTextValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
             IF ! Empty( aItem[ CFG_VTABLE ] )
                nSelect := Select()
                SELECT ( Select( aItem[ CFG_VTABLE ] ) )

@@ -4,6 +4,18 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 #include "frm_class.ch"
 
+FUNCTION gui_PageEnd( xDlg, xControl )
+
+   (xDlg); (xControl)
+
+   RETURN Nil
+
+FUNCTION gui_PageBegin( xDlg, xControl, cText )
+
+   (xDlg); (xControl); (cText)
+
+   RETURN Nil
+
 FUNCTION gui_MsgGeneric( cText )
 
    RETURN Msgbox( cText )
@@ -14,7 +26,7 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       RETURN .F.
 
-FUNCTION gui_GetTextBoxValue( xDlg, xControl )
+FUNCTION gui_GetTextValue( xDlg, xControl )
 
    (xDlg)
 
@@ -64,7 +76,7 @@ FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    RETURN Nil
 
-FUNCTION gui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+FUNCTION gui_CreateMLText( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    IF Empty( xControl )
       xControl := gui_newctlname()
@@ -82,7 +94,7 @@ FUNCTION gui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValu
 
    RETURN Nil
 
-FUNCTION gui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
+FUNCTION gui_CreateText( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    IF Empty( xControl )
@@ -123,7 +135,7 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_EnableTextbox( xDlg, xControl, lEnable )
+FUNCTION gui_EnableText( xDlg, xControl, lEnable )
 
    SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
@@ -189,7 +201,7 @@ FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    RETURN Nil
 
-FUNCTION gui_SetTextboxValue( xDlg, xControl, xValue )
+FUNCTION gui_SetTextValue( xDlg, xControl, xValue )
 
    // NOTE: string value, except if declared different on textbox creation
    SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )

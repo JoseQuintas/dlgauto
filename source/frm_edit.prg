@@ -51,14 +51,10 @@ FUNCTION frm_Edit( Self )
       IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + ( nLen * 12 ) > ::nDlgWidth - 40 ) .OR. nRow > ::nPageLimit
          IF ::lWithTab .AND. nRow > ::nPageLimit
             IF nPageCount > 0
-#ifdef HBMK_HAS_HWGUI
-               END PAGE OF oTab
-#endif
+               gui_PageEnd( ::oDlg, oTab )
             ENDIF
             nPageCount += 1
-#ifdef HBMK_HAS_HWGUI
-            BEGIN PAGE "Pag." + Str( nPageCount, 2 ) OF oTab
-#endif
+            gui_PageBegin( ::oDlg, oTab, "Pag." + Str( nPageCount, 2 ) )
             nRow := 40
             AAdd( aList, {} )
          ENDIF
@@ -72,10 +68,10 @@ FUNCTION frm_Edit( Self )
          nRow2 := nRow + ::nLineSpacing
          nCol2 := nCol
       ENDIF
-      gui_CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), aItem[ CFG_CCONTROL ], ;
+      gui_CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_CCONTROL ], ;
          nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
 
-      gui_CreateTextbox( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
+      gui_CreateText( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
          nRow2, nCol2, aItem[ CFG_FLEN ] * 12 + 12, ::nLineHeight, ;
          @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
          { || ::Validate( aItem ) } )
@@ -93,11 +89,10 @@ FUNCTION frm_Edit( Self )
 #ifdef HBMK_HAS_HWGUI
    // ghost for Getlist
    AAdd( ::aControlList, CFG_EMPTY )
-   Atail( ::aControlList )[ CFG_FCONTROL ] := "DummyTextbox"
-   gui_CreateTextbox( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+   gui_CreateText( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
       nRow, nCol, 0, 0, "", "", 0, { || .T. } )
    IF ::lWithTab
-      END PAGE OF oTab
+      gui_PageEnd( ::oDlg, oTab )
       FOR nTab = 1 TO Len( aList )
          nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
          SetLostFocus( aList[ nTab, Len( aList[ nTab ] ) /* *ghost* - 1 */ ], oTab, nPageNext, aList[ nPageNext, 1 ] )

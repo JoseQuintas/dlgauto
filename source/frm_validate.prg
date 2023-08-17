@@ -16,7 +16,7 @@ FUNCTION frm_Validate( aItem, Self )
       ENDIF
    ENDIF
 
-   xValue := gui_GetTextboxValue( ::oDlg, aItem[ CFG_FCONTROL ] )
+   xValue := gui_GetTextValue( ::oDlg, aItem[ CFG_FCONTROL ] )
    IF aItem[ CFG_ISKEY ]
       SEEK xValue
       IF ::cSelected == "INSERT"
