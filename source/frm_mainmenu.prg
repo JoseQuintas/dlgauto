@@ -25,7 +25,7 @@ FUNCTION frm_MainMenu( aAllSetup )
    NEXT
 
 #ifdef HBMK_HAS_HWGUI
-   INIT WINDOW oDlg TITLE "Example" AT 0, 0 SIZE 512, 384
+   INIT WINDOW oDlg TITLE "Example" AT 0, 0 SIZE 1024, 768
    MENU OF oDlg
       FOR EACH aGrupoList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) )
@@ -43,9 +43,9 @@ FUNCTION frm_MainMenu( aAllSetup )
 
 #ifdef HBMK_HAS_HMGE
    DEFINE WINDOW ( oDlg ) ;
-      AT 1000, 500 ;
-      WIDTH 512 ;
-      HEIGHT 384 ;
+      AT 0, 0 ;
+      WIDTH 1024 ;
+      HEIGHT 768 ;
       TITLE "Example" ;
       WINDOWTYPE MAIN
 
@@ -68,10 +68,10 @@ FUNCTION frm_MainMenu( aAllSetup )
 
 #ifdef HBMK_HAS_OOHG
    WITH OBJECT oDlg := TFormMain():Define()
-      :Col := 1000
-      :Row := 500
-      :Width := 900
-      :Height := 600
+      :Col := 0
+      :Row := 0
+      :Width := 1024
+      :Height := 768
       :Title := "DlgAuto"
       oMenuMain := TMenuMain():Define(,"MyMenu")
          FOR EACH aGrupoList IN aMenuList

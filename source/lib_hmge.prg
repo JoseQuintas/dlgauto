@@ -4,8 +4,6 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 #include "frm_class.ch"
 
-STATIC nNumControl := 1
-
 FUNCTION gui_MsgGeneric( cText )
 
    RETURN Msgbox( cText )
@@ -25,8 +23,7 @@ FUNCTION gui_GetTextBoxValue( xDlg, xControl )
 FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := "Control" + StrZero(nNumControl,10)
-      nNumControl += 1
+      xControl := gui_newctlname()
    ENDIF
    // no tab
    xControl := xDlg
@@ -37,8 +34,7 @@ FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := "Control" + StrZero(nNumControl,10)
-      nNumControl += 1
+      xControl := gui_newctlname()
    ENDIF
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
@@ -54,8 +50,7 @@ FUNCTION gui_ActivateDialog( xDlg )
 FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    IF Empty( xDlg )
-      xDlg := "Control" + StrZero(nNumControl,10)
-      nNumControl += 1
+      xDlg := gui_newctlname()
    ENDIF
 
    DEFINE WINDOW ( xDlg ) ;
@@ -72,8 +67,7 @@ FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 FUNCTION gui_CreateMLTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    IF Empty( xControl )
-      xControl := "Control" + StrZero(nNumControl,10)
-      nNumControl += 1
+      xControl := gui_newctlname()
    ENDIF
    DEFINE EDITBOX ( xControl )
       PARENT ( xDlg )
@@ -92,8 +86,7 @@ FUNCTION gui_CreateTextbox( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    IF Empty( xControl )
-      xControl := "Control" + StrZero(nNumControl,10)
-      nNumControl += 1
+      xControl := gui_newctlname()
    ENDIF
    (bValid)
    DEFINE TEXTBOX ( xControl )
@@ -145,8 +138,7 @@ FUNCTION gui_EnableButton( xDlg, xControl, lEnable )
 FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    IF Empty( xControl )
-      xControl := "Control" + StrZero(nNumControl,10)
-      nNumControl += 1
+      xControl := gui_newctlname()
    ENDIF
    // não mostra borda
    //DEFINE LABEL ( xControl )
@@ -172,8 +164,7 @@ FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    IF Empty( xControl )
-      xControl := "Control" + StrZero(nNumControl,10)
-      nNumControl += 1
+      xControl := gui_newctlname()
    ENDIF
    DEFINE BUTTONEX ( xControl )
       PARENT ( xDlg )
@@ -211,9 +202,34 @@ FUNCTION gui_SetLabelValue( xDlg, xControl, xValue )
 
    RETURN Nil
 
-FUNCTION gui_Browse( nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue )
 
-   (nRow);(nCol);(nWidth);(nHeight);(oTBrowse);(cField);(xValue)
+   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
+
+   IF Empty( xControl )
+      xControl := gui_newctlname()
+   ENDIF
+   FOR EACH aItem IN oTbrowse
+      AAdd( aHeaderList, aItem[1] )
+      AAdd( aFieldList, aItem[2] )
+      AAdd( aWidthList, Len( Eval( aItem[2] ) ) * 12 )
+   NEXT
+   @ nRow, nCol BROWSE ( xControl ) ;
+      OF ( xDlg ) ;
+      WIDTH nWidth ;
+      HEIGHT nHeight ;
+      HEADERS aHeaderList ;
+      WIDTHS aWidthList ;
+      FIELDS aFieldList
+
+   (cField);(xValue)
 
    RETURN Nil
 
+STATIC FUNCTION gui_newctlname()
+
+   STATIC nCount := 0
+
+   nCount += 1
+
+   RETURN "CTL" + StrZero( nCount, 10 )

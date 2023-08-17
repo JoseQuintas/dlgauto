@@ -186,21 +186,22 @@ STATIC FUNCTION BtnSetImageText( hHandle, cCaption, cResName, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION gui_Browse( nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue )
 
-   LOCAL oBrw, aItem
+   LOCAL aItem
 
-   @ nCol, nRow BROWSE oBrw DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL
+   @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL
 
-   oBrw:bOther := { |oBrw, msg, wParam, lParam| fKeyDown( oBrw, msg, wParam, lParam, cField, @xValue ) }
+   xControl:bOther := { |xControl, msg, wParam, lParam| fKeyDown( xControl, msg, wParam, lParam, cField, @xValue ) }
 
    FOR EACH aItem IN oTBrowse
-      ADD COLUMN aItem[2] TO oBrw HEADER aItem[1] LENGTH Len( Eval( aItem[2] ) ) JUSTIFY LINE DT_LEFT
+      ADD COLUMN aItem[2] TO xControl HEADER aItem[1] LENGTH Len( Eval( aItem[2] ) ) JUSTIFY LINE DT_LEFT
    NEXT
+   (xDlg)
 
    RETURN Nil
 
-STATIC FUNCTION fKeyDown(oBrw, msg, wParam, lParam, cField, xValue )
+STATIC FUNCTION fKeyDown( xControl, msg, wParam, lParam, cField, xValue )
 
    LOCAL nKEY
 
@@ -213,7 +214,7 @@ STATIC FUNCTION fKeyDown(oBrw, msg, wParam, lParam, cField, xValue )
          hwg_EndDialog()
       ENDIF
    ENDIF
-   (oBrw)
+   (xControl)
    (lParam)
 
    RETURN .T.
