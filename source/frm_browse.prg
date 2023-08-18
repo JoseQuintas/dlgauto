@@ -6,22 +6,26 @@ frm_browse - browse
 
 FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
 
-   LOCAL oTBrowse := {}, aField, xValue, cField, nSelect, nPos
+   LOCAL oTBrowse := {}, aItem, xValue, cField, nSelect, nPos
 
    nSelect := Select()
    SELECT ( cTable )
 
    nPos := hb_Ascan( ::aAllSetup, { | e | e[1] == cTable } )
-   FOR EACH aField IN ::aAllSetup[ nPos, 2 ]
-      AAdd( oTBrowse, { aField[ CFG_CAPTION ], { || Transform( FieldGet(FieldNum(aField[ CFG_FNAME ])), aField[ CFG_FPICTURE ] ) } } )
-      IF aField[ CFG_ISKEY ]
-         cField := aField[ CFG_FNAME ]
+   FOR EACH aItem IN ::aAllSetup[ nPos, 2 ]
+      AAdd( oTBrowse, { ;
+         aItem[ CFG_CAPTION ], ;
+         { || Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), aItem[ CFG_FPICTURE ] ) }, ;
+          aItem[ CFG_FNAME ] } ) // hwgui codeblock, minigui field name
+      IF aItem[ CFG_ISKEY ]
+         cField := aItem[ CFG_FNAME ]
       ENDIF
    NEXT
 
    DialogBrowse( oTBrowse, cTable, cField, @xValue )
 
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
+      hwg_MsgInfo( "variable is " + Transform( xValue, "" ) )
       gui_SetTextValue( xDlg, xControl, xValue )
    ENDIF
 
@@ -36,13 +40,16 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
 
    oThisForm := frm_Class():New()
    oThisForm:cOptions := ""
-   gui_CreateDialog( @oThisForm:oDlg, 0, 0, oThisForm:nDlgWidth, oThisForm:nDlgHeight, cTable, { || Nil } )
+   gui_CreateDialog( @oThisForm:oDlg, 0, 0, oThisForm:nDlgWidth, oThisForm:nDlgHeight, cTable, { || Nil }, ;
+      { || aItem[ CFG_FCONTROL ]:SetFocus() } )
    frm_Buttons( oThisForm, .F. )
    AAdd( oThisForm:aControlList, CFG_EMPTY )
    aItem := Atail( oThisForm:aControlList )
    aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
 
-   gui_Browse( oThisForm:oDlg, @aItem[ CFG_FCONTROL ], 70, 5, oThisForm:nDlgWidth - 10, oThisForm:nDlgHeight - 80, oTbrowse, cField, @xValue )
+   gui_Browse( oThisForm:oDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
+      oThisForm:nDlgWidth - 10, oThisForm:nDlgHeight - 80, ;
+      oTbrowse, cField, @xValue )
 
    gui_ActivateDialog( oThisForm:oDlg )
 

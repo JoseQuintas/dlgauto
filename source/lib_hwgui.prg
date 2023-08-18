@@ -73,7 +73,6 @@ FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
       SIZE      nWidth, nHeight ;
       BACKCOLOR COLOR_WHITE ;
       ON INIT   bAction
-   //hwg_SetColorInFocus(.T., , COLOR_YELLOW )
 
    RETURN Nil
 
@@ -234,11 +233,12 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL
 
-   xControl:bOther := { |xControl, msg, wParam, lParam| fKeyDown( xControl, msg, wParam, lParam, cField, @xValue ) }
-
    FOR EACH aItem IN oTBrowse
       ADD COLUMN aItem[2] TO xControl HEADER aItem[1] LENGTH Len( Eval( aItem[2] ) ) JUSTIFY LINE DT_LEFT
    NEXT
+
+   xControl:bOther := { |xControl, msg, wParam, lParam| fKeyDown( xControl, msg, wParam, lParam, cField, @xValue ) }
+
    (xDlg)
 
    RETURN Nil
@@ -248,7 +248,7 @@ STATIC FUNCTION fKeyDown( xControl, msg, wParam, lParam, cField, xValue )
    LOCAL nKEY
 
    IF msg == WM_KEYDOWN
-      nKey := hwg_PtrToUlong( wParam ) //wParam
+      nKey := hwg_PtrToUlong( wParam )
       IF nKey = VK_RETURN
          IF ! Empty( cField )
             xValue := FieldGet( FieldNum( cField, xValue ) )
