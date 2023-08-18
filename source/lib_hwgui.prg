@@ -73,7 +73,7 @@ FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
       SIZE      nWidth, nHeight ;
       BACKCOLOR COLOR_WHITE ;
       ON INIT   bAction
-   hwg_SetColorInFocus(.T., , COLOR_YELLOW )
+   //hwg_SetColorInFocus(.T., , COLOR_YELLOW )
 
    RETURN Nil
 
