@@ -25,7 +25,7 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    DialogBrowse( oTBrowse, cTable, cField, @xValue )
 
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
-      hwg_MsgInfo( "variable is " + Transform( xValue, "" ) )
+      //hwg_MsgInfo( "variable is " + Transform( xValue, "" ) )
       gui_SetTextValue( xDlg, xControl, xValue )
    ENDIF
 
@@ -49,7 +49,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
 
    gui_Browse( oThisForm:oDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
       oThisForm:nDlgWidth - 10, oThisForm:nDlgHeight - 80, ;
-      oTbrowse, cField, @xValue )
+      oTbrowse, cField, @xValue, cTable )
 
    gui_ActivateDialog( oThisForm:oDlg )
 

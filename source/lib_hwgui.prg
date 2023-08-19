@@ -227,7 +227,7 @@ STATIC FUNCTION BtnSetImageText( hHandle, cCaption, cResName, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
 
    LOCAL aItem
 
@@ -239,7 +239,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    xControl:bOther := { |xControl, msg, wParam, lParam| fKeyDown( xControl, msg, wParam, lParam, cField, @xValue ) }
 
-   (xDlg)
+   (xDlg); (workarea)
 
    RETURN Nil
 

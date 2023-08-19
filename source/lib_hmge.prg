@@ -214,7 +214,7 @@ FUNCTION gui_SetLabelValue( xDlg, xControl, xValue )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
@@ -223,8 +223,8 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
-      AAdd( aFieldList, aItem[2] )
-      AAdd( aWidthList, Len( Eval( aItem[2] ) ) * 12 )
+      AAdd( aFieldList, aItem[3] )
+      AAdd( aWidthList, Len( Transform(FieldGet(FieldNum(aItem[3])),"")) * 10 )
    NEXT
    @ nRow, nCol BROWSE ( xControl ) ;
       OF ( xDlg ) ;
@@ -232,6 +232,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       HEIGHT nHeight ;
       HEADERS aHeaderList ;
       WIDTHS aWidthList ;
+      WORKAREA ( workarea ) ;
       FIELDS aFieldList
 
    (cField);(xValue)

@@ -192,7 +192,6 @@ FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
    IF Empty( xControl )
       xControl := gui_newctlname()
    ENDIF
-   ( xDlg )
 
    @ nRow, nCol BUTTON ( xControl ) ;
       PARENT ( xDlg ) ;
@@ -201,7 +200,7 @@ FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       ACTION   Eval( bAction ) ;
       WIDTH    nWidth ;
       HEIGHT   nHeight ;
-      WINDRAW
+      IMAGEALIGN TOP
 
    RETURN Nil
 
@@ -218,9 +217,28 @@ FUNCTION gui_SetLabelValue( xDlg, xControl, xValue )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
 
-   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(oTBrowse);(cField);(xValue)
+   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
+
+   IF Empty( xControl )
+      xControl := gui_newctlname()
+   ENDIF
+   FOR EACH aItem IN oTbrowse
+      AAdd( aHeaderList, aItem[1] )
+      AAdd( aFieldList, aItem[3] )
+      AAdd( aWidthList, Len( Transform(FieldGet(FieldNum(aItem[3])),"")) * 10 )
+   NEXT
+   @ nRow, nCol BROWSE ( xControl ) ;
+      OF ( xDlg ) ;
+      WIDTH nWidth ;
+      HEIGHT nHeight ;
+      HEADERS aHeaderList ;
+      WIDTHS aWidthList ;
+      WORKAREA ( workarea ) ;
+      FIELDS aFieldList
+
+   (cField);(xValue)
 
    RETURN Nil
 
