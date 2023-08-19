@@ -7,7 +7,7 @@ frm_print - single report
 
 FUNCTION frm_Print( Self )
 
-   LOCAL aItem, nPag, nLin, nCol, nLen
+   LOCAL aItem, nPag, nLin, nCol, nLen, nLinAnt
 
    SET PRINTER TO ( "rel.lst" )
    SET DEVICE TO PRINT
@@ -34,6 +34,7 @@ FUNCTION frm_Print( Self )
          nLin += 1
       ENDIF
       nCol := 0
+      nLinAnt := nLin
       FOR EACH aItem IN ::aEditList // need additional adjust
          nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" ) ) )
          IF nCol != 0 .AND. nCol + nLen > 79
@@ -43,7 +44,7 @@ FUNCTION frm_Print( Self )
          @ nLin, nCol SAY Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" )
          nCol += nLen + 2
       NEXT
-      nLin += 1
+      nLin += 1 + iif( nLinAnt != nLin, 1, 0 )
       SKIP
    ENDDO
 
