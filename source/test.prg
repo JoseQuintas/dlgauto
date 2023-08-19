@@ -22,25 +22,25 @@ PROCEDURE Main()
    RddSetDefault( "DBFCDX" )
    frm_DBF()
    aKeyList := { ;
-      { "JPCADASTRO", "IDCADASTRO" }, ;
-      { "JPPRODUTO",  "IDPRODUTO" }, ;
-      { "JPUNIDADE",  "IDUNIDADE" }, ;
-      { "JPVENDEDOR", "IDVENDEDOR" }, ;
-      { "JPPORTADOR", "IDPORTADOR" }, ;
-      { "JPGRUPO",    "IDGRUPO" }, ;
-      { "JPESTOQUE",  "IDESTOQUE" }, ;
-      { "JPFINANC",   "IDFINANC" }, ;
-      { "JPUF",       "UFUF" } }
+      { "DBCLIENT",  "IDCLIENT" }, ;
+      { "DBPRODUCT", "IDPRODUCT" }, ;
+      { "DBUNIT",    "IDUNIT" }, ;
+      { "DBSELLER",  "IDSELLER" }, ;
+      { "DBBANK",    "IDBANK" }, ;
+      { "DBGROUP",   "IDGROUP" }, ;
+      { "DBSTOCK",   "IDSTOCK" }, ;
+      { "DBFINANC",  "IDFINANC" }, ;
+      { "DBSTATE",   "IDSTATE" } }
    aSeekList := { ;
-      { "JPCADASTRO", "CDVENDEDOR", "JPVENDEDOR", "IDVENDEDOR", "VENDNOME" }, ;
-      { "JPCADASTRO", "CDPORTADOR", "JPPORTADOR", "IDPORTADOR", "PORTNOME" }, ;
-      { "JPCADASTRO", "CDUF",       "JPUF",       "UFUF",       "UFNOME" }, ;
-      { "JPPRODUTO",  "IEUNIDADE",  "JPUNIDADE",  "IDUNIDADE",  "UNIDNOME" }, ;
-      { "JPESTOQUE",  "ESCADASTRO", "JPCADASTRO", "IDCADASTRO", "CDNOME" }, ;
-      { "JPESTOQUE",  "ESPRODUTO",  "JPPRODUTO",  "IDPRODUTO",  "ESNOME" }, ;
-      { "JPESTOQUE",  "ESGRUPO",    "JPGRUPO",    "IDGRUPO",    "GRUPONOME" }, ;
-      { "JPFINANC",   "FICADASTRO", "JPCADASTRO", "IDCADASTRO", "CDNOME" }, ;
-      { "JPFINANC",   "FIPORTADOR", "JPPORTADOR", "IDPORTADOR", "PORTNOME" } }
+      { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
+      { "DBCLIENT",  "CLBANK",    "DBBANK",    "IDBANK",    "BANAME" }, ;
+      { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "STNAME" }, ;
+      { "DBPRODUCT", "IEUNIT",    "DBUNIT",    "IDUNIT",    "UNNAME" }, ;
+      { "DBSTOCK",   "STCLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
+      { "DBSTOCK",   "STPRODUCT", "DBPRODUCT", "IDPRODUCT", "PRNAME" }, ;
+      { "DBSTOCK",   "STGROUP",   "DBGROUP",   "IDGROUP",   "GRNAME" }, ;
+      { "DBFINANC",  "FICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
+      { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )

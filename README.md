@@ -9,9 +9,10 @@ Field name          ( CFG_FNAME )
 Field type          ( CFG_FTYPE )
 Field len           ( CFG_FLEN )
 Field decimals      ( CFG_FDEC )
+
 A table has a key   ( CFG_ISKEY )
 
-To screen works
+To works on screen
 
 a caption           ( CFG_CAPTION )
 a variable          ( CFG_VALUE )
@@ -31,7 +32,6 @@ The label for this information on GUI: ( CFG_VCONTROL )
 it is needed to know size for this label ( CFG_VLEN )
 
 on gui buttons have action ( CFG_ACTION )
-
 
 check ch if there are elements added
 

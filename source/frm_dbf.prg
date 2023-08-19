@@ -6,165 +6,158 @@ FUNCTION frm_DBF()
 
    LOCAL nCont, cTxt
 
-   IF ! File( "JPCADASTRO.DBF" )
-      dbCreate( "JPCADASTRO", { ;
-         { "IDCADASTRO", "N+", 6, 0 }, ;
-         { "CDNOME",     "C", 50, 0 }, ;
-         { "CDCNPJ",  "C", 18, 0 }, ;
-         { "CDENDERECO",     "C", 50, 0 }, ;
-         { "CDBAIRRO", "C", 20, 0 }, ;
-         { "CDCIDADE", "C", 20, 0 }, ;
-         { "CDUF", "C", 2, 0 }, ;
-         { "CDCEP", "C", 9, 0 }, ;
-         { "CDTELEFONE", "C", 15, 0 }, ;
-         { "CDEMAIL", "C", 50, 0 }, ;
-         { "CDVENDEDOR", "N", 6, 0 }, ;
-         { "CDPORTADOR", "N", 6, 0 } } )
-      USE JPCADASTRO
+   IF ! File( "DBCLIENT.DBF" )
+      dbCreate( "DBCLIENT", { ;
+         { "IDCLIENT", "N+", 6, 0 }, ;
+         { "CLNAME",     "C", 50, 0 }, ;
+         { "CLDOC",  "C", 18, 0 }, ;
+         { "CLADDRESS",     "C", 50, 0 }, ;
+         { "CLCITY", "C", 20, 0 }, ;
+         { "CLSTATE", "C", 2, 0 }, ;
+         { "CLMAIL", "C", 50, 0 }, ;
+         { "CLSELLER", "N", 6, 0 }, ;
+         { "CLBANK", "N", 6, 0 } } )
+      USE DBCLIENT
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "CADASTRO" + Str( nCont, 1 ), 10 )
+         cTxt := Replicate( "CLIENT" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDCADASTRO WITH nCont, CDNOME WITH cTxt, CDCNPJ WITH cTxt, ;
-            CDENDERECO WITH cTxt, CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, ;
-            CDBAIRRO WITH cTxt, CDCIDADE WITH cTxt, CDUF WITH StrZero( nCont, 2 ), ;
-            CDCEP WITH cTxt, CDTELEFONE WITH cTxt, CDEMAIL WITH cTxt, ;
-            CDVENDEDOR WITH nCont, CDPORTADOR WITH nCont
+         REPLACE IDCLIENT WITH nCont, CLNAME WITH cTxt, CLDOC WITH cTxt, ;
+            CLADDRESS WITH cTxt, CLCITY WITH cTxt, CLSTATE WITH StrZero( nCont, 2 ), ;
+            CLMAIL WITH cTxt, CLSELLER WITH nCont, CLBANK WITH nCont
       NEXT
-      INDEX ON field->idCadastro TAG primary
-      INDEX ON field->cdNome TAG nome
+      INDEX ON field->IDCLIENT TAG primary
+      INDEX ON field->CLNAME TAG name
       USE
    ENDIF
-   IF ! File( "JPPRODUTO.DBF" )
-      dbCreate( "JPPRODUTO", { ;
-         { "IDPRODUTO", "N+", 6, 0 }, ;
-         { "IENOME",    "C", 50, 0 }, ;
-         { "IEUNIDADE", "N", 6, 0 }, ;
-         { "IEGRUPO",   "N", 6, 0 }, ;
-         { "IENCM",     "C", 8, 0 }, ;
-         { "IECEST",    "C", 7, 0 }, ;
-         { "IEQTD",     "N", 6, 0 }, ;
-         { "IEVALOR",   "N", 14, 2 } } )
-      USE jpproduto
+   IF ! File( "DBPRODUCT.DBF" )
+      dbCreate( "DBPRODUCT", { ;
+         { "IDPRODUCT", "N+", 6, 0 }, ;
+         { "PRNAME",    "C", 50, 0 }, ;
+         { "PRUNIT",   "N", 6, 0 }, ;
+         { "PRGROUP",   "N", 6, 0 }, ;
+         { "PRNCM",     "C", 8, 0 }, ;
+         { "PRQT",      "N", 6, 0 }, ;
+         { "PRVALUE",   "N", 14, 2 } } )
+      USE DBPRODUCT
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "PRODUTO" + Str( nCont, 1 ), 10 )
+         cTxt := Replicate( "PRODUCT" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDPRODUTO WITH nCont, IENOME WITH cTxt, ieUnidade WITH nCont, ;
-            IEGRUPO WITH nCont, IENCM WITH cTxt, IECEST WITH cTxt, IEQTD WITH nCont, ;
-            IEVALOR WITH nCont
+         REPLACE IDPRODUCT WITH nCont, PRNAME WITH cTxt, PRUNIT WITH nCont, ;
+            PRGROUP WITH nCont, PRNCM WITH cTxt, PRQT WITH nCont, ;
+            PRVALUE WITH nCont
       NEXT
-      INDEX ON field->IDPRODUTO TAG primary
-      INDEX ON field->IENOME TAG nome
+      INDEX ON field->IDPRODUCT TAG primary
+      INDEX ON field->PRNAME TAG name
       USE
    ENDIF
-   IF ! File( "JPUNIDADE.DBF" )
-      dbCreate( "JPUNIDADE", { ;
-         { "IDUNIDADE", "N+", 6, 0 }, ;
-         { "UNIDSIGLA", "C", 8, 0 }, ;
-         { "UNIDNOME",  "C", 30, 0 } } )
-      USE JPUNIDADE
+   IF ! File( "DBUNIT.DBF" )
+      dbCreate( "DBUNIT", { ;
+         { "IDUNIT", "N+", 6, 0 }, ;
+         { "UNSYMBOL", "C", 8, 0 }, ;
+         { "UNNAME",  "C", 30, 0 } } )
+      USE DBUNIT
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "UNIDADE" + Str( nCont, 1 ), 10 )
+         cTxt := Replicate( "UNIT" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDUNIDADE WITH nCont, UNIDSIGLA WITH cTxt, UNIDNOME WITH cTxt
+         REPLACE IDUNIT WITH nCont, UNSYMBOL WITH cTxt, UNNAME WITH cTxt
       NEXT
-      INDEX ON field->IDUNIDADE TAG primary
-      INDEX ON field->UNIDNOME TAG nome
+      INDEX ON field->IDUNIT TAG primary
+      INDEX ON field->UNNAME TAG name
       USE
    ENDIF
-   IF ! File( "JPVENDEDOR.DBF" )
-      dbCreate( "JPVENDEDOR", { ;
-         { "IDVENDEDOR", "N+", 6, 0 }, ;
-         { "VENDNOME",   "C", 30, 0 } } )
-      USE JPVENDEDOR
+   IF ! File( "DBSELLER.DBF" )
+      dbCreate( "DBSELLER", { ;
+         { "IDSELLER", "N+", 6, 0 }, ;
+         { "SENAME",   "C", 30, 0 } } )
+      USE DBSELLER
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "VENDEDOR" + Str( nCont, 1 ), 10 )
+         cTxt := Replicate( "SELLER" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDVENDEDOR WITH nCont, VENDNOME WITH cTxt
+         REPLACE IDSELLER WITH nCont, SENAME WITH cTxt
       NEXT
-      INDEX ON field->IDVENDEDOR TAG primary
-      INDEX ON field->VENDNOME TAG nome
+      INDEX ON field->IDSELLER TAG primary
+      INDEX ON field->SENAME TAG name
       USE
    ENDIF
-   IF ! File( "JPPORTADOR.DBF" )
-      dbCreate( "JPPORTADOR", { ;
-         { "IDPORTADOR", "N+", 6, 0 }, ;
-         { "PORTNOME",   "C", 30, 0 } } )
-      USE JPPORTADOR
+   IF ! File( "DBBANK.DBF" )
+      dbCreate( "DBBANK", { ;
+         { "IDBANK", "N+", 6, 0 }, ;
+         { "BANAME",   "C", 30, 0 } } )
+      USE DBBANK
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "PORTADOR" + Str( nCont, 1 ), 10 )
+         cTxt := Replicate( "BANK" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDPORTADOR WITH nCont, PORTNOME WITH cTxt
+         REPLACE IDBANK WITH nCont, BANAME WITH cTxt
       NEXT
-      INDEX ON field->IDPORTADOR TAG primary
-      INDEX ON field->PORTNOME TAG nome
+      INDEX ON field->IDBANK TAG primary
+      INDEX ON field->BANAME TAG name
       USE
    ENDIF
-   IF ! File( "JPGRUPO.DBF" )
-      dbCreate( "JPGRUPO", { ;
-         { "IDGRUPO", "N+", 6, 0 }, ;
-         { "GRUPONOME", "C", 30, 0 } } )
-      USE JPGRUPO
+   IF ! File( "DBGROUP.DBF" )
+      dbCreate( "DBGROUP", { ;
+         { "IDGROUP", "N+", 6, 0 }, ;
+         { "GRNAME", "C", 30, 0 } } )
+      USE DBGROUP
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "GRUPO" + Str( nCont, 1 ), 10 )
+         cTxt := Replicate( "GROUP" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDGRUPO WITH nCont, GRUPONOME WITH cTxt
+         REPLACE IDGROUP WITH nCont, GRNAME WITH cTxt
       NEXT
-      INDEX ON field->IDGRUPO TAG primary
-      INDEX ON field->GRUPONOME TAG nome
+      INDEX ON field->IDGROUP TAG primary
+      INDEX ON field->GRNAME TAG name
       USE
    ENDIF
-   IF ! File( "JPESTOQUE.DBF" )
-      dbCreate( "JPESTOQUE", { ;
-         { "IDESTOQUE", "N+", 6, 0 }, ;
-         { "ESDATLAN", "D", 8, 0 }, ;
-         { "ESPRODUTO", "N", 6, 0 }, ;
-         { "ESCADASTRO", "N", 6, 0 }, ;
-         { "ESNUMDOC", "C", 10, 0 }, ;
-         { "ESQTDE", "N", 10, 0 } } )
-      USE JPESTOQUE
+   IF ! File( "DBSTOCK.DBF" )
+      dbCreate( "DBSTOCK", { ;
+         { "IDSTOCK", "N+", 6, 0 }, ;
+         { "STDATOPER", "D", 8, 0 }, ;
+         { "STPRODUCT", "N", 6, 0 }, ;
+         { "STCLIENT", "N", 6, 0 }, ;
+         { "STNUMDOC", "C", 10, 0 }, ;
+         { "STQT", "N", 10, 0 } } )
+      USE DBSTOCK
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "ESTOQUE" + Str( nCont, 1 ), 10 )
+         cTxt := Replicate( "STOCK" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDESTOQUE WITH nCont, ESDATLAN WITH Date() + nCont, ;
-            ESCADASTRO WITH nCont, ESNUMDOC WITH cTxt, ;
-            ESPRODUTO WITH nCont, ESQTDE WITH nCont
+         REPLACE IDSTOCK WITH nCont, STDATOPER WITH Date() + nCont, ;
+            STCLIENT WITH nCont, STNUMDOC WITH cTxt, ;
+            STPRODUCT WITH nCont, STQT WITH nCont
       NEXT
-      INDEX ON field->IDESTOQUE TAG primary
+      INDEX ON field->IDSTOCK TAG primary
       USE
    ENDIF
-   IF ! File( "JPFINANC.DBF" )
-      dbCreate( "JPFINANC", { ;
+   IF ! File( "DBFINANC.DBF" )
+      dbCreate( "DBFINANC", { ;
          { "IDFINANC", "N+", 6, 0 }, ;
-         { "FIDATEMI", "D", 8, 0 }, ;
-         { "FICADASTRO", "N", 6, 0 }, ;
+         { "FIDATOPER", "D", 8, 0 }, ;
+         { "FICLIENT", "N", 6, 0 }, ;
          { "FINUMDOC", "C", 10, 0 }, ;
-         { "FIDATVEN", "D", 8, 0 }, ;
-         { "FIDATPAG", "N", 10, 0 }, ;
-         { "FIVALOR", "N", 14, 2 }, ;
-         { "FIPORTADOR", "N", 6, 0 }, ;
-         { "FIOBS", "C", 100, 0 } } )
-      USE JPFINANC
+         { "FIDATTOPAY", "D", 8, 0 }, ;
+         { "FIDATPAY", "N", 10, 0 }, ;
+         { "FIVALUE", "N", 14, 2 }, ;
+         { "FIBANK", "N", 6, 0 } } )
+      USE DBFINANC
       FOR nCont = 1 TO 9
          cTxt := Replicate( "FINANC" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE IDFINANC WITH nCont, FIDATEMI WITH Date() + nCont, ;
-            FICADASTRO WITH nCont, FINUMDOC WITH cTxt, ;
-            FIDATVEN WITH DATE() + 30, FIPORTADOR WITH nCont, FIOBS WITH cTxt
+         REPLACE IDFINANC WITH nCont, FIDATOPER WITH Date() + nCont, ;
+            FICLIENT WITH nCont, FINUMDOC WITH cTxt, ;
+            FIDATTOPAY WITH DATE() + 30, FIBANK WITH nCont
       NEXT
       INDEX ON field->IDFINANC TAG primary
       USE
    ENDIF
-   IF ! File( "JPUF.DBF" )
-      dbCreate( "JPUF", { ;
-         { "UFSIGLA", "C", 2, 0 }, ;
-         { "UFNOME", "C", 30, 0 } } )
-      USE JPUF
+   IF ! File( "DBSTATE.DBF" )
+      dbCreate( "DBSTATE", { ;
+         { "IDSTATE", "C", 2, 0 }, ;
+         { "STNAME", "C", 30, 0 } } )
+      USE DBSTATE
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "UF" + Str( nCont, 1 ), 10 )
+         cTxt := Replicate( "STATE" + Str( nCont, 1 ), 10 )
          APPEND BLANK
-         REPLACE UFSIGLA WITH StrZero( nCont, 2 ), UFNOME WITH cTxt
+         REPLACE IDSTATE WITH StrZero( nCont, 2 ), STNAME WITH cTxt
       NEXT
-      INDEX ON field->UFSIGLA TAG primary
+      INDEX ON field->IDSTATE TAG primary
       USE
    ENDIF
 
