@@ -102,6 +102,7 @@ FUNCTION frm_Edit( Self )
       NEXT
    ENDIF
 #endif
+   gui_TabEnd()
    (nRow2)
    (nCol2)
    //hb_MemoWrit( "tela.txt", cTxt )

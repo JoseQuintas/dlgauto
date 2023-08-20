@@ -6,12 +6,14 @@ lib_hmge - HMG Extended source code - included in frm_gui
 
 FUNCTION gui_PageEnd( xDlg, xControl )
 
+   END PAGE
    (xDlg); (xControl)
 
    RETURN Nil
 
 FUNCTION gui_PageBegin( xDlg, xControl, cText )
 
+   PAGE ( cText )
    (xDlg); (xControl); (cText)
 
    RETURN Nil
@@ -35,18 +37,26 @@ FUNCTION gui_GetTextValue( xDlg, xControl )
 FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "TAB" )
    ENDIF
-   // no tab
-   xControl := xDlg
-   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
+   DEFINE TAB ( xControl ) ;
+      PARENT ( xDlg ) ;
+      AT nRow, nCol;
+      WIDTH nWidth ;
+      HEIGHT nHeight
+
+   RETURN Nil
+
+FUNCTION gui_TabEnd()
+
+   END TAB
 
    RETURN Nil
 
 FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "PANEL" )
    ENDIF
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
@@ -62,7 +72,7 @@ FUNCTION gui_ActivateDialog( xDlg )
 FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    IF Empty( xDlg )
-      xDlg := gui_newctlname()
+      xDlg := gui_newctlname( "DIALOG" )
    ENDIF
 
    DEFINE WINDOW ( xDlg ) ;
@@ -79,7 +89,7 @@ FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 FUNCTION gui_CreateMLText( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "MLTEXT" )
    ENDIF
    DEFINE EDITBOX ( xControl )
       PARENT ( xDlg )
@@ -98,7 +108,7 @@ FUNCTION gui_CreateText( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "TEXT" )
    ENDIF
    (bValid)
    DEFINE TEXTBOX ( xControl )
@@ -150,7 +160,7 @@ FUNCTION gui_EnableButton( xDlg, xControl, lEnable )
 FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "LABEL" )
    ENDIF
    // não mostra borda
    //DEFINE LABEL ( xControl )
@@ -176,7 +186,7 @@ FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "BUTTON" )
    ENDIF
    DEFINE BUTTONEX ( xControl )
       PARENT ( xDlg )
@@ -219,7 +229,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "BROW" )
    ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
@@ -239,10 +249,11 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    RETURN Nil
 
-STATIC FUNCTION gui_newctlname()
+STATIC FUNCTION gui_newctlname( cPrefix )
 
    STATIC nCount := 0
 
    nCount += 1
+   hb_Default( @cPrefix, "ANY" )
 
-   RETURN "CTL" + StrZero( nCount, 10 )
+   RETURN cPrefix + StrZero( nCount, 10 )

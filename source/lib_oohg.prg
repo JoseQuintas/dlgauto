@@ -35,18 +35,28 @@ FUNCTION gui_GetTextValue( xDlg, xControl )
 FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "TAB" )
    ENDIF
-   // no tab
+   //DEFINE TAB ( xControl ) ;
+   //   PARENT ( xDlg ) ;
+   //   AT nRow, nCol;
+   //   WIDTH nWidth ;
+   //   HEIGHT nHeight
    xControl := xDlg
-   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
+   (nRow);(nCol);(nWidth);(nHeight)
+
+   RETURN Nil
+
+FUNCTION gui_TabEnd()
+
+   //END TAB
 
    RETURN Nil
 
 FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "PANEL" )
    ENDIF
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
@@ -62,7 +72,7 @@ FUNCTION gui_ActivateDialog( xDlg )
 FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
    IF Empty( xDlg )
-      xDlg := gui_newctlname()
+      xDlg := gui_newctlname( "DIALOG" )
    ENDIF
 
    DEFINE WINDOW ( xDlg ) ;
@@ -89,7 +99,7 @@ FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 FUNCTION gui_CreateMLText( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "MLTEXT" )
    ENDIF
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (xValue)
 
@@ -99,7 +109,7 @@ FUNCTION gui_CreateText( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "TEXT" )
    ENDIF
    (bValid)
    (cPicture)
@@ -159,7 +169,7 @@ FUNCTION gui_EnableButton( xDlg, xControl, lEnable )
 FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "LABEL" )
    ENDIF
    (xDlg)
    (lBorder)
@@ -190,7 +200,7 @@ FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "BUTTON" )
    ENDIF
 
    @ nRow, nCol BUTTON ( xControl ) ;
@@ -222,7 +232,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
    IF Empty( xControl )
-      xControl := gui_newctlname()
+      xControl := gui_newctlname( "BROWSE" )
    ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
@@ -242,10 +252,11 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    RETURN Nil
 
-STATIC FUNCTION gui_newctlname()
+STATIC FUNCTION gui_newctlname( cPrefix )
 
    STATIC nCount := 0
 
+   hb_Default( @cPrefix, "ANY" )
    nCount += 1
 
-   RETURN "CTL" + StrZero( nCount, 10 )
+   RETURN cPrefix  + StrZero( nCount, 10 )

@@ -43,6 +43,10 @@ FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
+FUNCTION gui_TabEnd()
+
+   RETURN Nil
+
 FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    @ nCol, nRow PANEL xControl ;

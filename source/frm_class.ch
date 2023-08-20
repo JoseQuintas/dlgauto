@@ -32,12 +32,10 @@
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
    #include "i_altsyntax.ch"
-   #define HBMK_HAS_HMGE_OR_OOHG
 #endif
 #ifdef HBMK_HAS_OOHG
    #include "oohg.ch"
    #include "i_altsyntax.ch"
-   #define HBMK_HAS_HMGE_OR_OOHG
 #endif
 
 #ifndef WIN_RGB
