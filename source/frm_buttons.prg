@@ -46,6 +46,9 @@ FUNCTION frm_Buttons( Self, lDefault )
       Atail( ::aControlList )[ CFG_ACTION ]   := aItem[ 2 ]
    NEXT
    FOR EACH aItem IN ::aControlList
+      IF aItem[ CFG_CTLTYPE ] != TYPE_BUTTON
+         LOOP
+      ENDIF
       gui_CreateButton( ::oDlg, @aItem[ CFG_FCONTROL ], nRow, nCol, ::nButtonSize, ::nButtonSize, ;
          aItem[ CFG_CAPTION ], IconFromCaption( aItem[ CFG_CAPTION ] ), aItem[ CFG_ACTION ] )
 

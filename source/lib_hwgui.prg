@@ -56,10 +56,14 @@ FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION gui_ActivateDialog( xDlg )
+FUNCTION gui_ActivateDialog( xDlg, bAction )
 
    xDlg:Center()
-   xDlg:Activate()
+   IF Empty( bAction )
+      xDlg:Activate()
+   ELSE
+      ACTIVATE DIALOG xDlg ON ACTIVATE bAction
+   ENDIF
 
    RETURN Nil
 
