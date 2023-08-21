@@ -5,12 +5,16 @@ frm_mainmenu - menu of DBF files
 #include "hbgtinfo.ch"
 #include "directry.ch"
 #include "frm_class.ch"
+#include "inkey.ch"
 
 FUNCTION frm_MainMenu( aAllSetup )
 
    LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, aGrupoList, cDBF, oDlg := "Main"
 #ifdef HBMK_HAS_OOHG
    LOCAL oMenuMain, oMenuGroup
+#endif
+#ifdef HBMK_HAS_GTWVG
+   LOCAL oMainMenu, oMenuGroup
 #endif
 
    FOR EACH aItem IN aAllSetup
@@ -89,6 +93,23 @@ FUNCTION frm_MainMenu( aAllSetup )
       :Center()
       :Activate()
    ENDWITH
+#endif
+
+#ifdef HBMK_HAS_GTWVG
+   (oDlg)
+   SetMode(30,100)
+   CLS
+   oMainMenu := wvgSetAppWindow():MenuBar()
+   FOR EACH aGrupoList IN aMenuList
+      oMenuGroup := wvgMenu():New( oMainMenu,,.T. ):Create()
+      FOR EACH cDBF IN aGrupoList
+         oMenuGroup:AddItem( cDBF, { | nGt | nGt := hb_gtSelect(), frm_Main( cDBF, aAllSetup ), hb_gtSelect( nGt ) } )
+      NEXT
+      oMainMenu:AddItem( oMenuGroup, "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) ) )
+   NEXT
+   //oMainMenu:AddItem( "Sair", { || __Quit() } )
+   DO WHILE Inkey(1) != K_ESC
+   ENDDO
 #endif
 
    RETURN Nil

@@ -5,16 +5,23 @@ frm_main - dialog for each data and main use of class
 #include "hbclass.ch"
 #include "directry.ch"
 #include "frm_class.ch"
+#include "inkey.ch"
 
 FUNCTION frm_main( cDBF, aAllSetup )
 
    LOCAL oFrm, nPos
 
+#ifdef HBMK_HAS_GTWVG
+   hb_gtReload( "WVG" )
+   SetMode(30,100)
+   SetColor( "W/B" )
+   CLS
+#endif
    oFrm := frm_Class():New()
    oFrm:cFileDBF   := cDBF
    oFrm:cTitle     := "test of " + cDBF
    oFrm:cOptions   := "IEDP"
-   oFrm:lWithTab   := .T.
+   oFrm:lWithTab   := .F.
    oFrm:nEditStyle := 3 // from 1 to 3
    oFrm:aAllSetup  := aAllSetup
    AAdd( oFrm:aOptionList, { "Mail", { || Nil } } )
@@ -23,5 +30,9 @@ FUNCTION frm_main( cDBF, aAllSetup )
 
    oFrm:aEditList := aAllSetup[ nPos, 2 ]
    oFrm:Execute()
+#ifdef HBMK_HAS_GTWVG
+   DO WHILE Inkey(1) != K_ESC
+   ENDDO
+#endif
 
    RETURN Nil

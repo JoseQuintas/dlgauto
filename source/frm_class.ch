@@ -37,6 +37,9 @@
    #include "oohg.ch"
    #include "i_altsyntax.ch"
 #endif
+#ifdef HBMK_HAS_GTWVG
+   #include "gtwvg.ch"
+#endif
 
 #ifndef WIN_RGB
    #ifdef HBMK_HAS_HWGUI

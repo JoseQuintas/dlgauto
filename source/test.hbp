@@ -16,8 +16,6 @@ test.rc
 -otest
 -w3
 -es2
--gui
--gtgui
 -mt
 
 hbct.hbc
