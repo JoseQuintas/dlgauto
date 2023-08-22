@@ -21,6 +21,9 @@ PROCEDURE Main()
    SET WINDOW MAIN OFF
    SET NAVIGATION EXTENDED
 #endif
+#ifdef HBMK_HAS_HWGUI
+   hwg_SetColorInFocus( .T., COLOR_BLACK,COLOR_YELLOW )
+#endif
    RddSetDefault( "DBFCDX" )
    frm_DBF()
    aKeyList := { ;

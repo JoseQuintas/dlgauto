@@ -90,7 +90,7 @@ FUNCTION frm_Edit( Self )
       ENDIF
    NEXT
 #ifdef HBMK_HAS_HWGUI
-   // ghost for Getlist
+   // ghost for bug on last Getlist valid
    AAdd( ::aControlList, CFG_EMPTY )
    gui_CreateText( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
       nRow, nCol, 0, 0, "", "", 0, { || .T. } )

@@ -56,7 +56,7 @@ FUNCTION gui_ActivateDialog( xDlg )
 
 FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
-   xDlg := wvgCrt():New()
+   xDlg := wvgDialog():New()
    xDlg:Create(,,{0,0},{30,100})
    SetColor( "W/B" )
    CLS
@@ -142,6 +142,7 @@ FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 FUNCTION gui_SetTextValue( xDlg, xControl, xValue )
 
    (xDlg);(xControl);(xValue)
+   xControl:SetValue( xValue )
 
    RETURN Nil
 
