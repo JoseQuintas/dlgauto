@@ -103,11 +103,13 @@ FUNCTION frm_MainMenu( aAllSetup )
    FOR EACH aGrupoList IN aMenuList
       oMenuGroup := wvgMenu():New( oMainMenu,,.T. ):Create()
       FOR EACH cDBF IN aGrupoList
-         oMenuGroup:AddItem( cDBF, { | nGt | nGt := hb_gtSelect(), frm_Main( cDBF, aAllSetup ), hb_gtSelect( nGt ) } )
+         oMenuGroup:AddItem( cDBF, { | nGt | nGt := hb_gtSelect(), ;
+            frm_Main( cDBF, aAllSetup ), ;
+            hb_gtSelect( nGt ) } )
       NEXT
       oMainMenu:AddItem( oMenuGroup, "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) ) )
    NEXT
-   //oMainMenu:AddItem( "Sair", { || __Quit() } )
+   oMainMenu:AddItem( "Sair", { || __Quit() } )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
 #endif

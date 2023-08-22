@@ -14,8 +14,9 @@ FUNCTION frm_main( cDBF, aAllSetup )
 #ifdef HBMK_HAS_GTWVG
    hb_gtReload( "WVG" )
    SetMode(30,100)
-   SetColor( "W/B" )
+   SetColor("W/B")
    CLS
+
 #endif
    oFrm := frm_Class():New()
    oFrm:cFileDBF   := cDBF
@@ -30,9 +31,5 @@ FUNCTION frm_main( cDBF, aAllSetup )
 
    oFrm:aEditList := aAllSetup[ nPos, 2 ]
    oFrm:Execute()
-#ifdef HBMK_HAS_GTWVG
-   DO WHILE Inkey(1) != K_ESC
-   ENDDO
-#endif
 
    RETURN Nil

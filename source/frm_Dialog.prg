@@ -3,6 +3,7 @@ frm_Dialog - create the dialog for data
 */
 
 #include "frm_class.ch"
+#include "inkey.ch"
 
 FUNCTION frm_Dialog( Self )
 
@@ -28,6 +29,10 @@ FUNCTION frm_Dialog( Self )
    gui_CreateDialog( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle, { || ::EditOff(), ::UpdateEdit() } )
    ::CreateControls()
    gui_ActivateDialog( ::oDlg )
+#ifdef HBMK_HAS_GTWVG
+   DO WHILE Inkey(1) != K_ESC
+   ENDDO
+#endif
    CLOSE DATABASES
 
    RETURN Nil
