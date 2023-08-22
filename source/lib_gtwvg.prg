@@ -1,5 +1,5 @@
 /*
-lib_hwgui - hwgui source code included in frm_gui
+lib_gtwvg - gtwvg source code included in frm_gui
 */
 
 #include "frm_class.ch"

@@ -26,6 +26,7 @@ PROCEDURE Main()
 #endif
    RddSetDefault( "DBFCDX" )
    frm_DBF()
+   /* table, key */
    aKeyList := { ;
       { "DBCLIENT",  "IDCLIENT" }, ;
       { "DBPRODUCT", "IDPRODUCT" }, ;
@@ -36,6 +37,7 @@ PROCEDURE Main()
       { "DBSTOCK",   "IDSTOCK" }, ;
       { "DBFINANC",  "IDFINANC" }, ;
       { "DBSTATE",   "IDSTATE" } }
+   /* table, field, table to search, key field, field to show */
    aSeekList := { ;
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
       { "DBCLIENT",  "CLBANK",    "DBBANK",    "IDBANK",    "BANAME" }, ;
@@ -64,10 +66,11 @@ PROCEDURE Main()
          aItem[ CFG_VALUE ]    := aField[ DBS_NAME ]
          aItem[ CFG_CAPTION ]  := aField[ DBS_NAME ]
          aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
-         /* additional setup */
+         /* is key */
          IF hb_ASCan( aKeyList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
             aItem[ CFG_ISKEY ] := .T.
          ENDIF
+         /* to search */
          IF ( nSeekPos := hb_ASCan( aSeekList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
             aItem[ CFG_VTABLE ] := aSeekList[ nSeekPos, 3 ]
             aItem[ CFG_VFIELD ] := aSeekList[ nSeekPos, 4 ]

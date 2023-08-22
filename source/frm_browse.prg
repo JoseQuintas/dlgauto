@@ -25,7 +25,6 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    DialogBrowse( oTBrowse, cTable, cField, @xValue )
 
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
-      //hwg_MsgInfo( "variable is " + Transform( xValue, "" ) )
       gui_SetTextValue( xDlg, xControl, xValue )
    ENDIF
 

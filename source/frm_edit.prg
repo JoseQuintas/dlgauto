@@ -12,7 +12,6 @@ FUNCTION frm_Edit( Self )
 
 #ifdef HBMK_HAS_HWGUI
    LOCAL nPageNext, nTab
-
 #endif
 
    FOR EACH aItem IN ::aEditList
@@ -20,12 +19,10 @@ FUNCTION frm_Edit( Self )
       AAdd( ::aControlList, AClone( aItem ) )
    NEXT
    IF ::lWithTab
-
       gui_CreateTab( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 75 )
       AAdd( ::aControlList, CFG_EMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
       Atail( ::aControlList )[ CFG_FCONTROL ] := oTab
-
       //CreatePanel( oTab, @oPanel, 23, 1, ::nDlgWidth - 25, ::nDlgHeight - 100 )
       //AAdd( ::aControlList, CFG_EMPTY )
       //Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
@@ -86,11 +83,10 @@ FUNCTION frm_Edit( Self )
          gui_CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
             nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 4 ) * 12 ), aItem[ CFG_VLEN ] * 12, ;
             ::nLineHeight, Space( aItem[ CFG_VLEN ] ), .T. )
-         //nCol += ( aItem[ CFG_VLEN ] + 3 ) * 12
       ENDIF
    NEXT
 #ifdef HBMK_HAS_HWGUI
-   // ghost for bug on last Getlist valid
+   // dummy textbox to works last valid
    AAdd( ::aControlList, CFG_EMPTY )
    gui_CreateText( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
       nRow, nCol, 0, 0, "", "", 0, { || .T. } )
@@ -100,14 +96,13 @@ FUNCTION frm_Edit( Self )
 #ifdef HBMK_HAS_HWGUI
       FOR nTab = 1 TO Len( aList )
          nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
-         SetLostFocus( aList[ nTab, Len( aList[ nTab ] ) /* *ghost* - 1 */ ], oTab, nPageNext, aList[ nPageNext, 1 ] )
+         SetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], oTab, nPageNext, aList[ nPageNext, 1 ] )
       NEXT
 #endif
       gui_TabEnd()
    ENDIF
    (nRow2)
    (nCol2)
-   //hb_MemoWrit( "tela.txt", cTxt )
 
    RETURN Nil
 
