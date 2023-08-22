@@ -94,15 +94,17 @@ FUNCTION frm_Edit( Self )
    AAdd( ::aControlList, CFG_EMPTY )
    gui_CreateText( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
       nRow, nCol, 0, 0, "", "", 0, { || .T. } )
+#endif
    IF ::lWithTab
       gui_PageEnd( ::oDlg, oTab )
+#ifdef HBMK_HAS_HWGUI
       FOR nTab = 1 TO Len( aList )
          nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
          SetLostFocus( aList[ nTab, Len( aList[ nTab ] ) /* *ghost* - 1 */ ], oTab, nPageNext, aList[ nPageNext, 1 ] )
       NEXT
-   ENDIF
 #endif
-   gui_TabEnd()
+      gui_TabEnd()
+   ENDIF
    (nRow2)
    (nCol2)
    //hb_MemoWrit( "tela.txt", cTxt )
