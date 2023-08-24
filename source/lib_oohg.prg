@@ -22,9 +22,7 @@ FUNCTION gui_MsgGeneric( cText )
 
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
-      (xDlg); (xControl)
-
-      RETURN .F.
+      RETURN _GetFocusedControl( xDlg ) == xControl
 
 FUNCTION gui_GetTextValue( xDlg, xControl )
 
