@@ -20,6 +20,9 @@ FUNCTION frm_main( cDBF, aAllSetup )
 
    oFrm := frm_Class():New()
    oFrm:cFileDBF   := cDBF
+#ifdef HBMK_HAS_GTWVG
+   oFrm:oDlg := wvgSetAppWindow()
+#endif
    oFrm:cTitle     := "test of " + cDBF
    oFrm:cOptions   := "IEDP"
    oFrm:lWithTab   := .T.

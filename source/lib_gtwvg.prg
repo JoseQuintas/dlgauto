@@ -46,10 +46,13 @@ FUNCTION gui_DialogClose( xDlg )
 
 FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
-   xDlg := wvgDialog():New()
-   xDlg:Create(,,{0,0},{30,100})
-   SetColor( "W/B" )
-   CLS
+   xDlg := wvgSetAppWindow()
+   //xDlg := wvgCrt():New()
+   //xDlg:Create(,,{0,0},{30,100})
+   //xDlg:lModal := .T.
+   //xDlg:Show()
+   //SetColor( "W/B" )
+   //CLS
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bAction)
 
    RETURN Nil

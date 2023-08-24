@@ -103,9 +103,9 @@ FUNCTION frm_MainMenu( aAllSetup )
    FOR EACH aGrupoList IN aMenuList
       oMenuGroup := wvgMenu():New( oMainMenu,,.T. ):Create()
       FOR EACH cDBF IN aGrupoList
-         oMenuGroup:AddItem( cDBF, { | nGt | nGt := hb_gtSelect(), ;
+         oMenuGroup:AddItem( cDBF, { || hb_ThreadStart( { | nGt | nGt := hb_gtSelect(), ;
             frm_Main( cDBF, aAllSetup ), ;
-            hb_gtSelect( nGt ) } )
+            hb_gtSelect( nGt ) } ) } )
       NEXT
       oMainMenu:AddItem( oMenuGroup, "Data" + Ltrim( Str( aGrupoList:__EnumIndex ) ) )
    NEXT
