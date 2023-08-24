@@ -93,6 +93,7 @@ FUNCTION frm_Edit( Self )
 #endif
    IF ::lWithTab
       gui_PageEnd( ::oDlg, oTab )
+// tab navigation
 #ifdef HBMK_HAS_HWGUI
       FOR nTab = 1 TO Len( aList )
          nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
@@ -107,7 +108,6 @@ FUNCTION frm_Edit( Self )
    RETURN Nil
 
 /* tab navigation */
-
 #ifdef HBMK_HAS_HWGUI
 STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
 

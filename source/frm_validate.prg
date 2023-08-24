@@ -8,6 +8,7 @@ FUNCTION frm_Validate( aItem, Self )
 
    LOCAL nSelect, lFound := .T., xValue, nPos
 
+   // if btn cancel abort validate (current on hwgui only)
    nPos := hb_AScan( ::aControlList, { | e | e[ CFG_CTLTYPE ] == TYPE_BUTTON .AND. ;
       e[ CFG_CAPTION ] == "Cancel" } )
    IF nPos != 0
@@ -33,6 +34,7 @@ FUNCTION frm_Validate( aItem, Self )
          ENDIF
       ENDIF
    ENDIF
+   // if setup to find on another dbf
    IF ! Empty( aItem[ CFG_VTABLE ] )
       nSelect := Select()
       SELECT ( Select( aItem[ CFG_VTABLE ] ) )

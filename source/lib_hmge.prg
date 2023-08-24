@@ -1,5 +1,5 @@
 /*
-lib_hmge - HMG Extended source code - included in frm_gui
+lib_hmge - HMG Extended source selected by lib.prg
 */
 
 #include "frm_class.ch"

@@ -16,8 +16,8 @@ FUNCTION frm_main( cDBF, aAllSetup )
    SetMode(30,100)
    SetColor("W/B")
    CLS
-
 #endif
+
    oFrm := frm_Class():New()
    oFrm:cFileDBF   := cDBF
    oFrm:cTitle     := "test of " + cDBF
@@ -25,7 +25,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
    oFrm:lWithTab   := .F.
    oFrm:nEditStyle := 3 // from 1 to 3
    oFrm:aAllSetup  := aAllSetup
-   AAdd( oFrm:aOptionList, { "Mail", { || Nil } } )
+   AAdd( oFrm:aOptionList, { "Mail", { || Nil } } ) // example of aditional button
 
    nPos := hb_ASCan( aAllSetup, { | e | e[ 1 ] == cDBF } )
 

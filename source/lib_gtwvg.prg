@@ -1,5 +1,5 @@
 /*
-lib_gtwvg - gtwvg source code included in frm_gui
+lib_gtwvg - gtwvg source selected by lib.prg
 */
 
 #include "frm_class.ch"

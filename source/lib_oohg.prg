@@ -1,5 +1,5 @@
 /*
-lib_oohg - oohg source code included in frm_gui
+lib_oohg - oohg source selected by lib.prg
 */
 
 #include "frm_class.ch"
