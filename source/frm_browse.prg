@@ -25,7 +25,7 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    DialogBrowse( oTBrowse, cTable, cField, @xValue )
 
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
-      gui_SetTextValue( xDlg, xControl, xValue )
+      gui_TextSetValue( xDlg, xControl, xValue )
    ENDIF
 
    SELECT ( nSelect )
@@ -39,7 +39,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
 
    oThisForm := frm_Class():New()
    oThisForm:cOptions := ""
-   gui_CreateDialog( @oThisForm:oDlg, 0, 0, oThisForm:nDlgWidth, oThisForm:nDlgHeight, cTable, { || Nil } )
+   gui_DialogCreate( @oThisForm:oDlg, 0, 0, oThisForm:nDlgWidth, oThisForm:nDlgHeight, cTable, { || Nil } )
    frm_Buttons( oThisForm, .F. )
    AAdd( oThisForm:aControlList, CFG_EMPTY )
    aItem := Atail( oThisForm:aControlList )
@@ -49,6 +49,6 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       oThisForm:nDlgWidth - 10, oThisForm:nDlgHeight - 80, ;
       oTbrowse, cField, @xValue, cTable )
 
-   gui_ActivateDialog( oThisForm:oDlg ) // , { || gui_SetFocus( aItem[ CFG_FCONTROL ] ) } )
+   gui_DialogActivate( oThisForm:oDlg ) // , { || gui_SetFocus( aItem[ CFG_FCONTROL ] ) } )
 
    RETURN Nil

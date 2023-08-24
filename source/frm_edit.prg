@@ -19,11 +19,11 @@ FUNCTION frm_Edit( Self )
       AAdd( ::aControlList, AClone( aItem ) )
    NEXT
    IF ::lWithTab
-      gui_CreateTab( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 75 )
+      gui_TabCreate( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 75 )
       AAdd( ::aControlList, CFG_EMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
       Atail( ::aControlList )[ CFG_FCONTROL ] := oTab
-      //CreatePanel( oTab, @oPanel, 23, 1, ::nDlgWidth - 25, ::nDlgHeight - 100 )
+      //PanelCreate( oTab, @oPanel, 23, 1, ::nDlgWidth - 25, ::nDlgHeight - 100 )
       //AAdd( ::aControlList, CFG_EMPTY )
       //Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL
       //Atail( ::aControlList )[ CFG_FCONTROL ] := oPanel
@@ -68,10 +68,10 @@ FUNCTION frm_Edit( Self )
          nRow2 := nRow + ::nLineSpacing
          nCol2 := nCol
       ENDIF
-      gui_CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_CCONTROL ], ;
+      gui_LabelCreate( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_CCONTROL ], ;
          nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
 
-      gui_CreateText( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
+      gui_TextCreate( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
          nRow2, nCol2, aItem[ CFG_FLEN ] * 12 + 12, ::nLineHeight, ;
          @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
          { || ::Validate( aItem ) } )
@@ -80,7 +80,7 @@ FUNCTION frm_Edit( Self )
          AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
       ENDIF
       IF ! Empty( aItem[ CFG_VTABLE ] )
-         gui_CreateLabel( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
+         gui_LabelCreate( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
             nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 4 ) * 12 ), aItem[ CFG_VLEN ] * 12, ;
             ::nLineHeight, Space( aItem[ CFG_VLEN ] ), .T. )
       ENDIF
@@ -88,7 +88,7 @@ FUNCTION frm_Edit( Self )
 #ifdef HBMK_HAS_HWGUI
    // dummy textbox to works last valid
    AAdd( ::aControlList, CFG_EMPTY )
-   gui_CreateText( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+   gui_TextCreate( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
       nRow, nCol, 0, 0, "", "", 0, { || .T. } )
 #endif
    IF ::lWithTab

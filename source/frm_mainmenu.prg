@@ -39,10 +39,10 @@ FUNCTION frm_MainMenu( aAllSetup )
          ENDMENU
       NEXT
       MENU TITLE "Exit"
-         MENUITEM "&Exit" ACTION gui_CloseDialog( oDlg )
+         MENUITEM "&Exit" ACTION gui_DialogClose( oDlg )
       ENDMENU
    ENDMENU
-   gui_ActivateDialog( oDlg )
+   gui_DialogActivate( oDlg )
 #endif
 
 #ifdef HBMK_HAS_HMGE
@@ -62,12 +62,12 @@ FUNCTION frm_MainMenu( aAllSetup )
             END POPUP
          NEXT
          DEFINE POPUP "Sair"
-            MENUITEM "Sair" ACTION gui_CloseDialog( oDlg )
+            MENUITEM "Sair" ACTION gui_DialogClose( oDlg )
          END POPUP
       END MENU
    END WINDOW
 
-   gui_ActivateDialog( oDlg )
+   gui_DialogActivate( oDlg )
 #endif
 
 #ifdef HBMK_HAS_OOHG

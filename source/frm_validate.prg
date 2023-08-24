@@ -17,7 +17,7 @@ FUNCTION frm_Validate( aItem, Self )
       ENDIF
    ENDIF
 
-   xValue := gui_GetTextValue( ::oDlg, aItem[ CFG_FCONTROL ] )
+   xValue := gui_TextGetValue( ::oDlg, aItem[ CFG_FCONTROL ] )
    IF aItem[ CFG_ISKEY ]
       SEEK xValue
       IF ::cSelected == "INSERT"
@@ -46,7 +46,7 @@ FUNCTION frm_Validate( aItem, Self )
          frm_Browse( Self, ::oDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
          gui_SetFocus( ::oDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
       ENDIF
-      gui_SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], xValue )
+      gui_LabelSetValue( ::oDlg, aItem[ CFG_VCONTROL ], xValue )
    ENDIF
 
    RETURN lFound

@@ -46,7 +46,7 @@ CREATE CLASS frm_Class
    METHOD Last()               INLINE &( ::cFileDbf )->( dbgobottom() ), ::UpdateEdit()
    METHOD Next()               INLINE &( ::cFileDbf )->( dbSkip() ),     ::UpdateEdit()
    METHOD Previous()           INLINE &( ::cFileDbf )->( dbSkip( -1 ) ), ::UpdateEdit()
-   METHOD Exit()               INLINE gui_CloseDialog( ::oDlg )
+   METHOD Exit()               INLINE gui_DialogClose( ::oDlg )
    METHOD Save()
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::UpdateEdit()
    METHOD Validate( aItem )    INLINE frm_Validate( aItem, Self )
@@ -61,9 +61,9 @@ METHOD ButtonSaveOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
-            gui_EnableButton( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_ButtonEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          ELSE
-            gui_EnableButton( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
+            gui_ButtonEnable( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
          ENDIF
       ENDIF
    NEXT
@@ -77,9 +77,9 @@ METHOD ButtonSaveOff() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
-            gui_EnableButton( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
+            gui_ButtonEnable( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
-            gui_EnableButton( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_ButtonEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          ENDIF
       ENDIF
    NEXT
@@ -92,7 +92,7 @@ METHOD EditOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! aItem[ CFG_ISKEY ]
-         gui_EnableText( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
+         gui_TextEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound
             lFound := .T.
             oFirstEdit := aItem[ CFG_FCONTROL ]
@@ -110,7 +110,7 @@ METHOD EditOff() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         gui_EnableText( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
+         gui_TextEnable( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
    ::ButtonSaveOff()
@@ -138,14 +138,14 @@ METHOD UpdateEdit() CLASS frm_Class
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ! Empty( aItem[ CFG_FNAME ] )
             xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
-            gui_SetTextValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
+            gui_TextSetValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
             IF ! Empty( aItem[ CFG_VTABLE ] )
                nSelect := Select()
                SELECT ( Select( aItem[ CFG_VTABLE ] ) )
                SEEK xValue
                cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
                SELECT ( nSelect )
-               gui_SetLabelValue( ::oDlg, aItem[ CFG_VCONTROL ], cText )
+               gui_LabelSetValue( ::oDlg, aItem[ CFG_VCONTROL ], cText )
             ENDIF
          ENDIF
       ENDIF

@@ -4,12 +4,152 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 #include "frm_class.ch"
 
-FUNCTION gui_PageEnd( xDlg, xControl )
+FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
-   END PAGE
-   (xDlg); (xControl)
+   IF Empty( xControl )
+      xControl := gui_newctlname( "BUTTON" )
+   ENDIF
+   DEFINE BUTTONEX ( xControl )
+      PARENT ( xDlg )
+      ROW         nRow
+      COL         nCol
+      WIDTH       nWidth
+      HEIGHT      nHeight
+      ICON        cResName
+      IMAGEWIDTH  nWidth - 20
+      IMAGEHEIGHT nHeight - 20
+      CAPTION     cCaption
+      ACTION      Eval( bAction )
+      FONTNAME    DEFAULT_FONTNAME
+      FONTSIZE    9
+      FONTBOLD    .T.
+      FONTCOLOR   COLOR_BLACK
+      VERTICAL   .T.
+      BACKCOLOR  COLOR_WHITE
+      FLAT       .T.
+      NOXPSTYLE  .T.
+   END BUTTONEX
 
    RETURN Nil
+
+FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
+
+   SetProperty( xDlg, xControl, "ENABLED", lEnable )
+
+   RETURN Nil
+
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
+
+   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
+
+   IF Empty( xControl )
+      xControl := gui_newctlname( "BROW" )
+   ENDIF
+   FOR EACH aItem IN oTbrowse
+      AAdd( aHeaderList, aItem[1] )
+      AAdd( aFieldList, aItem[3] )
+      AAdd( aWidthList, Len( Transform(FieldGet(FieldNum(aItem[3])),"")) * 10 )
+   NEXT
+   @ nRow, nCol BROWSE ( xControl ) ;
+      OF ( xDlg ) ;
+      WIDTH nWidth ;
+      HEIGHT nHeight ;
+      HEADERS aHeaderList ;
+      WIDTHS aWidthList ;
+      WORKAREA ( workarea ) ;
+      FIELDS aFieldList
+
+   (cField);(xValue)
+
+   RETURN Nil
+
+FUNCTION gui_DialogActivate( xDlg )
+
+   DoMethod( xDlg, "CENTER" )
+   ACTIVATE WINDOW ( xDlg )
+
+   RETURN Nil
+
+FUNCTION gui_DialogClose( xDlg )
+
+   DoMethod( xDlg, "RELEASE" )
+
+   RETURN Nil
+
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+
+   IF Empty( xDlg )
+      xDlg := gui_newctlname( "DIALOG" )
+   ENDIF
+
+   DEFINE WINDOW ( xDlg ) ;
+      AT nCol, nRow ;
+      WIDTH nWidth ;
+      HEIGHT nHeight ;
+      TITLE cTitle ;
+      MODAL ;
+      ON INIT Eval( bAction )
+   END WINDOW
+
+   RETURN Nil
+
+FUNCTION gui_IsCurrentFocus( xDlg, xControl )
+
+      RETURN _GetFocusedControl( xDlg ) == xControl
+
+FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+
+   IF Empty( xControl )
+      xControl := gui_newctlname( "LABEL" )
+   ENDIF
+   // não mostra borda
+   //DEFINE LABEL ( xControl )
+   //   PARENT ( xDlg )
+   //   COL nCol
+   //   ROW nRow
+   //   WIDTH nWidth
+   //   HEIGHT nHeight
+   //   VALUE xValue
+   //   BORDER lBorder
+   //END LABEL
+
+   IF lBorder
+      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
+         VALUE xValue WIDTH nWidth HEIGHT nHeight BORDER
+   ELSE
+      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
+         VALUE xValue WIDTH nWidth HEIGHT nHeight
+   ENDIF
+
+   RETURN Nil
+
+FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
+
+   SetProperty( xDlg, xControl, "VALUE", xValue )
+
+   RETURN Nil
+
+FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+
+   IF Empty( xControl )
+      xControl := gui_newctlname( "MLTEXT" )
+   ENDIF
+   DEFINE EDITBOX ( xControl )
+      PARENT ( xDlg )
+      COL nCol
+      ROW nRow
+      WIDTH nWidth
+      HEIGHT nHeight
+      VALUE xValue
+      TOOLTIP 'EditBox'
+      NOHSCROLLBAR .T.
+   END EDITBOX
+
+   RETURN Nil
+
+FUNCTION gui_MsgGeneric( cText )
+
+   RETURN Msgbox( cText )
 
 FUNCTION gui_PageBegin( xDlg, xControl, cText )
 
@@ -18,21 +158,29 @@ FUNCTION gui_PageBegin( xDlg, xControl, cText )
 
    RETURN Nil
 
-FUNCTION gui_MsgGeneric( cText )
+FUNCTION gui_PageEnd( xDlg, xControl )
 
-   RETURN Msgbox( cText )
+   END PAGE
+   (xDlg); (xControl)
 
-FUNCTION gui_IsCurrentFocus( xDlg, xControl )
+   RETURN Nil
 
-      RETURN _GetFocusedControl( xDlg ) == xControl
+FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-FUNCTION gui_GetTextValue( xDlg, xControl )
+   IF Empty( xControl )
+      xControl := gui_newctlname( "PANEL" )
+   ENDIF
+   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
-   (xDlg)
+   RETURN Nil
 
-   RETURN GetProperty( xDlg, xControl, "VALUE" )
+FUNCTION gui_SetFocus( xDlg, xControl )
 
-FUNCTION gui_CreateTab( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+   DoMethod( xDlg, xControl, "SETFOCUS" )
+
+   RETURN Nil
+
+FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "TAB" )
@@ -51,58 +199,7 @@ FUNCTION gui_TabEnd()
 
    RETURN Nil
 
-FUNCTION gui_CreatePanel( xDlg, xControl, nRow, nCol, nWidth, nHeight )
-
-   IF Empty( xControl )
-      xControl := gui_newctlname( "PANEL" )
-   ENDIF
-   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
-
-   RETURN Nil
-
-FUNCTION gui_ActivateDialog( xDlg )
-
-   DoMethod( xDlg, "CENTER" )
-   ACTIVATE WINDOW ( xDlg )
-
-   RETURN Nil
-
-FUNCTION gui_CreateDialog( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
-
-   IF Empty( xDlg )
-      xDlg := gui_newctlname( "DIALOG" )
-   ENDIF
-
-   DEFINE WINDOW ( xDlg ) ;
-      AT nCol, nRow ;
-      WIDTH nWidth ;
-      HEIGHT nHeight ;
-      TITLE cTitle ;
-      MODAL ;
-      ON INIT Eval( bAction )
-   END WINDOW
-
-   RETURN Nil
-
-FUNCTION gui_CreateMLText( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
-
-   IF Empty( xControl )
-      xControl := gui_newctlname( "MLTEXT" )
-   ENDIF
-   DEFINE EDITBOX ( xControl )
-      PARENT ( xDlg )
-      COL nCol
-      ROW nRow
-      WIDTH nWidth
-      HEIGHT nHeight
-      VALUE xValue
-      TOOLTIP 'EditBox'
-      NOHSCROLLBAR .T.
-   END EDITBOX
-
-   RETURN Nil
-
-FUNCTION gui_CreateText( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
+FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    IF Empty( xControl )
@@ -131,119 +228,22 @@ FUNCTION gui_CreateText( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
    RETURN Nil
 
-FUNCTION gui_CloseDialog( xDlg )
-
-   DoMethod( xDlg, "RELEASE" )
-
-   RETURN Nil
-
-FUNCTION gui_SetFocus( xDlg, xControl )
-
-   DoMethod( xDlg, xControl, "SETFOCUS" )
-
-   RETURN Nil
-
-FUNCTION gui_EnableText( xDlg, xControl, lEnable )
+FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
 
    SetProperty( xDlg, xControl, "ENABLED", lEnable )
 
    RETURN Nil
 
-FUNCTION gui_EnableButton( xDlg, xControl, lEnable )
+FUNCTION gui_TextGetValue( xDlg, xControl )
 
-   SetProperty( xDlg, xControl, "ENABLED", lEnable )
+   (xDlg)
 
-   RETURN Nil
+   RETURN GetProperty( xDlg, xControl, "VALUE" )
 
-FUNCTION gui_CreateLabel( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
-
-   IF Empty( xControl )
-      xControl := gui_newctlname( "LABEL" )
-   ENDIF
-   // não mostra borda
-   //DEFINE LABEL ( xControl )
-   //   PARENT ( xDlg )
-   //   COL nCol
-   //   ROW nRow
-   //   WIDTH nWidth
-   //   HEIGHT nHeight
-   //   VALUE xValue
-   //   BORDER lBorder
-   //END LABEL
-
-   IF lBorder
-      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
-         VALUE xValue WIDTH nWidth HEIGHT nHeight BORDER
-   ELSE
-      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
-         VALUE xValue WIDTH nWidth HEIGHT nHeight
-   ENDIF
-
-   RETURN Nil
-
-FUNCTION gui_CreateButton( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
-
-   IF Empty( xControl )
-      xControl := gui_newctlname( "BUTTON" )
-   ENDIF
-   DEFINE BUTTONEX ( xControl )
-      PARENT ( xDlg )
-      ROW         nRow
-      COL         nCol
-      WIDTH       nWidth
-      HEIGHT      nHeight
-      ICON        cResName
-      IMAGEWIDTH  nWidth - 20
-      IMAGEHEIGHT nHeight - 20
-      CAPTION     cCaption
-      ACTION      Eval( bAction )
-      FONTNAME    DEFAULT_FONTNAME
-      FONTSIZE    9
-      FONTBOLD    .T.
-      FONTCOLOR   COLOR_BLACK
-      VERTICAL   .T.
-      BACKCOLOR  COLOR_WHITE
-      FLAT       .T.
-      NOXPSTYLE  .T.
-   END BUTTONEX
-
-   RETURN Nil
-
-FUNCTION gui_SetTextValue( xDlg, xControl, xValue )
+FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
    // NOTE: string value, except if declared different on textbox creation
    SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
-
-   RETURN Nil
-
-FUNCTION gui_SetLabelValue( xDlg, xControl, xValue )
-
-   SetProperty( xDlg, xControl, "VALUE", xValue )
-
-   RETURN Nil
-
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
-
-   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
-
-   IF Empty( xControl )
-      xControl := gui_newctlname( "BROW" )
-   ENDIF
-   FOR EACH aItem IN oTbrowse
-      AAdd( aHeaderList, aItem[1] )
-      AAdd( aFieldList, aItem[3] )
-      AAdd( aWidthList, Len( Transform(FieldGet(FieldNum(aItem[3])),"")) * 10 )
-   NEXT
-   @ nRow, nCol BROWSE ( xControl ) ;
-      OF ( xDlg ) ;
-      WIDTH nWidth ;
-      HEIGHT nHeight ;
-      HEADERS aHeaderList ;
-      WIDTHS aWidthList ;
-      WORKAREA ( workarea ) ;
-      FIELDS aFieldList
-
-   (cField);(xValue)
 
    RETURN Nil
 
