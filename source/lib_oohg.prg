@@ -10,14 +10,26 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       xControl := gui_newctlname( "BUTTON" )
    ENDIF
 
-   @ nRow, nCol BUTTON ( xControl ) ;
-      PARENT ( xDlg ) ;
-      CAPTION  cCaption ;
-      PICTURE  cResName ;
-      ACTION   Eval( bAction ) ;
-      WIDTH    nWidth ;
-      HEIGHT   nHeight ;
-      IMAGEALIGN TOP
+   IF cCaption == "Cancel"
+      @ nRow, nCol BUTTON ( xControl ) ;
+         PARENT ( xDlg ) ;
+         CAPTION  cCaption ;
+         PICTURE  cResName ;
+         ACTION   Eval( bAction ) ;
+         WIDTH    nWidth ;
+         HEIGHT   nHeight ;
+         IMAGEALIGN TOP ;
+         CANCEL // abort valid
+   ELSE
+      @ nRow, nCol BUTTON ( xControl ) ;
+         PARENT ( xDlg ) ;
+         CAPTION  cCaption ;
+         PICTURE  cResName ;
+         ACTION   Eval( bAction ) ;
+         WIDTH    nWidth ;
+         HEIGHT   nHeight ;
+         IMAGEALIGN TOP
+   ENDIF
 
    RETURN Nil
 
@@ -94,10 +106,8 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
 
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
-   (xDlg)
-   (xControl)
-
-   RETURN Nil
+   // not used, solved on button using CANCEL
+   RETURN GetFocus() == GetProperty( xDlg, xControl, "HWND" )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
