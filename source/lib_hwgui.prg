@@ -104,54 +104,55 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
-   (xDlg)
-   (lBorder)
-   @ nCol, nRow BOARD xControl SIZE nWidth, nHeight ON PAINT { | o, h | LabelPaint( o, h, lBorder ) }
-   xControl:Title := xValue
+//   (xDlg)
+//   (lBorder)
+//   @ nCol, nRow BOARD xControl SIZE nWidth, nHeight ON PAINT { | o, h | LabelPaint( o, h, lBorder ) }
+//   xControl:Title := xValue
+//
+//   RETURN Nil
+//
+//FUNCTION LabelPaint( o, h, lBorder )
+//
+//   IF o:oFont != Nil
+//      hwg_SelectObject( h, o:oFont:Handle )
+//   ENDIF
+//   IF o:TColor != Nil
+//      hwg_SetTextColor( h, o:TColor )
+//   ENDIF
+//   IF ! Empty( lBorder ) .AND. lBorder
+//      hwg_Rectangle( h, 0, 0, o:nWidth - 1, o:nHeight - 1 )
+//   ENDIF
+//   hwg_SetTransparentMode( h, .T. )
+//   hwg_DrawText( h, o:Title, 2, 2, o:nWidth - 2, o:nHeight - 2 )
+//   hwg_SetTransparentMode( h, .F. )
+//
+//   RETURN Nil
+//
+   ( xDlg )
+   IF lBorder
+      @ nCol, nRow SAY xControl ;
+         CAPTION xValue ;
+         OF      xDlg ;
+         SIZE    nWidth, nHeight ;
+         STYLE   WS_BORDER ;
+         COLOR COLOR_BLACK ;
+         BACKCOLOR COLOR_GREEN // TRANSPARENT // DO NOT USE TRANSPARENT WITH BORDER
+   ELSE
+      @ nCol, nRow SAY xControl ;
+         CAPTION xValue ;
+         OF      xDlg ;
+         SIZE    nWidth, nHeight ;
+         COLOR   COLOR_BLACK ;
+         TRANSPARENT
+   ENDIF
 
    RETURN Nil
-
-FUNCTION LabelPaint( o, h, lBorder )
-
-   IF o:oFont != Nil
-      hwg_SelectObject( h, o:oFont:Handle )
-   ENDIF
-   IF o:TColor != Nil
-      hwg_SetTextColor( h, o:TColor )
-   ENDIF
-   IF ! Empty( lBorder ) .AND. lBorder
-      hwg_Rectangle( h, 0, 0, o:nWidth - 1, o:nHeight - 1 )
-   ENDIF
-   hwg_SetTransparentMode( h, .T. )
-   hwg_DrawText( h, o:Title, 2, 2, o:nWidth - 2, o:nHeight - 2 )
-   hwg_SetTransparentMode( h, .F. )
-
-   RETURN Nil
-
-   //( xDlg )
-   //IF lBorder
-   //   @ nCol, nRow SAY xControl ;
-   //      CAPTION xValue ;
-   //      OF      xDlg ;
-   //      SIZE    nWidth, nHeight ;
-   //      STYLE   WS_BORDER ;
-   //      COLOR COLOR_BLACK ;
-   //      BACKCOLOR COLOR_GREEN // TRANSPARENT // DO NOT USE TRANSPARENT WITH BORDER
-   //ELSE
-   //   @ nCol, nRow SAY xControl ;
-   //      CAPTION xValue ;
-   //      OF      xDlg ;
-   //      SIZE    nWidth, nHeight ;
-   //      COLOR   COLOR_BLACK ;
-   //      TRANSPARENT
-   //ENDIF
-
-   //RETURN Nil
 
 FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
 
    (xDlg)
    xControl:SetText( xValue )
+   //xControl:Refresh()
 
    RETURN Nil
 
