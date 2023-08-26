@@ -124,6 +124,12 @@ FUNCTION gui_TabEnd()
 
    RETURN Nil
 
+FUNCTION gui_TabNavigate( xDlg, oTab, aList )
+
+   (xDlg);(oTab);(aList)
+
+   RETURN Nil
+
 FUNCTION gui_TextGetValue( xDlg, xControl )
 
    (xDlg);(xControl)

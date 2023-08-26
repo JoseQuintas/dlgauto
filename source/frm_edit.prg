@@ -10,10 +10,6 @@ FUNCTION frm_Edit( Self )
    LOCAL nRow, nCol, aItem, oTab, nPageCount := 0, nLen, aList := {}
    LOCAL nLenList, nRow2, nCol2 // oPanel
 
-#ifdef HBMK_HAS_HWGUI
-   LOCAL nPageNext, nTab
-#endif
-
    FOR EACH aItem IN ::aEditList
       aItem[ CFG_VALUE ]    := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
       AAdd( ::aControlList, AClone( aItem ) )
@@ -93,26 +89,10 @@ FUNCTION frm_Edit( Self )
 #endif
    IF ::lWithTab
       gui_PageEnd( ::oDlg, oTab )
-// tab navigation
-#ifdef HBMK_HAS_HWGUI
-      FOR nTab = 1 TO Len( aList )
-         nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
-         SetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], oTab, nPageNext, aList[ nPageNext, 1 ] )
-      NEXT
-#endif
+      gui_TabNavigate( aList )
       gui_TabEnd()
    ENDIF
    (nRow2)
    (nCol2)
 
    RETURN Nil
-
-/* tab navigation */
-#ifdef HBMK_HAS_HWGUI
-STATIC FUNCTION SetLostFocus( oEdit, oTab, nPageNext, oEditNext )
-
-   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), gui_SetFocus( Nil, oEditNext ), .T. }
-
-   RETURN Nil
-#endif
-

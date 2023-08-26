@@ -208,6 +208,12 @@ FUNCTION gui_TabEnd()
 
    RETURN Nil
 
+FUNCTION gui_TabNavigate( xDlg, oTab, aList )
+
+   (xDlg);(oTab);(aList)
+
+   RETURN Nil
+
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 

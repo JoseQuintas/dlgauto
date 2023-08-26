@@ -41,13 +41,13 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       ADD COLUMN aItem[2] TO xControl HEADER aItem[1] LENGTH Len( Eval( aItem[2] ) ) JUSTIFY LINE DT_LEFT
    NEXT
 
-   xControl:bOther := { |xControl, msg, wParam, lParam| fKeyDown( xControl, msg, wParam, lParam, cField, @xValue ) }
+   xControl:bOther := { |xControl, msg, wParam, lParam| gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, @xValue ) }
 
    (xDlg); (workarea)
 
    RETURN Nil
 
-STATIC FUNCTION fKeyDown( xControl, msg, wParam, lParam, cField, xValue )
+STATIC FUNCTION gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, xValue )
 
    LOCAL nKEY
 
@@ -215,6 +215,24 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
    RETURN Nil
 
 FUNCTION gui_TabEnd()
+
+   RETURN Nil
+
+FUNCTION gui_TabNavigate( xDlg, oTab, aList )
+
+   LOCAL nTab, nPageNext
+
+   FOR nTab = 1 TO Len( aList )
+      nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
+      gui_TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], oTab, nPageNext, aList[ nPageNext, 1 ] )
+   NEXT
+   (xDlg)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_TabSetLostFocus( oEdit, oTab, nPageNext, oEditNext )
+
+   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), gui_SetFocus( Nil, oEditNext ), .T. }
 
    RETURN Nil
 

@@ -164,13 +164,13 @@ METHOD Save() CLASS frm_Class
    ENDIF
    IF RLock()
       FOR EACH aItem IN ::aControlList
-         IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-            IF ! Empty( aItem[ CFG_FNAME ] )
-               IF ! aItem[ CFG_ISKEY ] .OR. ::cSelected == "INSERT"
-                  FieldPut( FieldNum( aItem[ CFG_FNAME ] ), aItem[ CFG_VALUE ] )
-               ENDIF
-            ENDIF
-         ENDIF
+         DO CASE
+         CASE aItem[ CFG_CTLTYPE ] != TYPE_EDIT // not editable
+         CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
+         CASE aItem[ CFG_ISKEY ]                // table key
+         OTHERWISE
+            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), aItem[ CFG_VALUE ] )
+         ENDCASE
       NEXT
       SKIP 0
       UNLOCK
