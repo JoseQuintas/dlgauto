@@ -15,7 +15,6 @@ CREATE CLASS frm_Class
    VAR cSelected       INIT "NONE"
 
    VAR nEditStyle      INIT 1
-   VAR nPageLimit      INIT 300
    VAR lWithTab        INIT .F.
 
    VAR nDlgWidth       INIT 1024

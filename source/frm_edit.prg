@@ -8,7 +8,7 @@ frm_Edit - Create textbox/label on dialog
 FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, oTab, nPageCount := 0, nLen, aList := {}
-   LOCAL nLenList, nRow2, nCol2 // oPanel
+   LOCAL nLenList, nRow2, nCol2, lFirst := .T.
 
    FOR EACH aItem IN ::aEditList
       aItem[ CFG_VALUE ]    := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
@@ -44,8 +44,8 @@ FUNCTION frm_Edit( Self )
             Len( aItem[ CFG_CAPTION ] ) )
       ENDIF
       IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + ( nLen * 12 ) > ::nDlgWidth - 40 ) .OR. ;
-         ( nRow > ::nPageLimit .AND. ::lWithTab )
-         IF ::lWithTab .AND. nRow > ::nPageLimit
+         ( ::lWithTab .AND. nRow > ::nDlgHeight - ( ::nLineHeight * 3 ) )
+         IF ::lWithTab .AND. nRow > ::nDlgHeight - ( ::nLineHeight * 3 )
             IF nPageCount > 0
                gui_TabPageEnd( ::oDlg, oTab )
             ENDIF
@@ -53,9 +53,12 @@ FUNCTION frm_Edit( Self )
             gui_TabPageBegin( ::oDlg, oTab, "Pag." + Str( nPageCount, 2 ) )
             nRow := 40
             AAdd( aList, {} )
+            lFirst := .T.
          ENDIF
          nCol := 10
-         nRow += ( ::nLineSpacing * iif( ::nEditStyle < 3, 2, 3 ) )
+         IF ! lFirst
+            nRow += ( ::nLineSpacing * iif( ::nEditStyle < 3, 2, 3 ) )
+         ENDIF
       ENDIF
       IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
          nRow2 := nRow
@@ -64,6 +67,7 @@ FUNCTION frm_Edit( Self )
          nRow2 := nRow + ::nLineSpacing
          nCol2 := nCol
       ENDIF
+      lFirst := .F.
       gui_LabelCreate( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_CCONTROL ], ;
          nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
 
