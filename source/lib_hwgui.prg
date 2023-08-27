@@ -80,7 +80,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN xDlg:Close()
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    LOCAL oFont
 
@@ -93,7 +93,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
       AT        nRow, nCol ;
       SIZE      nWidth, nHeight ;
       BACKCOLOR COLOR_WHITE ;
-      ON INIT   bAction
+      ON INIT   bInit
 
    RETURN Nil
 

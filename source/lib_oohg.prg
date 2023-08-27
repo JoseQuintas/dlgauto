@@ -77,7 +77,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    IF Empty( xDlg )
       xDlg := gui_newctlname( "DIALOG" )
@@ -89,7 +89,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bAction )
       HEIGHT nHeight ;
       TITLE  cTitle ;
       MODAL ;
-      ON INIT Eval( bAction )
+      ON INIT Eval( bInit )
    END WINDOW
 
    RETURN Nil
