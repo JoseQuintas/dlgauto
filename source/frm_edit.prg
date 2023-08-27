@@ -47,10 +47,10 @@ FUNCTION frm_Edit( Self )
          ( nRow > ::nPageLimit .AND. ::lWithTab )
          IF ::lWithTab .AND. nRow > ::nPageLimit
             IF nPageCount > 0
-               gui_PageEnd( ::oDlg, oTab )
+               gui_TabPageEnd( ::oDlg, oTab )
             ENDIF
             nPageCount += 1
-            gui_PageBegin( ::oDlg, oTab, "Pag." + Str( nPageCount, 2 ) )
+            gui_TabPageBegin( ::oDlg, oTab, "Pag." + Str( nPageCount, 2 ) )
             nRow := 40
             AAdd( aList, {} )
          ENDIF
@@ -88,8 +88,8 @@ FUNCTION frm_Edit( Self )
       nRow, nCol, 0, 0, "", "", 0, { || .T. } )
 #endif
    IF ::lWithTab
-      gui_PageEnd( ::oDlg, oTab )
-      gui_TabNavigate( aList )
+      gui_TabPageEnd( ::oDlg, oTab )
+      gui_TabNavigate( ::oDlg, oTab, aList )
       gui_TabEnd()
    ENDIF
    (nRow2)

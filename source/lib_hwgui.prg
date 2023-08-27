@@ -173,20 +173,6 @@ FUNCTION gui_MsgGeneric( cText )
 
    RETURN hwg_MsgInfo( cText )
 
-FUNCTION gui_PageBegin( xDlg, xControl, cText )
-
-   (xDlg)
-   BEGIN PAGE cText OF xControl
-
-   RETURN Nil
-
-FUNCTION gui_PageEnd( xDlg, xControl )
-
-   (xDlg)
-   END PAGE OF xControl
-
-   RETURN Nil
-
 FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    @ nCol, nRow PANEL xControl ;
@@ -227,6 +213,20 @@ FUNCTION gui_TabNavigate( xDlg, oTab, aList )
       gui_TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], oTab, nPageNext, aList[ nPageNext, 1 ] )
    NEXT
    (xDlg)
+
+   RETURN Nil
+
+FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
+
+   (xDlg)
+   BEGIN PAGE cText OF xControl
+
+   RETURN Nil
+
+FUNCTION gui_TabPageEnd( xDlg, xControl )
+
+   (xDlg)
+   END PAGE OF xControl
 
    RETURN Nil
 

@@ -159,18 +159,6 @@ FUNCTION gui_MsgGeneric( cText )
 
    RETURN Msgbox( cText )
 
-FUNCTION gui_PageBegin( xDlg, xControl, cText )
-
-   (xDlg); (xControl); (cText)
-
-   RETURN Nil
-
-FUNCTION gui_PageEnd( xDlg, xControl )
-
-   (xDlg); (xControl)
-
-   RETURN Nil
-
 FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
@@ -191,26 +179,41 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
    IF Empty( xControl )
       xControl := gui_newctlname( "TAB" )
    ENDIF
-   //DEFINE TAB ( xControl ) ;
-   //   PARENT ( xDlg ) ;
-   //   AT nRow, nCol;
-   //   WIDTH nWidth ;
-   //   HEIGHT nHeight
+   DEFINE TAB ( xControl ) ;
+      PARENT ( xDlg ) ;
+      AT nRow, nCol;
+      WIDTH nWidth ;
+      HEIGHT nHeight ;
+      VALUE 1
 
-   xControl := xDlg
+   xControl := xDlg // because they are not on tab
    (nRow);(nCol);(nWidth);(nHeight);(xDlg)
 
    RETURN Nil
 
 FUNCTION gui_TabEnd()
 
-   //END TAB
+   END TAB
 
    RETURN Nil
 
 FUNCTION gui_TabNavigate( xDlg, oTab, aList )
 
    (xDlg);(oTab);(aList)
+
+   RETURN Nil
+
+FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
+
+   (xDlg); (xControl); (cText)
+   DEFINE PAGE cText
+
+   RETURN Nil
+
+FUNCTION gui_TabPageEnd( xDlg, xControl )
+
+   (xDlg); (xControl)
+   END PAGE
 
    RETURN Nil
 
