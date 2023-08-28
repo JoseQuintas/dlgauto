@@ -92,6 +92,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
 
    (xDlg);(xControl);(xValue)
+   xControl:SetCaption( AllTrim( Transform( xValue, "" ) ) )
 
    RETURN Nil
 
