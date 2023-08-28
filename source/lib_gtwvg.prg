@@ -164,6 +164,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    */
    xControl := wvgSle():New()
    WITH OBJECT xControl
+      :BufferLength := nMaxLength
       :Create( xDlg,,{nCol,nRow},{nWidth,nHeight})
       :SetData( Transform( xValue, "" ) )
    ENDWITH
