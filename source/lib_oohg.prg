@@ -64,8 +64,11 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    RETURN Nil
 
-FUNCTION gui_DialogActivate( xDlg )
+FUNCTION gui_DialogActivate( xDlg, bCode )
 
+   IF ! Empty( bCode )
+      Eval( bCode )
+   ENDIF
    DoMethod( xDlg, "CENTER" )
    ACTIVATE WINDOW ( xDlg )
 
@@ -81,6 +84,9 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    IF Empty( xDlg )
       xDlg := gui_newctlname( "DIALOG" )
+   ENDIF
+   IF Empty( bInit )
+      bInit := { || Nil }
    ENDIF
 
    DEFINE WINDOW ( xDlg ) ;

@@ -26,10 +26,10 @@ FUNCTION frm_Dialog( Self )
    NEXT
    SELECT ( Select( ::cFileDbf ) )
 
-   gui_DialogCreate( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle, ;
-      { || ::EditOff(), ::UpdateEdit() } )
+   gui_DialogCreate( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle )
    ::CreateControls()
-   gui_DialogActivate( ::oDlg )
+   gui_DialogActivate( ::oDlg, { || ::EditOff(), ::UpdateEdit() } )
+
 #ifdef HBMK_HAS_GTWVG
    DO WHILE Inkey(1) != K_ESC
    ENDDO

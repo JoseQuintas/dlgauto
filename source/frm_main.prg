@@ -25,7 +25,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
 #endif
    oFrm:cTitle     := "test of " + cDBF
    oFrm:cOptions   := "IEDP"
-   oFrm:lWithTab   := .T.
+   oFrm:lWithTab   := .F.
    oFrm:nEditStyle := 3 // from 1 to 3
    oFrm:aAllSetup  := aAllSetup
    AAdd( oFrm:aOptionList, { "Mail", { || Nil } } ) // example of aditional button

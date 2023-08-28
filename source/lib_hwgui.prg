@@ -65,13 +65,13 @@ STATIC FUNCTION gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, xValue
 
    RETURN .T.
 
-FUNCTION gui_DialogActivate( xDlg, bAction )
+FUNCTION gui_DialogActivate( xDlg, bCode )
 
    xDlg:Center()
-   IF Empty( bAction )
+   IF Empty( bCode )
       xDlg:Activate()
    ELSE
-      ACTIVATE DIALOG xDlg ON ACTIVATE bAction
+      ACTIVATE DIALOG xDlg ON ACTIVATE bCode
    ENDIF
 
    RETURN Nil
@@ -84,6 +84,9 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    LOCAL oFont
 
+   IF Empty( bInit )
+      bInit := { || Nil }
+   ENDIF
    oFont := HFont():Add( DEFAULT_FONTNAME, 0, -11 )
    INIT DIALOG xDlg ;
       CLIPPER ;

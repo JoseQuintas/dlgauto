@@ -14,6 +14,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       :Create( xDlg,,{nCol,nRow},{nHeight,nWidth})
       :SetCaption( {, WVG_IMAGE_ICONRESOURCE, cResName } )
       :SetCaption( cCaption )
+      :Activate := bAction
    ENDWITH
 
    RETURN Nil
@@ -21,6 +22,11 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
    (xDlg);(xControl);(lEnable)
+   IF lEnable
+      xControl:Enable()
+   ELSE
+      xControl:Disable()
+   ENDIF
 
    RETURN Nil
 
@@ -30,9 +36,12 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    RETURN Nil
 
-FUNCTION gui_DialogActivate( xDlg )
+FUNCTION gui_DialogActivate( xDlg, bCode )
 
    (xDlg)
+   IF ! Empty( bCode )
+      Eval( bCode )
+   ENDIF
 
    RETURN Nil
 
@@ -140,6 +149,18 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bValid)
+   /*
+   xControl := wvgStatic():New()
+   WITH OBJECT xControl
+      :Type := WVGSTATIC_TYPE_TEXT
+      :Options := WVGSTATIC_TEXT_LEFT
+      :SetColorFG( "W/B" )
+      :SetColorBG( "W/B" )
+      :Caption := xValue
+      :SetFont( "Arial" )
+      :Create(xDlg,,{nCol,nRow},{nWidth,nHeight})
+   ENDWITH
+   */
    xControl := wvgSle():New()
    WITH OBJECT xControl
       :Create( xDlg,,{nCol,nRow},{nWidth,nHeight})
@@ -157,13 +178,18 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
 
    (xDlg);(xControl);(lEnable)
+   IF lEnable
+      xControl:Enable()
+   ELSE
+      xControl:Disable()
+   ENDIF
 
    RETURN Nil
 
 FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
    (xDlg);(xControl);(xValue)
-   xControl:SetValue( xValue )
+   xControl:SetData( xValue )
 
    RETURN Nil
 
