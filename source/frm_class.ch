@@ -32,6 +32,7 @@
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
    #include "i_altsyntax.ch"
+
 #endif
 #ifdef HBMK_HAS_OOHG
    #include "oohg.ch"
