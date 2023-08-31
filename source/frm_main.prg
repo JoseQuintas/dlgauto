@@ -23,7 +23,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
 #ifdef HBMK_HAS_GTWVG
    oFrm:oDlg := wvgSetAppWindow()
 #endif
-   oFrm:cTitle     := "test of " + cDBF
+   oFrm:cTitle     := gui_LibName() + " - " + cDBF
    oFrm:cOptions   := "IEDP"
    oFrm:lWithTab   := .F.
    oFrm:nEditStyle := 3 // from 1 to 3

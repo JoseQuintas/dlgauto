@@ -4,11 +4,11 @@ lib_hwgui - hwgui source selected by lib.prg
 
 #include "frm_class.ch"
 
-FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup )
+FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   INIT WINDOW oDlg TITLE "Example" AT 0, 0 SIZE 1024, 768
+   INIT WINDOW oDlg TITLE cTitle AT 0, 0 SIZE 1024, 768
    MENU OF oDlg
       FOR EACH aGroupList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
@@ -180,6 +180,10 @@ FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
    //xControl:Refresh()
 
    RETURN Nil
+
+FUNCTION gui_LibName()
+
+   RETURN "HWGUI"
 
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 

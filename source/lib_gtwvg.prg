@@ -5,11 +5,10 @@ lib_gtwvg - gtwvg source selected by lib.prg
 #include "inkey.ch"
 #include "frm_class.ch"
 
-FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup )
+FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL oMainMenu, aGroupList, cDBF, oMenuGroup
 
-   (oDlg)
    SetMode(30,100)
    CLS
    oMainMenu := wvgSetAppWindow():MenuBar()
@@ -25,6 +24,7 @@ FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup )
    oMainMenu:AddItem( "Sair", { || __Quit() } )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
+   (oDlg),(cTitle)
 
    RETURN Nil
 
@@ -119,6 +119,10 @@ FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
    xControl:SetCaption( AllTrim( Transform( xValue, "" ) ) )
 
    RETURN Nil
+
+FUNCTION gui_LibName()
+
+   RETURN "GTWVG"
 
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 

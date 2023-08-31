@@ -22,6 +22,6 @@ FUNCTION frm_MainMenu( aAllSetup )
       ENDIF
    NEXT
 
-   gui_MainMenu( oDlg, aMenuList, aAllSetup )
+   gui_MainMenu( oDlg, aMenuList, aAllSetup, gui_LibName() + " - MENU" )
 
    RETURN Nil
