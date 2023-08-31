@@ -29,15 +29,23 @@
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"
 #endif
+
+#ifdef HBMK_HAS_HMG3
+   #include "hmg.ch"
+   #include "i_altsyntax.ch"
+   MEMVAR _HMG_SYSDATA
+#endif
+
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
    #include "i_altsyntax.ch"
-
 #endif
+
 #ifdef HBMK_HAS_OOHG
    #include "oohg.ch"
    #include "i_altsyntax.ch"
 #endif
+
 #ifdef HBMK_HAS_GTWVG
    #include "gtwvg.ch"
 #endif

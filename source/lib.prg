@@ -18,3 +18,7 @@ lib - select apropriate source code
    #include "lib_gtwvg.prg"
    #include "\fontes\integra\libjpa\prg\errorsys.prg"
 #endif
+
+#ifdef HBMK_HAS_HMG3
+   #include "lib_hmg3.prg"
+#endif
