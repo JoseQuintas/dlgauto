@@ -4,6 +4,35 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 #include "frm_class.ch"
 
+FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup )
+
+   LOCAL aGroupList, cDBF
+
+   DEFINE WINDOW ( oDlg ) ;
+      AT 0, 0 ;
+      WIDTH 1024 ;
+      HEIGHT 768 ;
+      TITLE "Example" ;
+      WINDOWTYPE MAIN
+
+      DEFINE MAIN MENU OF ( oDlg )
+         FOR EACH aGroupList IN aMenuList
+            DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
+               FOR EACH cDBF IN aGroupList
+                  MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+               NEXT
+            END POPUP
+         NEXT
+         DEFINE POPUP "Sair"
+            MENUITEM "Sair" ACTION gui_DialogClose( oDlg )
+         END POPUP
+      END MENU
+   END WINDOW
+
+   gui_DialogActivate( oDlg )
+
+   RETURN Nil
+
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    IF Empty( xControl )

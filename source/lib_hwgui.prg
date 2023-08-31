@@ -4,6 +4,27 @@ lib_hwgui - hwgui source selected by lib.prg
 
 #include "frm_class.ch"
 
+FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup )
+
+   LOCAL aGroupList, cDBF
+
+   INIT WINDOW oDlg TITLE "Example" AT 0, 0 SIZE 1024, 768
+   MENU OF oDlg
+      FOR EACH aGroupList IN aMenuList
+         MENU TITLE "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
+            FOR EACH cDBF IN aGroupList
+               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+            NEXT
+         ENDMENU
+      NEXT
+      MENU TITLE "Exit"
+         MENUITEM "&Exit" ACTION gui_DialogClose( oDlg )
+      ENDMENU
+   ENDMENU
+   gui_DialogActivate( oDlg )
+
+   RETURN Nil
+
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    ( xDlg )

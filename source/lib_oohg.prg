@@ -4,6 +4,35 @@ lib_oohg - oohg source selected by lib.prg
 
 #include "frm_class.ch"
 
+FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup )
+
+   LOCAL aGroupList, oMenuMain, oMenuGroup, cDBF
+
+   WITH OBJECT oDlg := TFormMain():Define()
+      :Col := 0
+      :Row := 0
+      :Width := 1024
+      :Height := 768
+      :Title := "DlgAuto"
+      oMenuMain := TMenuMain():Define(,"MyMenu")
+         FOR EACH aGroupList IN aMenuList
+            oMenuGroup:= TMenuItem():DefinePopup( "Data" + Ltrim( Str( aGroupList:__EnumIndex ) ) )
+            FOR EACH cDBF IN aGroupList
+               TMenuItem():DefineItem( cDBF, { || frm_Main( cDBF, aAllSetup ) } )
+            NEXT
+            oMenuGroup:EndPopup()
+         NEXT
+         oMenuGroup := TMenuItem():DefinePopup( "Sair" )
+            TMenuItem():DefineItem( "Sair", { || oDlg:Release() } )
+         oMenuGroup:EndPopup()
+      oMenuMain:EndMenu()
+      :EndWindow()
+      :Center()
+      :Activate()
+   ENDWITH
+
+   RETURN Nil
+
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    IF Empty( xControl )

@@ -2,7 +2,31 @@
 lib_gtwvg - gtwvg source selected by lib.prg
 */
 
+#include "inkey.ch"
 #include "frm_class.ch"
+
+FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup )
+
+   LOCAL oMainMenu, aGroupList, cDBF, oMenuGroup
+
+   (oDlg)
+   SetMode(30,100)
+   CLS
+   oMainMenu := wvgSetAppWindow():MenuBar()
+   FOR EACH aGroupList IN aMenuList
+      oMenuGroup := wvgMenu():New( oMainMenu,,.T. ):Create()
+      FOR EACH cDBF IN aGroupList
+         oMenuGroup:AddItem( cDBF, { || hb_ThreadStart( { | nGt | nGt := hb_gtSelect(), ;
+            frm_Main( cDBF, aAllSetup ), ;
+            hb_gtSelect( nGt ) } ) } )
+      NEXT
+      oMainMenu:AddItem( oMenuGroup, "Data" + Ltrim( Str( aGroupList:__EnumIndex ) ) )
+   NEXT
+   oMainMenu:AddItem( "Sair", { || __Quit() } )
+   DO WHILE Inkey(1) != K_ESC
+   ENDDO
+
+   RETURN Nil
 
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
