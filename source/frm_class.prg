@@ -118,15 +118,14 @@ METHOD EditOff() CLASS frm_Class
 
 METHOD Delete() CLASS frm_Class
 
-#ifdef HBMK_HAS_HWGUI
-   IF hwg_MsgYesNo( "Delete" )
+   IF gui_MsgYesNo( "Delete" )
       IF rLock()
          DELETE
          SKIP 0
          UNLOCK
       ENDIF
    ENDIF
-#endif
+
    RETURN Nil
 
 METHOD UpdateEdit() CLASS frm_Class

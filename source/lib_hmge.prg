@@ -182,9 +182,13 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    RETURN Nil
 
-FUNCTION gui_MsgGeneric( cText )
+FUNCTION gui_Msgbox( cText )
 
    RETURN Msgbox( cText )
+
+FUNCTION gui_MsgYesNo( cText )
+
+   RETURN MsgYesNo( cText )
 
 FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 

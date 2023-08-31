@@ -22,13 +22,13 @@ FUNCTION frm_Validate( aItem, Self )
       SEEK xValue
       IF ::cSelected == "INSERT"
          IF ! Eof()
-            gui_MsgGeneric( "Code already exists" )
+            gui_Msgbox( "Code already exists" )
             gui_SetFocus( ::oDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
             RETURN .F.
          ENDIF
       ELSE
          IF Eof()
-            gui_MsgGeneric( "Code not found" )
+            gui_Msgbox( "Code not found" )
             gui_SetFocus( ::oDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
             RETURN .F.
          ENDIF
