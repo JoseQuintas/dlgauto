@@ -59,7 +59,10 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL
 
    FOR EACH aItem IN oTBrowse
-      ADD COLUMN aItem[2] TO xControl HEADER aItem[1] LENGTH Len( Eval( aItem[2] ) ) JUSTIFY LINE DT_LEFT
+      ADD COLUMN { || Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) } TO xControl ;
+         HEADER aItem[1] ;
+         LENGTH Max( Len( aItem[1] ), Len( Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) ) ) ;
+         JUSTIFY LINE DT_LEFT
    NEXT
 
    xControl:bOther := { |xControl, msg, wParam, lParam| gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, @xValue ) }
@@ -128,30 +131,6 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
-   (xDlg)
-   (lBorder)
-   @ nCol, nRow BOARD xControl SIZE nWidth, nHeight ON PAINT { | o, h | LabelPaint( o, h, lBorder ) }
-   xControl:Title := xValue
-
-   RETURN Nil
-
-FUNCTION LabelPaint( o, h, lBorder )
-
-   IF o:oFont != Nil
-      hwg_SelectObject( h, o:oFont:Handle )
-   ENDIF
-   IF o:TColor != Nil
-      hwg_SetTextColor( h, o:TColor )
-   ENDIF
-   IF ! Empty( lBorder ) .AND. lBorder
-      hwg_Rectangle( h, 0, 0, o:nWidth - 1, o:nHeight - 1 )
-   ENDIF
-   hwg_SetTransparentMode( h, .T. )
-   hwg_DrawText( h, o:Title, 2, 2, o:nWidth - 2, o:nHeight - 2 )
-   hwg_SetTransparentMode( h, .F. )
-
-   RETURN Nil
-/*
    ( xDlg )
    IF lBorder
       @ nCol, nRow SAY xControl ;
@@ -169,15 +148,37 @@ FUNCTION LabelPaint( o, h, lBorder )
          COLOR   COLOR_BLACK ;
          TRANSPARENT
    ENDIF
+   (xDlg);(lBorder)
 
    RETURN Nil
-*/
+
+//   @ nCol, nRow BOARD xControl SIZE nWidth, nHeight ON PAINT { | o, h | LabelPaint( o, h, lBorder ) }
+//   xControl:Title := xValue
+
+//   RETURN Nil
+
+//FUNCTION LabelPaint( o, h, lBorder )
+
+//   IF o:oFont != Nil
+//      hwg_SelectObject( h, o:oFont:Handle )
+//   ENDIF
+//   IF o:TColor != Nil
+//      hwg_SetTextColor( h, o:TColor )
+//   ENDIF
+//   IF ! Empty( lBorder ) .AND. lBorder
+//      hwg_Rectangle( h, 0, 0, o:nWidth - 1, o:nHeight - 1 )
+//   ENDIF
+//   hwg_SetTransparentMode( h, .T. )
+//   hwg_DrawText( h, o:Title, 2, 2, o:nWidth - 2, o:nHeight - 2 )
+//   hwg_SetTransparentMode( h, .F. )
+
+//   RETURN Nil
 
 FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
 
    (xDlg)
    xControl:SetText( xValue )
-   //xControl:Refresh()
+   xControl:Refresh()
 
    RETURN Nil
 

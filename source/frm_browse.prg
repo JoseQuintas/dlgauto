@@ -13,10 +13,7 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
 
    nPos := hb_Ascan( ::aAllSetup, { | e | e[1] == cTable } )
    FOR EACH aItem IN ::aAllSetup[ nPos, 2 ]
-      AAdd( oTBrowse, { ;
-         aItem[ CFG_CAPTION ], ;
-         { || Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), aItem[ CFG_FPICTURE ] ) }, ;
-          aItem[ CFG_FNAME ] } ) // hwgui codeblock, minigui field name
+      AAdd( oTBrowse, { aItem[ CFG_CAPTION ], aItem[ CFG_FNAME ], aItem[ CFG_FPICTURE ] } )
       IF aItem[ CFG_ISKEY ]
          cField := aItem[ CFG_FNAME ]
       ENDIF

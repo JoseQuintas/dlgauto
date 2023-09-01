@@ -77,8 +77,8 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
-      AAdd( aFieldList, aItem[3] )
-      AAdd( aWidthList, Len( Transform(FieldGet(FieldNum(aItem[3])),"")) * 10 )
+      AAdd( aFieldList, { || Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) } )
+      AAdd( aWidthList, Max( Len( aItem[1] ), Len( Transform(FieldGet(FieldNum(aItem[1])),aItem[3])) ) * 10 )
    NEXT
    @ nRow, nCol BROWSE ( xControl ) ;
       OF ( xDlg ) ;
