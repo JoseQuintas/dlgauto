@@ -24,7 +24,7 @@ FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
    oMainMenu:AddItem( "Sair", { || __Quit() } )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
-   (oDlg),(cTitle)
+   (oDlg);(cTitle)
 
    RETURN Nil
 
