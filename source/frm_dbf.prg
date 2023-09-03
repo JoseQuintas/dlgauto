@@ -133,7 +133,7 @@ FUNCTION frm_DBF()
          { "FICLIENT", "N", 6, 0 }, ;
          { "FINUMDOC", "C", 10, 0 }, ;
          { "FIDATTOPAY", "D", 8, 0 }, ;
-         { "FIDATPAY", "N", 10, 0 }, ;
+         { "FIDATPAY", "D", 10, 0 }, ;
          { "FIVALUE", "N", 14, 2 }, ;
          { "FIBANK", "N", 6, 0 } } )
       USE DBFINANC

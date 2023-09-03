@@ -185,7 +185,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       HEIGHT nHeight
       VALUE xValue
       TOOLTIP 'EditBox'
-      NOHSCROLLBAR .T.
+      /* NOHSCROLLBAR .T. */
    END EDITBOX
    (xDlg)
 

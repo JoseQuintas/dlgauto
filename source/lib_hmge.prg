@@ -180,8 +180,9 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       WIDTH nWidth
       HEIGHT nHeight
       VALUE xValue
+      /* MAXLENGTH 510000 */
       TOOLTIP 'EditBox'
-      NOHSCROLLBAR .T.
+      /* NOHSCROLLBAR .T. */
    END EDITBOX
 
    RETURN Nil

@@ -187,9 +187,21 @@ FUNCTION gui_LibName()
 
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
+   /* not multiline */
    IF Empty( xControl )
       xControl := gui_newctlname( "MLTEXT" )
    ENDIF
+   DEFINE EDITBOX ( xControl )
+      PARENT ( xDlg )
+      ROW      nRow
+      COL      nCol
+      HEIGHT   nHeight
+      WIDTH    nWidth
+      FONTNAME DEFAULT_FONTNAME
+      VALUE     xValue
+      MAXLENGTH 510000
+      /* NOHSCROLLBAR .T. */
+   END TEXTBOX
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (xValue)
 
    RETURN Nil
