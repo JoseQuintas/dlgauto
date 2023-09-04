@@ -24,7 +24,7 @@ FUNCTION frm_Preview( cFileMask )
 
    gui_DialogCreate( @oFrm:oDlg, 0, 0, oFrm:nDlgWidth, oFrm:nDlgHeight, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:oDlg ) } )
    frm_Buttons( oFrm, .F. )
-   gui_MLTextCreate( oFrm:oDlg, @oEdit, 65, 10, oFrm:nDlgWidth - 40, oFrm:nDlgHeight - 100, "" )
+   gui_MLTextCreate( oFrm:oDlg, @oEdit, 65, 10, oFrm:nDlgWidth - 40, oFrm:nDlgHeight - 120, "" )
    gui_DialogActivate( oFrm:oDlg )
 
    RETURN Nil

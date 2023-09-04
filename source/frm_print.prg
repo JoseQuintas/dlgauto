@@ -4,6 +4,8 @@ frm_print - single report
 
 #define CFG_FNAME     1
 #define CFG_CAPTION   7
+#define PAGE_ROWS     66
+#define PAGE_COLS     132
 
 FUNCTION frm_Print( Self )
 
@@ -15,16 +17,17 @@ FUNCTION frm_Print( Self )
    nLin := 99
    GOTO TOP
    DO WHILE ! Eof()
-      IF nLin > 64
+      IF nLin > PAGE_ROWS - 2
          nPag += 1
-         @ 0, 0   SAY ::cFileDBF
-         @ 0, 71 SAY "Page " + StrZero( nPag, 3 )
-         @ 1, 0   SAY Replicate( "-", 80 )
+         @ 0, 0 SAY gui_LibName()
+         @ 0, 66 - Int( Len( ::cFileDbf ) / 2 ) SAY ::cFileDBF
+         @ 0, PAGE_COLS - 9 SAY "Page " + StrZero( nPag, 3 )
+         @ 1, 0 SAY Replicate( "-", PAGE_COLS )
          nLin := 2
          nCol := 0
-         FOR EACH aItem IN ::aEditList // need additional adjust
-            nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" ) ) )
-            IF nCol != 0 .AND. nCol + nLen > 79
+         FOR EACH aItem IN ::aEditList
+            nLen := Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" ) ) )
+            IF nCol != 0 .AND. nCol + nLen > PAGE_COLS - 1
                nLin += 1
                nCol := 0
             ENDIF
@@ -35,9 +38,9 @@ FUNCTION frm_Print( Self )
       ENDIF
       nCol := 0
       nLinAnt := nLin
-      FOR EACH aItem IN ::aEditList // need additional adjust
-         nLen = Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" ) ) )
-         IF nCol != 0 .AND. nCol + nLen > 79
+      FOR EACH aItem IN ::aEditList
+         nLen := Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), "" ) ) )
+         IF nCol != 0 .AND. nCol + nLen > PAGE_COLS - 1
             nLin += 1
             nCol := 0
          ENDIF
