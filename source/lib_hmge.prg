@@ -75,6 +75,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    IF Empty( xControl )
       xControl := gui_newctlname( "BROW" )
    ENDIF
+   //SET BROWSESYNC ON // on top application
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
@@ -87,11 +88,57 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       HEADERS aHeaderList ;
       WIDTHS aWidthList ;
       WORKAREA ( workarea ) ;
-      FIELDS aFieldList
+      FIELDS aFieldList ;
+      ON DBLCLICK gui_browseDblClick( xDlg, xControl, cField, @xValue )
+
+   //CREATE EVENT PROCNAME gui_BrowseKeys()
 
    (cField);(xValue)
 
    RETURN Nil
+
+FUNCTION gui_BrowseDblClick( xDlg, xControl, cField, xValue )
+
+   LOCAL nCol, nPos, aList
+
+   IF ! Empty( cField )
+      // no, this is for grid
+      //nCol := FieldNum( cField )
+      //nPos := GetProperty( xDlg, xControl, "VALUE" )
+      //aList := GetProperty( xDlg, xControl, "ITEM", nPos )
+      //xValue := aList[ nCol ]
+      // no position on DBF
+      //xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
+   ENDIF
+   //msgbox( cField )
+   //msgbox( valtype( xvalue ) )
+   //msgbox( transform( xvalue, "" ) )
+   DoMethod( xDlg, "RELEASE" )
+   (xDlg);(xControl);(cField);(xValue);(nCol);(aList)
+
+   //LOCAL nKey
+
+   //IF nMsg != WM_NOTIFY
+   //   RETURN Nil
+   //ENDIF
+   //IF ! _IsControlDefined( cBrowseName, cWindowName ) .OR. ;
+   //   GetWndFrom( lParam ) != GetProperty( cWindowName, cBrowseName, "HANDLE" )
+   //   RETURN Nil
+   //ENDIF
+   //IF ! GetNotifyCode( lParam ) == LVN_KEYDOWN
+   //   RETURN Nil
+   //ENDIF
+
+   //nKey := GetGridVKey( lParam )
+
+   //IF nKey == VK_RETURN // RETURN is not a LVN_KEYDOWN
+   //   Msgbox( Ltrim( Str( nKey ) ) )
+   //ENDIF
+   //(hWnd); (wParam)
+
+
+   RETURN Nil
+
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
