@@ -149,8 +149,6 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    IF Empty( xControl )
       xControl := gui_newctlname( "LABEL" )
    ENDIF
-   (xDlg)
-   (lBorder)
    IF lBorder
       @ nRow, nCol LABEL ( xControl ) ;
          PARENT ( xDlg ) ;
@@ -172,6 +170,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    //   :Height := nHeight
    //   //:Border := lBorder
    //ENDWITH
+   (xDlg); (lBorder)
 
    RETURN Nil
 
@@ -244,7 +243,7 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       VALUE 1
 
    xControl := xDlg // because they are not on tab
-   (nRow);(nCol);(nWidth);(nHeight);(xDlg)
+   (nRow); (nCol); (nWidth); (nHeight); (xDlg)
 
    RETURN Nil
 
@@ -269,8 +268,8 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
 
 FUNCTION gui_TabPageEnd( xDlg, xControl )
 
-   (xDlg); (xControl)
    END PAGE
+   (xDlg); (xControl)
 
    RETURN Nil
 
@@ -280,8 +279,6 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    IF Empty( xControl )
       xControl := gui_newctlname( "TEXT" )
    ENDIF
-   (bValid)
-   (cPicture)
    DEFINE TEXTBOX ( xControl )
       PARENT ( xDlg )
       ROW      nRow
@@ -299,6 +296,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       VALUE     xValue
       ON LOSTFOCUS Eval( bValid )
    END TEXTBOX
+   (bValid); (cPicture)
 
    RETURN Nil
 

@@ -30,7 +30,6 @@ FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
-   ( xDlg );(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
    xControl := wvgPushButton():New()
    WITH OBJECT xControl
       :PointerFocus := .F.
@@ -40,17 +39,18 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       :SetCaption( cCaption )
       :Activate := bAction
    ENDWITH
+   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (cCaption); (cResName); (bAction)
 
    RETURN Nil
 
 FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
-   (xDlg);(xControl);(lEnable)
    IF lEnable
       xControl:Enable()
    ELSE
       xControl:Disable()
    ENDIF
+   (xDlg);(xControl);(lEnable)
 
    RETURN Nil
 
@@ -62,17 +62,17 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
-   (xDlg)
    IF ! Empty( bCode )
       Eval( bCode )
    ENDIF
+   (xDlg)
 
    RETURN Nil
 
 FUNCTION gui_DialogClose( xDlg )
 
-   (xDlg)
    xDlg:Destroy()
+   (xDlg)
    QUIT
 
    RETURN Nil
@@ -98,7 +98,6 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
-   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
    xControl := wvgStatic():New()
    WITH OBJECT xControl
       :Type := WVGSTATIC_TYPE_TEXT
@@ -110,13 +109,14 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
       :SetFont( "Arial" )
       :Create(xDlg,,{nCol,nRow},{nWidth,nHeight})
    ENDWITH
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
 
    RETURN Nil
 
 FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
 
-   (xDlg);(xControl);(xValue)
    xControl:SetCaption( AllTrim( Transform( xValue, "" ) ) )
+   (xDlg);(xControl);(xValue)
 
    RETURN Nil
 
@@ -183,7 +183,6 @@ FUNCTION gui_TextGetValue( xDlg, xControl )
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
-   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bValid)
    /*
    xControl := wvgStatic():New()
    WITH OBJECT xControl
@@ -202,6 +201,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       :Create( xDlg,,{nCol,nRow},{nWidth,nHeight})
       :SetData( Transform( xValue, "" ) )
    ENDWITH
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bValid)
 
    RETURN Nil
 
@@ -213,19 +213,19 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
 FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
 
-   (xDlg);(xControl);(lEnable)
    IF lEnable
       xControl:Enable()
    ELSE
       xControl:Disable()
    ENDIF
+   (xDlg);(xControl);(lEnable)
 
    RETURN Nil
 
 FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
-   (xDlg);(xControl);(xValue)
    xControl:SetData( xValue )
+   (xDlg);(xControl);(xValue)
 
    RETURN Nil
 

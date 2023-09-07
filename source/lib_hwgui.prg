@@ -27,8 +27,6 @@ FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
-   ( xDlg )
-
    @ nCol, nRow BUTTON xControl ;
       CAPTION  Nil ;
       OF       xDlg ;
@@ -38,17 +36,18 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       ON INIT  { || ;
          BtnSetImageText( xControl:Handle, cCaption, cResName, nWidth, nHeight ) } ;
          TOOLTIP cCaption
+   ( xDlg )
 
    RETURN Nil
 
 FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
-   (xDlg)
    IF lEnable
       xControl:Enable()
    ELSE
       xControl:Disable()
    ENDIF
+   (xDlg)
 
    RETURN Nil
 
@@ -127,11 +126,11 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       (xDlg)
+
       RETURN hwg_SelfFocus( xControl:Handle )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
-   ( xDlg )
    IF lBorder
       @ nCol, nRow SAY xControl ;
          CAPTION xValue ;
@@ -148,7 +147,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
          COLOR   COLOR_BLACK ;
          TRANSPARENT
    ENDIF
-   (xDlg);(lBorder)
+   (xDlg); (lBorder)
 
    RETURN Nil
 
@@ -176,9 +175,9 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 
 FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
 
-   (xDlg)
    xControl:SetText( xValue )
    xControl:Refresh()
+   (xDlg)
 
    RETURN Nil
 
@@ -190,12 +189,12 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    LOCAL oFont := HFont():Add( "Courier New", 0, -11 )
 
-   (xDlg)
    @ nCol, nRow EDITBOX xControl ;
       CAPTION xValue ;
       SIZE    nWidth, nHeight ;
       FONT    oFont ;
       STYLE   ES_MULTILINE + ES_AUTOVSCROLL + WS_VSCROLL + WS_HSCROLL
+   (xDlg)
 
    RETURN Nil
 
@@ -252,15 +251,15 @@ FUNCTION gui_TabNavigate( xDlg, oTab, aList )
 
 FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
 
-   (xDlg)
    BEGIN PAGE cText OF xControl
+   (xDlg)
 
    RETURN Nil
 
 FUNCTION gui_TabPageEnd( xDlg, xControl )
 
-   (xDlg)
    END PAGE OF xControl
+   (xDlg)
 
    RETURN Nil
 
@@ -287,23 +286,25 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
 FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
 
-   (xDlg)
    IF lEnable
       xControl:Enable()
    ELSE
       xControl:Disable()
    ENDIF
+   (xDlg)
 
    RETURN Nil
 
 FUNCTION gui_TextGetValue( xDlg, xControl )
 
    (xDlg)
+
    RETURN xControl:Value
 
 FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
    ( xDlg )
+
    xControl:Value := xValue
 
    RETURN Nil

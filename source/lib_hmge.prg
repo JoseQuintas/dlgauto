@@ -3,6 +3,7 @@ lib_hmge - HMG Extended source selected by lib.prg
 */
 
 #include "frm_class.ch"
+#include "i_winuser.ch"
 
 FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
@@ -255,7 +256,6 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    IF Empty( xControl )
       xControl := gui_newctlname( "TEXT" )
    ENDIF
-   (bValid)
    DEFINE TEXTBOX ( xControl )
       PARENT ( xDlg )
       ROW nRow
@@ -275,6 +275,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       VALUE     xValue
       ON LOSTFOCUS Eval( bValid )
    END TEXTBOX
+   (bValid)
 
    RETURN Nil
 

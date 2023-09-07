@@ -278,7 +278,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       VALUE     xValue
       ON LOSTFOCUS Eval( bValid )
    END TEXTBOX
-   (bValid);(xDlg)
+   (bValid); (xDlg)
 
    RETURN Nil
 

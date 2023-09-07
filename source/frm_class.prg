@@ -29,6 +29,10 @@ CREATE CLASS frm_Class
    VAR aControlList   INIT {}
    VAR aAllSetup      INIT {}
 
+   METHOD First()
+   METHOD Last()
+   METHOD Next()
+   METHOD Previous()
    METHOD CreateControls()     INLINE frm_Buttons( Self ), frm_Edit( Self )
    METHOD ButtonSaveOn()
    METHOD ButtonSaveOff()
@@ -41,10 +45,6 @@ CREATE CLASS frm_Class
    METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditOn()
    METHOD Delete()
    METHOD Insert()             INLINE Nil
-   METHOD First()              INLINE &( ::cFileDbf )->( dbgotop() ),    ::UpdateEdit()
-   METHOD Last()               INLINE &( ::cFileDbf )->( dbgobottom() ), ::UpdateEdit()
-   METHOD Next()               INLINE &( ::cFileDbf )->( dbSkip() ),     ::UpdateEdit()
-   METHOD Previous()           INLINE &( ::cFileDbf )->( dbSkip( -1 ) ), ::UpdateEdit()
    METHOD Exit()               INLINE gui_DialogClose( ::oDlg )
    METHOD Save()
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::UpdateEdit()
@@ -52,6 +52,40 @@ CREATE CLASS frm_Class
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
 
    ENDCLASS
+
+METHOD First() Class frm_Class
+
+   GOTO TOP
+   ::UpdateEdit()
+
+   RETURN Nil
+
+METHOD Last() CLASS frm_Class
+
+   GOTO BOTTOM
+   ::UpdateEdit()
+
+   RETURN Nil
+
+METHOD Next() CLASS frm_Class
+
+   SKIP
+   IF Eof()
+      GOTO BOTTOM
+   ENDIF
+   ::UpdateEdit()
+
+   RETURN Nil
+
+METHOD Previous() CLASS frm_Class
+
+   SKIP -1
+   IF Bof()
+      GOTO TOP
+   ENDIF
+   ::UpdateEdit()
+
+   RETURN Nil
 
 METHOD ButtonSaveOn() CLASS frm_Class
 
