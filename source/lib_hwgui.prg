@@ -193,7 +193,7 @@ FUNCTION gui_LibName()
 
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
-   LOCAL oFont := HFont():Add( "Courier New", 0, -11 )
+   LOCAL oFont := HFont():Add( PREVIEW_FONTNAME, 0, -11 )
 
    @ nCol, nRow EDITBOX xControl ;
       CAPTION xValue ;

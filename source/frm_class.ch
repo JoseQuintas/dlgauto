@@ -63,3 +63,4 @@
 #define COLOR_YELLOW  WIN_RGB( 255, 255, 0 )
 #define COLOR_GREEN   12507070
 #define DEFAULT_FONTNAME "MS Sans Serif"
+#define PREVIEW_FONTNAME "Courier New"

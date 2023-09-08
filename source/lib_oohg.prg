@@ -203,7 +203,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       COL      nCol
       HEIGHT   nHeight
       WIDTH    nWidth
-      FONTNAME DEFAULT_FONTNAME
+      FONTNAME PREVIEW_FONTNAME
       VALUE     xValue
       SETBREAK  .T.
       MAXLENGTH 510000

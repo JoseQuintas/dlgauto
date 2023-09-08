@@ -205,6 +205,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       WIDTH nWidth
       HEIGHT nHeight
       VALUE xValue
+      FONTNAME PREVIEW_FONTNAME
       TOOLTIP 'EditBox'
       /* NOHSCROLLBAR .T. */
    END EDITBOX

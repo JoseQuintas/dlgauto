@@ -100,7 +100,6 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    (xDlg);(cField);(xValue);(workarea)
 
-
    RETURN Nil
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
@@ -112,7 +111,6 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
    (xControl)
 
    RETURN Nil
-
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
@@ -202,6 +200,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       WIDTH nWidth
       HEIGHT nHeight
       VALUE xValue
+      FONTNAME PREVIEW_FONTNAME
       /* MAXLENGTH 510000 */
       TOOLTIP 'EditBox'
       /* NOHSCROLLBAR .T. */
