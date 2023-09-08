@@ -5,6 +5,12 @@ lib_gtwvg - gtwvg source selected by lib.prg
 #include "inkey.ch"
 #include "frm_class.ch"
 
+FUNCTION gui_Init()
+
+   // Nothing
+
+   RETURN Nil
+
 FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL oMainMenu, aGroupList, cDBF, oMenuGroup

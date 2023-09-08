@@ -4,6 +4,12 @@ lib_oohg - oohg source selected by lib.prg
 
 #include "frm_class.ch"
 
+FUNCTION gui_Init()
+
+   SET NAVIGATION EXTENDED
+
+   RETURN Nil
+
 FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, oMenuMain, oMenuGroup, cDBF

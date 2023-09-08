@@ -4,6 +4,13 @@ lib_hmg3 - HMG3 source selected by lib.prg
 
 #include "frm_class.ch"
 
+FUNCTION gui_Init()
+
+   SET NAVIGATION EXTENDED
+   SET BROWSESYNC ON
+
+   RETURN Nil
+
 FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupLIst, cDBF
@@ -98,11 +105,14 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
+   LOCAL nRecNo
+
    IF ! Empty( cField )
+      nRecNo := GetProperty( xDlg, xControl, "RECNO" )
+      GOTO ( nRecNo )
       xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
    DoMethod( xDlg, "RELEASE" )
-   (xDlg);(xControl);(cField);(xValue)
 
    RETURN Nil
 

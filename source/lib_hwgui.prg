@@ -4,6 +4,12 @@ lib_hwgui - hwgui source selected by lib.prg
 
 #include "frm_class.ch"
 
+FUNCTION gui_Init()
+
+   hwg_SetColorInFocus( .T., COLOR_BLACK,COLOR_YELLOW )
+
+   RETURN Nil
+
 FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF

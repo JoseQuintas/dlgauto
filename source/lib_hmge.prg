@@ -5,6 +5,14 @@ lib_hmge - HMG Extended source selected by lib.prg
 #include "frm_class.ch"
 #include "i_winuser.ch"
 
+FUNCTION gui_Init()
+
+   SET OOP ON
+   SET WINDOW MAIN OFF
+   SET NAVIGATION EXTENDED
+
+   RETURN Nil
+
 FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
@@ -101,7 +109,7 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
       xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
    DoMethod( xDlg, "RELEASE" )
-   (xDlg);(xControl);(cField);(xValue)
+   (xControl)
 
    RETURN Nil
 

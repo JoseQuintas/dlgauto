@@ -16,14 +16,7 @@ PROCEDURE Main()
    SET EPOCH TO Year( Date() ) - 90
    SET DATE BRITISH
    SET CONFIRM OFF
-#ifdef HBMK_HAS_HMGE
-   SET OOP ON
-   SET WINDOW MAIN OFF
-   SET NAVIGATION EXTENDED
-#endif
-#ifdef HBMK_HAS_HWGUI
-   hwg_SetColorInFocus( .T., COLOR_BLACK,COLOR_YELLOW )
-#endif
+   gui_Init()
    RddSetDefault( "DBFCDX" )
    frm_DBF()
    /* table, key */
