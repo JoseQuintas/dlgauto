@@ -86,12 +86,23 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       OF ( xDlg ) ;
       WIDTH nWidth ;
       HEIGHT nHeight ;
+      ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) ;
       HEADERS aHeaderList ;
       WIDTHS aWidthList ;
       ROWSOURCE ( workarea ) ;
       COLUMNFIELDS aFieldList
 
    (xDlg);(cField);(xValue);(workarea)
+
+   RETURN Nil
+
+FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
+
+   IF ! Empty( cField )
+      xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
+   ENDIF
+   DoMethod( xDlg, "RELEASE" )
+   (xDlg);(xControl);(cField);(xValue)
 
    RETURN Nil
 

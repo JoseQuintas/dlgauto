@@ -75,67 +75,33 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    IF Empty( xControl )
       xControl := gui_newctlname( "BROW" )
    ENDIF
-   //SET BROWSESYNC ON // on top application
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
-      AAdd( aWidthList, Max( Len( aItem[1] ), Len( Transform(FieldGet(FieldNum(aItem[2])),"")) ) * 10 )
+      AAdd( aWidthList, Max( Len( aItem[3] ), Len( Transform(FieldGet(FieldNum(aItem[1] ) ), "" ) ) ) * 10 )
    NEXT
-   @ nRow, nCol BROWSE ( xControl ) ;
+   @ nRow, nCol GRID ( xControl ) ;
       OF ( xDlg ) ;
       WIDTH nWidth ;
       HEIGHT nHeight ;
+      ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) ;
       HEADERS aHeaderList ;
       WIDTHS aWidthList ;
-      WORKAREA ( workarea ) ;
-      FIELDS aFieldList ;
-      ON DBLCLICK gui_browseDblClick( xDlg, xControl, cField, @xValue )
+      ROWSOURCE ( workarea ) ;
+      COLUMNFIELDS aFieldList
 
-   //CREATE EVENT PROCNAME gui_BrowseKeys()
+   (xDlg);(cField);(xValue);(workarea)
 
-   (cField);(xValue)
 
    RETURN Nil
 
-FUNCTION gui_BrowseDblClick( xDlg, xControl, cField, xValue )
-
-   LOCAL nCol, nPos, aList
+FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
    IF ! Empty( cField )
-      // no, this is for grid
-      //nCol := FieldNum( cField )
-      //nPos := GetProperty( xDlg, xControl, "VALUE" )
-      //aList := GetProperty( xDlg, xControl, "ITEM", nPos )
-      //xValue := aList[ nCol ]
-      // no position on DBF
-      //xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
+      xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
-   //msgbox( cField )
-   //msgbox( valtype( xvalue ) )
-   //msgbox( transform( xvalue, "" ) )
    DoMethod( xDlg, "RELEASE" )
-   (xDlg);(xControl);(cField);(xValue);(nCol);(aList)
-
-   //LOCAL nKey
-
-   //IF nMsg != WM_NOTIFY
-   //   RETURN Nil
-   //ENDIF
-   //IF ! _IsControlDefined( cBrowseName, cWindowName ) .OR. ;
-   //   GetWndFrom( lParam ) != GetProperty( cWindowName, cBrowseName, "HANDLE" )
-   //   RETURN Nil
-   //ENDIF
-   //IF ! GetNotifyCode( lParam ) == LVN_KEYDOWN
-   //   RETURN Nil
-   //ENDIF
-
-   //nKey := GetGridVKey( lParam )
-
-   //IF nKey == VK_RETURN // RETURN is not a LVN_KEYDOWN
-   //   Msgbox( Ltrim( Str( nKey ) ) )
-   //ENDIF
-   //(hWnd); (wParam)
-
+   (xDlg);(xControl);(cField);(xValue)
 
    RETURN Nil
 
