@@ -93,9 +93,23 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       HEADERS aHeaderList ;
       WIDTHS aWidthList ;
       WORKAREA ( workarea ) ;
-      FIELDS aFieldList
+      FIELDS aFieldList ;
+      ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
 
    (cField);(xValue)
+
+   RETURN Nil
+
+FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
+
+   LOCAL nRecNo
+
+   IF ! Empty( cField )
+      nRecNo := GetProperty( xDlg, xControl, "VALUE" )
+      GOTO ( nRecNo )
+      xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
+   ENDIF
+   DoMethod( xDlg, "RELEASE" )
 
    RETURN Nil
 
