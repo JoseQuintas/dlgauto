@@ -12,10 +12,11 @@ PROCEDURE Main()
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL aKeyList, aSeekList
 
-   SET EXCLUSIVE OFF
-   SET EPOCH TO Year( Date() ) - 90
-   SET DATE BRITISH
    SET CONFIRM OFF
+   SET DATE    BRITISH
+   SET DELETED ON
+   SET EPOCH TO Year( Date() ) - 90
+   SET EXCLUSIVE OFF
    gui_Init()
    RddSetDefault( "DBFCDX" )
    frm_DBF()

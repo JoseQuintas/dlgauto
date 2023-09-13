@@ -44,7 +44,7 @@ CREATE CLASS frm_Class
    METHOD View()               INLINE frm_Browse( Self, "", "", ::cFileDbf, Nil ), ::UpdateEdit()
    METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditOn()
    METHOD Delete()
-   METHOD Insert()             INLINE Nil
+   METHOD Insert()             INLINE ::cSelected := "INSERT", ::EditOn()
    METHOD Exit()               INLINE gui_DialogClose( ::oDlg )
    METHOD Save()
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::UpdateEdit()
@@ -124,7 +124,7 @@ METHOD EditOn() CLASS frm_Class
    LOCAL aItem, oFirstEdit, lFound := .F.
 
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! aItem[ CFG_ISKEY ]
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ( ! aItem[ CFG_ISKEY ] .OR. ::cSelected == "INSERT" )
          gui_TextEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound
             lFound := .T.
@@ -199,9 +199,9 @@ METHOD Save() CLASS frm_Class
          DO CASE
          CASE aItem[ CFG_CTLTYPE ] != TYPE_EDIT // not editable
          CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
-         CASE aItem[ CFG_ISKEY ]                // table key
+         CASE ( aItem[ CFG_ISKEY ] .AND. ::cSelected != "INSERT" )  // table key
          OTHERWISE
-            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), aItem[ CFG_VALUE ] )
+            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), gui_TextGetValue( ::oDlg, aItem[ CFG_FCONTROL ] ) )
          ENDCASE
       NEXT
       SKIP 0

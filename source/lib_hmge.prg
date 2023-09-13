@@ -86,12 +86,12 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
-      AAdd( aWidthList, Max( Len( aItem[3] ), Len( Transform(FieldGet(FieldNum(aItem[1] ) ), "" ) ) ) * 10 )
+      AAdd( aWidthList, Max( Len( aItem[3] ), Len( Transform(FieldGet(FieldNum(aItem[1] ) ), "" ) ) ) * 10 + 10 )
    NEXT
    @ nRow, nCol GRID ( xControl ) ;
       OF ( xDlg ) ;
-      WIDTH nWidth ;
-      HEIGHT nHeight ;
+      WIDTH nWidth - 20 ;
+      HEIGHT nHeight - 20 ;
       ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) ;
       HEADERS aHeaderList ;
       WIDTHS aWidthList ;
