@@ -45,7 +45,7 @@ FUNCTION frm_Edit( Self )
       ENDIF
       IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + ( nLen * 12 ) > ::nDlgWidth - 40 ) .OR. ;
          ( ::lWithTab .AND. nRow > ::nDlgHeight - ( ::nLineHeight * 3 ) )
-         IF ::lWithTab .AND. nRow > ::nDlgHeight - ( ::nLineHeight * 3 )
+         IF ::lWithTab .AND. nRow > ::nDlgHeight - ( ::nLineHeight * 3 ) - 150
             IF nPageCount > 0
                gui_TabPageEnd( ::oDlg, oTab )
             ENDIF

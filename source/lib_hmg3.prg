@@ -320,7 +320,7 @@ FUNCTION gui_TextGetValue( xDlg, xControl )
 FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
    // NOTE: string value, except if declared different on textbox creation
-   SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
+   SetProperty( xDlg, xControl, "VALUE", xValue )
 
    RETURN Nil
 
