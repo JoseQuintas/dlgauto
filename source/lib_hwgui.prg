@@ -10,12 +10,12 @@ FUNCTION gui_Init()
 
    RETURN Nil
 
-FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
+FUNCTION gui_MainMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   INIT WINDOW oDlg TITLE cTitle AT 0, 0 SIZE 1024, 768
-   MENU OF oDlg
+   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
+   MENU OF xDlg
       FOR EACH aGroupList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
             FOR EACH cDBF IN aGroupList
@@ -24,10 +24,10 @@ FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
          ENDMENU
       NEXT
       MENU TITLE "Exit"
-         MENUITEM "&Exit" ACTION gui_DialogClose( oDlg )
+         MENUITEM "&Exit" ACTION gui_DialogClose( xDlg )
       ENDMENU
    ENDMENU
-   gui_DialogActivate( oDlg )
+   gui_DialogActivate( xDlg )
 
    RETURN Nil
 
