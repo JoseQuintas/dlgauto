@@ -13,32 +13,26 @@ FUNCTION gui_Init()
 
    RETURN Nil
 
-FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
+FUNCTION gui_MainMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   DEFINE WINDOW ( oDlg ) ;
-      AT 0, 0 ;
-      WIDTH 1024 ;
-      HEIGHT 768 ;
-      TITLE cTitle ;
-      WINDOWTYPE MAIN
+   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
 
-      DEFINE MAIN MENU OF ( oDlg )
-         FOR EACH aGroupList IN aMenuList
-            DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
-               FOR EACH cDBF IN aGroupList
-                  MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
-               NEXT
-            END POPUP
-         NEXT
-         DEFINE POPUP "Sair"
-            MENUITEM "Sair" ACTION gui_DialogClose( oDlg )
+   DEFINE MAIN MENU OF ( xDlg )
+      FOR EACH aGroupList IN aMenuList
+         DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
+            FOR EACH cDBF IN aGroupList
+               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+            NEXT
          END POPUP
-      END MENU
-   END WINDOW
+      NEXT
+      DEFINE POPUP "Sair"
+         MENUITEM "Sair" ACTION gui_DialogClose( xDlg )
+      END POPUP
+   END MENU
 
-   gui_DialogActivate( oDlg )
+   gui_DialogActivate( xDlg )
 
    RETURN Nil
 

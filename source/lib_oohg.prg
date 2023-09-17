@@ -12,30 +12,29 @@ FUNCTION gui_Init()
 
 FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
 
-   LOCAL aGroupList, oMenuMain, oMenuGroup, cDBF
+   LOCAL aGroupList, cDBF
 
-   WITH OBJECT oDlg := TFormMain():Define()
-      :Col := 0
-      :Row := 0
-      :Width := 1024
-      :Height := 768
-      :Title := cTitle
-      oMenuMain := TMenuMain():Define(,"MyMenu")
+   DEFINE WINDOW ( oDlg ) ;
+      AT 0, 0 ;
+      WIDTH 1024 ;
+      HEIGHT 768 ;
+      TITLE cTitle ;
+      //MAIN
+
+      DEFINE MAIN MENU OF ( oDlg )
          FOR EACH aGroupList IN aMenuList
-            oMenuGroup:= TMenuItem():DefinePopup( "Data" + Ltrim( Str( aGroupList:__EnumIndex ) ) )
-            FOR EACH cDBF IN aGroupList
-               TMenuItem():DefineItem( cDBF, { || frm_Main( cDBF, aAllSetup ) } )
-            NEXT
-            oMenuGroup:EndPopup()
+            DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
+               FOR EACH cDBF IN aGroupList
+                  MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+               NEXT
+            END POPUP
          NEXT
-         oMenuGroup := TMenuItem():DefinePopup( "Sair" )
-            TMenuItem():DefineItem( "Sair", { || oDlg:Release() } )
-         oMenuGroup:EndPopup()
-      oMenuMain:EndMenu()
-      :EndWindow()
-      :Center()
-      :Activate()
-   ENDWITH
+         DEFINE POPUP "Sair"
+            MENUITEM "Sair" ACTION gui_DialogClose( oDlg )
+         END POPUP
+      END MENU
+   END WINDOW
+   gui_DialogActivate( oDlg )
 
    RETURN Nil
 
