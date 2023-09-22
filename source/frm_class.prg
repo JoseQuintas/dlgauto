@@ -152,6 +152,26 @@ METHOD EditOff() CLASS frm_Class
 
 METHOD Delete() CLASS frm_Class
 
+   LOCAL aFile, aItem, cSearch, nSelect
+
+   FOR EACH aFile IN ::aAllSetup
+      FOR EACH aItem IN aFile[ 2 ]
+         IF aItem[ CFG_VTABLE ] == ::cFileDBF
+            nSelect := Select()
+            SELECT Select( aFile[ 1 ] )
+            cSearch := aItem[ CFG_FNAME ] + [=("] + aItem[ CFG_VTABLE ] + [")->] + aItem[ CFG_VFIELD ]
+            LOCATE FOR &cSearch
+            IF ! Eof()
+               gui_MsgBox( "Code in use on " + aFile[ 1 ] )
+               SELECT ( nSelect )
+               RETURN Nil
+            ENDIF
+            SELECT ( nSelect )
+            EXIT
+         ENDIF
+      NEXT
+   NEXT
+
    IF gui_MsgYesNo( "Delete" )
       IF rLock()
          DELETE

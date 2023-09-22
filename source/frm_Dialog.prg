@@ -7,7 +7,7 @@ frm_Dialog - create the dialog for data
 
 FUNCTION frm_Dialog( Self )
 
-   LOCAL aItem
+   LOCAL aItem, aFile
 
    SELECT 0
    USE ( ::cFileDBF )
@@ -24,6 +24,18 @@ FUNCTION frm_Dialog( Self )
          ENDIF
       ENDIF
    NEXT
+   FOR EACH aFile IN ::aAllSetup
+      FOR EACH aItem IN aFile[ 2 ]
+         IF aItem[ CFG_VTABLE ] == ::cFileDBF
+            SELECT 0
+            USE ( aFile[ 1 ] )
+            SET INDEX TO ( aFile[ 1 ] )
+            SET ORDER TO 1
+            EXIT
+         ENDIF
+      NEXT
+   NEXT
+
    SELECT ( Select( ::cFileDbf ) )
 
    gui_DialogCreate( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle )
