@@ -96,11 +96,11 @@ STATIC FUNCTION gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, xValue
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
-   xDlg:Center()
+   // xDlg:Center()
    IF Empty( bCode )
-      xDlg:Activate()
+      ACTIVATE DIALOG xDLG CENTER // xDlg:Activate()
    ELSE
-      ACTIVATE DIALOG xDlg ON ACTIVATE bCode
+      ACTIVATE DIALOG xDlg CENTER ON ACTIVATE bCode
    ENDIF
 
    RETURN Nil
