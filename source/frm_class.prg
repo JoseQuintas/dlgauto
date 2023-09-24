@@ -187,18 +187,16 @@ METHOD UpdateEdit() CLASS frm_Class
    LOCAL aItem, nSelect, xValue, cText
 
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF ! Empty( aItem[ CFG_FNAME ] )
-            xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
-            gui_TextSetValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
-            IF ! Empty( aItem[ CFG_VTABLE ] )
-               nSelect := Select()
-               SELECT ( Select( aItem[ CFG_VTABLE ] ) )
-               SEEK xValue
-               cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
-               SELECT ( nSelect )
-               gui_LabelSetValue( ::oDlg, aItem[ CFG_VCONTROL ], cText )
-            ENDIF
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! Empty( aItem[ CFG_FNAME ] )
+         xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
+         gui_TextSetValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
+         IF ! Empty( aItem[ CFG_VTABLE ] )
+            nSelect := Select()
+            SELECT ( Select( aItem[ CFG_VTABLE ] ) )
+            SEEK xValue
+            cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+            SELECT ( nSelect )
+            gui_LabelSetValue( ::oDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
       ENDIF
    NEXT

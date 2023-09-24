@@ -15,23 +15,20 @@ FUNCTION frm_Dialog( Self )
       SET INDEX TO ( ::cFileDBF )
    ENDIF
    FOR EACH aItem IN ::aEditList
-      IF ! Empty( aItem[ CFG_VTABLE ] )
-         IF Select( aItem[ CFG_VTABLE ] ) == 0
-            SELECT 0
-            USE ( aItem[ CFG_VTABLE ] )
-            SET INDEX TO ( aItem[ CFG_VTABLE ] )
-            SET ORDER TO 1
-         ENDIF
+      IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. Select( aItem[ CFG_VTABLE ] ) == 0
+         SELECT 0
+         USE ( aItem[ CFG_VTABLE ] )
+         SET INDEX TO ( aItem[ CFG_VTABLE ] )
+         SET ORDER TO 1
       ENDIF
    NEXT
    FOR EACH aFile IN ::aAllSetup
       FOR EACH aItem IN aFile[ 2 ]
-         IF aItem[ CFG_VTABLE ] == ::cFileDBF
+         IF aItem[ CFG_VTABLE ] == ::cFileDBF .AND. Select( aFile[ 1 ] ) == 0
             SELECT 0
             USE ( aFile[ 1 ] )
             SET INDEX TO ( aFile[ 1 ] )
             SET ORDER TO 1
-            EXIT
          ENDIF
       NEXT
    NEXT
