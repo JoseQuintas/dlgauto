@@ -14,6 +14,7 @@ FUNCTION frm_Dialog( Self )
    IF hb_ASCan( ::aEditList, { | e | e[ CFG_ISKEY ] } ) != 0
       SET INDEX TO ( ::cFileDBF )
    ENDIF
+   // dbfs for code validation
    FOR EACH aItem IN ::aEditList
       IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. Select( aItem[ CFG_VTABLE ] ) == 0
          SELECT 0
@@ -22,6 +23,7 @@ FUNCTION frm_Dialog( Self )
          SET ORDER TO 1
       ENDIF
    NEXT
+   // dbfs for code in use validation
    FOR EACH aFile IN ::aAllSetup
       FOR EACH aItem IN aFile[ 2 ]
          IF aItem[ CFG_VTABLE ] == ::cFileDBF .AND. Select( aFile[ 1 ] ) == 0

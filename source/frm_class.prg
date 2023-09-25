@@ -154,6 +154,7 @@ METHOD Delete() CLASS frm_Class
 
    LOCAL aFile, aItem, cSearch, nSelect
 
+   // check if code is in use, from validate setup
    FOR EACH aFile IN ::aAllSetup
       FOR EACH aItem IN aFile[ 2 ]
          IF aItem[ CFG_VTABLE ] == ::cFileDBF
