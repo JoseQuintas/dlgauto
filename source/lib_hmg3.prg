@@ -5,6 +5,7 @@ lib_hmg3 - HMG3 source selected by lib.prg
 #include "frm_class.ch"
 
 MEMVAR _HMG_SYSDATA
+MEMVAR _HMG_MainWindowFirst
 
 FUNCTION gui_Init()
 
