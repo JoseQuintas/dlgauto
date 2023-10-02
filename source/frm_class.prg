@@ -152,22 +152,24 @@ METHOD EditOff() CLASS frm_Class
 
 METHOD Delete() CLASS frm_Class
 
-   LOCAL aFile, cSearch, nSelect, nPos
+   LOCAL aFile, cSearch, nSelect, aItem
 
    nSelect := Select()
    // check if code is in use, from validate setup
+   // do not use hb_Scan(), because can exists more than one field to same dbf
    FOR EACH aFile IN ::aAllSetup
-      nPos := hb_Ascan( aFile[ 2 ], { | e | e[ CFG_VTABLE ] == ::cFileDBF } )
-      IF nPos != 0
-         SELECT Select( aFile[ 1 ] )
-         cSearch := aFile[ 2 ][ nPos ][ CFG_FNAME ] + [=("] + ::cFileDbf + [")->] + aFile[ 2 ][ nPos ][ CFG_VFIELD ]
-         LOCATE FOR &cSearch
-         IF ! Eof()
-            gui_MsgBox( "Code in use on " + aFile[ 1 ] )
-            SELECT ( nSelect )
-            RETURN Nil
+      FOR EACH aItem IN aFile[ 2 ]
+         IF aItem[ CFG_VTABLE ] == ::cFileDbf
+            SELECT Select( aFile[ 1 ] )
+            cSearch := aItem[ CFG_FNAME ] + [=("] + ::cFileDbf + [")->] + aItem[ CFG_VFIELD ]
+            LOCATE FOR &cSearch
+            IF ! Eof()
+               gui_MsgBox( "Code in use on " + aFile[ 1 ] )
+               SELECT ( nSelect )
+               RETURN Nil
+            ENDIF
          ENDIF
-      ENDIF
+      NEXT
    NEXT
    SELECT ( nSelect )
 
