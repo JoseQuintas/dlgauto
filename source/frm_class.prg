@@ -125,7 +125,7 @@ METHOD EditKeyOn() CLASS frm_Class
    LOCAL aItem, oKeyEdit, lFound := .F.
 
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. aItem[ CFG_ISKEY ]
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ( aItem[ CFG_ISKEY ] .OR. Empty( aItem[ CFG_FNAME ] ) )
          gui_TextEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound
             lFound := .T.
