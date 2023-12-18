@@ -75,14 +75,6 @@ FUNCTION frm_Edit( Self )
          nRow2, nCol2, aItem[ CFG_FLEN ] * 12 + 12, ::nLineHeight, ;
          @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
          { || ::Validate( aItem ) } )
-#ifdef HBMK_HAS_HWGUI
-      IF aItem[ CFG_ISKEY ]
-         // dummy textbox to works last valid
-         AAdd( ::aControlList, CFG_EMPTY )
-         gui_TextCreate( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-            nRow, nCol, 0, 0, "", "", 0, { || .T. } )
-      ENDIF
-#endif
       nCol += ( nLen + 3 ) * 12
       IF ::lWithTab
          IF ! aItem[ CFG_ISKEY ]
