@@ -19,7 +19,7 @@ FUNCTION frm_DBF()
          { "CLBANK", "N", 6, 0 } } )
       USE DBCLIENT
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "CLIENT" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "CLIENT", nCont )
          APPEND BLANK
          REPLACE IDCLIENT WITH nCont, CLNAME WITH cTxt, CLDOC WITH cTxt, ;
             CLADDRESS WITH cTxt, CLCITY WITH cTxt, CLSTATE WITH StrZero( nCont, 2 ), ;
@@ -40,7 +40,7 @@ FUNCTION frm_DBF()
          { "PRVALUE",   "N", 14, 2 } } )
       USE DBPRODUCT
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "PRODUCT" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "PRODUCT", nCont )
          APPEND BLANK
          REPLACE IDPRODUCT WITH nCont, PRNAME WITH cTxt, PRUNIT WITH nCont, ;
             PRGROUP WITH nCont, PRNCM WITH cTxt, PRQT WITH nCont, ;
@@ -57,7 +57,7 @@ FUNCTION frm_DBF()
          { "UNNAME",  "C", 30, 0 } } )
       USE DBUNIT
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "UNIT" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "UNIT", nCont )
          APPEND BLANK
          REPLACE IDUNIT WITH nCont, UNSYMBOL WITH cTxt, UNNAME WITH cTxt
       NEXT
@@ -71,7 +71,7 @@ FUNCTION frm_DBF()
          { "SENAME",   "C", 30, 0 } } )
       USE DBSELLER
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "SELLER" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "SELLER", nCont )
          APPEND BLANK
          REPLACE IDSELLER WITH nCont, SENAME WITH cTxt
       NEXT
@@ -85,7 +85,7 @@ FUNCTION frm_DBF()
          { "BANAME",   "C", 30, 0 } } )
       USE DBBANK
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "BANK" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "BANK", nCont )
          APPEND BLANK
          REPLACE IDBANK WITH nCont, BANAME WITH cTxt
       NEXT
@@ -99,7 +99,7 @@ FUNCTION frm_DBF()
          { "GRNAME", "C", 30, 0 } } )
       USE DBGROUP
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "GROUP" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "GROUP", nCont )
          APPEND BLANK
          REPLACE IDGROUP WITH nCont, GRNAME WITH cTxt
       NEXT
@@ -117,7 +117,7 @@ FUNCTION frm_DBF()
          { "STQT", "N", 10, 0 } } )
       USE DBSTOCK
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "STOCK" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "STOCK" , nCont )
          APPEND BLANK
          REPLACE IDSTOCK WITH nCont, STDATOPER WITH Date() + nCont, ;
             STCLIENT WITH nCont, STNUMDOC WITH cTxt, ;
@@ -138,7 +138,7 @@ FUNCTION frm_DBF()
          { "FIBANK", "N", 6, 0 } } )
       USE DBFINANC
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "FINANC" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "FINANC", nCont )
          APPEND BLANK
          REPLACE IDFINANC WITH nCont, FIDATOPER WITH Date() + nCont, ;
             FICLIENT WITH nCont, FINUMDOC WITH cTxt, ;
@@ -153,7 +153,7 @@ FUNCTION frm_DBF()
          { "STNAME", "C", 30, 0 } } )
       USE DBSTATE
       FOR nCont = 1 TO 9
-         cTxt := Replicate( "STATE" + Str( nCont, 1 ), 10 )
+         cTxt := ToDescription( "STATE", nCont )
          APPEND BLANK
          REPLACE IDSTATE WITH StrZero( nCont, 2 ), STNAME WITH cTxt
       NEXT
@@ -162,3 +162,21 @@ FUNCTION frm_DBF()
    ENDIF
 
    RETURN Nil
+
+STATIC FUNCTION ToDescription( cText, n )
+
+   cText += " "
+   DO CASE
+   CASE n == 1 ; cText += "ONE"
+   CASE n == 2 ; cText += "TWO"
+   CASE n == 3 ; cText += "THREE"
+   CASE n == 4 ; cText += "FOUR"
+   CASE n == 5 ; cText += "FIVE"
+   CASE n == 6 ; cText += "SIX"
+   CASE n == 7 ; cText += "SEVEN"
+   CASE n == 8 ; cText += "EIGHT"
+   CASE n == 9 ; cText += "NINE"
+   ENDCASE
+   cText += " "
+
+   RETURN Replicate( cText, 5 )
