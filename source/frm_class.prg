@@ -25,7 +25,7 @@ CREATE CLASS frm_Class
    VAR nButtonSpace    INIT 3
    VAR nTextSize       INIT 15
 
-   VAR oDlg
+   VAR xDlg
    VAR aControlList   INIT {}
    VAR aAllSetup      INIT {}
 
@@ -46,7 +46,7 @@ CREATE CLASS frm_Class
    METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditKeyOn()
    METHOD Delete()
    METHOD Insert()             INLINE ::cSelected := "INSERT", ::EditKeyOn()
-   METHOD Exit()               INLINE gui_DialogClose( ::oDlg )
+   METHOD Exit()               INLINE gui_DialogClose( ::xDlg )
    METHOD Save()
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::UpdateEdit()
    METHOD Validate( aItem )    INLINE frm_Validate( aItem, Self )
@@ -54,7 +54,7 @@ CREATE CLASS frm_Class
 
    ENDCLASS
 
-METHOD First() Class frm_Class
+METHOD First() CLASS frm_Class
 
    GOTO TOP
    ::UpdateEdit()
@@ -95,9 +95,9 @@ METHOD ButtonSaveOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
-            gui_ButtonEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_ButtonEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          ELSE
-            gui_ButtonEnable( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
+            gui_ButtonEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ENDIF
       ENDIF
    NEXT
@@ -111,9 +111,9 @@ METHOD ButtonSaveOff() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
-            gui_ButtonEnable( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
+            gui_ButtonEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
-            gui_ButtonEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_ButtonEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          ENDIF
       ENDIF
    NEXT
@@ -126,7 +126,7 @@ METHOD EditKeyOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ( aItem[ CFG_ISKEY ] .OR. Empty( aItem[ CFG_FNAME ] ) )
-         gui_TextEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
+         gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound
             lFound := .T.
             oKeyEdit := aItem[ CFG_FCONTROL ]
@@ -134,7 +134,7 @@ METHOD EditKeyOn() CLASS frm_Class
       ENDIF
    NEXT
    ::ButtonSaveOn()
-   gui_SetFocus( ::oDlg, oKeyEdit )
+   gui_SetFocus( ::xDlg, oKeyEdit )
 
    RETURN Nil
 
@@ -145,9 +145,9 @@ METHOD EditOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF aItem[ CFG_ISKEY ]
-            gui_TextEnable( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
+            gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
-            gui_TextEnable( ::oDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
             IF ! lFound
                lFound := .T.
                oFirstEdit := aItem[ CFG_FCONTROL ]
@@ -156,7 +156,7 @@ METHOD EditOn() CLASS frm_Class
       ENDIF
    NEXT
    ::ButtonSaveOn()
-   gui_SetFocus( ::oDlg, oFirstEdit )
+   gui_SetFocus( ::xDlg, oFirstEdit )
 
    RETURN Nil
 
@@ -166,7 +166,7 @@ METHOD EditOff() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         gui_TextEnable( ::oDlg, aItem[ CFG_FCONTROL ], .F. )
+         gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
    ::ButtonSaveOff()
@@ -213,14 +213,14 @@ METHOD UpdateEdit() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! Empty( aItem[ CFG_FNAME ] )
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
-         gui_TextSetValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
+         gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] )
             nSelect := Select()
             SELECT ( Select( aItem[ CFG_VTABLE ] ) )
             SEEK xValue
             cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
             SELECT ( nSelect )
-            gui_LabelSetValue( ::oDlg, aItem[ CFG_VCONTROL ], cText )
+            gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
       ENDIF
    NEXT
@@ -240,7 +240,7 @@ METHOD Save() CLASS frm_Class
          CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
          CASE aItem[ CFG_ISKEY ]
          OTHERWISE
-            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), gui_TextGetValue( ::oDlg, aItem[ CFG_FCONTROL ] ) )
+            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
          ENDCASE
       NEXT
       SKIP 0

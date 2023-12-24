@@ -9,7 +9,7 @@ frm_mainmenu - menu of DBF files
 
 FUNCTION frm_MainMenu( aAllSetup )
 
-   LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, oDlg := "Main", cDBF
+   LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, xDlg := "Main", cDBF
 
    FOR EACH aItem IN aAllSetup
       IF ! cName == aItem[1]
@@ -22,6 +22,6 @@ FUNCTION frm_MainMenu( aAllSetup )
       ENDIF
    NEXT
 
-   gui_MainMenu( oDlg, aMenuList, aAllSetup, gui_LibName() + " - MENU" )
+   gui_MainMenu( xDlg, aMenuList, aAllSetup, gui_LibName() + " - MENU" )
 
    RETURN Nil

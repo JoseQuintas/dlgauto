@@ -10,18 +10,18 @@ FUNCTION gui_Init()
 
    RETURN Nil
 
-FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
+FUNCTION gui_MainMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   DEFINE WINDOW ( oDlg ) ;
+   DEFINE WINDOW ( xDlg ) ;
       AT 0, 0 ;
       WIDTH 1024 ;
       HEIGHT 768 ;
       TITLE cTitle ;
       //MAIN
 
-      DEFINE MAIN MENU OF ( oDlg )
+      DEFINE MAIN MENU OF ( xDlg )
          FOR EACH aGroupList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
                FOR EACH cDBF IN aGroupList
@@ -30,11 +30,11 @@ FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
             END POPUP
          NEXT
          DEFINE POPUP "Sair"
-            MENUITEM "Sair" ACTION gui_DialogClose( oDlg )
+            MENUITEM "Sair" ACTION gui_DialogClose( xDlg )
          END POPUP
       END MENU
    END WINDOW
-   gui_DialogActivate( oDlg )
+   gui_DialogActivate( xDlg )
 
    RETURN Nil
 
@@ -148,7 +148,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    RETURN Nil
 
-//   WITH OBJECT ::oDlg := TForm():Define()
+//   WITH OBJECT xDlg := TForm():Define()
 //      :Row := 500
 //      :Col := 1000
 //      :Width := ::nDlgWidth

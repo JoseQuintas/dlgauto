@@ -15,7 +15,7 @@ FUNCTION frm_Edit( Self )
       AAdd( ::aControlList, AClone( aItem ) )
    NEXT
    IF ::lWithTab
-      gui_TabCreate( ::oDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 75 )
+      gui_TabCreate( ::xDlg, @oTab, 70, 5, ::nDlgWidth - 19, ::nDlgHeight - 75 )
       AAdd( ::aControlList, CFG_EMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
       Atail( ::aControlList )[ CFG_FCONTROL ] := oTab
@@ -47,10 +47,10 @@ FUNCTION frm_Edit( Self )
          ( ::lWithTab .AND. nRow > ::nDlgHeight - ( ::nLineHeight * 3 ) )
          IF ::lWithTab .AND. nRow > ::nDlgHeight - ( ::nLineHeight * 3 ) - 150
             IF nPageCount > 0
-               gui_TabPageEnd( ::oDlg, oTab )
+               gui_TabPageEnd( ::xDlg, oTab )
             ENDIF
             nPageCount += 1
-            gui_TabPageBegin( ::oDlg, oTab, "Pag." + Str( nPageCount, 2 ) )
+            gui_TabPageBegin( ::xDlg, oTab, "Pag." + Str( nPageCount, 2 ) )
             nRow := 40
             AAdd( aList, {} )
             lFirst := .T.
@@ -68,10 +68,10 @@ FUNCTION frm_Edit( Self )
          nCol2 := nCol
       ENDIF
       lFirst := .F.
-      gui_LabelCreate( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_CCONTROL ], ;
+      gui_LabelCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
          nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
 
-      gui_TextCreate( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_FCONTROL ], ;
+      gui_TextCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
          nRow2, nCol2, aItem[ CFG_FLEN ] * 12 + 12, ::nLineHeight, ;
          @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
          { || ::Validate( aItem ) } )
@@ -82,7 +82,7 @@ FUNCTION frm_Edit( Self )
          ENDIF
       ENDIF
       IF ! Empty( aItem[ CFG_VTABLE ] )
-         gui_LabelCreate( iif( ::lWithTab, oTab, ::oDlg ), @aItem[ CFG_VCONTROL ], ;
+         gui_LabelCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_VCONTROL ], ;
             nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 4 ) * 12 ), aItem[ CFG_VLEN ] * 12, ;
             ::nLineHeight, Space( aItem[ CFG_VLEN ] ), .T. )
       ENDIF
@@ -90,12 +90,12 @@ FUNCTION frm_Edit( Self )
 #ifdef HBMK_HAS_HWGUI
    // dummy textbox to works last valid
    AAdd( ::aControlList, CFG_EMPTY )
-   gui_TextCreate( ::oDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+   gui_TextCreate( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
       nRow, nCol, 0, 0, "", "", 0, { || .T. } )
 #endif
    IF ::lWithTab
-      gui_TabPageEnd( ::oDlg, oTab )
-      gui_TabNavigate( ::oDlg, oTab, aList )
+      gui_TabPageEnd( ::xDlg, oTab )
+      gui_TabNavigate( ::xDlg, oTab, aList )
       gui_TabEnd()
    ENDIF
    (nRow2)

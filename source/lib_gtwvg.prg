@@ -11,7 +11,7 @@ FUNCTION gui_Init()
 
    RETURN Nil
 
-FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
+FUNCTION gui_MainMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL oMainMenu, aGroupList, cDBF, oMenuGroup
 
@@ -30,7 +30,7 @@ FUNCTION gui_MainMenu( oDlg, aMenuList, aAllSetup, cTitle )
    oMainMenu:AddItem( "Sair", { || __Quit() } )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
-   (oDlg);(cTitle)
+   (xDlg);(cTitle)
 
    RETURN Nil
 

@@ -47,25 +47,25 @@ FUNCTION frm_Browse( Self, cModule, cTitle, ... )
 
 FUNCTION MakeBrowse( Self, cTitle, cnSQL, oBrowseList, cFilterList, bCode )
 
-   LOCAL oDlg, oBrowse, cFilter := "", lSelected := .F., xValue := Nil, oBtnList := {}
+   LOCAL xDlg, oBrowse, cFilter := "", lSelected := .F., xValue := Nil, oBtnList := {}
 
    hb_Default( @cFilter, "" )
 
-   INIT DIALOG oDlg ;
+   INIT DIALOG xDlg ;
       AT 0, 0 SIZE ::nDlgWidth, ::nDlgHeight ;
       TITLE cTitle ;
       STYLE WS_DLGFRAME + WS_SYSMENU ;
       BACKCOLOR STYLE_BACK
 
    @ 11, 101 BROWSE ARRAY oBrowse ;
-      SIZE oDlg:nWidth - 20, oDlg:nHeight - 140 STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL + DS_CENTER ;
-      ON CLICK { || lSelected := .T., oDlg:Close() } ;
-      ON KEYDOWN { | oBrw, nkey | oBrowseKey( oDlg, oBrw, nkey, @cFilter, lSelected, cFilterList ) }
+      SIZE xDlg:nWidth - 20, xDlg:nHeight - 140 STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL + DS_CENTER ;
+      ON CLICK { || lSelected := .T., xDlg:Close() } ;
+      ON KEYDOWN { | oBrw, nkey | oBrowseKey( xDlg, oBrw, nkey, @cFilter, lSelected, cFilterList ) }
    oBrowse:aArray := cnSQL
    BrowseSet( oBrowse, oBrowseList )
-   CreateButtons( Self, oDlg, oBrowse, @oBtnList )
+   CreateButtons( Self, xDlg, oBrowse, @oBtnList )
 
-   ACTIVATE DIALOG oDlg CENTER
+   ACTIVATE DIALOG xDlg CENTER
 
    IF lSelected .AND. bCode != Nil
       xValue := Eval( bCode )
@@ -110,7 +110,7 @@ FUNCTION ADOSkipper( cnSQL, nSkip )
 
    RETURN cnSQL:AbsolutePosition() - nRec
 
-STATIC FUNCTION oBrowseKey( oDlg, oBrowse, nKey, cFilter, lSelected, cFilterList )
+STATIC FUNCTION oBrowseKey( xDlg, oBrowse, nKey, cFilter, lSelected, cFilterList )
 
    nKey := hb_KeyStd( nKey )
    DO CASE
@@ -118,7 +118,7 @@ STATIC FUNCTION oBrowseKey( oDlg, oBrowse, nKey, cFilter, lSelected, cFilterList
       IF nKey == K_ENTER
          lSelected := .T.
       ENDIF
-      oDlg:Close()
+      xDlg:Close()
       RETURN .F.
    CASE IsAscChar( nKey )
       IF nKey == K_BS
@@ -152,7 +152,7 @@ STATIC FUNCTION IsAscChar( nKey )
 
    RETURN .T.
 
-STATIC FUNCTION CreateButtons( Self, oDlg, oBrowse, oBtnList )
+STATIC FUNCTION CreateButtons( Self, xDlg, oBrowse, oBtnList )
 
    LOCAL nRow, nCol, oBtn, nRowLine := 1
    LOCAL acOptions := { ;
@@ -163,13 +163,13 @@ STATIC FUNCTION CreateButtons( Self, oDlg, oBrowse, oBtnList )
       { "NextPage",   "icoGoPgDn",   { || oBrowse:PageDown() } }, ;
       { "Last",       "icoGoBottom", { || oBrowse:Bottom() } }, ;
       { "Filter",     "icoFilter",   { || Nil } }, ;
-      { "Exit",       "icoDoor",     { || oDlg:Close() } } }
+      { "Exit",       "icoDoor",     { || xDlg:Close() } } }
 
    nCol := 10
    nRow := 10
    oBtnList := {}
    FOR EACH oBtn IN acOptions
-      @ nCol, nRow OWNERBUTTON oBtn OF oDlg SIZE BUTTON_SIZE, BUTTON_SIZE ;
+      @ nCol, nRow OWNERBUTTON oBtn OF xDlg SIZE BUTTON_SIZE, BUTTON_SIZE ;
          ON CLICK oBtn[ 3 ] ;
          BITMAP ;
          HICON():AddResource( oBtn[ 2 ], BUTTON_SIZE - TEXT_SIZE, BUTTON_SIZE - TEXT_SIZE ) COORDINATES 1, 1, BUTTON_SIZE - TEXT_SIZE, BUTTON_SIZE - TEXT_SIZE ;

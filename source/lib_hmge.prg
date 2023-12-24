@@ -7,9 +7,10 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 FUNCTION gui_Init()
 
-   SET OOP ON
-   SET WINDOW MAIN OFF
    SET NAVIGATION EXTENDED
+   //SET OOP ON
+   SET WINDOW MAIN OFF
+   SET WINDOW MODAL PARENT HANDLE ON
 
    RETURN Nil
 
@@ -98,11 +99,13 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
+   LOCAL aItem
+
    IF ! Empty( cField )
       xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
-   DoMethod( xDlg, "RELEASE" )
    (xControl)
+   DoMethod( xDlg, "RELEASE" )
 
    RETURN Nil
 

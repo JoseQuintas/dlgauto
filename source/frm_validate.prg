@@ -12,24 +12,24 @@ FUNCTION frm_Validate( aItem, Self )
    nPos := hb_AScan( ::aControlList, { | e | e[ CFG_CTLTYPE ] == TYPE_BUTTON .AND. ;
       e[ CFG_CAPTION ] == "Cancel" } )
    IF nPos != 0
-      IF gui_IsCurrentFocus( ::oDlg, ::aControlList[ nPos, CFG_FCONTROL ] )
+      IF gui_IsCurrentFocus( ::xDlg, ::aControlList[ nPos, CFG_FCONTROL ] )
          RETURN .T.
       ENDIF
    ENDIF
 
-   xValue := gui_TextGetValue( ::oDlg, aItem[ CFG_FCONTROL ] )
+   xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
    IF aItem[ CFG_ISKEY ]
       SEEK xValue
       IF ::cSelected == "INSERT"
          IF ! Eof()
             gui_Msgbox( "Code already exists" )
-            gui_SetFocus( ::oDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
+            gui_SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
             RETURN .F.
          ENDIF
       ELSE
          IF Eof()
             gui_Msgbox( "Code not found" )
-            gui_SetFocus( ::oDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
+            gui_SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
             RETURN .F.
          ENDIF
       ENDIF
@@ -39,7 +39,7 @@ FUNCTION frm_Validate( aItem, Self )
          SKIP 0
       ENDIF
       ::UpdateEdit()
-      gui_TextSetValue( ::oDlg, aItem[ CFG_FCONTROL ], xValue )
+      gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
       ::EditOn()
    ELSEIF ! Empty( aItem[ CFG_VTABLE ] )
       // if setup to find on another dbf
@@ -50,10 +50,10 @@ FUNCTION frm_Validate( aItem, Self )
       xValue := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
       SELECT ( nSelect )
       IF ! lFound
-         frm_Browse( Self, ::oDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
-         gui_SetFocus( ::oDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
+         frm_Browse( Self, ::xDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
+         gui_SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
       ENDIF
-      gui_LabelSetValue( ::oDlg, aItem[ CFG_VCONTROL ], xValue )
+      gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], xValue )
    ENDIF
 
    RETURN lFound

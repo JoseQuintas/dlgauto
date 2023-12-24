@@ -21,7 +21,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
    oFrm := frm_Class():New()
    oFrm:cFileDBF   := cDBF
 #ifdef HBMK_HAS_GTWVG
-   oFrm:oDlg := wvgSetAppWindow()
+   oFrm:xDlg := wvgSetAppWindow()
 #endif
    oFrm:cTitle     := gui_LibName() + " - " + cDBF
    oFrm:cOptions   := "IEDP"

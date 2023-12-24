@@ -37,9 +37,9 @@ FUNCTION frm_Dialog( Self )
 
    SELECT ( Select( ::cFileDbf ) )
 
-   gui_DialogCreate( @::oDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle )
+   gui_DialogCreate( @::xDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle )
    ::CreateControls()
-   gui_DialogActivate( ::oDlg, { || ::EditOff(), ::UpdateEdit() } )
+   gui_DialogActivate( ::xDlg, { || ::EditOff(), ::UpdateEdit() } )
 
 #ifdef HBMK_HAS_GTWVG
    DO WHILE Inkey(1) != K_ESC

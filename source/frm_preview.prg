@@ -17,15 +17,15 @@ FUNCTION frm_Preview( cFileMask )
    oFrm := frm_Class():New()
    oFrm:cOptions := ""
    oFrm:aOptionList := { ;
-      { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } }, ;
-      { "Previous", { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } }, ;
-      { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } }, ;
-      { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:oDlg, oEdit ) } } }
+      { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
+      { "Previous", { || Button_Click( cCaption, aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
+      { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
+      { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:xDlg, oEdit ) } } }
 
-   gui_DialogCreate( @oFrm:oDlg, 0, 0, oFrm:nDlgWidth, oFrm:nDlgHeight, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:oDlg ) } )
+   gui_DialogCreate( @oFrm:xDlg, 0, 0, oFrm:nDlgWidth, oFrm:nDlgHeight, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:xDlg ) } )
    frm_Buttons( oFrm, .F. )
-   gui_MLTextCreate( oFrm:oDlg, @oEdit, 65, 10, oFrm:nDlgWidth - 40, oFrm:nDlgHeight - 120, "" )
-   gui_DialogActivate( oFrm:oDlg )
+   gui_MLTextCreate( oFrm:xDlg, @oEdit, 65, 10, oFrm:nDlgWidth - 40, oFrm:nDlgHeight - 120, "" )
+   gui_DialogActivate( oFrm:xDlg )
 
    RETURN Nil
 
