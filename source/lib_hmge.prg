@@ -99,8 +99,6 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
-   LOCAL aItem
-
    IF ! Empty( cField )
       xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
@@ -115,7 +113,7 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
       Eval( bCode )
    ENDIF
    DoMethod( xDlg, "CENTER" )
-   ACTIVATE WINDOW ( xDlg )
+   DoMethod( xDlg, "ACTIVATE" )
 
    RETURN Nil
 
@@ -125,7 +123,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOldDlg )
 
    IF Empty( xDlg )
       xDlg := gui_newctlname( "DIALOG" )
@@ -139,8 +137,12 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
       WIDTH nWidth ;
       HEIGHT nHeight ;
       TITLE cTitle ;
-      MODAL ;
-      ON INIT Eval( bInit )
+      ; // MODAL ; // bad using WINDOW MAIN OFF
+      ON INIT Eval( bInit ) ;
+      ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
+      IF ! Empty( xOldDlg )
+         ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
+      ENDIF
    END WINDOW
 
    RETURN Nil

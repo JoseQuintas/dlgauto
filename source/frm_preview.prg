@@ -17,10 +17,10 @@ FUNCTION frm_Preview( cFileMask )
    oFrm := frm_Class():New()
    oFrm:cOptions := ""
    oFrm:aOptionList := { ;
-      { "First",    { || Button_Click( cCaption, aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
-      { "Previous", { || Button_Click( cCaption, aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
-      { "Next",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
-      { "Last",     { || Button_Click( cCaption, aFileList, @nIndex, oFrm:xDlg, oEdit ) } } }
+      { "First",    { || Button_Click( "First",    aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
+      { "Previous", { || Button_Click( "Previous", aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
+      { "Next",     { || Button_Click( "Next",     aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
+      { "Last",     { || Button_Click( "Last",     aFileList, @nIndex, oFrm:xDlg, oEdit ) } } }
 
    gui_DialogCreate( @oFrm:xDlg, 0, 0, oFrm:nDlgWidth, oFrm:nDlgHeight, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:xDlg ) } )
    frm_Buttons( oFrm, .F. )
