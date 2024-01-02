@@ -9,7 +9,6 @@ FUNCTION frm_Preview( cFileMask )
 
    LOCAL aFileList, nIndex
    LOCAL oFrm, oEdit := "EditPreview"
-   LOCAL cCaption
 
    aFileList := Directory( cFileMask )
    nIndex := 1
