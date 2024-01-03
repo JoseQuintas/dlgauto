@@ -83,15 +83,29 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       AAdd( aFieldList, aItem[2] )
       AAdd( aWidthList, Max( Len( aItem[3] ), Len( Transform(FieldGet(FieldNum(aItem[1] ) ), "" ) ) ) * 10 + 10 )
    NEXT
-   @ nRow, nCol GRID ( xControl ) ;
-      OF ( xDlg ) ;
-      WIDTH nWidth - 20 ;
-      HEIGHT nHeight - 20 ;
-      ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) ;
-      HEADERS aHeaderList ;
-      WIDTHS aWidthList ;
-      ROWSOURCE ( workarea ) ;
-      COLUMNFIELDS aFieldList
+
+   DEFINE BROWSE ( xControl )
+      PARENT ( xDlg )
+      ROW nRow
+      COL nCol
+      WIDTH nWidth - 20
+      HEIGHT nHeight - 20
+      ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+      HEADERS aHeaderList
+      WIDTHS aWidthList
+      WORKAREA ( workarea )
+      FIELDS aFieldList
+   END BROWSE
+
+   //@ nRow, nCol GRID ( xControl ) ;
+   //   OF ( xDlg ) ;
+   //   WIDTH nWidth - 20 ;
+   //   HEIGHT nHeight - 20 ;
+   //   ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) ;
+   //   HEADERS aHeaderList ;
+   //   WIDTHS aWidthList ;
+   //   ROWSOURCE ( workarea ) ;
+   //   COLUMNFIELDS aFieldList
 
    (xDlg);(cField);(xValue);(workarea)
 
