@@ -19,6 +19,7 @@ FUNCTION frm_Edit( Self )
       AAdd( ::aControlList, CFG_EMPTY )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
       Atail( ::aControlList )[ CFG_FCONTROL ] := oTab
+      //panel is to use another back color on hwgui
       //PanelCreate( oTab, @oPanel, 23, 1, ::nDlgWidth - 25, ::nDlgHeight - 100 )
       //AAdd( ::aControlList, CFG_EMPTY )
       //Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_PANEL

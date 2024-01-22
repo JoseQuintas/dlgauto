@@ -19,7 +19,11 @@ FUNCTION frm_Validate( aItem, Self )
 
    xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
    IF aItem[ CFG_ISKEY ]
-      SEEK xValue
+      IF aItem[ CFG_FTYPE ] == "C"
+         SEEK Pad( xValue, aItem[ CFG_FLEN ] )
+      ELSE
+         SEEK xValue
+      ENDIF
       IF ::cSelected == "INSERT"
          IF ! Eof()
             gui_Msgbox( "Code already exists" )
@@ -45,7 +49,11 @@ FUNCTION frm_Validate( aItem, Self )
       // if setup to find on another dbf
       nSelect := Select()
       SELECT ( Select( aItem[ CFG_VTABLE ] ) )
-      SEEK xValue
+      IF aItem[ CFG_FTYPE ] == "C"
+         SEEK Pad( xValue, aItem[ CFG_FLEN ] )
+      ELSE
+         SEEK xValue
+      ENDIF
       lFound := ! Eof()
       xValue := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
       SELECT ( nSelect )

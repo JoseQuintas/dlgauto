@@ -95,6 +95,10 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       WIDTHS aWidthList
       WORKAREA ( workarea )
       FIELDS aFieldList
+
+#xcommand BROWSESYNC => _HMG_BrowseSyncStatus := .T.
+      BROWSESYNC
+
    END BROWSE
 
    //@ nRow, nCol GRID ( xControl ) ;
@@ -113,8 +117,10 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
+   //gui_MsgBox( cField )
    IF ! Empty( cField )
       xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
+      //gui_MsgBox( Transform( xValue , "" ) )
    ENDIF
    (xControl)
    DoMethod( xDlg, "RELEASE" )
@@ -171,23 +177,25 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
       xControl := gui_newctlname( "LABEL" )
    ENDIF
    // não mostra borda
-   //DEFINE LABEL ( xControl )
-   //   PARENT ( xDlg )
-   //   COL nCol
-   //   ROW nRow
-   //   WIDTH nWidth
-   //   HEIGHT nHeight
-   //   VALUE xValue
-   //   BORDER lBorder
-   //END LABEL
+   DEFINE LABEL ( xControl )
+      PARENT ( xDlg )
+      COL nCol
+      ROW nRow
+      WIDTH nWidth
+      HEIGHT nHeight
+      VALUE xValue
+      IF lBorder
+         BORDER lBorder
+      ENDIF
+   END LABEL
 
-   IF lBorder
-      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
-         VALUE xValue WIDTH nWidth HEIGHT nHeight BORDER
-   ELSE
-      @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
-         VALUE xValue WIDTH nWidth HEIGHT nHeight
-   ENDIF
+   //IF lBorder
+   //   @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
+   //      VALUE xValue WIDTH nWidth HEIGHT nHeight BORDER
+   //ELSE
+   //   @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
+   //      VALUE xValue WIDTH nWidth HEIGHT nHeight
+   //ENDIF
 
    RETURN Nil
 
@@ -289,12 +297,12 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    IF Empty( xControl )
       xControl := gui_newctlname( "TEXT" )
    ENDIF
-   DEFINE TEXTBOX ( xControl )
+   DEFINE GETBOX ( xControl )
       PARENT ( xDlg )
       ROW nRow
       COL nCol
-      HEIGHT    nHeight
-      WIDTH     nWidth
+      HEIGHT nHeight
+      WIDTH nWidth
       FONTNAME DEFAULT_FONTNAME
       IF ValType( xValue ) == "N"
          NUMERIC .T.
@@ -302,12 +310,14 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       ELSEIF ValType( xValue ) == "D"
          DATE .T.
          DATEFORMAT cPicture
-      ELSE
+      ELSEIF ValType( xValue ) == "L" // workaround to do not get error
+         xValue := " "
+      ELSEIF ValType( xValue ) == "C"
          MAXLENGTH nMaxLength
       ENDIF
-      VALUE     xValue
+      VALUE xValue
       ON LOSTFOCUS Eval( bValid )
-   END TEXTBOX
+   END GETBOX
    (bValid)
 
    RETURN Nil
@@ -320,14 +330,19 @@ FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
 
 FUNCTION gui_TextGetValue( xDlg, xControl )
 
+   LOCAL xValue
+
+   xValue := GetProperty( xDlg, xControl, "VALUE" )
    (xDlg)
 
-   RETURN GetProperty( xDlg, xControl, "VALUE" )
+   RETURN xValue
 
 FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
-   // NOTE: string value, except if declared different on textbox creation
-   SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
+   // NOTE: textbox string value, except if declared different on textbox creation
+   // getbox????
+   SetProperty( xDlg, xControl, "VALUE", xValue )
+   //DoMethod( xDlg, xControl, "REFRESH" )
 
    RETURN Nil
 

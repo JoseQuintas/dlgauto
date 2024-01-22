@@ -124,6 +124,7 @@ METHOD EditKeyOn() CLASS frm_Class
 
    LOCAL aItem, oKeyEdit, lFound := .F.
 
+   // search key field
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ( aItem[ CFG_ISKEY ] .OR. Empty( aItem[ CFG_FNAME ] ) )
          gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
@@ -133,8 +134,12 @@ METHOD EditKeyOn() CLASS frm_Class
          ENDIF
       ENDIF
    NEXT
-   ::ButtonSaveOn()
-   gui_SetFocus( ::xDlg, oKeyEdit )
+   IF lFound // have key field
+      ::ButtonSaveOn()
+      gui_SetFocus( ::xDlg, oKeyEdit )
+   ELSE // do not have key field
+      ::EditOn()
+   ENDIF
 
    RETURN Nil
 

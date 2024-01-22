@@ -52,23 +52,15 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    DEFINE BUTTON ( xControl )
       PARENT ( xDlg )
-      ROW         nRow
-      COL         nCol
-      WIDTH       nWidth
-      HEIGHT      nHeight
-      //ICON        cResName
-      CAPTION     cCaption
-      ACTION      Eval( bAction )
-      //IMAGEWIDTH  nWidth - 20
-      //IMAGEHEIGHT nHeight - 20
-      //FONTNAME    DEFAULT_FONTNAME
-      //FONTSIZE    9
-      //FONTBOLD    .T.
-      //FONTCOLOR   COLOR_BLACK
-      //VERTICAL   .T.
-      //BACKCOLOR  COLOR_WHITE
-      //FLAT       .T.
-      //NOXPSTYLE  .T.
+      ROW           nRow
+      COL           nCol
+      WIDTH         nWidth
+      HEIGHT        nHeight
+      CAPTION       cCaption
+      // do not show ico ??
+      PICTURE       cResName
+      PICTALIGNMENT TOP
+      ACTION         Eval( bAction )
    END BUTTON
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
