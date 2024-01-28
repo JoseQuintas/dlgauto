@@ -95,10 +95,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       WIDTHS aWidthList
       WORKAREA ( workarea )
       FIELDS aFieldList
-
-#xcommand BROWSESYNC => _HMG_BrowseSyncStatus := .T.
-      BROWSESYNC
-
+      SET BROWSESYNC ON
    END BROWSE
 
    //@ nRow, nCol GRID ( xControl ) ;
@@ -117,10 +114,10 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
-   //gui_MsgBox( cField )
    IF ! Empty( cField )
+      // without browsesync ON
+      // &(workarea)->( dbGoto( GetProperty( xDlg, xControl, "VALUE" ) ) )
       xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
-      //gui_MsgBox( Transform( xValue , "" ) )
    ENDIF
    (xControl)
    DoMethod( xDlg, "RELEASE" )
