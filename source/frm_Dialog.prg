@@ -14,12 +14,19 @@ FUNCTION frm_Dialog( Self )
    IF hb_ASCan( ::aEditList, { | e | e[ CFG_ISKEY ] } ) != 0
       SET INDEX TO ( ::cFileDBF )
    ENDIF
-   // dbfs for code validation
    FOR EACH aItem IN ::aEditList
       IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. Select( aItem[ CFG_VTABLE ] ) == 0
+         // dbfs for code validation
          SELECT 0
          USE ( aItem[ CFG_VTABLE ] )
          SET INDEX TO ( aItem[ CFG_VTABLE ] )
+         SET ORDER TO 1
+      ENDIF
+      IF ! Empty( aItem[ CFG_BTABLE ] ) .AND. Select( aItem[ CFG_BTABLE ] ) == 0
+         // dbfs for browse
+         SELECT 0
+         USE ( aItem[ CFG_BTABLE ] )
+         SET INDEX TO ( aItem[ CFG_BTABLE ] )
          SET ORDER TO 1
       ENDIF
    NEXT

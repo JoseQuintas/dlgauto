@@ -8,10 +8,12 @@ frm_Edit - Create textbox/label on dialog
 FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, oTab, nPageCount := 0, nLen, aList := {}
-   LOCAL nLenList, nRow2, nCol2, lFirst := .T.
+   LOCAL nLenList, nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse := {}
 
    FOR EACH aItem IN ::aEditList
-      aItem[ CFG_VALUE ]    := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
+      IF aItem[ CFG_CTLTYPE ] != Nil .AND. aItem[ CFG_CTLTYPE ] != TYPE_BROWSE
+         aItem[ CFG_VALUE ]    := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
+      ENDIF
       AAdd( ::aControlList, AClone( aItem ) )
    NEXT
    IF ::lWithTab
@@ -34,7 +36,25 @@ FUNCTION frm_Edit( Self )
       IF aItem:__EnumIndex > nLenList
          EXIT
       ENDIF
-      IF aItem[ CFG_CTLTYPE ] != TYPE_EDIT
+      IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
+         SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
+         SET SCOPE TO Str( &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) ), 10 )
+         FOR EACH aBrowDBF IN ::aAllSetup
+            IF aBrowDBF[ 1 ] == aItem[ CFG_BTABLE ]
+               FOR EACH aBrowField IN aBrowDbf[ 2 ]
+                  IF ! aBrowField[ CFG_FNAME ] == aItem[ CFG_BKEYTO ]
+                     AAdd( oTBrowse, { aBrowField[ CFG_CAPTION ], aBrowField[ CFG_FNAME ], aBrowField[ CFG_FPICTURE ] } )
+                  ENDIF
+               NEXT
+               EXIT
+            ENDIF
+         NEXT
+         gui_Browse( ::xDlg, @aItem[ CFG_FCONTROL ], nRow + 60, 5, ;
+            ::nDlgWidth - 30, 200, ;
+            oTbrowse, Nil, Nil, aItem[ CFG_BTABLE ] )
+         SELECT ( Select( ::cFileDBF ) )
+         LOOP
+      ELSEIF aItem[ CFG_CTLTYPE ] != TYPE_EDIT
          LOOP
       ENDIF
       IF ::nEditStyle == 1 .OR. ::nEditStyle == 2

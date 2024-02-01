@@ -10,7 +10,7 @@ REQUEST DBFCDX
 PROCEDURE Main()
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL aKeyList, aSeekList
+   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse
 
    SET CONFIRM OFF
    SET DATE    BRITISH
@@ -24,15 +24,17 @@ PROCEDURE Main()
    frm_DBF()
    /* table, key */
    aKeyList := { ;
-      { "DBCLIENT",  "IDCLIENT" }, ;
-      { "DBPRODUCT", "IDPRODUCT" }, ;
-      { "DBUNIT",    "IDUNIT" }, ;
-      { "DBSELLER",  "IDSELLER" }, ;
-      { "DBBANK",    "IDBANK" }, ;
-      { "DBGROUP",   "IDGROUP" }, ;
-      { "DBSTOCK",   "IDSTOCK" }, ;
-      { "DBFINANC",  "IDFINANC" }, ;
-      { "DBSTATE",   "IDSTATE" } }
+      { "DBCLIENT",    "IDCLIENT" }, ;
+      { "DBPRODUCT",   "IDPRODUCT" }, ;
+      { "DBUNIT",      "IDUNIT" }, ;
+      { "DBSELLER",    "IDSELLER" }, ;
+      { "DBBANK",      "IDBANK" }, ;
+      { "DBGROUP",     "IDGROUP" }, ;
+      { "DBSTOCK",     "IDSTOCK" }, ;
+      { "DBFINANC",    "IDFINANC" }, ;
+      { "DBSTATE",     "IDSTATE" }, ;
+      { "DBTICKET",    "IDTICKET" }, ;
+      { "DBTICKETPRO", "Str( TPTICKET,10 ) + Str( IDTICKETPRO, 10 )" } }
    /* table, field, table to search, key field, field to show */
    aSeekList := { ;
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
@@ -44,6 +46,9 @@ PROCEDURE Main()
       { "DBSTOCK",   "STGROUP",   "DBGROUP",   "IDGROUP",   "GRNAME" }, ;
       { "DBFINANC",  "FICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
+   /* Related browse */
+   aBrowseList := { ;
+      { "DBTICKET", "IDTICKET", "DBTICKETPRO", "TPTICKET", "IDTICKEDPRO", .F. } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -73,6 +78,20 @@ PROCEDURE Main()
             aItem[ CFG_VSHOW ]  := aSeekList[ nSeekPos, 5 ]
          ENDIF
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
+      NEXT
+      /* in browse */
+      FOR EACH aBrowse IN aBrowseList
+         IF aBrowse[ 1 ] == cFile
+            aItem := CFG_EMPTY
+            aItem[ CFG_CTLTYPE ]  := TYPE_BROWSE
+            aItem[ CFG_BKEYFROM ] := aBrowse[ 2 ]
+            aItem[ CFG_BTABLE ]   := aBrowse[ 3 ]
+            aItem[ CFG_BKEYTO ]   := aBrowse[ 4 ]
+            aItem[ CFG_BKEYTO2 ]  := aBrowse[ 5 ]
+            aItem[ CFG_BVALUE ]   := FieldGet( FieldNum( aItem[ CFG_BKEYFROM  ] ) )
+            aItem[ CFG_BEDIT ]    := aBrowse[ 6 ]
+            AAdd( Atail( aAllSetup )[ 2 ], aItem )
+         ENDIF
       NEXT
       USE
    NEXT

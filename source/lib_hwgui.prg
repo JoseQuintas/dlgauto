@@ -71,12 +71,15 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    LOCAL aItem
 
+
    @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL
+   // may be not current alias
+   xControl:Alias := workarea
 
    FOR EACH aItem IN oTBrowse
-      ADD COLUMN { || Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) } TO xControl ;
+      ADD COLUMN { || Transform( &(workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) } TO xControl ;
          HEADER aItem[1] ;
-         LENGTH Max( Len( aItem[1] ), Len( Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) ) ) ;
+         LENGTH Max( Len( aItem[1] ), Len( Transform( &(workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) ) ) ;
          JUSTIFY LINE DT_LEFT
    NEXT
 

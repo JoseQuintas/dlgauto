@@ -81,7 +81,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
-      AAdd( aWidthList, Max( Len( aItem[3] ), Len( Transform(FieldGet(FieldNum(aItem[1] ) ), "" ) ) ) * 10 + 10 )
+      AAdd( aWidthList, Max( Len( aItem[3] ), Len( Transform(&(workarea)->( FieldGet(FieldNum(aItem[1] ) ) ), "" ) ) ) * 10 + 10 )
    NEXT
 
    DEFINE BROWSE ( xControl )

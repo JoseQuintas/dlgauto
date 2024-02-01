@@ -160,6 +160,67 @@ FUNCTION frm_DBF()
       INDEX ON field->IDSTATE TAG primary
       USE
    ENDIF
+   IF ! File( "DBTICKET.DBF" )
+      dbCreate( "DBTICKET", { ;
+         { "IDTICKET", "N+", 6, 0 }, ;
+         { "TIDATDOC", "D", 8, 0 }, ;
+         { "TICLIENT", "N", 6, 0 }, ;
+         { "TIVALUE",  "N", 14, 2 } } )
+      USE DBTICKET
+      APPEND BLANK
+      REPLACE ;
+         field->IdTicket WITH 1, ;
+         field->tiDatDoc WITH Date(), ;
+         field->tiClient WITH 1, ;
+         field->tiValue WITH 100
+      APPEND BLANK
+      REPLACE ;
+         field->IdTicket WITH 2, ;
+         field->tiDatDoc WITH Date(), ;
+         field->tiClient WITH 2, ;
+         field->tiValue WITH 200
+      INDEX ON field->IdTicket TAG primary
+      USE
+   ENDIF
+   IF ! File( "DBTICKETPRO.DBF" )
+      dbCreate( "DBTICKETPRO", { ;
+         { "IDTICKPRO", "N+", 6, 0 }, ;
+         { "TPTICKET", "N", 6, 0 }, ;
+         { "TPPRODUCT", "N", 6, 0 }, ;
+         { "TPQT", "N", 6, 0 }, ;
+         { "TPVALUE", "N", 14, 2 } } )
+      USE DBTICKETPRO
+      APPEND BLANK
+      REPLACE ;
+         field->idTickPro WITH 1, ;
+         field->tpTicket WITH 1, ;
+         field->tpProduct WITH 1, ;
+         field->tpQt WITH 1, ;
+         field->tpValue WITH 1
+      APPEND BLANK
+      REPLACE ;
+         field->idTickPro WITH 2, ;
+         field->tpTicket WITH 1, ;
+         field->tpProduct WITH 2, ;
+         field->tpQt WITH 2, ;
+         field->tpValue WITH 2
+      APPEND BLANK
+      REPLACE ;
+         field->idTickPro WITH 3, ;
+         field->tpTicket WITH 2, ;
+         field->tpProduct WITH 3, ;
+         field->tpQt WITH 3, ;
+         field->tpValue WITH 3
+      APPEND BLANK
+      REPLACE ;
+         field->idTickPro WITH 4, ;
+         field->tpTicket WITH 2, ;
+         field->tpProduct WITH 4, ;
+         field->tpQt WITH 4, ;
+         field->tpValue WITH 4
+      INDEX ON Str( field->tpTicket, 10 ) + Str( field->IdTickPro, 6 ) TAG primary
+      USE
+   ENDIF
 
    RETURN Nil
 
