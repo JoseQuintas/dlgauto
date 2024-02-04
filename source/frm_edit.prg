@@ -38,7 +38,7 @@ FUNCTION frm_Edit( Self )
       ENDIF
       IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
-         SET SCOPE TO Str( &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) ), 10 )
+         //SET SCOPE TO Str( &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) ), 10 )
          FOR EACH aBrowDBF IN ::aAllSetup
             IF aBrowDBF[ 1 ] == aItem[ CFG_BTABLE ]
                FOR EACH aBrowField IN aBrowDbf[ 2 ]

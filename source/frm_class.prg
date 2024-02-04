@@ -213,7 +213,7 @@ METHOD Delete() CLASS frm_Class
 
 METHOD UpdateEdit() CLASS frm_Class
 
-   LOCAL aItem, nSelect, xValue, cText
+   LOCAL aItem, nSelect, xValue, cText// , cFilter
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! Empty( aItem[ CFG_FNAME ] )
@@ -227,6 +227,19 @@ METHOD UpdateEdit() CLASS frm_Class
             SELECT ( nSelect )
             gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
+      ENDIF
+      IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
+         SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
+//#ifdef HBMK_HAS_HMGE
+//      cFilter := ::cFileDbf + "->" + aItem[ CFG_BKEYFROM ] + " = " + ;
+//         aItem[ CFG_BTABLE ] + "->" + aItem[ CFG_BKEYTO ]
+//      SET FILTER TO &(cFilter)
+//#else
+         SET SCOPE TO Str( &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) ), 10 )
+//#endif
+         GOTO TOP
+         gui_BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+         SELECT ( Select( ::cFileDbf ) ) // HMG Extended
       ENDIF
    NEXT
    (cText)

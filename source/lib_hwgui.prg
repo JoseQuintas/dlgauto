@@ -107,6 +107,13 @@ STATIC FUNCTION gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, xValue
 
    RETURN .T.
 
+FUNCTION gui_BrowseRefresh( xDlg, xControl )
+
+   xControl:Refresh()
+   (xDlg)
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    // xDlg:Center()

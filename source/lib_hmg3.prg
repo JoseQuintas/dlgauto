@@ -113,6 +113,13 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
    RETURN Nil
 
+FUNCTION gui_BrowseRefresh( xDlg, xControl )
+
+   DoMethod( xDlg, xControl, "REFRESH" )
+   (xDlg)
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    IF ! Empty( bCode )

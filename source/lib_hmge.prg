@@ -124,6 +124,14 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
    RETURN Nil
 
+FUNCTION gui_BrowseRefresh( xDlg, xControl )
+
+   SetProperty( xDlg, xControl, "VALUE", RecNo() )
+   DoMethod( xDlg, xControl, "REFRESH" )
+   (xDlg)
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    IF ! Empty( bCode )
@@ -351,3 +359,6 @@ STATIC FUNCTION gui_newctlname( cPrefix )
    hb_Default( @cPrefix, "ANY" )
 
    RETURN cPrefix + StrZero( nCount, 10 )
+
+// notes
+// HMG_GetFormControls( xDlg, "LABEL" )
