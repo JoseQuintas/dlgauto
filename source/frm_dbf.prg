@@ -2,9 +2,12 @@
 frm_DBF - Create DBF for test
 */
 
+#include "directry.ch"
+#include "dbstruct.ch"
+
 FUNCTION frm_DBF()
 
-   LOCAL nCont, cTxt
+   LOCAL nCont, cTxt, lLoadStru := .F.
 
    IF ! File( "DBCLIENT.DBF" )
       dbCreate( "DBCLIENT", { ;
@@ -221,6 +224,74 @@ FUNCTION frm_DBF()
       INDEX ON Str( field->tpTicket, 10 ) + Str( field->IdTickPro, 6 ) TAG primary
       USE
    ENDIF
+   IF ! File( "DBFIELDS.DBF" )
+      dbCreate( "DBFIELDS", { ;
+         { "IDFIELD", "N+", 6, 0 }, ;
+         { "DBF", "C", 20, 0 }, ;
+         { "NAME", "C", 10, 0 }, ;
+         { "TYPE", "C", 1, 0 }, ;
+         { "LEN", "N", 3, 0 }, ;
+         { "DEC", "N", 2, 0 } } )
+      USE DBFIELDS
+      INDEX ON field->DBF + Str( field->IDFIELD, 6 ) tag primary
+      USE
+      lLoadStru := .T.
+   ENDIF
+   IF ! File ( "DBDBF.DBF" )
+      dbCreate( "DBDBF", { ;
+         { "IDDBF", "N+", 6, 0 }, ;
+         { "NAME", "C", 20, 0 } } )
+      USE DBDBF
+      INDEX ON field->iddbf tag primary
+      USE
+      lLoadStru := .T.
+   ENDIF
+   IF lLoadStru
+      LoadStru()
+   ENDIF
+
+   RETURN Nil
+
+STATIC FUNCTION LoadStru()
+
+   LOCAL aList := {}, aStru, aField, aFile, nCont := 1
+
+   FOR EACH aFile IN Directory( "*.dbf" )
+      AAdd( aList, { hb_FNameName( aFile[ F_NAME ] ), {} } )
+      USE ( aFile[ 1 ] )
+      aStru := dbStruct()
+      FOR EACH aField IN aStru
+         AAdd( aTail( aList )[ 2 ], { aField[ DBS_NAME ], aField[ DBS_TYPE ], ;
+            aField[ DBS_LEN ], aField[ DBS_DEC ] } )
+      NEXT
+      USE
+   NEXT
+
+   SELECT A
+   USE DBDBF
+   SET INDEX TO DBDBF
+   SELECT B
+   USE DBFIELDS
+   SET INDEX TO DBFIELDS
+   FOR EACH aFile IN aList
+      SELECT a
+      APPEND BLANK
+      REPLACE ;
+         field->idDBF WITH aFile:__EnumIndex, ;
+         field->NAME WITH aFile[ 1 ]
+      SELECT B
+      FOR EACH aStru IN aFile[ 2 ]
+         APPEND BLANK
+         REPLACE ;
+            field->IDFIELD WITH nCont++, ;
+            field->DBF  WITH aFile[ 1 ], ;
+            field->NAME WITH aStru[ DBS_NAME ], ;
+            field->TYPE WITH aStru[ DBS_TYPE ], ;
+            field->LEN  WITH aStru[ DBS_LEN ], ;
+            field->DEC  WITH aStru[ DBS_DEC ]
+      NEXT
+   NEXT
+   CLOSE DATABASES
 
    RETURN Nil
 
@@ -241,3 +312,4 @@ STATIC FUNCTION ToDescription( cText, n )
    cText += " "
 
    RETURN Replicate( cText, 5 )
+

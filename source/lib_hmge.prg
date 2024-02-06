@@ -126,7 +126,8 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
 FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
-   SetProperty( xDlg, xControl, "VALUE", RecNo() )
+   // on older hmge versions, need to set browse value/recno()
+   //SetProperty( xDlg, xControl, "VALUE", RecNo() )
    DoMethod( xDlg, xControl, "REFRESH" )
    (xDlg)
 

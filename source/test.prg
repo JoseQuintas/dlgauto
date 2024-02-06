@@ -34,7 +34,9 @@ PROCEDURE Main()
       { "DBFINANC",    "IDFINANC" }, ;
       { "DBSTATE",     "IDSTATE" }, ;
       { "DBTICKET",    "IDTICKET" }, ;
-      { "DBTICKETPRO", "Str( TPTICKET,10 ) + Str( IDTICKETPRO, 10 )" } }
+      { "DBTICKETPRO", "Str( TPTICKET,10 ) + Str( IDTICKETPRO, 10 )" }, ;
+      { "DBDBF",       "IDDBF" }, ;
+      { "DBFIELDS",    "IDFIELD" } }
    /* table, field, table to search, key field, field to show */
    aSeekList := { ;
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
@@ -48,7 +50,8 @@ PROCEDURE Main()
       { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
    /* Related browse */
    aBrowseList := { ;
-      { "DBTICKET", "IDTICKET", "DBTICKETPRO", "TPTICKET", "IDTICKEDPRO", .F. } }
+      { "DBTICKET", "IDTICKET", "DBTICKETPRO", "TPTICKET", "IDTICKEDPRO", .F. }, ;
+      { "DBDBF",    "NAME",     "DBFIELDS",    "DBF",  "IDFIELD", .F. } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )

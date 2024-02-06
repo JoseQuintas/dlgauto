@@ -67,10 +67,13 @@ FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList )
 
    LOCAL aItem
 
+   IF ValType( aKeyCodeList ) != "A"
+      aKeyCodeList:= { { VK_RETURN, { || gui_BrowseEnter( cField, @xValue, xDlg, xControl ) } } }
+   ENDIF
 
    @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL
    // may be not current alias
@@ -83,29 +86,43 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
          JUSTIFY LINE DT_LEFT
    NEXT
 
-   xControl:bOther := { |xControl, msg, wParam, lParam| gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, @xValue ) }
+   xControl:bOther := { |xControl, msg, wParam, lParam| gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, @xValue, aKeyCodeList, xDlg ) }
 
    (xDlg); (workarea)
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, xValue )
+STATIC FUNCTION gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, xValue, aKeyCodeList, xDlg )
 
-   LOCAL nKEY
+   LOCAL nKey, nPos
 
    IF msg == WM_KEYDOWN
       nKey := hwg_PtrToUlong( wParam )
-      IF nKey = VK_RETURN
-         IF ! Empty( cField )
-            xValue := FieldGet( FieldNum( cField, xValue ) )
-         ENDIF
-         hwg_EndDialog()
+      nPos := hb_AScan( aKeyCodeList, { | e | nKey == e[ 1 ] } )
+      IF nPos != 0
+         Eval( aKeyCodeList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
       ENDIF
+      // IF nKey = VK_RETURN
+      //   IF ! Empty( cField )
+      //      xValue := FieldGet( FieldNum( cField, xValue ) )
+      //   ENDIF
+      //   hwg_EndDialog()
+      //ENDIF
    ENDIF
    (xControl)
    (lParam)
 
    RETURN .T.
+
+STATIC FUNCTION gui_BrowseEnter( cField, xValue, xDlg )
+
+   IF ! Empty( cField )
+      xValue := FieldGet( FieldNum( cField ) )
+   ENDIF
+   hwg_EndDialog()
+   (xDlg)
+
+   RETURN Nil
 
 FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
