@@ -13,9 +13,11 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
 
    nPos := hb_Ascan( ::aAllSetup, { | e | e[1] == cTable } )
    FOR EACH aItem IN ::aAllSetup[ nPos, 2 ]
-      AAdd( oTBrowse, { aItem[ CFG_CAPTION ], aItem[ CFG_FNAME ], aItem[ CFG_FPICTURE ] } )
-      IF aItem[ CFG_ISKEY ]
-         cField := aItem[ CFG_FNAME ]
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+         AAdd( oTBrowse, { aItem[ CFG_CAPTION ], aItem[ CFG_FNAME ], aItem[ CFG_FPICTURE ] } )
+         IF aItem[ CFG_ISKEY ]
+            cField := aItem[ CFG_FNAME ]
+         ENDIF
       ENDIF
    NEXT
 
