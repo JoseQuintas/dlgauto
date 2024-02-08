@@ -66,6 +66,12 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
    RETURN Nil
 
+FUNCTION gui_BrowseRefresh( xDlg, xControl )
+   (xDlg)
+   (xControl)
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    IF ! Empty( bCode )
