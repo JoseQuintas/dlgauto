@@ -73,7 +73,7 @@ FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
@@ -85,16 +85,26 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       AAdd( aFieldList, { || Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) } )
       AAdd( aWidthList, ( 1 + Max( Len( aItem[1] ), Len( Transform(FieldGet(FieldNum(aItem[1])),aItem[3])) ) ) * 13 )
    NEXT
-   @ nRow, nCol BROWSE ( xControl ) ;
-      OF ( xDlg ) ;
-      WIDTH nWidth - 20 ;
-      HEIGHT nHeight - 20 ;
-      HEADERS aHeaderList ;
-      WIDTHS aWidthList ;
-      WORKAREA ( workarea ) ;
-      FIELDS aFieldList ;
-      ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
-
+   IF ValType( aKeyCodeList ) != "A"
+      @ nRow, nCol BROWSE ( xControl ) ;
+         OF ( xDlg ) ;
+         WIDTH nWidth - 20 ;
+         HEIGHT nHeight - 20 ;
+         HEADERS aHeaderList ;
+         WIDTHS aWidthList ;
+         WORKAREA ( workarea ) ;
+         FIELDS aFieldList
+   ELSE
+      @ nRow, nCol BROWSE ( xControl ) ;
+         OF ( xDlg ) ;
+         WIDTH nWidth - 20 ;
+         HEIGHT nHeight - 20 ;
+         HEADERS aHeaderList ;
+         WIDTHS aWidthList ;
+         WORKAREA ( workarea ) ;
+         FIELDS aFieldList ;
+         ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+   ENDIF
    (cField);(xValue)
 
    RETURN Nil

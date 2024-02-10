@@ -51,6 +51,7 @@ PROCEDURE Main()
    /* Related browse */
    aBrowseList := { ;
       { "DBTICKET", "IDTICKET", "DBTICKETPRO", "TPTICKET", "IDTICKEDPRO", .F. }, ;
+      { "DBDBF",    "NAME",     "DBFIELDS",    "DBF",  "IDFIELD", .F. }, ;
       { "DBDBF",    "NAME",     "DBFIELDS",    "DBF",  "IDFIELD", .F. } }
 
    aAllSetup := {}

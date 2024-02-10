@@ -71,7 +71,7 @@ FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
@@ -90,13 +90,19 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       COL nCol
       WIDTH nWidth - 20
       HEIGHT nHeight - 20
-      ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+      IF ValType( aKeyCodeList ) != "A"
+         aKeyCodeList := {}
+         ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+      ENDIF
       HEADERS aHeaderList
       WIDTHS aWidthList
       WORKAREA ( workarea )
       FIELDS aFieldList
       SET BROWSESYNC ON
    END BROWSE
+   FOR EACH aItem IN aKeyCodeList
+      _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_BrowseKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aKeyCodeList ) } )
+   NEXT
 
    //@ nRow, nCol GRID ( xControl ) ;
    //   OF ( xDlg ) ;
@@ -111,6 +117,21 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    (xDlg);(cField);(xValue);(workarea)
 
    RETURN Nil
+
+STATIC FUNCTION gui_BrowseKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aKeyCodeList )
+
+   LOCAL nPos
+
+   IF ! gui_IsCurrentFocus( xDlg, xControl )
+      RETURN Nil
+   ENDIF
+   nPos := hb_AScan( aKeyCodeList, { | e | nKey == e[ 1 ] } )
+   IF nPos != 0
+      Eval( aKeyCodeList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
+   ENDIF
+   (xControl); (workarea)
+
+   RETURN .T.
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
@@ -175,7 +196,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
 
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
-      RETURN _GetFocusedControl( xDlg ) == xControl
+      RETURN GetProperty( xDlg, "FOCUSEDCONTROL" )  == xControl
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 

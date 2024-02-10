@@ -86,33 +86,27 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
          JUSTIFY LINE DT_LEFT
    NEXT
 
-   xControl:bOther := { |xControl, msg, wParam, lParam| gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, @xValue, aKeyCodeList, xDlg ) }
+   xControl:bOther := { | xControl, msg, wParam, lParam | ;
+      gui_browsekeydown( xControl, xDlg, msg, wParam, lParam, cField, workarea, xValue, aKeyCodeList ) }
 
    (xDlg); (workarea)
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseKeyDown( xControl, msg, wParam, lParam, cField, xValue, aKeyCodeList, xDlg )
+STATIC FUNCTION gui_browsekeydown( xControl, xDlg, msg, wParam, lParam, cField, workarea, xValue, aKeyCodeList )
 
    LOCAL nKey, nPos
 
    IF msg == WM_KEYDOWN
-      nKey := hwg_PtrToUlong( wParam )
+      nKey := hwg_PtrToULong( wParam )
       nPos := hb_AScan( aKeyCodeList, { | e | nKey == e[ 1 ] } )
       IF nPos != 0
          Eval( aKeyCodeList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
       ENDIF
-      // IF nKey = VK_RETURN
-      //   IF ! Empty( cField )
-      //      xValue := FieldGet( FieldNum( cField, xValue ) )
-      //   ENDIF
-      //   hwg_EndDialog()
-      //ENDIF
    ENDIF
-   (xControl)
-   (lParam)
+   (lParam); (workarea)
 
-   RETURN .T.
+   RETURN Nil
 
 STATIC FUNCTION gui_BrowseEnter( cField, xValue, xDlg )
 

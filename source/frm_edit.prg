@@ -9,6 +9,7 @@ FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, oTab, nPageCount := 0, nLen, aList := {}
    LOCAL nLenList, nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse := {}
+   LOCAL aKeyCodeList
 
    FOR EACH aItem IN ::aEditList
       IF aItem[ CFG_CTLTYPE ] != Nil .AND. aItem[ CFG_CTLTYPE ] != TYPE_BROWSE
@@ -37,6 +38,17 @@ FUNCTION frm_Edit( Self )
          EXIT
       ENDIF
       IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
+         IF nRow > ::nDlgHeight - ( ::nLineHeight * 3 ) - 150 - 200
+            IF ::nlWithTab
+               IF nPageCount > 0
+                  gui_TabPageEnd( ::xDlg, oTab )
+               ENDIF
+               nPageCount += 1
+               gui_TabPageBegin( ::xDlg, oTab, "Pag." + Str( nPageCount, 2 ) )
+            ENDIF
+            nRow := 40
+            lFirst := .T.
+         ENDIF
          SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
          //SET SCOPE TO Str( &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) ), 10 )
          FOR EACH aBrowDBF IN ::aAllSetup
@@ -49,10 +61,17 @@ FUNCTION frm_Edit( Self )
                EXIT
             ENDIF
          NEXT
+         aKeyCodeList := { ;
+            { VK_INSERT, { || gui_MsgBox( "INSERT" ) } }, ;
+            { VK_DELETE, { || gui_MsgBox( "DELETE" ) } } }
          gui_Browse( ::xDlg, @aItem[ CFG_FCONTROL ], nRow + 60, 5, ;
             ::nDlgWidth - 30, 200, ;
-            oTbrowse, Nil, Nil, aItem[ CFG_BTABLE ] )
+            oTbrowse, Nil, Nil, aItem[ CFG_BTABLE ], aKeyCodeList )
          SELECT ( Select( ::cFileDBF ) )
+         //FOR EACH aKey IN aKeyCodeList
+         //   AAdd( ahmgKeyCodeList, { aItem[ CFG_FCONTROL ], aKey[ 1 ], aKey[ 2 ] } )
+         //NEXT
+         nRow += 250
          LOOP
       ELSEIF aItem[ CFG_CTLTYPE ] != TYPE_EDIT
          LOOP
@@ -119,6 +138,11 @@ FUNCTION frm_Edit( Self )
       gui_TabNavigate( ::xDlg, oTab, aList )
       gui_TabEnd()
    ENDIF
+#ifdef HBMK_HAS_HMGE
+   //FOR EACH aKey IN ahmgKeyCodeList
+   //   // set key
+   //NEXT
+#endif
    (nRow2)
    (nCol2)
 
