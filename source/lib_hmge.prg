@@ -71,7 +71,7 @@ FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
@@ -101,7 +101,8 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       SET BROWSESYNC ON
    END BROWSE
    FOR EACH aItem IN aKeyCodeList
-      _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_BrowseKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aKeyCodeList ) } )
+      AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
+      _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
    NEXT
 
    //@ nRow, nCol GRID ( xControl ) ;
@@ -114,20 +115,17 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    //   ROWSOURCE ( workarea ) ;
    //   COLUMNFIELDS aFieldList
 
-   (xDlg);(cField);(xValue);(workarea)
+   (xDlg);(cField);(xValue);(workarea);(aKeyCodeList)
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aKeyCodeList )
+STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyCodeList )
 
    LOCAL nPos
 
-   IF ! gui_IsCurrentFocus( xDlg, xControl )
-      RETURN Nil
-   ENDIF
-   nPos := hb_AScan( aKeyCodeList, { | e | nKey == e[ 1 ] } )
+   nPos := hb_AScan( aDlgKeyCodeList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
    IF nPos != 0
-      Eval( aKeyCodeList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
+      Eval( aDlgKeyCodeList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
    ENDIF
    (xControl); (workarea)
 
