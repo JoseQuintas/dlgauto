@@ -213,7 +213,7 @@ METHOD Delete() CLASS frm_Class
 
 METHOD UpdateEdit() CLASS frm_Class
 
-   LOCAL aItem, nSelect, xValue, cText, xScope
+   LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! Empty( aItem[ CFG_FNAME ] )
@@ -230,11 +230,13 @@ METHOD UpdateEdit() CLASS frm_Class
       ENDIF
       IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
+         SET ORDER TO ( aItem[ CFG_BINDEXORD ] )
          xScope := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) )
+         nLenScope := &( ::cFileDbf )->( FieldLen( aItem[ CFG_BKEYFROM ] ) )
          IF ValType( xScope ) == "C"
             SET SCOPE TO xScope
          ELSE
-            SET SCOPE TO Str( xScope, 10 )
+            SET SCOPE TO Str( xScope, nLenScope )
          ENDIF
          GOTO TOP
          gui_BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )

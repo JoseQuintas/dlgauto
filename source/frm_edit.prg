@@ -8,7 +8,7 @@ frm_Edit - Create textbox/label on dialog
 FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, oTab, nPageCount := 0, nLen, aList := {}
-   LOCAL nLenList, nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse := {}
+   LOCAL nLenList, nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
    LOCAL aKeyCodeList, aDlgKeyCodeList := {}
 
    FOR EACH aItem IN ::aEditList
@@ -50,11 +50,11 @@ FUNCTION frm_Edit( Self )
             lFirst := .T.
          ENDIF
          SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
-         //SET SCOPE TO Str( &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) ), 10 )
+         oTBrowse := {}
          FOR EACH aBrowDBF IN ::aAllSetup
             IF aBrowDBF[ 1 ] == aItem[ CFG_BTABLE ]
                FOR EACH aBrowField IN aBrowDbf[ 2 ]
-                  IF ! aBrowField[ CFG_FNAME ] == aItem[ CFG_BKEYTO ]
+                  IF ! aBrowField[ CFG_FNAME ] == aItem[ CFG_BKEYTO ] .AND. aBrowField[ CFG_CTLTYPE ] != TYPE_BROWSE
                      AAdd( oTBrowse, { aBrowField[ CFG_CAPTION ], aBrowField[ CFG_FNAME ], aBrowField[ CFG_FPICTURE ] } )
                   ENDIF
                NEXT
@@ -62,8 +62,8 @@ FUNCTION frm_Edit( Self )
             ENDIF
          NEXT
          aKeyCodeList := { ;
-            { VK_INSERT, { || gui_MsgBox( "INSERT" ) } }, ;
-            { VK_DELETE, { || gui_MsgBox( "DELETE" ) } } }
+            { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BTABLE ] ) } }, ;
+            { VK_DELETE, { || gui_MsgBox( "DELETE " + aItem[ CFG_BTABLE ] ) } } }
          gui_Browse( ::xDlg, @aItem[ CFG_FCONTROL ], nRow + 60, 5, ;
             ::nDlgWidth - 30, 200, ;
             oTbrowse, Nil, Nil, aItem[ CFG_BTABLE ], aKeyCodeList, @aDlgKeyCodeList )

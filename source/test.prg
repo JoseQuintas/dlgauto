@@ -34,7 +34,7 @@ PROCEDURE Main()
       { "DBFINANC",    "IDFINANC" }, ;
       { "DBSTATE",     "IDSTATE" }, ;
       { "DBTICKET",    "IDTICKET" }, ;
-      { "DBTICKETPRO", "Str( TPTICKET,10 ) + Str( IDTICKETPRO, 10 )" }, ;
+      { "DBTICKETPRO", "IDTICKETPRO" }, ;
       { "DBDBF",       "IDDBF" }, ;
       { "DBFIELDS",    "IDFIELD" } }
    /* table, field, table to search, key field, field to show */
@@ -50,11 +50,11 @@ PROCEDURE Main()
       { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
    /* Related browse */
    aBrowseList := { ;
-      { "DBTICKET", "IDTICKET", "DBTICKETPRO", "TPTICKET", "IDTICKEDPRO", .F. }, ;
-      { "DBDBF",    "NAME",     "DBFIELDS",    "DBF",  "IDFIELD", .F. }, ;
-      { "DBDBF",    "NAME",     "DBFIELDS",    "DBF",  "IDFIELD", .F. }, ;
-      { "DBDBF",    "NAME",     "DBFIELDS",    "DBF",  "IDFIELD", .F. }, ;
-      { "DBDBF",    "NAME",     "DBFIELDS",    "DBF",  "IDFIELD", .F. } }
+      { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F. }, ;
+      { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F. }, ;
+      { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F. }, ;
+      { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .F. }, ;
+      { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F. } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -89,13 +89,14 @@ PROCEDURE Main()
       FOR EACH aBrowse IN aBrowseList
          IF aBrowse[ 1 ] == cFile
             aItem := CFG_EMPTY
-            aItem[ CFG_CTLTYPE ]  := TYPE_BROWSE
-            aItem[ CFG_BKEYFROM ] := aBrowse[ 2 ]
-            aItem[ CFG_BTABLE ]   := aBrowse[ 3 ]
-            aItem[ CFG_BKEYTO ]   := aBrowse[ 4 ]
-            aItem[ CFG_BKEYTO2 ]  := aBrowse[ 5 ]
-            aItem[ CFG_BVALUE ]   := FieldGet( FieldNum( aItem[ CFG_BKEYFROM  ] ) )
-            aItem[ CFG_BEDIT ]    := aBrowse[ 6 ]
+            aItem[ CFG_CTLTYPE ]   := TYPE_BROWSE
+            aItem[ CFG_BKEYFROM ]  := aBrowse[ 2 ]
+            aItem[ CFG_BTABLE ]    := aBrowse[ 3 ]
+            aItem[ CFG_BINDEXORD ] := aBrowse[ 4 ]
+            aItem[ CFG_BKEYTO ]    := aBrowse[ 5 ]
+            aItem[ CFG_BKEYTO2 ]   := aBrowse[ 6 ]
+            aItem[ CFG_BVALUE ]    := FieldGet( FieldNum( aItem[ CFG_BKEYFROM  ] ) )
+            aItem[ CFG_BEDIT ]     := aBrowse[ 7 ]
             AAdd( Atail( aAllSetup )[ 2 ], aItem )
          ENDIF
       NEXT

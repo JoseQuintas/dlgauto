@@ -18,12 +18,13 @@
 #define CFG_ACTION    18                    // app action for button
 #define CFG_BTABLE    19                    // browse table
 #define CFG_BKEYFROM  20                    // browse field from main
-#define CFG_BKEYTO    21                    // browse field to
-#define CFG_BKEYTO2   22                    // browse field2 to
-#define CFG_BVALUE    23                    // browse key value
-#define CFG_BEDIT     24                    // can edit browse values
+#define CFG_BINDEXORD 21                    // browse index order
+#define CFG_BKEYTO    22                    // browse field to
+#define CFG_BKEYTO2   23                    // browse field2 to
+#define CFG_BVALUE    24                    // browse key value
+#define CFG_BEDIT     25                    // can edit browse values
 
-#define CFG_EMPTY { "", "C", 1, 0, .F., "", "", .T., "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, Nil, Nil, Nil, Nil }
+#define CFG_EMPTY { "", "C", 1, 0, .F., "", "", .T., "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil }
 
 #define TYPE_BUTTON   1
 #define TYPE_EDIT     2

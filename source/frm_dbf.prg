@@ -11,15 +11,15 @@ FUNCTION frm_DBF()
 
    IF ! File( "DBCLIENT.DBF" )
       dbCreate( "DBCLIENT", { ;
-         { "IDCLIENT", "N+", 6, 0 }, ;
-         { "CLNAME",     "C", 50, 0 }, ;
-         { "CLDOC",  "C", 18, 0 }, ;
-         { "CLADDRESS",     "C", 50, 0 }, ;
-         { "CLCITY", "C", 20, 0 }, ;
-         { "CLSTATE", "C", 2, 0 }, ;
-         { "CLMAIL", "C", 50, 0 }, ;
+         { "IDCLIENT", "N", 6, 0 }, ;
+         { "CLNAME",   "C", 50, 0 }, ;
+         { "CLDOC",    "C", 18, 0 }, ;
+         { "CLADDRESS","C", 50, 0 }, ;
+         { "CLCITY",   "C", 20, 0 }, ;
+         { "CLSTATE",  "C", 2, 0 }, ;
+         { "CLMAIL",   "C", 50, 0 }, ;
          { "CLSELLER", "N", 6, 0 }, ;
-         { "CLBANK", "N", 6, 0 } } )
+         { "CLBANK",   "N", 6, 0 } } )
       USE DBCLIENT
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "CLIENT", nCont )
@@ -34,9 +34,9 @@ FUNCTION frm_DBF()
    ENDIF
    IF ! File( "DBPRODUCT.DBF" )
       dbCreate( "DBPRODUCT", { ;
-         { "IDPRODUCT", "N+", 6, 0 }, ;
+         { "IDPRODUCT", "N", 6, 0 }, ;
          { "PRNAME",    "C", 50, 0 }, ;
-         { "PRUNIT",   "N", 6, 0 }, ;
+         { "PRUNIT",    "N", 6, 0 }, ;
          { "PRGROUP",   "N", 6, 0 }, ;
          { "PRNCM",     "C", 8, 0 }, ;
          { "PRQT",      "N", 6, 0 }, ;
@@ -55,9 +55,9 @@ FUNCTION frm_DBF()
    ENDIF
    IF ! File( "DBUNIT.DBF" )
       dbCreate( "DBUNIT", { ;
-         { "IDUNIT", "N+", 6, 0 }, ;
+         { "IDUNIT",   "N", 6, 0 }, ;
          { "UNSYMBOL", "C", 8, 0 }, ;
-         { "UNNAME",  "C", 30, 0 } } )
+         { "UNNAME",   "C", 30, 0 } } )
       USE DBUNIT
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "UNIT", nCont )
@@ -70,7 +70,7 @@ FUNCTION frm_DBF()
    ENDIF
    IF ! File( "DBSELLER.DBF" )
       dbCreate( "DBSELLER", { ;
-         { "IDSELLER", "N+", 6, 0 }, ;
+         { "IDSELLER", "N", 6, 0 }, ;
          { "SENAME",   "C", 30, 0 } } )
       USE DBSELLER
       FOR nCont = 1 TO 9
@@ -84,8 +84,8 @@ FUNCTION frm_DBF()
    ENDIF
    IF ! File( "DBBANK.DBF" )
       dbCreate( "DBBANK", { ;
-         { "IDBANK", "N+", 6, 0 }, ;
-         { "BANAME",   "C", 30, 0 } } )
+         { "IDBANK", "N", 6, 0 }, ;
+         { "BANAME", "C", 30, 0 } } )
       USE DBBANK
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "BANK", nCont )
@@ -98,8 +98,8 @@ FUNCTION frm_DBF()
    ENDIF
    IF ! File( "DBGROUP.DBF" )
       dbCreate( "DBGROUP", { ;
-         { "IDGROUP", "N+", 6, 0 }, ;
-         { "GRNAME", "C", 30, 0 } } )
+         { "IDGROUP", "N", 6, 0 }, ;
+         { "GRNAME",  "C", 30, 0 } } )
       USE DBGROUP
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "GROUP", nCont )
@@ -112,12 +112,12 @@ FUNCTION frm_DBF()
    ENDIF
    IF ! File( "DBSTOCK.DBF" )
       dbCreate( "DBSTOCK", { ;
-         { "IDSTOCK", "N+", 6, 0 }, ;
+         { "IDSTOCK",   "N", 6, 0 }, ;
          { "STDATOPER", "D", 8, 0 }, ;
          { "STPRODUCT", "N", 6, 0 }, ;
-         { "STCLIENT", "N", 6, 0 }, ;
-         { "STNUMDOC", "C", 10, 0 }, ;
-         { "STQT", "N", 10, 0 } } )
+         { "STCLIENT",  "N", 6, 0 }, ;
+         { "STNUMDOC",  "C", 10, 0 }, ;
+         { "STQT",      "N", 10, 0 } } )
       USE DBSTOCK
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "STOCK" , nCont )
@@ -127,18 +127,20 @@ FUNCTION frm_DBF()
             STPRODUCT WITH nCont, STQT WITH nCont
       NEXT
       INDEX ON field->IDSTOCK TAG primary
+      INDEX ON Str( field->StClient, 6 ) + Str( field->idStock, 6 ) tag client
+      INDEX ON Str( field->stProduct, 6 ) + Str( field->idStock, 6 ) Tag product
       USE
    ENDIF
    IF ! File( "DBFINANC.DBF" )
       dbCreate( "DBFINANC", { ;
-         { "IDFINANC", "N+", 6, 0 }, ;
-         { "FIDATOPER", "D", 8, 0 }, ;
-         { "FICLIENT", "N", 6, 0 }, ;
-         { "FINUMDOC", "C", 10, 0 }, ;
+         { "IDFINANC",   "N", 6, 0 }, ;
+         { "FIDATOPER",  "D", 8, 0 }, ;
+         { "FICLIENT",   "N", 6, 0 }, ;
+         { "FINUMDOC",   "C", 10, 0 }, ;
          { "FIDATTOPAY", "D", 8, 0 }, ;
-         { "FIDATPAY", "D", 10, 0 }, ;
-         { "FIVALUE", "N", 14, 2 }, ;
-         { "FIBANK", "N", 6, 0 } } )
+         { "FIDATPAY",   "D", 10, 0 }, ;
+         { "FIVALUE",    "N", 14, 2 }, ;
+         { "FIBANK",     "N", 6, 0 } } )
       USE DBFINANC
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "FINANC", nCont )
@@ -148,12 +150,13 @@ FUNCTION frm_DBF()
             FIDATTOPAY WITH DATE() + 30, FIBANK WITH nCont
       NEXT
       INDEX ON field->IDFINANC TAG primary
+      INDEX ON Str( field->fiClient, 6 ) + Str( field->idFinanc, 6 ) tag client
       USE
    ENDIF
    IF ! File( "DBSTATE.DBF" )
       dbCreate( "DBSTATE", { ;
          { "IDSTATE", "C", 2, 0 }, ;
-         { "STNAME", "C", 30, 0 } } )
+         { "STNAME",  "C", 30, 0 } } )
       USE DBSTATE
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "STATE", nCont )
@@ -165,7 +168,7 @@ FUNCTION frm_DBF()
    ENDIF
    IF ! File( "DBTICKET.DBF" )
       dbCreate( "DBTICKET", { ;
-         { "IDTICKET", "N+", 6, 0 }, ;
+         { "IDTICKET", "N", 6, 0 }, ;
          { "TIDATDOC", "D", 8, 0 }, ;
          { "TICLIENT", "N", 6, 0 }, ;
          { "TIVALUE",  "N", 14, 2 } } )
@@ -183,15 +186,16 @@ FUNCTION frm_DBF()
          field->tiClient WITH 2, ;
          field->tiValue WITH 200
       INDEX ON field->IdTicket TAG primary
+      INDEX ON Str( field->tiClient, 6 ) + Str( field->idTicket, 6 ) tag client
       USE
    ENDIF
    IF ! File( "DBTICKETPRO.DBF" )
       dbCreate( "DBTICKETPRO", { ;
-         { "IDTICKPRO", "N+", 6, 0 }, ;
-         { "TPTICKET", "N", 6, 0 }, ;
+         { "IDTICKPRO", "N", 6, 0 }, ;
+         { "TPTICKET",  "N", 6, 0 }, ;
          { "TPPRODUCT", "N", 6, 0 }, ;
-         { "TPQT", "N", 6, 0 }, ;
-         { "TPVALUE", "N", 14, 2 } } )
+         { "TPQT",      "N", 6, 0 }, ;
+         { "TPVALUE",   "N", 14, 2 } } )
       USE DBTICKETPRO
       APPEND BLANK
       REPLACE ;
@@ -221,26 +225,28 @@ FUNCTION frm_DBF()
          field->tpProduct WITH 4, ;
          field->tpQt WITH 4, ;
          field->tpValue WITH 4
-      INDEX ON Str( field->tpTicket, 10 ) + Str( field->IdTickPro, 6 ) TAG primary
+      INDEX ON field->idTickPro TAG primary
+      INDEX ON Str( field->tpTicket, 6 ) + Str( field->IdTickPro, 6 ) TAG ticket
       USE
    ENDIF
    IF ! File( "DBFIELDS.DBF" )
       dbCreate( "DBFIELDS", { ;
-         { "IDFIELD", "N+", 6, 0 }, ;
-         { "DBF", "C", 20, 0 }, ;
-         { "NAME", "C", 10, 0 }, ;
-         { "TYPE", "C", 1, 0 }, ;
-         { "LEN", "N", 3, 0 }, ;
-         { "DEC", "N", 2, 0 } } )
+         { "IDFIELD", "N", 6, 0 }, ;
+         { "DBF",     "C", 20, 0 }, ;
+         { "NAME",    "C", 10, 0 }, ;
+         { "TYPE",    "C", 1, 0 }, ;
+         { "LEN",     "N", 3, 0 }, ;
+         { "DEC",     "N", 2, 0 } } )
       USE DBFIELDS
-      INDEX ON field->DBF + Str( field->IDFIELD, 6 ) tag primary
+      INDEX ON field->idField TAG primary
+      INDEX ON field->DBF + Str( field->IDFIELD, 6 ) tag dbf
       USE
       lLoadStru := .T.
    ENDIF
    IF ! File ( "DBDBF.DBF" )
       dbCreate( "DBDBF", { ;
-         { "IDDBF", "N+", 6, 0 }, ;
-         { "NAME", "C", 20, 0 } } )
+         { "IDDBF", "N", 6, 0 }, ;
+         { "NAME",  "C", 20, 0 } } )
       USE DBDBF
       INDEX ON field->iddbf tag primary
       USE
