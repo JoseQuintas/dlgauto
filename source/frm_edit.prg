@@ -61,14 +61,20 @@ FUNCTION frm_Edit( Self )
                EXIT
             ENDIF
          NEXT
-         aKeyCodeList := { ;
-            { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BTABLE ] ) } }, ;
-            { VK_DELETE, { || gui_MsgBox( "DELETE " + aItem[ CFG_BTABLE ] ) } } }
+         IF aItem[ CFG_BEDIT ]
+            aKeyCodeList := { ;
+               { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BTABLE ] ) } }, ;
+               { VK_DELETE, { || gui_MsgBox( "DELETE " + aItem[ CFG_BTABLE ] ) } }, ;
+               { VK_RETURN, { || gui_MsgBox( "EDIT "   + aItem[ CFG_BTABLE ] ) } } }
+         ELSE
+            aKeyCodeList := {}
+         ENDIF
          gui_Browse( ::xDlg, @aItem[ CFG_FCONTROL ], nRow + 60, 5, ;
             ::nDlgWidth - 30, 200, ;
             oTbrowse, Nil, Nil, aItem[ CFG_BTABLE ], aKeyCodeList, @aDlgKeyCodeList )
          SELECT ( Select( ::cFileDBF ) )
          nRow += 250
+         nCol := 10
          LOOP
       ELSEIF aItem[ CFG_CTLTYPE ] != TYPE_EDIT
          LOOP
