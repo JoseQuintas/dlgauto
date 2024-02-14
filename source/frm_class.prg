@@ -126,11 +126,14 @@ METHOD EditKeyOn() CLASS frm_Class
 
    // search key field
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ( aItem[ CFG_ISKEY ] .OR. Empty( aItem[ CFG_FNAME ] ) )
-         gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-         IF ! lFound
-            lFound := .T.
-            oKeyEdit := aItem[ CFG_FCONTROL ]
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+         IF aItem[ CFG_ISKEY ] // .OR. Empty( aItem[ CFG_FNAME ] ) )
+            gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+            IF ! lFound
+               lFound := .T.
+               oKeyEdit := aItem[ CFG_FCONTROL ]
+               EXIT
+            ENDIF
          ENDIF
       ENDIF
    NEXT

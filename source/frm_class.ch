@@ -24,7 +24,7 @@
 #define CFG_BVALUE    24                    // browse key value
 #define CFG_BEDIT     25                    // can edit browse values
 
-#define CFG_EMPTY { "", "C", 1, 0, .F., "", "", .T., "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil }
+#define CFG_EMPTY { "", "C", 1, 0, .F., "", "", {}, "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil }
 
 #define TYPE_BUTTON   1
 #define TYPE_EDIT     2
