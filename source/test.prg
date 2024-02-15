@@ -41,7 +41,7 @@ PROCEDURE Main()
    aSeekList := { ;
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
       { "DBCLIENT",  "CLBANK",    "DBBANK",    "IDBANK",    "BANAME" }, ;
-      { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "STNAME" }, ;
+      { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "" }, ;
       { "DBPRODUCT", "IEUNIT",    "DBUNIT",    "IDUNIT",    "UNNAME" }, ;
       { "DBSTOCK",   "STCLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBSTOCK",   "STPRODUCT", "DBPRODUCT", "IDPRODUCT", "PRNAME" }, ;
@@ -51,10 +51,10 @@ PROCEDURE Main()
    /* Related browse */
    aBrowseList := { ;
       { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F. }, ;
-      { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F. }, ;
-      { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F. }, ;
-      { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T. }, ;
-      { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F. } }
+      { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F. } }
+      //{ "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F. }, ;
+      //{ "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T. }, ;
+      //{ "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F. } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
