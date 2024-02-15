@@ -127,6 +127,12 @@ STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, 
    IF nPos != 0
       Eval( aDlgKeyCodeList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
    ENDIF
+   IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyCodeList, { | e | e[ 2 ] == VK_RETURN } ) != 0
+      IF GetProperty( xDlg, GetProperty( xDlg, "FOCUSEDCONTROL" ), "TYPE" ) == "GETBOX"
+        // hb_ASCan( HMG_GetFormControls( xDlg, "GETBOX" ), { | e | e == GetProperty( xDlg, "FOCUSEDCONTROL" ) } ) != 0
+         _SetNextFocus()
+      ENDIF
+   ENDIF
    (xControl); (workarea)
 
    RETURN .T.
@@ -154,9 +160,14 @@ FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
+   //LOCAL xControl
+
    IF ! Empty( bCode )
       Eval( bCode )
    ENDIF
+   //FOR EACH xControl IN HMG_GetFormControls( xDlg, "BUTTONEX" )
+   //   SetHandCursor( GetControlHandle( xControl, xDlg ) )
+   //NEXT
    DoMethod( xDlg, "CENTER" )
    DoMethod( xDlg, "ACTIVATE" )
 
