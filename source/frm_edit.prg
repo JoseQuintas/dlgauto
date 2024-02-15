@@ -75,8 +75,8 @@ FUNCTION frm_Edit( Self )
          SELECT ( Select( ::cFileDBF ) )
          nRow += 250
          nCol := 10
-         LOOP
-      ELSEIF aItem[ CFG_CTLTYPE ] != TYPE_EDIT
+      ENDIF
+      IF aItem[ CFG_CTLTYPE ] != TYPE_EDIT
          LOOP
       ENDIF
       IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
@@ -124,7 +124,7 @@ FUNCTION frm_Edit( Self )
             AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
          ENDIF
       ENDIF
-      IF ! Empty( aItem[ CFG_VTABLE ] )
+      IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
          gui_LabelCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_VCONTROL ], ;
             nRow2, nCol2 + ( ( aItem[ CFG_FLEN ] + 4 ) * 12 ), aItem[ CFG_VLEN ] * 12, ;
             ::nLineHeight, Space( aItem[ CFG_VLEN ] ), .T. )

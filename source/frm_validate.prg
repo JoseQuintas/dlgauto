@@ -55,13 +55,15 @@ FUNCTION frm_Validate( aItem, Self )
          SEEK xValue
       ENDIF
       lFound := ! Eof()
-      xValue := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
       SELECT ( nSelect )
       IF ! lFound
          frm_Browse( Self, ::xDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
          gui_SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
       ENDIF
-      gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], xValue )
+      IF ! Empty( aItem[ CFG_VSHOW ] )
+         xValue := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
+         gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], xValue )
+      ENDIF
    ENDIF
 
    RETURN lFound
