@@ -126,14 +126,13 @@ METHOD EditKeyOn() CLASS frm_Class
 
    // search key field
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF aItem[ CFG_ISKEY ] // .OR. Empty( aItem[ CFG_FNAME ] ) )
+      IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
             gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-            IF ! lFound
-               lFound := .T.
-               oKeyEdit := aItem[ CFG_FCONTROL ]
-               EXIT
-            ENDIF
+      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. aItem[ CFG_ISKEY ]
+         gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+         IF ! lFound .AND. aItem[ CFG_ISKEY ]
+            lFound := .T.
+            oKeyEdit := aItem[ CFG_FCONTROL ]
          ENDIF
       ENDIF
    NEXT
@@ -151,7 +150,9 @@ METHOD EditOn() CLASS frm_Class
    LOCAL aItem, oFirstEdit, lFound := .F.
 
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+      IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
+            gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF aItem[ CFG_ISKEY ]
             gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
@@ -173,7 +174,7 @@ METHOD EditOff() CLASS frm_Class
    LOCAL aItem
 
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+      IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .OR. aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
          gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
@@ -222,7 +223,7 @@ METHOD UpdateEdit() CLASS frm_Class
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! Empty( aItem[ CFG_FNAME ] )
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
-         IF ! Empty( aItem[ CFG_VTABLE ] )
+         IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
             nSelect := Select()
             SELECT ( Select( aItem[ CFG_VTABLE ] ) )
             SEEK xValue

@@ -32,6 +32,7 @@
 #define TYPE_TABPAGE  4
 #define TYPE_PANEL    5
 #define TYPE_BROWSE   6
+#define TYPE_HWGUIBUG 7
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"
