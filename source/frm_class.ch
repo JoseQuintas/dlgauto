@@ -40,7 +40,6 @@
 #ifdef HBMK_HAS_HMG3
    #include "hmg.ch"
    #include "i_altsyntax.ch"
-   //MEMVAR _HMG_SYSDATA
 #endif
 
 #ifdef HBMK_HAS_HMGE

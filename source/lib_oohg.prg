@@ -85,7 +85,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       AAdd( aFieldList, { || Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) } )
       AAdd( aWidthList, ( 1 + Max( Len( aItem[1] ), Len( Transform(FieldGet(FieldNum(aItem[1])),aItem[3])) ) ) * 13 )
    NEXT
-   IF ValType( aKeyCodeList ) != "A"
+   IF ValType( aKeyCodeList ) == "A"
       @ nRow, nCol BROWSE ( xControl ) ;
          OF ( xDlg ) ;
          WIDTH nWidth - 20 ;
