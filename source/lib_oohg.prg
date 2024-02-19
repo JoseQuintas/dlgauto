@@ -73,7 +73,7 @@ FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
@@ -105,9 +105,34 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
          FIELDS aFieldList ;
          ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
    ENDIF
+   FOR EACH aItem IN aKeyCodeList
+      AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
+      _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
+   NEXT
    (cField);(xValue)
 
    RETURN Nil
+
+STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyCodeList )
+
+   LOCAL nPos, cType, cFocusedControl
+
+   nPos := hb_AScan( aDlgKeyCodeList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
+   IF nPos != 0
+      Eval( aDlgKeyCodeList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
+   ENDIF
+   IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyCodeList, { | e | e[ 2 ] == VK_RETURN } ) != 0
+      cFocusedControl := GetProperty( xDlg, "FOCUSEDCONTROL" )
+      gui_MsgBox( cFocusedControl )
+      cType := GetProperty( xDlg, cFocusedControl, "TYPE" )
+      gui_MsgBox( cType )
+      IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT" }, { | e | e == cType } ) != 0
+         _SetNextFocus()
+      ENDIF
+   ENDIF
+   (xControl); (workarea)
+
+   RETURN .T.
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 

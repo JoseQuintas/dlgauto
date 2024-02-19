@@ -10,7 +10,7 @@ FUNCTION gui_Init()
    SET NAVIGATION EXTENDED
    //SET OOP ON
    SET WINDOW MAIN OFF
-   SET WINDOW MODAL PARENT HANDLE ON
+   //SET WINDOW MODAL PARENT HANDLE ON
 
    RETURN Nil
 
@@ -121,15 +121,15 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
 STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyCodeList )
 
-   LOCAL nPos
+   LOCAL nPos, cType
 
    nPos := hb_AScan( aDlgKeyCodeList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
    IF nPos != 0
       Eval( aDlgKeyCodeList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
    ENDIF
    IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyCodeList, { | e | e[ 2 ] == VK_RETURN } ) != 0
-      IF GetProperty( xDlg, GetProperty( xDlg, "FOCUSEDCONTROL" ), "TYPE" ) == "GETBOX"
-        // hb_ASCan( HMG_GetFormControls( xDlg, "GETBOX" ), { | e | e == GetProperty( xDlg, "FOCUSEDCONTROL" ) } ) != 0
+      cType := GetProperty( xDlg, GetProperty( xDlg, "FOCUSEDCONTROL" ), "TYPE" )
+      IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT" }, { | e | e == cType } ) != 0
          _SetNextFocus()
       ENDIF
    ENDIF

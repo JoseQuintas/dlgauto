@@ -1,5 +1,5 @@
 /*
-frm_Validate - Validate each field
+frm_Valid - valid used on getbox, edit, textbox
 */
 
 #include "frm_class.ch"

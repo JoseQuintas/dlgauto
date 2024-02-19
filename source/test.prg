@@ -51,10 +51,10 @@ PROCEDURE Main()
    /* Related browse */
    aBrowseList := { ;
       { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F. }, ;
-      { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F. } }
-      //{ "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F. }, ;
-      //{ "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T. }, ;
-      //{ "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F. } }
+      { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F. } , ;
+      { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F. }, ;
+      { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T. }, ;
+      { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F. } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )

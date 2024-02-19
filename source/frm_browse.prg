@@ -48,6 +48,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       oThisForm:nDlgWidth - 10, oThisForm:nDlgHeight - 80, ;
       oTbrowse, cField, @xValue, cTable )
 
-   gui_DialogActivate( oThisForm:xDlg ) // , { || gui_SetFocus( aItem[ CFG_FCONTROL ] ) } )
+                                        // setfocus on browse do not solve ENTER question
+   gui_DialogActivate( oThisForm:xDlg ) // { || gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] ) } )
 
    RETURN Nil
