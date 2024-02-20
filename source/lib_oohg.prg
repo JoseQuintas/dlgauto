@@ -115,7 +115,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
 
 STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyCodeList )
 
-   LOCAL nPos, cType, cFocusedControl
+   LOCAL nPos, cType, cFocusedControl, oObj
 
    nPos := hb_AScan( aDlgKeyCodeList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
    IF nPos != 0
@@ -123,9 +123,8 @@ STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, 
    ENDIF
    IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyCodeList, { | e | e[ 2 ] == VK_RETURN } ) != 0
       cFocusedControl := GetProperty( xDlg, "FOCUSEDCONTROL" )
-      gui_MsgBox( cFocusedControl )
-      cType := GetProperty( xDlg, cFocusedControl, "TYPE" )
-      gui_MsgBox( cType )
+      oObj := GetControlObjectByHandle( GetProperty( xDlg, cFocusedControl, "HANDLE" ) )
+      cType := oObj:Type
       IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT" }, { | e | e == cType } ) != 0
          _SetNextFocus()
       ENDIF
