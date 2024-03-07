@@ -105,10 +105,12 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
          FIELDS aFieldList ;
          ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
    ENDIF
-   FOR EACH aItem IN aKeyCodeList
-      AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
-      _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
-   NEXT
+   IF ! Empty( aKeyCodeList )
+      FOR EACH aItem IN aKeyCodeList
+         AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
+         _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
+      NEXT
+   ENDIF
    (cField);(xValue)
 
    RETURN Nil

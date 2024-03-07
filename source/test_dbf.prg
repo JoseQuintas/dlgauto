@@ -1,11 +1,11 @@
 /*
-frm_DBF - Create DBF for test
+test_DBF - Create DBF for test
 */
 
 #include "directry.ch"
 #include "dbstruct.ch"
 
-FUNCTION frm_DBF()
+FUNCTION Test_DBF()
 
    LOCAL nCont, cTxt, lLoadStru := .F.
 

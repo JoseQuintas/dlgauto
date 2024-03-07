@@ -6,12 +6,16 @@ frm_browse - browse
 
 FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
 
-   LOCAL oTBrowse := {}, aItem, xValue, cField, nSelect, nPos
+   LOCAL oTBrowse := {}, aItem, xValue, cField, nSelect, nPos, nIndexOrd
 
    nSelect := Select()
    SELECT ( cTable )
+   nIndexOrd := IndexOrd()
 
    nPos := hb_Ascan( ::aAllSetup, { | e | e[1] == cTable } )
+   IF nPos != 0 .AND. ::aAllSetup[ nPos, 3 ] != Nil
+      SET ORDER TO ( ::aAllSetup[ nPos, 3 ] )
+   ENDIF
    FOR EACH aItem IN ::aAllSetup[ nPos, 2 ]
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          AAdd( oTBrowse, { aItem[ CFG_CAPTION ], aItem[ CFG_FNAME ], aItem[ CFG_FPICTURE ] } )
@@ -26,6 +30,7 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
       gui_TextSetValue( xDlg, xControl, xValue )
    ENDIF
+   SET ORDER TO ( nIndexOrd )
 
    SELECT ( nSelect )
    (xDlg)

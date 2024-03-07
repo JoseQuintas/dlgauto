@@ -4,13 +4,13 @@ frm_Dialog.prg
 frm_Edit.prg
 frm_Browse.prg
 frm_Buttons.prg
-frm_Dbf.prg
+test_Dbf.prg
 lib.prg
 frm_Main.prg
-frm_MainMenu.prg
+test_MainMenu.prg
 frm_Preview.prg
 frm_Print.prg
-frm_valid.prg
+frm_TextValidate.prg
 test.rc
 
 -otest
@@ -22,5 +22,3 @@ test.rc
 
 hbct.hbc
 {win}hbwin.hbc
-
-

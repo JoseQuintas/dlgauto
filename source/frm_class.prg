@@ -7,6 +7,10 @@ frm_Class - Class for data and bypass for functions
 
 CREATE CLASS frm_Class
 
+   VAR lIsSQL          INIT .F.
+   VAR cn
+   VAR cDataTable      INIT ""
+   VAR cDataField      INIT ""
    VAR cTitle
    VAR cFileDBF
    VAR aEditList       INIT {}
@@ -56,23 +60,42 @@ CREATE CLASS frm_Class
 
 METHOD First() CLASS frm_Class
 
-   GOTO TOP
+   IF ::lIsSQL
+      ::cn:Execute( "SELECT " + ::cDataField + " FROM " + ::cDataTable + " ORDER BY " + ::cDataField + " LIMIT 1" )
+      //
+      ::cn:CloseRecordset()
+   ELSE
+      GOTO TOP
+   ENDIF
    ::UpdateEdit()
 
    RETURN Nil
 
 METHOD Last() CLASS frm_Class
 
-   GOTO BOTTOM
+   IF ::lIsSQL
+      ::cn:Execute( "SELECT " + ::cDataField + " FROM " + ::cDataTable + " ORDER BY " + ::cDataField + " DESC LIMIT 1" )
+      //
+      ::cn:CloseRecordset()
+   ELSE
+      GOTO BOTTOM
+   ENDIF
    ::UpdateEdit()
 
    RETURN Nil
 
 METHOD Next() CLASS frm_Class
 
-   SKIP
-   IF Eof()
-      GOTO BOTTOM
+   IF ::lIsSQL
+      ::cn:Execute( "SELECT " + ::cDataField + " FROM " + ::cDataTable + " WHERE " + ::cDataField + ;
+         " > " + ::axKeyValue + " ORDER BY " + ::cDataField + " DESC LIMIT 1" )
+      //
+      ::cn:CloseRecordset()
+   ELSE
+      SKIP
+      IF Eof()
+         GOTO BOTTOM
+      ENDIF
    ENDIF
    ::UpdateEdit()
 
@@ -80,11 +103,18 @@ METHOD Next() CLASS frm_Class
 
 METHOD Previous() CLASS frm_Class
 
-   SKIP -1
-   IF Bof()
-      GOTO TOP
+   IF ::lIsSQL
+      ::cn:Execute( "SELECT " + ::cDataField + " FROM " + ::cDataTable + " WHERE " + ::cDataField + ;
+         " < " + ::axKeyValue + " ORDER BY " + ::cDataField + " LIMIT 1" )
+      //
+      ::cn:CloseRecordset()
+   ELSE
+      SKIP -1
+      IF Bof()
+         GOTO TOP
+      ENDIF
+      ::UpdateEdit()
    ENDIF
-   ::UpdateEdit()
 
    RETURN Nil
 
@@ -206,10 +236,14 @@ METHOD Delete() CLASS frm_Class
    SELECT ( nSelect )
 
    IF gui_MsgYesNo( "Delete" )
-      IF rLock()
-         DELETE
-         SKIP 0
-         UNLOCK
+      IF ::lIsSQL
+         ::cn:ExecuteNoReturn( "DELETE FROM " + ::cDataTable + " WHERE " + ::cDataField + "=" + "NONE" )
+      ELSE
+         IF rLock()
+            DELETE
+            SKIP 0
+            UNLOCK
+         ENDIF
       ENDIF
    ENDIF
 

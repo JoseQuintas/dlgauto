@@ -3,14 +3,19 @@ test - main program
 */
 REQUEST DBFCDX
 
+#include "hbclass.ch"
 #include "directry.ch"
 #include "dbstruct.ch"
 #include "frm_class.ch"
 
-PROCEDURE Main()
+#ifdef DLGAUTO_AS_LIB
+   PROCEDURE DlgAuto()
+#else
+   PROCEDURE Main()
+#endif
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse
+   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos
 
    SET CONFIRM OFF
    SET DATE    BRITISH
@@ -19,24 +24,30 @@ PROCEDURE Main()
    SET EXCLUSIVE OFF
    SET FILECASE LOWER
    SET DIRCASE  LOWER
+#ifdef DLGAUTO_AS_LIB
+   #ifdef HBMK_HAS_HMGE
+      Init()
+   #endif
+#endif
    gui_Init()
    RddSetDefault( "DBFCDX" )
-   frm_DBF()
-   /* table, key */
+   test_DBF()
+   /* table, key, browse index */
    aKeyList := { ;
-      { "DBCLIENT",    "IDCLIENT" }, ;
-      { "DBPRODUCT",   "IDPRODUCT" }, ;
-      { "DBUNIT",      "IDUNIT" }, ;
-      { "DBSELLER",    "IDSELLER" }, ;
-      { "DBBANK",      "IDBANK" }, ;
-      { "DBGROUP",     "IDGROUP" }, ;
+      { "DBCLIENT",    "IDCLIENT", 2 }, ;
+      { "DBPRODUCT",   "IDPRODUCT", 2 }, ;
+      { "DBUNIT",      "IDUNIT", 2 }, ;
+      { "DBSELLER",    "IDSELLER", 2 }, ;
+      { "DBBANK",      "IDBANK", 2 }, ;
+      { "DBGROUP",     "IDGROUP", 2 }, ;
       { "DBSTOCK",     "IDSTOCK" }, ;
       { "DBFINANC",    "IDFINANC" }, ;
-      { "DBSTATE",     "IDSTATE" }, ;
+      { "DBSTATE",     "IDSTATE", 2 }, ;
       { "DBTICKET",    "IDTICKET" }, ;
       { "DBTICKETPRO", "IDTICKETPRO" }, ;
-      { "DBDBF",       "IDDBF" }, ;
-      { "DBFIELDS",    "IDFIELD" } }
+      { "DBDBF",       "IDDBF", 2 }, ;
+      { "DBFIELDS",    "IDFIELD", 2 } }
+
    /* table, field, table to search, key field, field to show */
    aSeekList := { ;
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
@@ -48,6 +59,7 @@ PROCEDURE Main()
       { "DBSTOCK",   "STGROUP",   "DBGROUP",   "IDGROUP",   "GRNAME" }, ;
       { "DBFINANC",  "FICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
+
    /* Related browse */
    aBrowseList := { ;
       { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F. }, ;
@@ -61,7 +73,7 @@ PROCEDURE Main()
    FOR EACH aFile IN aList
       aFile[ F_NAME ] := Upper( hb_FNameName( aFile[ F_NAME ] ) )
       cFile := aFile[ F_NAME ]
-      AAdd( aAllSetup, { cFile, {} } )
+      AAdd( aAllSetup, { cFile, {}, Nil } )
       USE ( cFile )
       aStru := dbStruct()
       FOR EACH aField IN aStru
@@ -101,6 +113,12 @@ PROCEDURE Main()
          ENDIF
       NEXT
       USE
+      nPos := hb_AScan( aKeyList, { | e | e[1] == cFile } )
+      IF nPos != 0
+         IF Len( aKeyList[ nPos ] ) > 2
+            Atail( aAllSetup )[ 3 ] := aKeyList[ nPos, 3 ]
+         ENDIF
+      ENDIF
    NEXT
    /* retrieve size of VSHOW */
    FOR EACH aDBF IN aAllSetup
@@ -141,5 +159,42 @@ STATIC FUNCTION PictureFromValue( oValue )
 
    RETURN cPicture
 
+/* above functions not in use, for tests purpose */
+
+/*
 FUNCTION AppVersaoExe(); RETURN ""
 FUNCTION AppUserName(); RETURN ""
+
+FUNCTION AppConexao()
+
+   STATIC cnConexao
+
+   IF Empty( cnConexao )
+      cnConexao := win_OleCreateObject( "ADODB.Connection" )
+   ENDIF
+
+   RETURN cnConexao
+
+FUNCTION ADOLocal()
+
+   LOCAL cnSQL
+
+   cnSQL := ADOClass():New()
+   cnSQL:cn := AppConexao()
+
+   RETURN cnSQL
+
+CREATE CLASS ADOClass
+   VAR  cn
+   VAR rs
+   METHOD Open() INLINE Nil
+   METHOD CloseRecordset() INLINE Nil
+   METHOD CloseConnection() INLINE Nil
+   METHOD Execute() INLINE Nil
+   METHOD ExecuteNoReturn() INLINE Nil
+   METHOD QueryCreate() INLINE Nil
+   METHOD QueryAdd() INLINE Nil
+   METHOD QueryExecuteInsert() INLINE Nil
+   METHOD QueryExecuteUpdate() INLINE Nil
+   ENDCLASS
+*/

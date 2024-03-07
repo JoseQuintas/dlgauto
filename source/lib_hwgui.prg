@@ -75,7 +75,8 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
       aKeyCodeList:= { { VK_RETURN, { || gui_BrowseEnter( cField, @xValue, xDlg, xControl ) } } }
    ENDIF
 
-   @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL
+   @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
+   ON CLICK { |...| gui_browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
    // may be not current alias
    xControl:Alias := workarea
 
@@ -86,25 +87,24 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
          JUSTIFY LINE DT_LEFT
    NEXT
 
-   xControl:bOther := { | xControl, msg, wParam, lParam | ;
-      gui_browsekeydown( xControl, xDlg, msg, wParam, lParam, cField, workarea, xValue, aKeyCodeList ) }
+   //xControl:bEnter := { || hwg_MsgInfo( "teste"), gui_browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
+   xControl:bKeyDown := { | o, nKey | hwg_msgInfo("antes"), gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xvalue, aKeyCodeList ), hwg_MsgInfo("depois"),(o) }
+   //xControl:bOther := { | xControl, msg, wParam, lParam | ;
+   //   gui_browsekeydown( xControl, xDlg, msg, wParam, lParam, cField, workarea, xValue, aKeyCodeList ) }
 
    (xDlg); (workarea)
 
    RETURN Nil
 
-STATIC FUNCTION gui_browsekeydown( xControl, xDlg, msg, wParam, lParam, cField, workarea, xValue, aKeyCodeList )
+STATIC FUNCTION gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xValue, aKeyCodeList )
 
-   LOCAL nKey, nPos
+   LOCAL nPos
 
-   IF msg == WM_KEYDOWN
-      nKey := hwg_PtrToULong( wParam )
-      nPos := hb_AScan( aKeyCodeList, { | e | nKey == e[ 1 ] } )
-      IF nPos != 0
-         Eval( aKeyCodeList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
-      ENDIF
+   nPos := hb_AScan( aKeyCodeList, { | e | nKey == e[ 1 ] } )
+   IF nPos != 0
+      Eval( aKeyCodeList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
    ENDIF
-   (lParam); (workarea)
+   (workarea)
 
    RETURN Nil
 
@@ -264,7 +264,7 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
    @ nCol, nRow TAB xControl ;
       ITEMS {} ;
       OF    xDlg ;
-      ID    101 ;
+      ; // ID    101 ;
       SIZE  nWidth, nHeight ;
       STYLE WS_CHILD + WS_VISIBLE
 
