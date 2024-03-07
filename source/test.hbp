@@ -1,16 +1,16 @@
 test.prg
 frm_class.prg
-frm_Dialog.prg
-frm_Edit.prg
-frm_Browse.prg
-frm_Buttons.prg
-test_Dbf.prg
+frm_dialog.prg
+frm_edit.prg
+frm_browse.prg
+frm_buttons.prg
+test_dbf.prg
 lib.prg
-frm_Main.prg
-test_MainMenu.prg
-frm_Preview.prg
-frm_Print.prg
-frm_TextValidate.prg
+frm_main.prg
+test_mainMenu.prg
+frm_preview.prg
+frm_print.prg
+frm_textvalidate.prg
 test.rc
 
 -otest

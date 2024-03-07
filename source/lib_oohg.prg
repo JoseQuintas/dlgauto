@@ -73,7 +73,8 @@ FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
+   cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
@@ -83,7 +84,8 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, { || Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) } )
-      AAdd( aWidthList, ( 1 + Max( Len( aItem[1] ), Len( Transform(FieldGet(FieldNum(aItem[1])),aItem[3])) ) ) * 13 )
+      AAdd( aWidthList, ( 1 + Max( Len( aItem[1] ), ;
+         Len( Transform( FieldGet( FieldNum(aItem[ 1 ] ) ), aItem[ 3 ] ) ) ) ) * 13 )
    NEXT
    IF ValType( aKeyCodeList ) == "A"
       @ nRow, nCol BROWSE ( xControl ) ;
@@ -108,7 +110,8 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    IF ! Empty( aKeyCodeList )
       FOR EACH aItem IN aKeyCodeList
          AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
-         _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
+         _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_DlgKeyDown( xDlg, xControl, ;
+            aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
       NEXT
    ENDIF
    (cField);(xValue)

@@ -73,7 +73,8 @@ FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
+FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
+   cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
@@ -107,10 +108,13 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
          ROWSOURCE ( workarea ) ;
          COLUMNFIELDS aFieldList
    ENDIF
-   FOR EACH aItem IN aKeyCodeList
-      AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
-      _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
-   NEXT
+   IF ! Empty( aKeyCodeList )
+      FOR EACH aItem IN aKeyCodeList
+         AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
+         _DefineHotKey( xDlg, 0, aItem[ 1 ], ;
+            { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
+      NEXT
+   ENDIF
 
    (xDlg);(cField);(xValue);(workarea)
 

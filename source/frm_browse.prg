@@ -12,10 +12,12 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    SELECT ( cTable )
    nIndexOrd := IndexOrd()
 
+   // check begin if is defined a order to browse
    nPos := hb_Ascan( ::aAllSetup, { | e | e[1] == cTable } )
    IF nPos != 0 .AND. ::aAllSetup[ nPos, 3 ] != Nil
       SET ORDER TO ( ::aAllSetup[ nPos, 3 ] )
    ENDIF
+   // check end
    FOR EACH aItem IN ::aAllSetup[ nPos, 2 ]
       IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          AAdd( oTBrowse, { aItem[ CFG_CAPTION ], aItem[ CFG_FNAME ], aItem[ CFG_FPICTURE ] } )

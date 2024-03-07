@@ -28,8 +28,8 @@ FUNCTION Test_DBF()
             CLADDRESS WITH cTxt, CLCITY WITH cTxt, CLSTATE WITH StrZero( nCont, 2 ), ;
             CLMAIL WITH cTxt, CLSELLER WITH nCont, CLBANK WITH nCont
       NEXT
-      INDEX ON field->IDCLIENT TAG primary
-      INDEX ON field->CLNAME TAG name
+      INDEX ON field->IdClient TAG primary
+      INDEX ON field->clName TAG name
       USE
    ENDIF
    IF ! File( "DBPRODUCT.DBF" )
@@ -49,8 +49,8 @@ FUNCTION Test_DBF()
             PRGROUP WITH nCont, PRNCM WITH cTxt, PRQT WITH nCont, ;
             PRVALUE WITH nCont
       NEXT
-      INDEX ON field->IDPRODUCT TAG primary
-      INDEX ON field->PRNAME TAG name
+      INDEX ON field->IdProduct TAG primary
+      INDEX ON field->prName TAG name
       USE
    ENDIF
    IF ! File( "DBUNIT.DBF" )
@@ -64,8 +64,8 @@ FUNCTION Test_DBF()
          APPEND BLANK
          REPLACE IDUNIT WITH nCont, UNSYMBOL WITH cTxt, UNNAME WITH cTxt
       NEXT
-      INDEX ON field->IDUNIT TAG primary
-      INDEX ON field->UNNAME TAG name
+      INDEX ON field->IdUnit TAG primary
+      INDEX ON field->UnName TAG name
       USE
    ENDIF
    IF ! File( "DBSELLER.DBF" )
@@ -78,8 +78,8 @@ FUNCTION Test_DBF()
          APPEND BLANK
          REPLACE IDSELLER WITH nCont, SENAME WITH cTxt
       NEXT
-      INDEX ON field->IDSELLER TAG primary
-      INDEX ON field->SENAME TAG name
+      INDEX ON field->IdSeller TAG primary
+      INDEX ON field->seName TAG name
       USE
    ENDIF
    IF ! File( "DBBANK.DBF" )
@@ -92,8 +92,8 @@ FUNCTION Test_DBF()
          APPEND BLANK
          REPLACE IDBANK WITH nCont, BANAME WITH cTxt
       NEXT
-      INDEX ON field->IDBANK TAG primary
-      INDEX ON field->BANAME TAG name
+      INDEX ON field->IdBank TAG primary
+      INDEX ON field->baName TAG name
       USE
    ENDIF
    IF ! File( "DBGROUP.DBF" )
@@ -106,8 +106,8 @@ FUNCTION Test_DBF()
          APPEND BLANK
          REPLACE IDGROUP WITH nCont, GRNAME WITH cTxt
       NEXT
-      INDEX ON field->IDGROUP TAG primary
-      INDEX ON field->GRNAME TAG name
+      INDEX ON field->IdGroup TAG primary
+      INDEX ON field->grName TAG name
       USE
    ENDIF
    IF ! File( "DBSTOCK.DBF" )
@@ -126,7 +126,7 @@ FUNCTION Test_DBF()
             STCLIENT WITH nCont, STNUMDOC WITH cTxt, ;
             STPRODUCT WITH nCont, STQT WITH nCont
       NEXT
-      INDEX ON field->IDSTOCK TAG primary
+      INDEX ON field->IdStock TAG primary
       INDEX ON Str( field->StClient, 6 ) + Str( field->idStock, 6 ) tag client
       INDEX ON Str( field->stProduct, 6 ) + Str( field->idStock, 6 ) Tag product
       USE
@@ -149,7 +149,7 @@ FUNCTION Test_DBF()
             FICLIENT WITH nCont, FINUMDOC WITH cTxt, ;
             FIDATTOPAY WITH DATE() + 30, FIBANK WITH nCont
       NEXT
-      INDEX ON field->IDFINANC TAG primary
+      INDEX ON field->IdFinanc TAG primary
       INDEX ON Str( field->fiClient, 6 ) + Str( field->idFinanc, 6 ) tag client
       USE
    ENDIF
@@ -163,7 +163,8 @@ FUNCTION Test_DBF()
          APPEND BLANK
          REPLACE IDSTATE WITH StrZero( nCont, 2 ), STNAME WITH cTxt
       NEXT
-      INDEX ON field->IDSTATE TAG primary
+      INDEX ON field->IdState TAG primary
+      INDEX ON field->stName TAG name
       USE
    ENDIF
    IF ! File( "DBTICKET.DBF" )
@@ -239,7 +240,7 @@ FUNCTION Test_DBF()
          { "DEC",     "N", 2, 0 } } )
       USE DBFIELDS
       INDEX ON field->idField TAG primary
-      INDEX ON field->DBF + Str( field->IDFIELD, 6 ) tag dbf
+      INDEX ON field->Dbf + Str( field->IDFIELD, 6 ) tag dbf
       USE
       lLoadStru := .T.
    ENDIF
@@ -248,7 +249,7 @@ FUNCTION Test_DBF()
          { "IDDBF", "N", 6, 0 }, ;
          { "NAME",  "C", 20, 0 } } )
       USE DBDBF
-      INDEX ON field->iddbf tag primary
+      INDEX ON field->IdDbf tag primary
       USE
       lLoadStru := .T.
    ENDIF

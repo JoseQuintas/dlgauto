@@ -83,12 +83,14 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cFie
    FOR EACH aItem IN oTBrowse
       ADD COLUMN { || Transform( &(workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) } TO xControl ;
          HEADER aItem[1] ;
-         LENGTH Int( 1.4 * ( 1 + Max( Len( aItem[1] ), Len( Transform( &(workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) ) ) ) );
+         LENGTH Int( 1.4 * ( 1 + Max( Len( aItem[1] ), ;
+            Len( Transform( &(workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) ) ) ) );
          JUSTIFY LINE DT_LEFT
    NEXT
 
    //xControl:bEnter := { || hwg_MsgInfo( "teste"), gui_browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
-   xControl:bKeyDown := { | o, nKey | hwg_msgInfo("antes"), gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xvalue, aKeyCodeList ), hwg_MsgInfo("depois"),(o) }
+   xControl:bKeyDown := { | o, nKey | hwg_msgInfo("antes"), ;
+      gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xvalue, aKeyCodeList ), hwg_MsgInfo("depois"),(o) }
    //xControl:bOther := { | xControl, msg, wParam, lParam | ;
    //   gui_browsekeydown( xControl, xDlg, msg, wParam, lParam, cField, workarea, xValue, aKeyCodeList ) }
 
