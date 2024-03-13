@@ -261,7 +261,7 @@ METHOD UpdateEdit() CLASS frm_Class
             nSelect := Select()
             SELECT ( Select( aItem[ CFG_VTABLE ] ) )
             SEEK xValue
-            cText := &( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+            cText := ( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
             SELECT ( nSelect )
             gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
@@ -269,8 +269,8 @@ METHOD UpdateEdit() CLASS frm_Class
       IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
          SET ORDER TO ( aItem[ CFG_BINDEXORD ] )
-         xScope := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) )
-         nLenScope := &( ::cFileDbf )->( FieldLen( aItem[ CFG_BKEYFROM ] ) )
+         xScope := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) )
+         nLenScope := ( ::cFileDbf )->( FieldLen( aItem[ CFG_BKEYFROM ] ) )
          IF ValType( xScope ) == "C"
             SET SCOPE TO xScope
          ELSE

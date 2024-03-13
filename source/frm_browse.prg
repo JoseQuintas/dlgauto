@@ -45,7 +45,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
 
    oThisForm := frm_Class():New()
    oThisForm:cOptions := ""
-   gui_DialogCreate( @oThisForm:xDlg, 0, 0, oThisForm:nDlgWidth, oThisForm:nDlgHeight, cTable, { || Nil } )
+   gui_DialogCreate( @oThisForm:xDlg, 0, 0, oThisForm:nDlgWidth, oThisForm:nDlgHeight, gui_libName() + " " + cTable, { || Nil } )
    frm_Buttons( oThisForm, .F. )
    AAdd( oThisForm:aControlList, CFG_EMPTY )
    aItem := Atail( oThisForm:aControlList )
@@ -55,7 +55,6 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       oThisForm:nDlgWidth - 10, oThisForm:nDlgHeight - 80, ;
       oTbrowse, cField, @xValue, cTable )
 
-                                        // setfocus on browse do not solve ENTER question
-   gui_DialogActivate( oThisForm:xDlg ) // { || gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] ) } )
+   gui_DialogActivate( oThisForm:xDlg )
 
    RETURN Nil

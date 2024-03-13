@@ -148,7 +148,7 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
    IF ! Empty( cField )
       nRecNo := GetProperty( xDlg, xControl, "RECNO" )
       GOTO ( nRecNo )
-      xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
+      xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
    DoMethod( xDlg, "RELEASE" )
 

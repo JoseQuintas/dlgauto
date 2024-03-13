@@ -83,7 +83,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
       AAdd( aWidthList, ( 1 + Max( Len( aItem[3] ), ;
-         Len( Transform( &( workarea )->( FieldGet( FieldNum( aItem[ 1 ] ) ) ), "" ) ) ) ) * 13 )
+         Len( Transform( ( workarea )->( FieldGet( FieldNum( aItem[ 1 ] ) ) ), "" ) ) ) ) * 13 )
    NEXT
 
    DEFINE BROWSE ( xControl )
@@ -144,8 +144,8 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
    IF ! Empty( cField )
       // without browsesync ON
-      // &(workarea)->( dbGoto( GetProperty( xDlg, xControl, "VALUE" ) ) )
-      xValue := &(workarea)->( FieldGet( FieldNum( cField ) ) )
+      // (workarea)->( dbGoto( GetProperty( xDlg, xControl, "VALUE" ) ) )
+      xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
    (xControl)
    DoMethod( xDlg, "RELEASE" )

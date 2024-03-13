@@ -13,7 +13,7 @@ FUNCTION frm_Edit( Self )
 
    FOR EACH aItem IN ::aEditList
       IF aItem[ CFG_CTLTYPE ] != Nil .AND. aItem[ CFG_CTLTYPE ] != TYPE_BROWSE
-         aItem[ CFG_VALUE ]    := &( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
+         aItem[ CFG_VALUE ]    := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
       ENDIF
       AAdd( ::aControlList, AClone( aItem ) )
    NEXT
