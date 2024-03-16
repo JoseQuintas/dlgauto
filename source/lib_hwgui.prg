@@ -107,6 +107,7 @@ STATIC FUNCTION gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xValu
       Eval( aKeyCodeList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
    ENDIF
    (workarea)
+   // return value is used by hwgui
 
    RETURN .T.
 

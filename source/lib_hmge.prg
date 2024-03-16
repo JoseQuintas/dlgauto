@@ -11,6 +11,7 @@ FUNCTION gui_Init()
    //SET OOP ON
    SET WINDOW MAIN OFF
    //SET WINDOW MODAL PARENT HANDLE ON
+   SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
 
    RETURN Nil
 
@@ -61,6 +62,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       BACKCOLOR  COLOR_WHITE
       FLAT       .T.
       NOXPSTYLE  .T.
+      //NOTABSTOP .T.
    END BUTTONEX
 
    RETURN Nil
@@ -166,7 +168,8 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
    //LOCAL xControl
 
    IF ! Empty( bCode )
-      Eval( bCode )
+      // Eval( bCode )
+      ON INIT bCode
    ENDIF
    //FOR EACH xControl IN HMG_GetFormControls( xDlg, "BUTTONEX" )
    //   SetHandCursor( GetControlHandle( xControl, xDlg ) )
@@ -355,7 +358,8 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          MAXLENGTH nMaxLength
       ENDIF
       VALUE xValue
-      ON LOSTFOCUS Eval( bValid )
+      //ON LOSTFOCUS Eval( bValid )
+      VALID bValid
    END GETBOX
    (bValid)
 

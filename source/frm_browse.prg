@@ -54,7 +54,8 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    gui_Browse( oThisForm:xDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
       oThisForm:nDlgWidth - 10, oThisForm:nDlgHeight - 80, ;
       oTbrowse, cField, @xValue, cTable )
-
+   // works for hmge from button
+   gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] )
    gui_DialogActivate( oThisForm:xDlg )
 
    RETURN Nil
