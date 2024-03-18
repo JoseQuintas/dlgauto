@@ -30,7 +30,7 @@
 #define TYPE_EDIT     2
 #define TYPE_TAB      3
 #define TYPE_TABPAGE  4
-#define TYPE_PANEL    5
+//#define TYPE_PANEL    5
 #define TYPE_BROWSE   6
 #define TYPE_HWGUIBUG 7
 
