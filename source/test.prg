@@ -132,7 +132,7 @@ REQUEST DBFCDX
          ENDIF
       NEXT
    NEXT
-   frm_MainMenu( @aAllSetup )
+   frm_DlgMenu( @aAllSetup )
 
    RETURN
 

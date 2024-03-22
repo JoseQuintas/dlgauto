@@ -7,7 +7,7 @@ frm_buttons.prg
 test_dbf.prg
 lib.prg
 frm_main.prg
-test_mainmenu.prg
+test_dlgmenu.prg
 frm_preview.prg
 frm_print.prg
 frm_textvalidate.prg

@@ -15,7 +15,7 @@ FUNCTION gui_Init()
 
    RETURN Nil
 
-FUNCTION gui_MainMenu( xDlg, aMenuList, aAllSetup, cTitle )
+FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 

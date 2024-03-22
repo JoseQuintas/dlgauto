@@ -56,6 +56,6 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       oTbrowse, cField, @xValue, cTable )
    // works for hmge from button
    gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] )
-   gui_DialogActivate( oThisForm:xDlg )
+   gui_DialogActivate( oThisForm:xDlg, { || gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] ) } )
 
    RETURN Nil

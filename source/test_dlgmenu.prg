@@ -1,5 +1,5 @@
 /*
-frm_mainmenu - menu of DBF files
+test_Dlgmenu - menu of DBF files
 */
 
 #include "hbgtinfo.ch"
@@ -7,7 +7,7 @@ frm_mainmenu - menu of DBF files
 #include "frm_class.ch"
 #include "inkey.ch"
 
-FUNCTION frm_MainMenu( aAllSetup )
+FUNCTION frm_DlgMenu( aAllSetup )
 
    LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, xDlg := "Main", cDBF
 
@@ -22,6 +22,6 @@ FUNCTION frm_MainMenu( aAllSetup )
       ENDIF
    NEXT
 
-   gui_MainMenu( xDlg, aMenuList, aAllSetup, gui_LibName() + " - MENU" )
+   gui_DlgMenu( xDlg, aMenuList, aAllSetup, gui_LibName() + " - MENU" )
 
    RETURN Nil
