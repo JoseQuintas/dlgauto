@@ -128,6 +128,12 @@ FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    RETURN Nil
 
+FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+
+   @ nCol, nRow COMBOBOX xControl ITEMS aList OF xDlg STYLE WS_TABSTOP SIZE nWidth, nHeight
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    // xDlg:Center()
@@ -281,6 +287,9 @@ FUNCTION gui_TabNavigate( xDlg, oTab, aList )
 
    LOCAL nTab, nPageNext
 
+   IF Len( aList ) == 0
+      RETURN Nil
+   ENDIF
    FOR nTab = 1 TO Len( aList ) - 1
       nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
       gui_TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], oTab, nPageNext, aList[ nPageNext, 1 ] )

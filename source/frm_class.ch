@@ -23,16 +23,18 @@
 #define CFG_BKEYTO2   23                    // browse field2 to
 #define CFG_BVALUE    24                    // browse key value
 #define CFG_BEDIT     25                    // can edit browse values
+#define CFG_COMBOLIST 26                    // array for combo
 
-#define CFG_EMPTY { "", "C", 1, 0, .F., "", "", {}, "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil }
+#define CFG_EMPTY { "", "C", 1, 0, .F., "", "", {}, "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil, Nil }
 
-#define TYPE_BUTTON   1
-#define TYPE_EDIT     2
-#define TYPE_TAB      3
-#define TYPE_TABPAGE  4
-//#define TYPE_PANEL    5
-#define TYPE_BROWSE   6
-#define TYPE_HWGUIBUG 7
+#define TYPE_BUTTON    1
+#define TYPE_EDIT      2
+#define TYPE_TAB       3
+#define TYPE_TABPAGE   4
+#define TYPE_BROWSE    5
+#define TYPE_HWGUIBUG  8
+#define TYPE_COMBOTEXT 9
+#define TYPE_COMBONUM  10
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"

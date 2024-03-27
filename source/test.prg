@@ -15,7 +15,7 @@ REQUEST DBFCDX
 #endif
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos
+   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboTextList //, bOldError
 
    SET CONFIRM OFF
    SET DATE    BRITISH
@@ -29,6 +29,8 @@ REQUEST DBFCDX
       Init()
    #endif
 #endif
+   //bOldError := ErrorBlock()
+   //ErrorBlock( { | e | JoseQuintasError( e ), Eval( bOldError ) } )
    gui_Init()
    RddSetDefault( "DBFCDX" )
    test_DBF()
@@ -52,7 +54,7 @@ REQUEST DBFCDX
    aSeekList := { ;
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
       { "DBCLIENT",  "CLBANK",    "DBBANK",    "IDBANK",    "BANAME" }, ;
-      { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "" }, ;
+      ; // { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "" }, ;
       { "DBPRODUCT", "IEUNIT",    "DBUNIT",    "IDUNIT",    "UNNAME" }, ;
       { "DBSTOCK",   "STCLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBSTOCK",   "STPRODUCT", "DBPRODUCT", "IDPRODUCT", "PRNAME" }, ;
@@ -61,12 +63,18 @@ REQUEST DBFCDX
       { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
 
    /* Related browse */
-   aBrowseList := { ;
+   aBrowseList := {}
+   /*
       { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F. }, ;
       { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F. } , ;
       { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F. }, ;
       { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T. }, ;
       { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F. } }
+   */
+
+   /* Combotext */
+   aComboTextList := { ;
+      { "DBCLIENT", "CLSTATE", { "AC", "RS", "SP", "RJ", "PR", "RN" } } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -94,6 +102,11 @@ REQUEST DBFCDX
             aItem[ CFG_VTABLE ] := aSeekList[ nSeekPos, 3 ]
             aItem[ CFG_VFIELD ] := aSeekList[ nSeekPos, 4 ]
             aItem[ CFG_VSHOW ]  := aSeekList[ nSeekPos, 5 ]
+         ENDIF
+         /* combotext */
+         IF ( nSeekPos := hb_Ascan( aComboTextList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+            aItem[ CFG_COMBOLIST ] := aComboTextList[ nSeekPos, 3 ]
+            aItem[ CFG_CTLTYPE ] := TYPE_COMBOTEXT
          ENDIF
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT
@@ -158,6 +171,9 @@ STATIC FUNCTION PictureFromValue( oValue )
    ENDCASE
 
    RETURN cPicture
+
+FUNCTION AppVersaoExe(); RETURN ""
+FUNCTION AppUserName(); RETURN ""
 
 /* above functions not in use, for tests purpose */
 
