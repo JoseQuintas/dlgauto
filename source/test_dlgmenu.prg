@@ -7,7 +7,7 @@ test_Dlgmenu - menu of DBF files
 #include "frm_class.ch"
 #include "inkey.ch"
 
-FUNCTION frm_DlgMenu( aAllSetup )
+FUNCTION test_DlgMenu( aAllSetup )
 
    LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, xDlg := "Main", cDBF
 

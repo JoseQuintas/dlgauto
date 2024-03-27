@@ -31,6 +31,8 @@ REQUEST DBFCDX
 #endif
    //bOldError := ErrorBlock()
    //ErrorBlock( { | e | JoseQuintasError( e ), Eval( bOldError ) } )
+   //SetMode(33,100)
+   //CLS
    gui_Init()
    RddSetDefault( "DBFCDX" )
    test_DBF()
@@ -74,7 +76,7 @@ REQUEST DBFCDX
 
    /* Combotext */
    aComboTextList := { ;
-      { "DBCLIENT", "CLSTATE", { "AC", "RS", "SP", "RJ", "PR", "RN" } } }
+      { "DBCLIENT", "CLSTATE", { "ACxxxxxxxxxxxxxx", "RS", "SP", "RJ", "PR", "RN" } } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -145,7 +147,8 @@ REQUEST DBFCDX
          ENDIF
       NEXT
    NEXT
-   frm_DlgMenu( @aAllSetup )
+
+   test_DlgMenu( @aAllSetup )
 
    RETURN
 

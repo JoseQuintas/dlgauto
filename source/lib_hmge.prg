@@ -41,7 +41,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "BUTTON" )
+      xControl := gui_newctlname( "BTN" )
    ENDIF
    DEFINE BUTTONEX ( xControl )
       PARENT ( xDlg )
@@ -79,7 +79,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "BROW" )
+      xControl := gui_newctlname( "BRW" )
    ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
@@ -163,13 +163,41 @@ FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    RETURN Nil
 
+FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+
+   IF Empty( xControl )
+      xControl := gui_newctlname( "CBO" )
+   ENDIF
+   DEFINE COMBOBOX ( xControl )
+      PARENT ( xDlg )
+      ROW nRow
+      COL nCol
+      VALUE 1
+      WIDTH nWidth
+      //HEIGHT nHeight
+      ITEMS aList
+   END COMBOBOX
+   //hb_MemoWrit( "d:\temp\test.txt", ;
+   //   [DEFINE COMBOBOX ( "] + xControl + [" )] + hb_Eol() + ;
+   //   [   PARENT ( "] + xDlg + [" )] + hb_Eol() + ;
+   //   [   ROW ] + Ltrim( Str( nRow ) ) + hb_Eol() + ;
+   //   [   COL ] + Ltrim( Str( nCol ) ) + hb_Eol() + ;
+   //   [   VALUE 1] + hb_Eol() + ;
+   //   [   WIDTH ] + Ltrim( Str( nWidth ) ) + hb_Eol() + ;
+   //   [   HEIGHT ] + Ltrim( Str( nHeight ) ) + hb_Eol() + ;
+   //   [   ITEMS ] + hb_ValToExp( aList ) + hb_Eol() + ;
+   //   [END COMBOBOX] + hb_Eol() )
+   ( nHeight )
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    //LOCAL xControl
 
    IF ! Empty( bCode )
-      // Eval( bCode )
-      ON INIT bCode
+      Eval( bCode )
+      // ON INIT bCode
    ENDIF
    //FOR EACH xControl IN HMG_GetFormControls( xDlg, "BUTTONEX" )
    //   SetHandCursor( GetControlHandle( xControl, xDlg ) )
@@ -188,7 +216,7 @@ FUNCTION gui_DialogClose( xDlg )
 FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOldDlg )
 
    IF Empty( xDlg )
-      xDlg := gui_newctlname( "DIALOG" )
+      xDlg := gui_newctlname( "DLG" )
    ENDIF
 
    IF Empty( bInit )
@@ -216,7 +244,7 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "LABEL" )
+      xControl := gui_newctlname( "LBL" )
    ENDIF
    // não mostra borda
    DEFINE LABEL ( xControl )
@@ -254,7 +282,7 @@ FUNCTION gui_LibName()
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "MLTEXT" )
+      xControl := gui_newctlname( "MLTXT" )
    ENDIF
    DEFINE EDITBOX ( xControl )
       PARENT ( xDlg )
@@ -282,7 +310,7 @@ FUNCTION gui_MsgYesNo( cText )
 FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "PANEL" )
+      xControl := gui_newctlname( "PAN" )
    ENDIF
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
 
@@ -337,7 +365,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "TEXT" )
+      xControl := gui_newctlname( "TXT" )
    ENDIF
    DEFINE GETBOX ( xControl )
       PARENT ( xDlg )
@@ -365,7 +393,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
    RETURN Nil
 
-FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
+FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    SetProperty( xDlg, xControl, "ENABLED", lEnable )
 

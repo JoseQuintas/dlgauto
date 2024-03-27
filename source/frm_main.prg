@@ -11,7 +11,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
 
    LOCAL oFrm, nPos
 
-#ifdef HBMK_HAS_GTWVG
+#ifdef HBMK_HAS_GTWVGX
    hb_gtReload( "WVG" )
    SetMode(30,100)
    SetColor("W/B")
@@ -20,7 +20,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
 
    oFrm := frm_Class():New()
    oFrm:cFileDBF   := cDBF
-#ifdef HBMK_HAS_GTWVG
+#ifdef HBMK_HAS_GTWVGX
    oFrm:xDlg := wvgSetAppWindow()
 #endif
    oFrm:cTitle     := gui_LibName() + " - " + cDBF

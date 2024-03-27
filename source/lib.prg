@@ -14,7 +14,7 @@ lib - select apropriate source code
    #include "lib_oohg.prg"
 #endif
 
-#ifdef HBMK_HAS_GTWVG
+#ifdef HBMK_HAS_GTWVGX
    #include "lib_gtwvg.prg"
 #endif
 

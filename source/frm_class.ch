@@ -55,7 +55,7 @@
    #include "i_altsyntax.ch"
 #endif
 
-#ifdef HBMK_HAS_GTWVG
+#ifdef HBMK_HAS_GTWVGX
    #include "gtwvg.ch"
 #endif
 

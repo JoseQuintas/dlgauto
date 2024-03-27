@@ -333,7 +333,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
    RETURN Nil
 
-FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
+FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    IF lEnable
       xControl:Enable()

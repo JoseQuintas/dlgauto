@@ -157,9 +157,9 @@ METHOD EditKeyOn() CLASS frm_Class
    // search key field
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
-            gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
       ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. aItem[ CFG_ISKEY ]
-         gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+         gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound .AND. aItem[ CFG_ISKEY ]
             lFound := .T.
             oKeyEdit := aItem[ CFG_FCONTROL ]
@@ -181,15 +181,12 @@ METHOD EditOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
-            gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_COMBOTEXT
-         //hwg_EnableWindow( aItem[ CFG_FCONTROL ]:handle, .T. )
-         aItem[ CFG_FCONTROL ]:Enable()
-      ELSEIF hb_AScan( { TYPE_EDIT }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+      ELSEIF hb_AScan( { TYPE_EDIT, TYPE_COMBOTEXT }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ]
-            gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
-            gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
             IF ! lFound
                lFound := .T.
                oFirstEdit := aItem[ CFG_FCONTROL ]
@@ -207,11 +204,8 @@ METHOD EditOff() CLASS frm_Class
    LOCAL aItem
 
    FOR EACH aItem IN ::aControlList
-      IF hb_AScan( { TYPE_EDIT, TYPE_HWGUIBUG }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
-         gui_TextEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
-      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_COMBOTEXT
-         //hwg_EnableWindow( aItem[ CFG_FCONTROL ]:handle, .F. )
-         aItem[ CFG_FCONTROL ]:Disable()
+      IF hb_AScan( { TYPE_EDIT, TYPE_HWGUIBUG , TYPE_COMBOTEXT }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+         gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
    ::ButtonSaveOff()
