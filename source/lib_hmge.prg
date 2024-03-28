@@ -174,7 +174,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       COL nCol
       VALUE 1
       WIDTH nWidth
-      //HEIGHT nHeight
+      //HEIGHT nHeight // do not define height, it can limit list size to zero
       ITEMS aList
    END COMBOBOX
    //hb_MemoWrit( "d:\temp\test.txt", ;

@@ -37,7 +37,8 @@ REQUEST DBFCDX
    RddSetDefault( "DBFCDX" )
    test_DBF()
    /* table, key, browse index */
-   aKeyList := { ;
+   aKeyList := {}
+   /*
       { "DBCLIENT",    "IDCLIENT", 2 }, ;
       { "DBPRODUCT",   "IDPRODUCT", 2 }, ;
       { "DBUNIT",      "IDUNIT", 2 }, ;
@@ -51,18 +52,21 @@ REQUEST DBFCDX
       { "DBTICKETPRO", "IDTICKETPRO" }, ;
       { "DBDBF",       "IDDBF", 2 }, ;
       { "DBFIELDS",    "IDFIELD", 2 } }
+   */
 
    /* table, field, table to search, key field, field to show */
-   aSeekList := { ;
+   aSeekList := {}
+   /*
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
       { "DBCLIENT",  "CLBANK",    "DBBANK",    "IDBANK",    "BANAME" }, ;
-      ; // { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "" }, ;
+      { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "STNAME" }, ;
       { "DBPRODUCT", "IEUNIT",    "DBUNIT",    "IDUNIT",    "UNNAME" }, ;
       { "DBSTOCK",   "STCLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBSTOCK",   "STPRODUCT", "DBPRODUCT", "IDPRODUCT", "PRNAME" }, ;
       { "DBSTOCK",   "STGROUP",   "DBGROUP",   "IDGROUP",   "GRNAME" }, ;
       { "DBFINANC",  "FICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
+   /*
 
    /* Related browse */
    aBrowseList := {}
@@ -75,8 +79,8 @@ REQUEST DBFCDX
    */
 
    /* Combotext */
-   aComboTextList := { ;
-      { "DBCLIENT", "CLSTATE", { "ACxxxxxxxxxxxxxx", "RS", "SP", "RJ", "PR", "RN" } } }
+   aComboTextList := {}
+   // { "DBCLIENT", "CLSTATE", { "AC", "RS", "SP", "RJ", "PR", "RN" } } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
