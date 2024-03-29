@@ -134,6 +134,12 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
+FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   @ nCol, nRow CHECKBOX xControl CAPTION "" OF xDlg STYLE WS_TABSTOP SIZE nWidth, nHeight
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    // xDlg:Center()

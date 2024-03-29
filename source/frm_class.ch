@@ -35,6 +35,7 @@
 #define TYPE_HWGUIBUG  8
 #define TYPE_COMBOTEXT 9
 #define TYPE_COMBONUM  10
+#define TYPE_CHECKBOX  11
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"

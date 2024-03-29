@@ -27,6 +27,7 @@ FUNCTION frm_Edit( Self )
       nRow := 80
    ENDIF
    nCol := 10
+   Altd()
    FOR EACH aItem IN ::aControlList
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
@@ -37,6 +38,13 @@ FUNCTION frm_Edit( Self )
          ELSE
             nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
          ENDIF
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
+         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+            nLen := ( Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 ) * 12
+         ELSE
+            nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
+         ENDIF
+
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nLen := ( Len( aItem[ CFG_CAPTION ] ) + 1 + aItem[ CFG_FLEN ] + 3 ) * 12
@@ -105,6 +113,21 @@ FUNCTION frm_Edit( Self )
             nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
          gui_ComboCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, nCol2, nLen, ::nLineHeight, aItem[ CFG_COMBOLIST ] )
+         nCol += nLen
+
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
+         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+            nRow2 := nRow
+            nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
+         ELSE
+            nRow2 := nRow + ::nLineSpacing
+            nCol2 := nCol
+         ENDIF
+
+         gui_LabelCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
+            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+         gui_CheckboxCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
+            nRow2, nCol2, nLen, ::nLineHeight )
          nCol += nLen
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT

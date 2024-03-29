@@ -161,6 +161,22 @@ FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    RETURN Nil
 
+FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   IF Empty( xControl )
+      xControl := gui_NewCtlName( "CHK" )
+   ENDIF
+   DEFINE CHECKBOX ( xControl )
+      PARENT ( xDlg )
+      Row nRow
+      COL nCol
+      WIDTH nWidth
+      HEIGHT nHeight
+      CAPTION ""
+   END CHECKBOX
+
+   RETURN Nil
+
 FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    IF Empty( xControl )

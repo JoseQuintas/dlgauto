@@ -15,7 +15,7 @@ REQUEST DBFCDX
 #endif
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboTextList //, bOldError
+   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboTextList, aCheckList
 
    SET CONFIRM OFF
    SET DATE    BRITISH
@@ -29,10 +29,6 @@ REQUEST DBFCDX
       Init()
    #endif
 #endif
-   //bOldError := ErrorBlock()
-   //ErrorBlock( { | e | JoseQuintasError( e ), Eval( bOldError ) } )
-   //SetMode(33,100)
-   //CLS
    gui_Init()
    RddSetDefault( "DBFCDX" )
    test_DBF()
@@ -82,6 +78,10 @@ REQUEST DBFCDX
    aComboTextList := {}
    // { "DBCLIENT", "CLSTATE", { "AC", "RS", "SP", "RJ", "PR", "RN" } } }
 
+   /* checkbox */
+   aCheckList := {}
+   // { "DBCLIENT", "CLSTATUS" } }
+
    aAllSetup := {}
    aList := Directory( "*.dbf" )
    FOR EACH aFile IN aList
@@ -113,6 +113,10 @@ REQUEST DBFCDX
          IF ( nSeekPos := hb_Ascan( aComboTextList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
             aItem[ CFG_COMBOLIST ] := aComboTextList[ nSeekPos, 3 ]
             aItem[ CFG_CTLTYPE ] := TYPE_COMBOTEXT
+         ENDIF
+         /* checkbox */
+         IF hb_Ascan( aCheckList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
+            aItem[ CFG_CTLTYPE ] := TYPE_CHECKBOX
          ENDIF
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT

@@ -19,7 +19,8 @@ FUNCTION Test_DBF()
          { "CLSTATE",  "C", 2, 0 }, ;
          { "CLMAIL",   "C", 50, 0 }, ;
          { "CLSELLER", "N", 6, 0 }, ;
-         { "CLBANK",   "N", 6, 0 } } )
+         { "CLBANK",   "N", 6, 0 }, ;
+         { "CLSTATUS", "N", 1, 0 } } )
       USE DBCLIENT
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "CLIENT", nCont )
@@ -40,7 +41,8 @@ FUNCTION Test_DBF()
          { "PRGROUP",   "N", 6, 0 }, ;
          { "PRNCM",     "C", 8, 0 }, ;
          { "PRQT",      "N", 6, 0 }, ;
-         { "PRVALUE",   "N", 14, 2 } } )
+         { "PRVALUE",   "N", 14, 2 }, ;
+         { "PRSTATUS",  "N", 1, 0 } } )
       USE DBPRODUCT
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "PRODUCT", nCont )
