@@ -33,9 +33,8 @@
 #define TYPE_TABPAGE   4
 #define TYPE_BROWSE    5
 #define TYPE_HWGUIBUG  8
-#define TYPE_COMBOTEXT 9
-#define TYPE_COMBONUM  10
-#define TYPE_CHECKBOX  11
+#define TYPE_COMBOBOX  9
+#define TYPE_CHECKBOX  10
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"

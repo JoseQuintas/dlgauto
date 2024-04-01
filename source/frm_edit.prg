@@ -32,7 +32,7 @@ FUNCTION frm_Edit( Self )
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          nLen := ::nDlgWidth - 30
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOTEXT
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nLen := ( Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 ) * 12
          ELSE
@@ -100,7 +100,7 @@ FUNCTION frm_Edit( Self )
          SELECT ( Select( ::cFileDBF ) )
          nRow += 200 + ::nLineSpacing
 
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOTEXT
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )

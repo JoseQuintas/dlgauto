@@ -112,7 +112,7 @@ REQUEST DBFCDX
          /* combotext */
          IF ( nSeekPos := hb_Ascan( aComboTextList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
             aItem[ CFG_COMBOLIST ] := aComboTextList[ nSeekPos, 3 ]
-            aItem[ CFG_CTLTYPE ] := TYPE_COMBOTEXT
+            aItem[ CFG_CTLTYPE ] := TYPE_COMBOBOX
          ENDIF
          /* checkbox */
          IF hb_Ascan( aCheckList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
