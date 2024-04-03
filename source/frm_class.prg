@@ -182,7 +182,7 @@ METHOD EditOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-      ELSEIF hb_AScan( { TYPE_EDIT, TYPE_COMBOBOX }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      ELSEIF hb_AScan( { TYPE_EDIT, TYPE_COMBOBOX, TYPE_CHECKBOX }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ]
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
@@ -204,7 +204,7 @@ METHOD EditOff() CLASS frm_Class
    LOCAL aItem
 
    FOR EACH aItem IN ::aControlList
-      IF hb_AScan( { TYPE_EDIT, TYPE_HWGUIBUG , TYPE_COMBOBOX }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      IF hb_AScan( { TYPE_EDIT, TYPE_HWGUIBUG , TYPE_COMBOBOX, TYPE_CHECKBOX }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
