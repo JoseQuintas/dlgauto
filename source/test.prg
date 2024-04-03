@@ -15,7 +15,7 @@ REQUEST DBFCDX
 #endif
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboTextList, aCheckList
+   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList
 
    SET CONFIRM OFF
    SET DATE    BRITISH
@@ -33,8 +33,7 @@ REQUEST DBFCDX
    RddSetDefault( "DBFCDX" )
    test_DBF()
    /* table, key, browse index */
-   aKeyList := {}
-   /*
+   aKeyList := { ;
       { "DBCLIENT",    "IDCLIENT", 2 }, ;
       { "DBPRODUCT",   "IDPRODUCT", 2 }, ;
       { "DBUNIT",      "IDUNIT", 2 }, ;
@@ -48,39 +47,34 @@ REQUEST DBFCDX
       { "DBTICKETPRO", "IDTICKETPRO" }, ;
       { "DBDBF",       "IDDBF", 2 }, ;
       { "DBFIELDS",    "IDFIELD", 2 } }
-   */
 
    /* table, field, table to search, key field, field to show */
-   aSeekList := {}
-   /*
+   aSeekList := { ;
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
       { "DBCLIENT",  "CLBANK",    "DBBANK",    "IDBANK",    "BANAME" }, ;
-      { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "STNAME" }, ;
+      ; // { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "STNAME" }, ;
       { "DBPRODUCT", "IEUNIT",    "DBUNIT",    "IDUNIT",    "UNNAME" }, ;
       { "DBSTOCK",   "STCLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBSTOCK",   "STPRODUCT", "DBPRODUCT", "IDPRODUCT", "PRNAME" }, ;
       { "DBSTOCK",   "STGROUP",   "DBGROUP",   "IDGROUP",   "GRNAME" }, ;
       { "DBFINANC",  "FICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
-   /*
 
    /* Related browse */
-   aBrowseList := {}
-   /*
+   aBrowseList := { ;
       { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F. }, ;
       { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F. } , ;
       { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F. }, ;
       { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T. }, ;
       { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F. } }
-   */
 
    /* Combotext */
-   aComboTextList := {}
-   // { "DBCLIENT", "CLSTATE", { "AC", "RS", "SP", "RJ", "PR", "RN" } } }
+   aComboList := { ;
+      { "DBCLIENT", "CLSTATE", { "AC", "RS", "SP", "RJ", "PR", "RN" } } }
 
    /* checkbox */
-   aCheckList := {}
-   // { "DBCLIENT", "CLSTATUS" } }
+   aCheckList := { ;
+     { "DBCLIENT", "CLSTATUS" } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -110,8 +104,8 @@ REQUEST DBFCDX
             aItem[ CFG_VSHOW ]  := aSeekList[ nSeekPos, 5 ]
          ENDIF
          /* combotext */
-         IF ( nSeekPos := hb_Ascan( aComboTextList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
-            aItem[ CFG_COMBOLIST ] := aComboTextList[ nSeekPos, 3 ]
+         IF ( nSeekPos := hb_Ascan( aComboList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+            aItem[ CFG_COMBOLIST ] := aComboList[ nSeekPos, 3 ]
             aItem[ CFG_CTLTYPE ] := TYPE_COMBOBOX
          ENDIF
          /* checkbox */
