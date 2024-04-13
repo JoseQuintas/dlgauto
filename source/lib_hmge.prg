@@ -7,11 +7,12 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 FUNCTION gui_Init()
 
+   SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
+   SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
    //SET OOP ON
    SET WINDOW MAIN OFF
    //SET WINDOW MODAL PARENT HANDLE ON
-   SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
 
    RETURN Nil
 
@@ -25,12 +26,12 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       FOR EACH aGroupList IN aMenuList
          DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
             FOR EACH cDBF IN aGroupList
-               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup ) ICON "APPICON"
             NEXT
          END POPUP
       NEXT
       DEFINE POPUP "Sair"
-         MENUITEM "Sair" ACTION gui_DialogClose( xDlg )
+         MENUITEM "Sair" ACTION gui_DialogClose( xDlg ) ICON "ICODOOR"
       END POPUP
    END MENU
 
@@ -347,7 +348,8 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       PARENT ( xDlg ) ;
       AT nRow, nCol;
       WIDTH nWidth ;
-      HEIGHT nHeight
+      HEIGHT nHeight ;
+      HOTTRACK
 
    RETURN Nil
 
@@ -365,7 +367,8 @@ FUNCTION gui_TabNavigate( xDlg, oTab, aList )
 
 FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
 
-   PAGE ( cText )
+   PAGE ( cText ) IMAGE "bmpfolder"
+   // BACKCOLOR { 50, 50, 50 }
    (xDlg); (xControl); (cText)
 
    RETURN Nil
@@ -378,7 +381,7 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
    RETURN Nil
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
-            xValue, cPicture, nMaxLength, bValid )
+            xValue, cPicture, nMaxLength, bValid, bAction, cImage  )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "TXT" )
@@ -402,6 +405,12 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          MAXLENGTH nMaxLength
       ENDIF
       VALUE xValue
+      IF ! Empty( bAction )
+         ACTION Eval( bAction )
+      ENDIF
+      IF ! Empty( cImage )
+         IMAGE cImage
+      ENDIF
       //ON LOSTFOCUS Eval( bValid )
       VALID bValid
    END GETBOX

@@ -6,6 +6,7 @@ lib_oohg - oohg source selected by lib.prg
 
 FUNCTION gui_Init()
 
+   SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
 
    RETURN Nil
@@ -25,12 +26,12 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
          FOR EACH aGroupList IN aMenuList
             DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
                FOR EACH cDBF IN aGroupList
-                  MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+                  MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup ) ICON "APPICON"
                NEXT
             END POPUP
          NEXT
          DEFINE POPUP "Sair"
-            MENUITEM "Sair" ACTION gui_DialogClose( xDlg )
+            MENUITEM "Sair" ACTION gui_DialogClose( xDlg ) ICON "ICODOOR"
          END POPUP
       END MENU
    END WINDOW

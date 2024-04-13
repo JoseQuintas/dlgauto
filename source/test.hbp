@@ -22,3 +22,5 @@ test.rc
 hbct.hbc
 {win}hbwin.hbc
 {win}-gtgui
+
+hmge.hbc
