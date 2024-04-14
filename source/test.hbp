@@ -23,4 +23,7 @@ hbct.hbc
 {win}hbwin.hbc
 {win}-gtgui
 
-hmge.hbc
+#hmg3.hbc
+#hmge.hbc
+#hwgui.hbc
+#gtwvg.hbc

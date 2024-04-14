@@ -274,6 +274,23 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
+FUNCTION gui_Statusbar( xDlg, xControl )
+
+   IF Empty( xControl )
+      xControl := gui_NewCtlName( "STA" )
+   ENDIF
+
+	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8
+      OF ( xDlg )
+		STATUSITEM "DlgAuto" // ACTION MsgInfo('Click! 1')
+		//STATUSITEM "Item 2" 	WIDTH 100 ACTION MsgInfo('Click! 2')
+		//STATUSITEM 'A Car!'	WIDTH 100 ICON 'Car.Ico'
+		CLOCK
+		DATE
+	END STATUSBAR
+
+   RETURN Nil
+
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    @ nCol, nRow TAB xControl ;

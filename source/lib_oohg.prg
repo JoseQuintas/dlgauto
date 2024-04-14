@@ -15,26 +15,21 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   DEFINE WINDOW ( xDlg ) ;
-      AT 0, 0 ;
-      WIDTH 1024 ;
-      HEIGHT 768 ;
-      TITLE cTitle ;
-      //MAIN
+   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
 
-      DEFINE MAIN MENU OF ( xDlg )
-         FOR EACH aGroupList IN aMenuList
-            DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
-               FOR EACH cDBF IN aGroupList
-                  MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup ) ICON "APPICON"
-               NEXT
-            END POPUP
-         NEXT
-         DEFINE POPUP "Sair"
-            MENUITEM "Sair" ACTION gui_DialogClose( xDlg ) ICON "ICODOOR"
+   DEFINE MAIN MENU OF ( xDlg )
+      FOR EACH aGroupList IN aMenuList
+         DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
+            FOR EACH cDBF IN aGroupList
+               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup ) ICON "APPICON"
+            NEXT
          END POPUP
-      END MENU
-   END WINDOW
+      NEXT
+      DEFINE POPUP "Sair"
+         MENUITEM "Sair" ACTION gui_DialogClose( xDlg ) ICON "ICODOOR"
+      END POPUP
+   END MENU
+
    gui_DialogActivate( xDlg )
 
    RETURN Nil
@@ -225,6 +220,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
       TITLE  cTitle ;
       MODAL ;
       ON INIT Eval( bInit )
+      gui_Statusbar( xDlg, "" )
    END WINDOW
 
    RETURN Nil
@@ -327,6 +323,22 @@ FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 FUNCTION gui_SetFocus( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "SETFOCUS" )
+
+   RETURN Nil
+
+FUNCTION gui_Statusbar( xDlg, xControl )
+
+   IF Empty( xControl )
+      xControl := gui_NewCtlName( "STA" )
+   ENDIF
+
+	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8 PARENT (xDlg )
+		STATUSITEM "DlgAuto" // ACTION MsgInfo('Click! 1')
+		//STATUSITEM "Item 2" 	WIDTH 100 ACTION MsgInfo('Click! 2')
+		//STATUSITEM 'A Car!'	WIDTH 100 ICON 'Car.Ico'
+		CLOCK
+		DATE
+	END STATUSBAR
 
    RETURN Nil
 

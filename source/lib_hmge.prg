@@ -250,6 +250,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
       IF ! Empty( xOldDlg )
          ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
       ENDIF
+      gui_Statusbar( xDlg, "" )
    END WINDOW
 
    RETURN Nil
@@ -336,6 +337,23 @@ FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 FUNCTION gui_SetFocus( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "SETFOCUS" )
+
+   RETURN Nil
+
+FUNCTION gui_Statusbar( xDlg, xControl )
+
+   IF Empty( xControl )
+      xControl := "STATUSBAR" // gui_NewCtlName( "STA" )
+   ENDIF
+
+	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8 PARENT ( xDlg )
+		STATUSITEM "DlgAuto" // ACTION MsgInfo('Click! 1')
+		//STATUSITEM "Item 2" 	WIDTH 100 ACTION MsgInfo('Click! 2')
+		//STATUSITEM 'A Car!'	WIDTH 100 ICON 'Car.Ico'
+		CLOCK
+		DATE
+	END STATUSBAR
+   (xDlg); (xControl)
 
    RETURN Nil
 
