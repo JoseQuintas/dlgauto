@@ -49,7 +49,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    RETURN Nil
 
-FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
+FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    IF lEnable
       xControl:Enable()

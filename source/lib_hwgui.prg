@@ -37,6 +37,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "&Exit" ACTION gui_DialogClose( xDlg )
       ENDMENU
    ENDMENU
+   @ 400, 400 MONTHCALENDAR SIZE 250,250
    gui_DialogActivate( xDlg )
 
    RETURN Nil
@@ -276,18 +277,7 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
 FUNCTION gui_Statusbar( xDlg, xControl )
 
-   IF Empty( xControl )
-      xControl := gui_NewCtlName( "STA" )
-   ENDIF
-
-	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8
-      OF ( xDlg )
-		STATUSITEM "DlgAuto" // ACTION MsgInfo('Click! 1')
-		//STATUSITEM "Item 2" 	WIDTH 100 ACTION MsgInfo('Click! 2')
-		//STATUSITEM 'A Car!'	WIDTH 100 ICON 'Car.Ico'
-		CLOCK
-		DATE
-	END STATUSBAR
+   (xDlg); (xControl)
 
    RETURN Nil
 

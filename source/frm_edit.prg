@@ -86,6 +86,9 @@ FUNCTION frm_Edit( Self )
                EXIT
             ENDIF
          NEXT
+#ifdef HBMK_HAS_GTWVG
+         aKeyCodeList := {}
+#else
          IF aItem[ CFG_BEDIT ]
             aKeyCodeList := { ;
                { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BTABLE ] ) } }, ;
@@ -94,6 +97,7 @@ FUNCTION frm_Edit( Self )
          ELSE
             aKeyCodeList := {}
          ENDIF
+#endif
          gui_Browse( ::xDlg, @aItem[ CFG_FCONTROL ], nRow, 5, ;
             ::nDlgWidth - 30, 200, ;
             oTbrowse, Nil, Nil, aItem[ CFG_BTABLE ], aKeyCodeList, @aDlgKeyCodeList )
