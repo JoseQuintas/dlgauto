@@ -61,7 +61,7 @@ FUNCTION frm_Edit( Self )
          ENDIF
          nCol := 10
       ENDIF
-      IF ::lWithTab .AND. nRow + iif( aItem[ CFG_CTLTYPE ] == TYPE_BROWSE, 200, 20 ) > ::nDlgHeight - 200
+      IF ::lWithTab .AND. nRow + iif( aItem[ CFG_CTLTYPE ] == TYPE_BROWSE, 200, 100 ) > ::nDlgHeight - 100
          IF nPageCount > 0
             gui_TabPageEnd( ::xDlg, oTab )
          ENDIF

@@ -57,17 +57,6 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    RETURN Nil
 
-FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
-
-   IF lEnable
-      xControl:Enable()
-   ELSE
-      xControl:Disable()
-   ENDIF
-   (xDlg)
-
-   RETURN Nil
-
 FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList )
 
    LOCAL aItem

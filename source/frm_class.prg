@@ -125,9 +125,9 @@ METHOD ButtonSaveOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
-            gui_ButtonEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          ELSE
-            gui_ButtonEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ENDIF
       ENDIF
    NEXT
@@ -141,9 +141,9 @@ METHOD ButtonSaveOff() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
-            gui_ButtonEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
-            gui_ButtonEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          ENDIF
       ENDIF
    NEXT

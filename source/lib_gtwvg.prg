@@ -7,7 +7,8 @@ lib_gtwvg - gtwvg source selected by lib.prg
 
 FUNCTION gui_Init()
 
-   // Nothing
+   SetMode(30,100)
+   CLS
 
    RETURN Nil
 
@@ -46,6 +47,43 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       :Activate := bAction
    ENDWITH
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (cCaption); (cResName); (bAction)
+
+   RETURN Nil
+
+FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   xControl := wvgCheckBox():New()
+   WITH OBJECT xControl
+      :PointerFocus := .F.
+      :Caption := "."
+      :Selection := .F.
+      :Create( xDlg,,{nCol,nRow},{ nWidth, nHeight } )
+      :setColorFG( "W+" )
+      :setColorBG( "B*" )
+
+   ENDWITH
+   (nHeight)
+
+   RETURN Nil
+
+FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+
+   LOCAL cItem
+
+   xControl := wvgCombobox():New()
+   WITH OBJECT xControl
+      :Type := WVGCOMBO_DROPDOWN
+      FOR EACH cItem IN aList
+         :AddItem( cItem )
+      NEXT
+      :Create( xDlg,,{nCol,nRow},{nWidth,nHeight}, , .T. )
+      :SetColorFG("W+")
+      :SetColorBG("B*")
+      FOR EACH cItem IN aList
+         :AddItem( cItem )
+      NEXT
+
+   ENDWITH
 
    RETURN Nil
 
@@ -91,7 +129,22 @@ FUNCTION gui_DialogClose( xDlg )
 
 FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
+   LOCAL oSBar, oPanel, oPanel1, oPanel2
+
    xDlg := wvgSetAppWindow()
+
+   oSBar   := WvgStatusBar():new( xDlg )
+   WITH OBJECT OSBar
+      OSBar:create( , , , , , .T. )
+      oSBar:panelClick := {| oPanel | wvg_MessageBox( , oPanel:caption ) }
+      oPanel  := oSBar:getItem( 1 )
+      oPanel:caption := "My Root Panel"
+      oPanel1 := oSBar:addItem()
+      oPanel1:caption := "Ready"
+      oPanel2 := oSBar:addItem()
+      oPanel2:caption := "Click on any part!"
+   ENDWITH
+
    //xDlg := wvgCrt():New()
    //xDlg:Create(,,{0,0},{30,100})
    //xDlg:lModal := .T.
@@ -240,10 +293,3 @@ FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
    (xDlg);(xControl);(xValue)
 
    RETURN Nil
-
-PROCEDURE HB_GTSYS
-
-   REQUEST HB_GT_WVG_DEFAULT
-   REQUEST HB_GT_WVG
-
-   RETURN

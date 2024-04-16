@@ -30,6 +30,8 @@ REQUEST DBFCDX
    #endif
 #endif
    gui_Init()
+   Altd(2)
+   Inkey()
    RddSetDefault( "DBFCDX" )
    test_DBF()
    /* table, key, browse index */
@@ -75,7 +77,7 @@ REQUEST DBFCDX
 
    /* checkbox */
    aCheckList := { ;
-     { "DBCLIENT", "CLSTATUS" } }
+      { "DBCLIENT", "CLSTATUS" } }
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -220,3 +222,13 @@ CREATE CLASS ADOClass
    METHOD QueryExecuteUpdate() INLINE Nil
    ENDCLASS
 */
+
+#ifdef HBMK_HAS_GTWVG
+
+PROCEDURE HB_GTSYS
+
+   REQUEST HB_GT_WVG_DEFAULT
+   REQUEST HB_GT_WVG
+
+   RETURN
+#endif

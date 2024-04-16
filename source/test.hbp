@@ -21,7 +21,8 @@ test.rc
 
 hbct.hbc
 {win}hbwin.hbc
-{win}-gtgui
+# only if you see console screen with any library
+#{win}-gtgui
 
 #hmg3.hbc
 #hmge.hbc

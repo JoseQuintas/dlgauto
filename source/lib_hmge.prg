@@ -74,12 +74,6 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    RETURN Nil
 
-FUNCTION gui_ButtonEnable( xDlg, xControl, lEnable )
-
-   SetProperty( xDlg, xControl, "ENABLED", lEnable )
-
-   RETURN Nil
-
 FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
 

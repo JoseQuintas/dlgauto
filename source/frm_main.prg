@@ -11,8 +11,8 @@ FUNCTION frm_main( cDBF, aAllSetup )
 
    LOCAL oFrm, nPos
 
-#ifdef HBMK_HAS_GTWVGX
-   hb_gtReload( "WVG" )
+#ifdef HBMK_HAS_GTWVG
+   hb_gtReload( "WVG" )  // do not use WGU
    SetMode(30,100)
    SetColor("W/B")
    CLS
@@ -20,7 +20,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
 
    oFrm := frm_Class():New()
    oFrm:cFileDBF   := cDBF
-#ifdef HBMK_HAS_GTWVGX
+#ifdef HBMK_HAS_GTWVG
    oFrm:xDlg := wvgSetAppWindow()
 #endif
    oFrm:cTitle     := gui_LibName() + " - " + cDBF
