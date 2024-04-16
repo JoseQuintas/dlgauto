@@ -218,6 +218,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
       WIDTH  nWidth ;
       HEIGHT nHeight ;
       TITLE  cTitle ;
+      ICON "AppIcon" ;
       MODAL ;
       ON INIT Eval( bInit )
       gui_Statusbar( xDlg, "" )

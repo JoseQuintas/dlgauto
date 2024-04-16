@@ -244,6 +244,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
       WIDTH nWidth ;
       HEIGHT nHeight ;
       TITLE cTitle ;
+      ICON "AppIcon" ;
       ; // MODAL ; // bad using WINDOW MAIN OFF
       ON INIT Eval( bInit ) ;
       ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
@@ -404,7 +405,11 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    IF Empty( xControl )
       xControl := gui_newctlname( "TXT" )
    ENDIF
-   DEFINE GETBOX ( xControl )
+   IF ! Empty( cImage )
+      DEFINE BTNTEXTBOX ( xControl )
+   ELSE
+      DEFINE GETBOX ( xControl )
+   ENDIF
       PARENT ( xDlg )
       ROW nRow
       COL nCol
@@ -431,7 +436,11 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       ENDIF
       //ON LOSTFOCUS Eval( bValid )
       VALID bValid
-   END GETBOX
+   IF ! Empty( cImage )
+      END BTNTEXTBOX
+   ELSE
+      END GETBOX
+   ENDIF
    (bValid)
 
    RETURN Nil
