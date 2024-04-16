@@ -182,7 +182,7 @@ METHOD EditOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-      ELSEIF hb_AScan( { TYPE_EDIT, TYPE_COMBOBOX, TYPE_CHECKBOX }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      ELSEIF hb_AScan( { TYPE_EDIT, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ]
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
@@ -204,7 +204,7 @@ METHOD EditOff() CLASS frm_Class
    LOCAL aItem
 
    FOR EACH aItem IN ::aControlList
-      IF hb_AScan( { TYPE_EDIT, TYPE_HWGUIBUG , TYPE_COMBOBOX, TYPE_CHECKBOX }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      IF hb_AScan( { TYPE_EDIT, TYPE_HWGUIBUG , TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
@@ -255,7 +255,7 @@ METHOD UpdateEdit() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       DO CASE
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT .AND. ! Empty( aItem[ CFG_FNAME ] )
+      CASE hb_AScan( { TYPE_EDIT, TYPE_DATEPICKER }, aItem[ CFG_CTLTYPE ] ) != 0 .AND. ! Empty( aItem[ CFG_FNAME ] )
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
@@ -266,6 +266,7 @@ METHOD UpdateEdit() CLASS frm_Class
             SELECT ( nSelect )
             gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
+
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE

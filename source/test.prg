@@ -15,7 +15,7 @@ REQUEST DBFCDX
 #endif
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList
+   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList, aDatePickerList
 
    SET CONFIRM OFF
    SET DATE    BRITISH
@@ -79,6 +79,9 @@ REQUEST DBFCDX
    aCheckList := { ;
       { "DBCLIENT", "CLSTATUS" } }
 
+   aDatePickerList := { ;
+      { "DBFINANC", "FIDATTOPAY" } }
+
    aAllSetup := {}
    aList := Directory( "*.dbf" )
    FOR EACH aFile IN aList
@@ -114,6 +117,10 @@ REQUEST DBFCDX
          /* checkbox */
          IF hb_Ascan( aCheckList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
             aItem[ CFG_CTLTYPE ] := TYPE_CHECKBOX
+         ENDIF
+         /* datepicker */
+         IF hb_Ascan( aDatePickerList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
+            aItem[ CFG_CTLTYPE ] := TYPE_DATEPICKER
          ENDIF
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT

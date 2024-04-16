@@ -27,15 +27,16 @@
 
 #define CFG_EMPTY { "", "C", 1, 0, .F., "", "", {}, "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil, Nil }
 
-#define TYPE_BUTTON    1
-#define TYPE_EDIT      2
-#define TYPE_TAB       3
-#define TYPE_TABPAGE   4
-#define TYPE_BROWSE    5
-#define TYPE_HWGUIBUG  8
-#define TYPE_COMBOBOX  9
-#define TYPE_CHECKBOX  10
-#define TYPE_STATUSBAR 11
+#define TYPE_BUTTON     1
+#define TYPE_EDIT       2
+#define TYPE_TAB        3
+#define TYPE_TABPAGE    4
+#define TYPE_BROWSE     5
+#define TYPE_HWGUIBUG   8
+#define TYPE_COMBOBOX   9
+#define TYPE_CHECKBOX   10
+#define TYPE_STATUSBAR  11
+#define TYPE_DATEPICKER 12
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"

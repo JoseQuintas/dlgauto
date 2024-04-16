@@ -134,6 +134,21 @@ FUNCTION frm_Edit( Self )
             nRow2, nCol2, nLen, ::nLineHeight )
          nCol += nLen
 
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_DATEPICKER
+         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+            nRow2 := nRow
+            nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
+         ELSE
+            nRow2 := nRow + ::nLineSpacing
+            nCol2 := nCol
+         ENDIF
+
+         gui_LabelCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
+            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+         gui_DatePickerCreate( iif( ::lWithTab, oTab, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
+            nRow2, nCol2, nLen, ::nLineHeight, aItem[ CFG_VALUE ] ) // aItem[ CFG_FPICTURE ] )
+         nCol += nLen
+
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nRow2 := nRow
