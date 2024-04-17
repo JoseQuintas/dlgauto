@@ -130,6 +130,13 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
+FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
+            nRow, nCol, nWidth, nHeight, dValue )
+
+   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, dValue )
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    // xDlg:Center()

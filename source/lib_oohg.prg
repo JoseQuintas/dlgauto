@@ -188,6 +188,29 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
+FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
+            nRow, nCol, nWidth, nHeight, dValue )
+
+   IF Empty( xControl )
+      xControl := gui_newctlname( "DTP" )
+   ENDIF
+   DEFINE DATEPICKER (xControl)
+      PARENT ( xDlg )
+      ROW	nRow
+      COL	nCol
+      VALUE dValue
+      //DATEFORMAT "99/99/99"
+      TOOLTIP 'DatePicker Control'
+      SHOWNONE .F.
+      TITLEBACKCOLOR BLACK
+      TITLEFONTCOLOR YELLOW
+      TRAILINGFONTCOLOR PURPLE
+   END DATEPICKER
+
+   (nWidth);(nHeight)
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    IF ! Empty( bCode )
