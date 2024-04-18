@@ -42,7 +42,7 @@ FUNCTION frm_Validate( aItem, Self )
          FieldPut( FieldNum( aItem[ CFG_FNAME ] ), xValue )
          SKIP 0
       ENDIF
-      ::UpdateEdit()
+      ::DataLoad()
       gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
       ::EditOn()
    ELSEIF ! Empty( aItem[ CFG_VTABLE ] )

@@ -50,6 +50,7 @@
 #ifdef HBMK_HAS_HMGE
    #include "hmg.ch"
    #include "i_altsyntax.ch"
+   #include "i_winuser.ch"
 #endif
 
 #ifdef HBMK_HAS_OOHG
@@ -59,6 +60,10 @@
 
 #ifdef HBMK_HAS_GTWVG
    #include "gtwvg.ch"
+#endif
+
+#ifdef HBMK_HAS_FIVEWIN
+   #include "fivewin.ch"
 #endif
 
 #ifndef WIN_RGB

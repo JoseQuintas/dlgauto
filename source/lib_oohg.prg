@@ -255,7 +255,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 //      :Width := ::nDlgWidth
 //      :Height := ::nDlgHeight
 //      :Title := ::cFileDbf
-//      // :Init := ::UpdateEdit()
+//      // :Init := ::DataLoad()
 //   ENDWITH
 //    _EndWindow()
 

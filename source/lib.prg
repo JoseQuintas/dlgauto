@@ -21,3 +21,7 @@ lib - select apropriate source code
 #ifdef HBMK_HAS_HMG3
    #include "lib_hmg3.prg"
 #endif
+
+#ifdef HBMK_HAS_FIVEWIN
+   #include "lib_fivewin.prg"
+#endif

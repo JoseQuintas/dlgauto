@@ -38,21 +38,21 @@ CREATE CLASS frm_Class
    METHOD Next()
    METHOD Previous()
    METHOD CreateControls()     INLINE frm_Buttons( Self ), frm_Edit( Self )
-   METHOD ButtonSaveOn()
+   METHOD ButtonSaveOn( lSave )
    METHOD ButtonSaveOff()
-   METHOD UpdateEdit()
+   METHOD DataLoad()
    METHOD EditKeyOn()
    METHOD EditOn()
    METHOD EditOff()
    METHOD Print()              INLINE frm_Print( Self )
    METHOD Execute()            INLINE frm_Dialog( Self )
-   METHOD View()               INLINE frm_Browse( Self, "", "", ::cFileDbf, Nil ), ::UpdateEdit()
+   METHOD View()               INLINE frm_Browse( Self, "", "", ::cFileDbf, Nil ), ::DataLoad()
    METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditKeyOn()
    METHOD Delete()
    METHOD Insert()             INLINE ::cSelected := "INSERT", ::EditKeyOn()
    METHOD Exit()               INLINE gui_DialogClose( ::xDlg )
-   METHOD Save()
-   METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::UpdateEdit()
+   METHOD DataSave()
+   METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
    METHOD Validate( aItem )    INLINE frm_Validate( aItem, Self )
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
 
@@ -67,7 +67,7 @@ METHOD First() CLASS frm_Class
    ELSE
       GOTO TOP
    ENDIF
-   ::UpdateEdit()
+   ::DataLoad()
 
    RETURN Nil
 
@@ -80,7 +80,7 @@ METHOD Last() CLASS frm_Class
    ELSE
       GOTO BOTTOM
    ENDIF
-   ::UpdateEdit()
+   ::DataLoad()
 
    RETURN Nil
 
@@ -97,7 +97,7 @@ METHOD Next() CLASS frm_Class
          GOTO BOTTOM
       ENDIF
    ENDIF
-   ::UpdateEdit()
+   ::DataLoad()
 
    RETURN Nil
 
@@ -113,18 +113,19 @@ METHOD Previous() CLASS frm_Class
       IF Bof()
          GOTO TOP
       ENDIF
-      ::UpdateEdit()
+      ::DataLoad()
    ENDIF
 
    RETURN Nil
 
-METHOD ButtonSaveOn() CLASS frm_Class
+METHOD ButtonSaveOn( lSave ) CLASS frm_Class
 
    LOCAL aItem
 
+   hb_Default( @lSave, .T. )
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
+         IF aItem[ CFG_CAPTION ] $ "Cancel" + iif( lSave, ",Save", "" )
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          ELSE
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
@@ -167,7 +168,7 @@ METHOD EditKeyOn() CLASS frm_Class
       ENDIF
    NEXT
    IF lFound // have key field
-      ::ButtonSaveOn()
+      ::ButtonSaveOn(.F.)
       gui_SetFocus( ::xDlg, oKeyEdit )
    ELSE // do not have key field
       ::EditOn()
@@ -249,13 +250,13 @@ METHOD Delete() CLASS frm_Class
 
    RETURN Nil
 
-METHOD UpdateEdit() CLASS frm_Class
+METHOD DataLoad() CLASS frm_Class
 
    LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope
 
    FOR EACH aItem IN ::aControlList
       DO CASE
-      CASE hb_AScan( { TYPE_EDIT, TYPE_DATEPICKER }, aItem[ CFG_CTLTYPE ] ) != 0 .AND. ! Empty( aItem[ CFG_FNAME ] )
+      CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. hb_AScan( { TYPE_EDIT, TYPE_DATEPICKER }, aItem[ CFG_CTLTYPE ] ) != 0
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
@@ -288,7 +289,7 @@ METHOD UpdateEdit() CLASS frm_Class
 
    RETURN Nil
 
-METHOD Save() CLASS frm_Class
+METHOD DataSave() CLASS frm_Class
 
    LOCAL aItem
 
@@ -296,10 +297,10 @@ METHOD Save() CLASS frm_Class
    IF RLock()
       FOR EACH aItem IN ::aControlList
          DO CASE
+         CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
          CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
 
-         CASE aItem[ CFG_CTLTYPE ] != TYPE_EDIT // not editable
-         CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
+         CASE hb_AScan( { TYPE_EDIT, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
          CASE aItem[ CFG_ISKEY ]
          OTHERWISE
             FieldPut( FieldNum( aItem[ CFG_FNAME ] ), gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )

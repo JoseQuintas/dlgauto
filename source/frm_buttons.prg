@@ -32,7 +32,7 @@ FUNCTION frm_Buttons( Self, lDefault )
       AAdd( aList, { aItem[1], aItem[2] } )
    NEXT
    IF "E" $ ::cOptions
-      AAdd( aList, { "Save",     { || ::Save() } } )
+      AAdd( aList, { "Save",     { || ::DataSave() } } )
       AAdd( aList, { "Cancel",   { || ::Cancel() } } )
    ENDIF
    AAdd( aList, { "Exit",     { || ::Exit() } } )

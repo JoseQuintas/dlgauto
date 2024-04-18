@@ -46,7 +46,7 @@ FUNCTION frm_Dialog( Self )
 
    gui_DialogCreate( @::xDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle )
    ::CreateControls()
-   gui_DialogActivate( ::xDlg, { || ::EditOff(), ::UpdateEdit() } )
+   gui_DialogActivate( ::xDlg, { || ::EditOff(), ::DataLoad() } )
 
 #ifdef HBMK_HAS_GTWVG
    DO WHILE Inkey(1) != K_ESC
