@@ -408,8 +408,8 @@ FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
 FUNCTION ToRow( nRow )
 
-   RETURN nRow / 10
+   RETURN nRow / 13
 
 FUNCTION ToCol( nCol )
 
-   RETURN nCol / 5
+   RETURN nCol / 8
