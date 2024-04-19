@@ -395,10 +395,11 @@ FUNCTION gui_TabNavigate( xDlg, oTab, aList )
 
    RETURN Nil
 
-FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
+FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 
-   (xDlg); (xControl); (cText)
    DEFINE PAGE cText
+   xPage := xControl
+   (xDlg); (xControl); (cText); (nPageCount)
 
    RETURN Nil
 

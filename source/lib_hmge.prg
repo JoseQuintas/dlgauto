@@ -406,11 +406,12 @@ FUNCTION gui_TabNavigate( xDlg, oTab, aList )
 
    RETURN Nil
 
-FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
+FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 
    PAGE ( cText ) IMAGE "bmpfolder"
+   xPage := xControl
    // BACKCOLOR { 50, 50, 50 }
-   (xDlg); (xControl); (cText)
+   (xDlg); (xControl); (cText); (nPageCount)
 
    RETURN Nil
 

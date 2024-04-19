@@ -132,7 +132,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    LOCAL xValue := .F.
 
-   @ ToRow( nRow ), ToCol( nCol ) CHECKBOX xValue PROMPT "" SIZE nWidth, nHeight PIXEL OF xDlg
+   @ nRow, nCol CHECKBOX xValue PROMPT "" PIXEL SIZE nWidth, nHeight OF xDlg
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -142,7 +142,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    LOCAL cAny
 
-   @ ToRow( nRow), ToCol( nCol ) COMBOBOX xControl VAR cAny OF xDlg SIZE nWidth, nHeight ;
+   @ nRow, nCol COMBOBOX xControl VAR cAny OF xDlg PIXEL SIZE nWidth, nHeight ;
       ITEMS aList ;
       STYLE CBS_DROPDOWN // ON CHANGE QueDia( cDia )
 
@@ -191,6 +191,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
 
    DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "AppIcon"
 
+   gui_StatusBar( xDlg, "" )
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit);(xOldDlg)
 
    RETURN Nil
@@ -202,7 +203,7 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
-   @ nRow, nCol SAY xControl VAR xValue OF xDlg SIZE nWidth, nHeight COLOR CLR_BLUE PIXEL TRANSPARENT
+   @ nRow, nCol SAY xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT
 
 /*
    DEFINE LABEL ( xControl )
@@ -269,33 +270,25 @@ FUNCTION gui_SetFocus( xDlg, xControl )
    RETURN Nil
 
 FUNCTION gui_Statusbar( xDlg, xControl )
-/*
-	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8 PARENT ( xDlg )
-		STATUSITEM "DlgAuto"
-		CLOCK
-		DATE
-	END STATUSBAR
-   */
+
+   DEFINE STATUSBAR xControl PROMPT "DlgAuto" OF xDlg ;
+      SIZES 150, 200, 240
    (xDlg); (xControl)
 
    RETURN Nil
 
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
-/*
-   DEFINE TAB ( xControl ) ;
-      PARENT ( xDlg ) ;
-      AT nRow, nCol;
-      WIDTH nWidth ;
-      HEIGHT nHeight ;
-      HOTTRACK
-*/
-(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
+
+   @ ToRow( nRow ), ToCol( nCol ) FOLDER xControl ;
+      PROMPT "Page 1" ;
+      OF xDlg SIZE nWidth, nHeight
+
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
+
    RETURN Nil
 
-FUNCTION gui_TabEnd()
-/*
-   END TAB
-*/
+FUNCTION gui_TabEnd( xTab, nPageCount )
+
    RETURN Nil
 
 FUNCTION gui_TabNavigate( xDlg, oTab, aList )
@@ -304,11 +297,16 @@ FUNCTION gui_TabNavigate( xDlg, oTab, aList )
 
    RETURN Nil
 
-FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
-/*
-   PAGE ( cText ) IMAGE "bmpfolder"
-*/
-   (xDlg); (xControl); (cText)
+FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
+
+   IF nPageCount == 1
+      xControl:aPrompts[ 1 ] := cText
+   ELSE
+      xControl:AddItem( cText )
+   ENDIF
+   xPage := Atail( xControl:aDialogs )
+
+   (xDlg); (xControl); (cText); (xPage); (nPageCount)
 
    RETURN Nil
 
@@ -324,9 +322,9 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage  )
 
    IF Empty( bAction )
-      @ ToRow( nRow ), ToCol( nCol ) GET xControl VAR xValue SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) )
+      @ nRow, nCol GET xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) )
    ELSE
-      @ ToRow( nRow ), ToCol( nCol ) GET xControl VAR xValue SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
+      @ nRow, nCol GET xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
       ACTION Eval( bAction ) BITMAP cImage
    ENDIF
    (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bAction);(cImage)
