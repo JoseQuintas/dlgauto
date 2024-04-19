@@ -87,6 +87,13 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
+FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
+            nRow, nCol, nWidth, nHeight, dValue )
+
+   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, dValue )
+
+   RETURN Nil
+
 FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    IF lEnable

@@ -1,7 +1,8 @@
 /*
-lib_hmge - HMG Extended source selected by lib.prg
+lib_fivewin- fivewin source selected by lib.prg
 */
 
+#pragma -w0
 #include "frm_class.ch"
 
 FUNCTION gui_Init()
@@ -55,9 +56,6 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
 /*
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
 
-   IF Empty( xControl )
-      xControl := gui_newctlname( "BRW" )
-   ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
@@ -159,9 +157,6 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 /*
-   IF Empty( xControl )
-      xControl := gui_newctlname( "DTP" )
-   ENDIF
    DEFINE DATEPICKER (xControl)
       PARENT ( xDlg )
       ROW	nRow
@@ -207,12 +202,9 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
-   @ nRow, nCol SAY xValue OF xDlg SIZE nWidth, nHeight COLOR CLR_BLUE PIXEL TRANSPARENT
+   @ nRow, nCol SAY xControl VAR xValue OF xDlg SIZE nWidth, nHeight COLOR CLR_BLUE PIXEL TRANSPARENT
 
 /*
-   IF Empty( xControl )
-      xControl := gui_newctlname( "LBL" )
-   ENDIF
    DEFINE LABEL ( xControl )
       PARENT ( xDlg )
       COL nCol
@@ -241,9 +233,6 @@ FUNCTION gui_LibName()
 
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 /*
-   IF Empty( xControl )
-      xControl := gui_newctlname( "MLTXT" )
-   ENDIF
    DEFINE EDITBOX ( xControl )
       PARENT ( xDlg )
       COL nCol
@@ -281,10 +270,6 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
 FUNCTION gui_Statusbar( xDlg, xControl )
 /*
-   IF Empty( xControl )
-      xControl := "STATUSBAR" // gui_NewCtlName( "STA" )
-   ENDIF
-
 	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8 PARENT ( xDlg )
 		STATUSITEM "DlgAuto"
 		CLOCK
@@ -297,9 +282,6 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 /*
-   IF Empty( xControl )
-      xControl := gui_newctlname( "TAB" )
-   ENDIF
    DEFINE TAB ( xControl ) ;
       PARENT ( xDlg ) ;
       AT nRow, nCol;
@@ -331,7 +313,7 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, cText )
    RETURN Nil
 
 FUNCTION gui_TabPageEnd( xDlg, xControl )
-/*
+   /*
    END PAGE
    */
    (xDlg); (xControl)
@@ -342,50 +324,18 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage  )
 
    IF Empty( bAction )
-      @ ToRow( nRow ), ToCol( nCol ) GET xValue SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) )
+      @ ToRow( nRow ), ToCol( nCol ) GET xControl VAR xValue SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) )
    ELSE
-      @ ToRow( nRow ), ToCol( nCol ) GET xValue SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
+      @ ToRow( nRow ), ToCol( nCol ) GET xControl VAR xValue SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
       ACTION Eval( bAction ) BITMAP cImage
    ENDIF
-/*
-   IF Empty( xControl )
-      xControl := gui_newctlname( "TXT" )
-   ENDIF
-      DEFINE GETBOX ( xControl )
-      PARENT ( xDlg )
-      ROW nRow
-      COL nCol
-      HEIGHT nHeight
-      WIDTH nWidth
-      FONTNAME DEFAULT_FONTNAME
-      IF ValType( xValue ) == "N"
-         NUMERIC .T.
-         INPUTMASK cPicture
-      ELSEIF ValType( xValue ) == "D"
-         DATE .T.
-         DATEFORMAT cPicture
-      ELSEIF ValType( xValue ) == "L" // workaround to do not get error
-         xValue := " "
-      ELSEIF ValType( xValue ) == "C"
-         MAXLENGTH nMaxLength
-      ENDIF
-      VALUE xValue
-      IF ! Empty( bAction )
-         ACTION Eval( bAction )
-      ENDIF
-      IF ! Empty( cImage )
-         IMAGE cImage
-      ENDIF
-      VALID bValid
-      END GETBOX
-*/
    (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bAction);(cImage)
 
    RETURN Nil
 
 FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
-   //SetProperty( xDlg, xControl, "ENABLED", lEnable )
+   xControl:Enable( lEnable )
    (xDlg);(xControl);(lEnable)
 
    RETURN Nil
@@ -394,14 +344,14 @@ FUNCTION gui_TextGetValue( xDlg, xControl )
 
    LOCAL xValue
 
-   xValue := "" // GetProperty( xDlg, xControl, "VALUE" )
+   xValue := xControl:Value
    (xDlg);(xControl)
 
    RETURN xValue
 
 FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
-   //SetProperty( xDlg, xControl, "VALUE", xValue )
+   xControl:Value := xValue
    (xDlg);(xControl);(xValue)
 
    RETURN Nil
@@ -412,4 +362,4 @@ FUNCTION ToRow( nRow )
 
 FUNCTION ToCol( nCol )
 
-   RETURN nCol / 8
+   RETURN nCol / 7
