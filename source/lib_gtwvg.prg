@@ -1,5 +1,7 @@
 /*
 lib_gtwvg - gtwvg source selected by lib.prg
+
+Note: Only to show on screen
 */
 
 #include "inkey.ch"

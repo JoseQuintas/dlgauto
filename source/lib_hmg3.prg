@@ -257,7 +257,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    IF Empty( xControl )
       xControl := gui_newctlname( "LABEL" )
    ENDIF
-   // não mostra borda
+   // do not show border
    //DEFINE LABEL ( xControl )
    //   PARENT ( xDlg )
    //   COL nCol

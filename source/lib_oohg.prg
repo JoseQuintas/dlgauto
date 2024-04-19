@@ -1,5 +1,7 @@
 /*
 lib_oohg - oohg source selected by lib.prg
+
+Note: Or use name or object, but can't mix on this source code
 */
 
 #include "frm_class.ch"
@@ -309,7 +311,6 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
    IF Empty( xControl )
       xControl := gui_newctlname( "MLTEXT" )
    ENDIF
-   //@ nRow, nCol EDITBOX (xControl) PARENT (xDlg) WIDTH nWidth HEIGHT nHeight
    //* not multiline */
    DEFINE EDITBOX ( xControl )
       PARENT ( xDlg )
@@ -357,7 +358,7 @@ FUNCTION gui_Statusbar( xDlg, xControl )
    ENDIF
 
 	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8 PARENT (xDlg )
-		STATUSITEM "DlgAuto" // ACTION MsgInfo('Click! 1')
+		STATUSITEM "DlgAuto/FiveLibs" // ACTION MsgInfo('Click! 1')
 		//STATUSITEM "Item 2" 	WIDTH 100 ACTION MsgInfo('Click! 2')
 		//STATUSITEM 'A Car!'	WIDTH 100 ICON 'Car.Ico'
 		CLOCK

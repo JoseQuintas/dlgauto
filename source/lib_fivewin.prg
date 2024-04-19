@@ -1,5 +1,7 @@
 /*
 lib_fivewin- fivewin source selected by lib.prg
+
+Note: work in progress
 */
 
 #pragma -w0
@@ -271,7 +273,7 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
 FUNCTION gui_Statusbar( xDlg, xControl )
 
-   DEFINE STATUSBAR xControl PROMPT "DlgAuto" OF xDlg ;
+   DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;
       SIZES 150, 200, 240
    (xDlg); (xControl)
 

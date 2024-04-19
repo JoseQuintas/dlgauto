@@ -110,16 +110,6 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
          { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
    NEXT
 
-   //@ nRow, nCol GRID ( xControl ) ;
-   //   OF ( xDlg ) ;
-   //   WIDTH nWidth - 20 ;
-   //   HEIGHT nHeight - 20 ;
-   //   ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) ;
-   //   HEADERS aHeaderList ;
-   //   WIDTHS aWidthList ;
-   //   ROWSOURCE ( workarea ) ;
-   //   COLUMNFIELDS aFieldList
-
    (xDlg);(cField);(xValue);(workarea);(aKeyCodeList)
 
    RETURN Nil
@@ -193,6 +183,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       //HEIGHT nHeight // do not define height, it can limit list size to zero
       ITEMS aList
    END COMBOBOX
+   //single test to write source code
    //hb_MemoWrit( "d:\temp\test.txt", ;
    //   [DEFINE COMBOBOX ( "] + xControl + [" )] + hb_Eol() + ;
    //   [   PARENT ( "] + xDlg + [" )] + hb_Eol() + ;
@@ -370,7 +361,7 @@ FUNCTION gui_Statusbar( xDlg, xControl )
    ENDIF
 
 	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8 PARENT ( xDlg )
-		STATUSITEM "DlgAuto" // ACTION MsgInfo('Click! 1')
+		STATUSITEM "DlgAuto/FiveLibs" // ACTION MsgInfo('Click! 1')
 		//STATUSITEM "Item 2" 	WIDTH 100 ACTION MsgInfo('Click! 2')
 		//STATUSITEM 'A Car!'	WIDTH 100 ICON 'Car.Ico'
 		CLOCK
