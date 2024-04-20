@@ -48,7 +48,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
 
-   @ ToRow( nRow ), ToCol( nCol ) BUTTON cCaption OF xDlg SIZE nWidth, nHeight ACTION Eval( bAction )
+   @ ToRow( nRow ), ToCol( nCol ) BUTTONBMP xControl PROMPT cCaption OF xDlg SIZE nWidth, nHeight RESOURCE cResName TOP ACTION Eval( bAction )
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
 
    RETURN Nil
@@ -134,7 +134,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    LOCAL xValue := .F.
 
-   @ nRow, nCol CHECKBOX xValue PROMPT "" PIXEL SIZE nWidth, nHeight OF xDlg
+   @ nRow, nCol CHECKBOX xControl VAR xValue PROMPT "" PIXEL SIZE nWidth, nHeight OF xDlg
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -177,6 +177,9 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
+   IF ! Empty( bCode )
+      EVAL( bCode )
+   ENDIF
    ACTIVATE WINDOW xDlg CENTERED
    (bCode)
 
@@ -335,7 +338,11 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
 FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
-   xControl:Enable( lEnable )
+   IF lEnable
+      xControl:Enable()
+   ELSE
+      xControl:Disable()
+   ENDIF
    (xDlg);(xControl);(lEnable)
 
    RETURN Nil
@@ -344,14 +351,14 @@ FUNCTION gui_TextGetValue( xDlg, xControl )
 
    LOCAL xValue
 
-   xValue := xControl:Value
+   xValue := xControl:GetText()
    (xDlg);(xControl)
 
    RETURN xValue
 
 FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
-   xControl:Value := xValue
+   xControl:SetText( xValue )
    (xDlg);(xControl);(xValue)
 
    RETURN Nil

@@ -63,6 +63,7 @@
 #endif
 
 #ifdef HBMK_HAS_FIVEWIN
+   #include "dialog.ch"
    #include "fivewin.ch"
 #endif
 
