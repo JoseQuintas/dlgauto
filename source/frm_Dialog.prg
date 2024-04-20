@@ -52,6 +52,7 @@ FUNCTION frm_Dialog( Self )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
 #endif
-   CLOSE DATABASES
+   //fivewin do not wait dialog close
+   //CLOSE DATABASES
 
    RETURN Nil
