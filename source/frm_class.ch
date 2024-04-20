@@ -63,8 +63,8 @@
 #endif
 
 #ifdef HBMK_HAS_FIVEWIN
-   #include "dialog.ch"
    #include "fivewin.ch"
+   #include "calendar.ch"
 #endif
 
 #ifndef WIN_RGB

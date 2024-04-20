@@ -13,7 +13,7 @@ FUNCTION gui_Init()
 
 FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
-   LOCAL oMenu, aGroupList, cDBF
+   LOCAL oMenu, aGroupList, cDBF, dDate := Date(), oCalendar
 
    gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
 
@@ -32,12 +32,10 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
          ENDMENU
       ENDMENU
       xDlg:SetMenu( oMenu )
-      //DEFINE MONTHCALENDAR("mcal001")
-      //   PARENT ( xDlg )
-      //   COL 400
-      //   ROW 400
-      //   VALUE Date()
-      //END MONTHCALENDAR
+
+      @ 400, 400 CALENDAR oCalendar VAR dDate OF xDlg PIXEL SIZE 220, 157 WEEKNUMBER DAYSTATE
+
+      //DEFINE CALEX oCalex OF xDlg FROM 400, 400 TO 1000, 1000 FIRST_DATE 0 ALL
 
    gui_DialogActivate( xDlg )
 
@@ -208,27 +206,20 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
-   @ nRow, nCol SAY xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT
+   hb_Default( @lBorder, .F. )
+   IF lBorder
+      @ nRow, nCol SAY xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT BORDER
+   ELSE
+      @ nRow, nCol SAY xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT
+   ENDIF
 
-/*
-   DEFINE LABEL ( xControl )
-      PARENT ( xDlg )
-      COL nCol
-      ROW nRow
-      WIDTH nWidth
-      HEIGHT nHeight
-      VALUE xValue
-      IF lBorder
-         BORDER lBorder
-      ENDIF
-   END LABEL
-*/
-(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
+
    RETURN Nil
 
 FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
 
-   //SetProperty( xDlg, xControl, "VALUE", xValue )
+   xControl:SetText( xValue )
    (xDlg);(xControl);(xValue)
 
    RETURN Nil

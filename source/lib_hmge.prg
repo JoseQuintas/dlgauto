@@ -32,7 +32,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       DEFINE POPUP "Sair"
          MENUITEM "Sair" ACTION gui_DialogClose( xDlg ) ICON "ICODOOR"
       END POPUP
-      DEFINE MONTHCALENDAR("mcal001")
+      DEFINE MONTHCALENDAR ( "mcal001" )
          PARENT ( xDlg )
          COL 400
          ROW 400
