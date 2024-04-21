@@ -30,8 +30,6 @@ REQUEST DBFCDX
    #endif
 #endif
    gui_Init()
-   Altd(2)
-   Inkey()
    RddSetDefault( "DBFCDX" )
    test_DBF()
    /* table, key, browse index */

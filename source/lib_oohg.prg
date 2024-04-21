@@ -390,9 +390,9 @@ FUNCTION gui_TabEnd()
 
    RETURN Nil
 
-FUNCTION gui_TabNavigate( xDlg, oTab, aList )
+FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
-   (xDlg);(oTab);(aList)
+   (xDlg);(xTab);(aList)
 
    RETURN Nil
 

@@ -292,7 +292,7 @@ FUNCTION gui_TabEnd()
 
    RETURN Nil
 
-FUNCTION gui_TabNavigate( xDlg, oTab, aList )
+FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    LOCAL nTab, nPageNext
 
@@ -301,7 +301,7 @@ FUNCTION gui_TabNavigate( xDlg, oTab, aList )
    ENDIF
    FOR nTab = 1 TO Len( aList ) - 1
       nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
-      gui_TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], oTab, nPageNext, aList[ nPageNext, 1 ] )
+      gui_TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, nPageNext, aList[ nPageNext, 1 ] )
    NEXT
    (xDlg)
 

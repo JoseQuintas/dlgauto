@@ -4,7 +4,7 @@ lib_fivewin- fivewin source selected by lib.prg
 Note: work in progress
 */
 
-#pragma -w0
+#pragma -w1
 #include "frm_class.ch"
 
 FUNCTION gui_Init()
@@ -39,12 +39,11 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    gui_DialogActivate( xDlg )
 
-   (xDlg);(aMenuList);(aAllSetup);(cTitle);(oMenu)
+   (xDlg);(aMenuList);(aAllSetup);(cTitle);(oMenu);(oCalendar)
 
    RETURN Nil
 
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
-
 
    @ ToRow( nRow ), ToCol( nCol ) BUTTONBMP xControl PROMPT cCaption OF xDlg SIZE nWidth, nHeight RESOURCE cResName TOP ACTION Eval( bAction )
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
@@ -53,40 +52,37 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
 FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
-/*
-   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
+
+   LOCAL aItem, oCol
+
+   @ nRow, nCol XBROWSE xControl ;
+      SIZE nWidth, nHeight PIXEL ;
+      DATASOURCE workarea ;
+      OF xDlg
+      //LINES CELL
 
    FOR EACH aItem IN oTbrowse
-      AAdd( aHeaderList, aItem[1] )
-      AAdd( aFieldList, aItem[2] )
-      AAdd( aWidthList, ( 1 + Max( Len( aItem[3] ), ;
-         Len( Transform( ( workarea )->( FieldGet( FieldNum( aItem[ 1 ] ) ) ), "" ) ) ) ) * 13 )
+      ADD oCol TO xControl ;
+         DATA FieldBlock( aItem[2] ) ;
+         HEADER aItem[1] ;
+         PICTURE aItem[3]
    NEXT
 
-   DEFINE BROWSE ( xControl )
-      PARENT ( xDlg )
-      ROW nRow
-      COL nCol
-      WIDTH nWidth - 20
-      HEIGHT nHeight - 20
-      IF ValType( aKeyCodeList ) != "A"
-         aKeyCodeList := {}
-         ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
-      ENDIF
-      HEADERS aHeaderList
-      WIDTHS aWidthList
-      WORKAREA ( workarea )
-      FIELDS aFieldList
-      SET BROWSESYNC ON
-   END BROWSE
-   FOR EACH aItem IN aKeyCodeList
-      AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
-      _DefineHotKey( xDlg, 0, aItem[ 1 ], ;
-         { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
-   NEXT
+   xControl:nMoveType := 0
+   xControl:CreateFromCode()
+
+      //IF ValType( aKeyCodeList ) != "A"
+         //aKeyCodeList := {}
+         //ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+      //ENDIF
+   //FOR EACH aItem IN aKeyCodeList
+      //AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
+      //_DefineHotKey( xDlg, 0, aItem[ 1 ], ;
+         //{ || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
+   //NEXT
 */
    (xDlg);(cField);(xValue);(workarea);(aKeyCodeList);(xControl);(nRow);(nCol);(nWidth)
-   (nHeight);(oTBrowse);(aDlgKeyCodeList)
+   (nHeight);(oTBrowse);(aDlgKeyCodeList);(oCol)
    (xValue)
 
    RETURN Nil
@@ -285,11 +281,14 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
 FUNCTION gui_TabEnd( xTab, nPageCount )
 
+   (xTab);(nPageCount)
+
    RETURN Nil
 
-FUNCTION gui_TabNavigate( xDlg, oTab, aList )
+FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
-   (xDlg);(oTab);(aList)
+   xTab:aDialogs[1]:SetFocus()
+   (xDlg);(xTab);(aList)
 
    RETURN Nil
 
