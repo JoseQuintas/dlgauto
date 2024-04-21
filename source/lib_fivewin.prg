@@ -271,8 +271,9 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   @ ToRow( nRow ), ToCol( nCol ) FOLDER xControl ;
+   @ nRow, nCol FOLDER xControl PIXEL ;
       PROMPT "Page 1" ;
+      ;//BITMAPS "bmpfolder" ; // folderex
       OF xDlg SIZE nWidth, nHeight
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
