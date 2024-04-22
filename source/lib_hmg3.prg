@@ -67,7 +67,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
+FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
@@ -82,7 +82,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    NEXT
    IF ValType( aKeyCodeList ) == "A"
       @ nRow, nCol GRID ( xControl ) ;
-         OF ( xDlg ) ;
+         OF ( xParent ) ;
          WIDTH nWidth - 40 ;
          HEIGHT nHeight - 40 ;
          HEADERS aHeaderList ;
@@ -110,7 +110,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
       NEXT
    ENDIF
 
-   (xDlg);(cField);(xValue);(workarea)
+   (xDlg);(cField);(xValue);(workarea);(xParent)
 
    RETURN Nil
 

@@ -45,12 +45,12 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
-   @ ToRow( nRow ), ToCol( nCol ) BUTTONBMP xControl PROMPT cCaption OF xDlg SIZE nWidth, nHeight RESOURCE cResName TOP ACTION Eval( bAction )
+   @ nRow, nCol BUTTONBMP xControl PIXEL PROMPT cCaption OF xDlg SIZE nWidth, nHeight RESOURCE cResName TOP ACTION Eval( bAction )
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
+FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
 
    LOCAL aItem, oCol
@@ -58,7 +58,7 @@ FUNCTION gui_Browse( xDlg, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    @ nRow, nCol XBROWSE xControl ;
       SIZE nWidth, nHeight PIXEL ;
       DATASOURCE workarea ;
-      OF xDlg
+      OF xParent
       //LINES CELL
 
    FOR EACH aItem IN oTbrowse
@@ -353,11 +353,3 @@ FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
    (xDlg);(xControl);(xValue)
 
    RETURN Nil
-
-FUNCTION ToRow( nRow )
-
-   RETURN nRow / 13
-
-FUNCTION ToCol( nCol )
-
-   RETURN nCol / 7

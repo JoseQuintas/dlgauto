@@ -5,6 +5,8 @@ frm_Edit - Create textbox/label on dialog
 #include "hbclass.ch"
 #include "frm_class.ch"
 
+MEMVAR cTxtPrg
+
 FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aList := {}
@@ -100,7 +102,7 @@ FUNCTION frm_Edit( Self )
             aKeyCodeList := {}
          ENDIF
 #endif
-         gui_Browse( xTabPage, @aItem[ CFG_FCONTROL ], nRow, 5, ;
+         gui_Browse( ::xDlg, xTabPage, @aItem[ CFG_FCONTROL ], nRow, 5, ;
             ::nDlgWidth - 30, 200, ;
             oTbrowse, Nil, Nil, aItem[ CFG_BTABLE ], aKeyCodeList, @aDlgKeyCodeList )
          SELECT ( Select( ::cFileDBF ) )
@@ -200,5 +202,6 @@ FUNCTION frm_Edit( Self )
    //gui_Statusbar( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ] )
    (nRow2)
    (nCol2)
+   hb_MemoWrit( "test.txt", cTxtPrg )
 
    RETURN Nil
