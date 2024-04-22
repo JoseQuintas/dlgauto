@@ -1,7 +1,6 @@
-//#define RT_MANIFEST 24
-//#define APP_MANIFEST 1
-
-//APP_MANIFEST RT_MANIFEST "../resource/exe.manifest"
+#define RT_MANIFEST 24
+#define APP_MANIFEST 1
+APP_MANIFEST RT_MANIFEST "../resource/exe.manifest"
 
 AppIcon       ICON   "../resource/icoBook.ico"
 bmpfolder     BITMAP "../resource/bmpfolder.bmp"

@@ -268,6 +268,17 @@ METHOD DataLoad() CLASS frm_Class
             gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
 
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
+         xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
+         DO CASE
+         CASE aItem[ CFG_FTYPE ] == "L"
+         CASE aItem[ CFG_FTYPE ] == "N"
+            xValue := ( xValue == 1 )
+         CASE aItem[ CFG_FTYPE ] == "C"
+            xValue := ( xValue $ "YS" )
+         ENDCASE
+         gui_LabelSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
+
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
@@ -291,7 +302,7 @@ METHOD DataLoad() CLASS frm_Class
 
 METHOD DataSave() CLASS frm_Class
 
-   LOCAL aItem
+   LOCAL aItem, xValue
 
    ::EditOff()
    IF RLock()
@@ -299,11 +310,19 @@ METHOD DataSave() CLASS frm_Class
          DO CASE
          CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
          CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
-
+         CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
+            xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+            DO CASE
+            CASE aItem[ CFG_FTYPE ] == "L"
+            CASE aItem[ CFG_FTYPE ] == "N"; xValue := iif( xValue, 1, 0 )
+            CASE aItem[ CFG_FTYPE ] == "C"; xValue := iif( xValue, "S", "N" )
+            ENDCASE
+            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), xValue )
          CASE hb_AScan( { TYPE_EDIT, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
          CASE aItem[ CFG_ISKEY ]
          OTHERWISE
-            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
+            xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+            FieldPut( FieldNum( aItem[ CFG_FNAME ] ), xValue )
          ENDCASE
       NEXT
       SKIP 0
