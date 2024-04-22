@@ -9,9 +9,7 @@ FUNCTION gui_Init()
    SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
-   //SET OOP ON
    SET WINDOW MAIN OFF
-   //SET WINDOW MODAL PARENT HANDLE ON
 
    RETURN Nil
 
@@ -56,8 +54,8 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       WIDTH       nWidth
       HEIGHT      nHeight
       ICON        cResName
-      IMAGEWIDTH  nWidth - 20
-      IMAGEHEIGHT nHeight - 20
+      IMAGEWIDTH  -1
+      IMAGEHEIGHT -1
       CAPTION     cCaption
       ACTION      Eval( bAction )
       FONTNAME    DEFAULT_FONTNAME
@@ -68,7 +66,6 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       BACKCOLOR  COLOR_WHITE
       FLAT       .T.
       NOXPSTYLE  .T.
-      //NOTABSTOP .T.
    END BUTTONEX
 
    RETURN Nil
@@ -227,7 +224,6 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
 
    IF ! Empty( bCode )
       Eval( bCode )
-      // ON INIT bCode
    ENDIF
    //FOR EACH xControl IN HMG_GetFormControls( xDlg, "BUTTONEX" )
    //   SetHandCursor( GetControlHandle( xControl, xDlg ) )
@@ -288,16 +284,9 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
       VALUE xValue
       IF lBorder
          BORDER lBorder
+         BACKCOLOR HMG_n2RGB( COLOR_GREEN )
       ENDIF
    END LABEL
-
-   //IF lBorder
-   //   @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
-   //      VALUE xValue WIDTH nWidth HEIGHT nHeight BORDER
-   //ELSE
-   //   @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
-   //      VALUE xValue WIDTH nWidth HEIGHT nHeight
-   //ENDIF
 
    RETURN Nil
 
@@ -324,9 +313,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       HEIGHT nHeight
       VALUE xValue
       FONTNAME PREVIEW_FONTNAME
-      /* MAXLENGTH 510000 */
       TOOLTIP 'EditBox'
-      /* NOHSCROLLBAR .T. */
    END EDITBOX
 
    RETURN Nil
@@ -338,15 +325,6 @@ FUNCTION gui_Msgbox( cText )
 FUNCTION gui_MsgYesNo( cText )
 
    RETURN MsgYesNo( cText )
-
-FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
-
-   IF Empty( xControl )
-      xControl := gui_newctlname( "PAN" )
-   ENDIF
-   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
-
-   RETURN Nil
 
 FUNCTION gui_SetFocus( xDlg, xControl )
 
@@ -479,7 +457,6 @@ FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
    // NOTE: textbox string value, except if declared different on textbox creation
    // getbox????
    SetProperty( xDlg, xControl, "VALUE", xValue )
-   //DoMethod( xDlg, xControl, "REFRESH" )
 
    RETURN Nil
 
@@ -491,6 +468,3 @@ STATIC FUNCTION gui_newctlname( cPrefix )
    hb_Default( @cPrefix, "ANY" )
 
    RETURN cPrefix + StrZero( nCount, 10 )
-
-// notes
-// HMG_GetFormControls( xDlg, "LABEL" )

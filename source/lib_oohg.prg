@@ -336,15 +336,6 @@ FUNCTION gui_MsgYesNo( cText )
 
    RETURN MsgYesNo( cText )
 
-FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
-
-   IF Empty( xControl )
-      xControl := gui_newctlname( "PANEL" )
-   ENDIF
-   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
-
-   RETURN Nil
-
 FUNCTION gui_SetFocus( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "SETFOCUS" )

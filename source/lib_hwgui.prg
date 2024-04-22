@@ -255,15 +255,6 @@ FUNCTION gui_MsgYesNo( cText )
 
    RETURN hwg_MsgYesNo( cText )
 
-FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
-
-   @ nCol, nRow PANEL xControl ;
-      OF        xDlg ;
-      SIZE      nWidth, nHeight ;
-      BACKCOLOR COLOR_WHITE
-
-   RETURN Nil
-
 FUNCTION gui_SetFocus( xDlg, xControl )
 
    (xDlg); (xControl)

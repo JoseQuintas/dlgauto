@@ -18,8 +18,8 @@ CREATE CLASS frm_Class
    VAR aOptionList     INIT {}
    VAR cSelected       INIT "NONE"
 
-   VAR nEditStyle      INIT 1
-   VAR lWithTab        INIT .F.
+   VAR nEditStyle      INIT 3
+   VAR lWithTab        INIT .T.
 
    VAR nDlgWidth       INIT 1024
    VAR nDlgHeight      INIT 768
@@ -53,7 +53,7 @@ CREATE CLASS frm_Class
    METHOD Exit()               INLINE gui_DialogClose( ::xDlg )
    METHOD DataSave()
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
-   METHOD Validate( aItem )    INLINE frm_Validate( aItem, Self )
+   METHOD Validate( aItem )    INLINE frm_Valid( aItem, Self )
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
 
    ENDCLASS

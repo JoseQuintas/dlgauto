@@ -225,19 +225,11 @@ FUNCTION gui_LibName()
    RETURN "FIVEWIN"
 
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
-/*
-   DEFINE EDITBOX ( xControl )
-      PARENT ( xDlg )
-      COL nCol
-      ROW nRow
-      WIDTH nWidth
-      HEIGHT nHeight
-      VALUE xValue
-      FONTNAME PREVIEW_FONTNAME
-      TOOLTIP 'EditBox'
-   END EDITBOX
-*/
-(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue)
+
+   @ nRow, nCol GET xControl VAR xValue MEMO OF xDlg PIXEL SIZE nWidth, nHeight
+
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue)
+
    RETURN Nil
 
 FUNCTION gui_Msgbox( cText )
@@ -247,12 +239,6 @@ FUNCTION gui_Msgbox( cText )
 FUNCTION gui_MsgYesNo( cText )
 
    RETURN MsgYesNo( cText )
-
-FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
-
-   (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight)
-
-   RETURN Nil
 
 FUNCTION gui_SetFocus( xDlg, xControl )
 

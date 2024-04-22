@@ -214,12 +214,6 @@ FUNCTION gui_MsgYesNo( cText )
 
    RETURN .F.
 
-FUNCTION gui_PanelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
-
-   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
-
-   RETURN Nil
-
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)

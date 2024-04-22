@@ -10,7 +10,7 @@ frm_main.prg
 test_dlgmenu.prg
 frm_preview.prg
 frm_print.prg
-frm_textvalidate.prg
+frm_valid.prg
 test.rc
 
 -otest
