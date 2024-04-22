@@ -4,8 +4,6 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 #include "frm_class.ch"
 
-MEMVAR cTxtPrg
-
 FUNCTION gui_Init()
 
    SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
@@ -72,26 +70,6 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       NOXPSTYLE  .T.
       //NOTABSTOP .T.
    END BUTTONEX
-   cTxtPrg += [   DEFINE BUTTONEX ( "] + xControl + ["] + [ )] + hb_Eol()
-   cTxtPrg += [       PARENT ( "] + xDlg + ["] + " )" + hb_Eol()
-   cTxtPrg += [       ROW         ] + Ltrim( Str( nRow ) ) + hb_Eol()
-   cTxtPrg += [       COL         ] + Ltrim( Str( nCol ) ) + hb_Eol()
-   cTxtPrg += [       WIDTH       ] + Ltrim( Str( nWidth ) ) + hb_Eol()
-   cTxtPrg += [       HEIGHT      ] + Ltrim( Str( nHeight ) ) + hb_Eol()
-   cTxtPrg += [       ICON        "] + cResName + ["] + hb_Eol()
-   cTxtPrg += [       IMAGEWIDTH  ] + Ltrim( Str( nWidth - 20 ) ) + hb_Eol()
-   cTxtPrg += [       IMAGEHEIGHT ] + Ltrim( Str( nHeight - 20 ) ) + hb_Eol()
-   cTxtPrg += [       CAPTION     ] + cCaption + hb_Eol()
-   cTxtPrg += [       ACTION      Eval( bAction )] + hb_Eol()
-   cTxtPrg += [       FONTNAME    DEFAULT_FONTNAME] + hb_Eol()
-   cTxtPrg += [       FONTSIZE    9] + hb_Eol()
-   cTxtPrg += [       FONTBOLD    .T.] + hb_Eol()
-   cTxtPrg += [       FONTCOLOR   COLOR_BLACK] + hb_Eol()
-   cTxtPrg += [       VERTICAL   .T.] + hb_Eol()
-   cTxtPrg += [       BACKCOLOR  COLOR_WHITE] + hb_Eol()
-   cTxtPrg += [       FLAT       .T.] + hb_Eol()
-   cTxtPrg += [       NOXPSTYLE  .T.] + hb_Eol()
-   cTxtPrg += [    END BUTTONEX] + hb_Eol()
 
    RETURN Nil
 
@@ -312,17 +290,6 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
          BORDER lBorder
       ENDIF
    END LABEL
-   cTxtPrg += [   DEFINE LABEL ( "] + xControl + [" )] + hb_Eol()
-   cTxtPrg += [      PARENT ( "] + xDlg + [" )] + hb_Eol()
-   cTxtPrg += [      COL ] + Ltrim( Str( nCol ) ) + hb_Eol()
-   cTxtPrg += [      ROW ] + Ltrim( Str( nRow ) ) + hb_Eol()
-   cTxtPrg += [      WIDTH ] + Ltrim( Str( nWidth ) ) + hb_Eol()
-   cTxtPrg += [      HEIGHT ] + Ltrim( Str( nHeight ) ) + hb_Eol()
-   cTxtPrg += [      VALUE ] + Transform( xValue, "" ) + hb_Eol()
-   IF lBorder
-      cTxtPrg += [         BORDER .T.] + hb_Eol()
-   ENDIF
-   cTxtPrg += [   END LABEL] + hb_Eol()
 
    //IF lBorder
    //   @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;

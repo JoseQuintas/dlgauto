@@ -50,7 +50,6 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    AAdd( oThisForm:aControlList, CFG_EMPTY )
    aItem := Atail( oThisForm:aControlList )
    aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
-   Altd()
    gui_Browse( oThisForm:xDlg, oThisForm:xDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
       oThisForm:nDlgWidth - 10, oThisForm:nDlgHeight - 80, ;
       oTbrowse, cField, @xValue, cTable )

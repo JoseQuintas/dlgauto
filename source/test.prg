@@ -8,8 +8,6 @@ REQUEST DBFCDX
 #include "dbstruct.ch"
 #include "frm_class.ch"
 
-MEMVAR cTxtPrg
-
 #ifdef DLGAUTO_AS_LIB
    PROCEDURE DlgAuto()
 #else
@@ -19,7 +17,6 @@ MEMVAR cTxtPrg
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList, aDatePickerList
 
-   cTxtPrg := ""
    SET CONFIRM OFF
    SET DATE    BRITISH
    SET DELETED ON
