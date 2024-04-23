@@ -20,14 +20,15 @@ FUNCTION Test_DBF()
          { "CLMAIL",   "C", 50, 0 }, ;
          { "CLSELLER", "N", 6, 0 }, ;
          { "CLBANK",   "N", 6, 0 }, ;
-         { "CLSTATUS", "N", 1, 0 } } )
+         { "CLSTATUS", "N", 1, 0 }, ;
+         { "CLCOMMENT", "C", 255, 0 } } )
       USE DBCLIENT
       FOR nCont = 1 TO 9
          cTxt := ToDescription( "CLIENT", nCont )
          APPEND BLANK
          REPLACE IDCLIENT WITH nCont, CLNAME WITH cTxt, CLDOC WITH cTxt, ;
             CLADDRESS WITH cTxt, CLCITY WITH cTxt, CLSTATE WITH StrZero( nCont, 2 ), ;
-            CLMAIL WITH cTxt, CLSELLER WITH nCont, CLBANK WITH nCont
+            CLMAIL WITH cTxt, CLSELLER WITH nCont, CLBANK WITH nCont, CLCOMMENT WITH cTxt
       NEXT
       INDEX ON field->IdClient TAG primary
       INDEX ON field->clName TAG name

@@ -126,14 +126,14 @@ REQUEST DBFCDX
       FOR EACH aBrowse IN aBrowseList
          IF aBrowse[ 1 ] == cFile
             aItem := CFG_EMPTY
-            aItem[ CFG_CTLTYPE ]   := TYPE_BROWSE
-            aItem[ CFG_BKEYFROM ]  := aBrowse[ 2 ]
-            aItem[ CFG_BTABLE ]    := aBrowse[ 3 ]
-            aItem[ CFG_BINDEXORD ] := aBrowse[ 4 ]
-            aItem[ CFG_BKEYTO ]    := aBrowse[ 5 ]
-            aItem[ CFG_BKEYTO2 ]   := aBrowse[ 6 ]
-            aItem[ CFG_BVALUE ]    := FieldGet( FieldNum( aItem[ CFG_BKEYFROM  ] ) )
-            aItem[ CFG_BEDIT ]     := aBrowse[ 7 ]
+            aItem[ CFG_CTLTYPE ]    := TYPE_BROWSE
+            aItem[ CFG_BRWKEYFROM ] := aBrowse[ 2 ]
+            aItem[ CFG_BRWTABLE ]   := aBrowse[ 3 ]
+            aItem[ CFG_BRWIDXORD ]  := aBrowse[ 4 ]
+            aItem[ CFG_BRWKEYTO ]   := aBrowse[ 5 ]
+            aItem[ CFG_BRWKEYTO2 ]  := aBrowse[ 6 ]
+            aItem[ CFG_BRWVALUE ]   := FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM  ] ) )
+            aItem[ CFG_BRWEDIT ]    := aBrowse[ 7 ]
             AAdd( Atail( aAllSetup )[ 2 ], aItem )
          ENDIF
       NEXT

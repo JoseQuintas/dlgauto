@@ -256,7 +256,7 @@ METHOD DataLoad() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       DO CASE
-      CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. hb_AScan( { TYPE_EDIT, TYPE_DATEPICKER }, aItem[ CFG_CTLTYPE ] ) != 0
+      CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. hb_AScan( { TYPE_EDIT, TYPE_EDITML, TYPE_DATEPICKER }, aItem[ CFG_CTLTYPE ] ) != 0
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
@@ -282,10 +282,10 @@ METHOD DataLoad() CLASS frm_Class
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
-         SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
-         SET ORDER TO ( aItem[ CFG_BINDEXORD ] )
-         xScope := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BKEYFROM ] ) ) )
-         nLenScope := ( ::cFileDbf )->( FieldLen( aItem[ CFG_BKEYFROM ] ) )
+         SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
+         SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
+         xScope := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM ] ) ) )
+         nLenScope := ( ::cFileDbf )->( FieldLen( aItem[ CFG_BRWKEYFROM ] ) )
          IF ValType( xScope ) == "C"
             SET SCOPE TO xScope
          ELSE
@@ -318,7 +318,7 @@ METHOD DataSave() CLASS frm_Class
             CASE aItem[ CFG_FTYPE ] == "C"; xValue := iif( xValue, "Y", "N" )
             ENDCASE
             FieldPut( FieldNum( aItem[ CFG_FNAME ] ), xValue )
-         CASE hb_AScan( { TYPE_EDIT, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
+         CASE hb_AScan( { TYPE_EDIT, TYPE_EDITML, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
          CASE aItem[ CFG_ISKEY ]
          OTHERWISE
             xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )

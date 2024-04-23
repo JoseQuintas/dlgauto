@@ -9,7 +9,7 @@ FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aList := {}
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
-   LOCAL aKeyCodeList, aDlgKeyCodeList := {}, xTabPage
+   LOCAL aKeyCodeList, aDlgKeyCodeList := {}, xTabPage, nHeight
 
    FOR EACH aItem IN ::aEditList
       IF aItem[ CFG_CTLTYPE ] != Nil .AND. aItem[ CFG_CTLTYPE ] != TYPE_BROWSE
@@ -28,9 +28,11 @@ FUNCTION frm_Edit( Self )
    ENDIF
    nCol := 10
    FOR EACH aItem IN ::aControlList
+      nHeight := 1
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          nLen := ::nDlgWidth - 30
+         nHeight := 6
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nLen := ( Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 ) * 12
@@ -45,13 +47,19 @@ FUNCTION frm_Edit( Self )
          ENDIF
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
-            nLen := ( Len( aItem[ CFG_CAPTION ] ) + 1 + aItem[ CFG_FLEN ] + 3 ) * 12
+         IF aItem[ CFG_FLEN ] > 100
+            aItem[ CFG_CTLTYPE ] := TYPE_EDITML
+            nLen := ::nDlgWidth - 30
+            nHeight := iif( aItem[ CFG_FTYPE ] == "M", 5, Round( aItem[ CFG_FLEN ] / 100, 0 ) )
          ELSE
-            nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
-         ENDIF
-         IF ! Empty( aItem[ CFG_VTABLE ] )
-            nLen += ( aItem[ CFG_VLEN ] + 3 ) * 12
+            IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+               nLen := ( Len( aItem[ CFG_CAPTION ] ) + 1 + aItem[ CFG_FLEN ] + 3 ) * 12
+            ELSE
+               nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
+            ENDIF
+            IF ! Empty( aItem[ CFG_VTABLE ] )
+               nLen += ( aItem[ CFG_VLEN ] + 3 ) * 12
+            ENDIF
          ENDIF
       ENDCASE
       IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + nLen > ::nDlgWidth - 40 )
@@ -60,7 +68,7 @@ FUNCTION frm_Edit( Self )
          ENDIF
          nCol := 10
       ENDIF
-      IF ::lWithTab .AND. nRow + iif( aItem[ CFG_CTLTYPE ] == TYPE_BROWSE, 200, 100 ) > ::nDlgHeight - 100
+      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nEditStyle < 3, 2, 3 ) ) * ::nLineSpacing  ) > ::nDlgHeight - 100
          IF nPageCount > 0
             gui_TabPageEnd( ::xDlg, xTab, xTabPage )
          ENDIF
@@ -76,12 +84,12 @@ FUNCTION frm_Edit( Self )
       ENDIF
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
-         SELECT  ( Select( aItem[ CFG_BTABLE ] ) )
+         SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
          oTBrowse := {}
          FOR EACH aBrowDBF IN ::aAllSetup
-            IF aBrowDBF[ 1 ] == aItem[ CFG_BTABLE ]
+            IF aBrowDBF[ 1 ] == aItem[ CFG_BRWTABLE ]
                FOR EACH aBrowField IN aBrowDbf[ 2 ]
-                  IF ! aBrowField[ CFG_FNAME ] == aItem[ CFG_BKEYTO ] .AND. aBrowField[ CFG_CTLTYPE ] != TYPE_BROWSE
+                  IF ! aBrowField[ CFG_FNAME ] == aItem[ CFG_BRWKEYTO ] .AND. aBrowField[ CFG_CTLTYPE ] != TYPE_BROWSE
                      AAdd( oTBrowse, { aBrowField[ CFG_CAPTION ], aBrowField[ CFG_FNAME ], aBrowField[ CFG_FPICTURE ] } )
                   ENDIF
                NEXT
@@ -91,20 +99,28 @@ FUNCTION frm_Edit( Self )
 #ifdef HBMK_HAS_GTWVG
          aKeyCodeList := {}
 #else
-         IF aItem[ CFG_BEDIT ]
+         IF aItem[ CFG_BRWEDIT ]
             aKeyCodeList := { ;
-               { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BTABLE ] ) } }, ;
-               { VK_DELETE, { || gui_MsgBox( "DELETE " + aItem[ CFG_BTABLE ] ) } }, ;
-               { VK_RETURN, { || gui_MsgBox( "EDIT "   + aItem[ CFG_BTABLE ] ) } } }
+               { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BRWTABLE ] ) } }, ;
+               { VK_DELETE, { || gui_MsgBox( "DELETE " + aItem[ CFG_BRWTABLE ] ) } }, ;
+               { VK_RETURN, { || gui_MsgBox( "EDIT "   + aItem[ CFG_BRWTABLE ] ) } } }
          ELSE
             aKeyCodeList := {}
          ENDIF
 #endif
          gui_Browse( ::xDlg, xTabPage, @aItem[ CFG_FCONTROL ], nRow, 5, ;
-            ::nDlgWidth - 30, 200, ;
-            oTbrowse, Nil, Nil, aItem[ CFG_BTABLE ], aKeyCodeList, @aDlgKeyCodeList )
+            ::nDlgWidth - 30, nHeight * ::nLineHeight, ;
+            oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyCodeList, @aDlgKeyCodeList )
          SELECT ( Select( ::cFileDBF ) )
-         nRow += 200 + ::nLineSpacing
+         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 2, 3 ) ) * ::nLineSpacing  )
+
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_EDITML
+         nRow2 := nRow + ::nLineSpacing
+         gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
+            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+         gui_MLTextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
+            nRow2, 5, ::nDlgWidth-30, nHeight * ::nLineHeight, @aItem[ CFG_VALUE ] )
+         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 2, 3 ) ) * ::nLineSpacing  )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2

@@ -24,12 +24,12 @@ FUNCTION frm_Dialog( Self )
          SET INDEX TO ( aItem[ CFG_VTABLE ] )
          SET ORDER TO 1
       ENDIF
-      IF ! Empty( aItem[ CFG_BTABLE ] ) .AND. Select( aItem[ CFG_BTABLE ] ) == 0
+      IF ! Empty( aItem[ CFG_BRWTABLE ] ) .AND. Select( aItem[ CFG_BRWTABLE ] ) == 0
          // dbfs for browse
-         SELECT ( Select( aItem[ CFG_BTABLE ] ) )
+         SELECT ( Select( aItem[ CFG_BRWTABLE ] ) )
          USE
-         USE ( aItem[ CFG_BTABLE ] )
-         SET INDEX TO ( aItem[ CFG_BTABLE ] )
+         USE ( aItem[ CFG_BRWTABLE ] )
+         SET INDEX TO ( aItem[ CFG_BRWTABLE ] )
          SET ORDER TO 1
       ENDIF
    NEXT
