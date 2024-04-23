@@ -275,7 +275,7 @@ METHOD DataLoad() CLASS frm_Class
          CASE aItem[ CFG_FTYPE ] == "N"
             xValue := ( xValue == 1 )
          CASE aItem[ CFG_FTYPE ] == "C"
-            xValue := ( xValue $ "YS" )
+            xValue := ( xValue == "Y" )
          ENDCASE
          gui_LabelSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
 
@@ -315,7 +315,7 @@ METHOD DataSave() CLASS frm_Class
             DO CASE
             CASE aItem[ CFG_FTYPE ] == "L"
             CASE aItem[ CFG_FTYPE ] == "N"; xValue := iif( xValue, 1, 0 )
-            CASE aItem[ CFG_FTYPE ] == "C"; xValue := iif( xValue, "S", "N" )
+            CASE aItem[ CFG_FTYPE ] == "C"; xValue := iif( xValue, "Y", "N" )
             ENDCASE
             FieldPut( FieldNum( aItem[ CFG_FNAME ] ), xValue )
          CASE hb_AScan( { TYPE_EDIT, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"

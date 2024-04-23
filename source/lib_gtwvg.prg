@@ -62,7 +62,6 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       :Create( xDlg,,{nCol,nRow},{ nWidth, nHeight } )
       :setColorFG( "W+" )
       :setColorBG( "B*" )
-
    ENDWITH
    (nHeight)
 
