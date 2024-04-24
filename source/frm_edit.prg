@@ -32,7 +32,7 @@ FUNCTION frm_Edit( Self )
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          nLen := ::nDlgWidth - 30
-         nHeight := 6
+         nHeight := 5
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nLen := ( Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 ) * 12
@@ -64,11 +64,11 @@ FUNCTION frm_Edit( Self )
       ENDCASE
       IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + nLen > ::nDlgWidth - 40 )
          IF ! lFirst
-            nRow += ( ::nLineSpacing * iif( ::nEditStyle < 3, 2, 3 ) )
+            nRow += ( ::nLineSpacing * iif( ::nEditStyle < 3, 1, 2 ) )
          ENDIF
          nCol := 10
       ENDIF
-      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nEditStyle < 3, 2, 3 ) ) * ::nLineSpacing  ) > ::nDlgHeight - 100
+      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * ::nLineSpacing  ) > ::nDlgHeight - 100
          IF nPageCount > 0
             gui_TabPageEnd( ::xDlg, xTab, xTabPage )
          ENDIF
@@ -108,11 +108,14 @@ FUNCTION frm_Edit( Self )
             aKeyCodeList := {}
          ENDIF
 #endif
-         gui_Browse( ::xDlg, xTabPage, @aItem[ CFG_FCONTROL ], nRow, 5, ;
+         nRow2 := nRow + ::nLineSpacing
+         gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
+            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_BRWTITLE ], .F. )
+         gui_Browse( ::xDlg, xTabPage, @aItem[ CFG_FCONTROL ], nRow2, 5, ;
             ::nDlgWidth - 30, nHeight * ::nLineHeight, ;
             oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyCodeList, @aDlgKeyCodeList )
          SELECT ( Select( ::cFileDBF ) )
-         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 2, 3 ) ) * ::nLineSpacing  )
+         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * ::nLineSpacing  )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDITML
          nRow2 := nRow + ::nLineSpacing
@@ -120,7 +123,7 @@ FUNCTION frm_Edit( Self )
             nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
          gui_MLTextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, 5, ::nDlgWidth-30, nHeight * ::nLineHeight, @aItem[ CFG_VALUE ] )
-         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 2, 3 ) ) * ::nLineSpacing  )
+         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * ::nLineSpacing  )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2

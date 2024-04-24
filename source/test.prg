@@ -63,11 +63,11 @@ REQUEST DBFCDX
 
    /* Related browse */
    aBrowseList := { ;
-      { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F. }, ;
-      { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F. } , ;
-      { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F. }, ;
-      { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T. }, ;
-      { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F. } }
+      { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F., "PROD LIST" }, ;
+      { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F., "DBF LIST" } , ;
+      { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F., "STOCK LIST" }, ;
+      { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T., "FINANC LIST" }, ;
+      { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F., "TICKET LIST" } }
 
    /* Combotext */
    aComboList := { ;
@@ -134,6 +134,11 @@ REQUEST DBFCDX
             aItem[ CFG_BRWKEYTO2 ]  := aBrowse[ 6 ]
             aItem[ CFG_BRWVALUE ]   := FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM  ] ) )
             aItem[ CFG_BRWEDIT ]    := aBrowse[ 7 ]
+            IF Len( aBrowse) > 7
+               aItem[ CFG_BRWTITLE ] := aBrowse[ 8 ]
+            ELSE
+               aItem[ CFG_BRWTITLE ] := aItem[ CFG_BRWTABLE ] + " LIST"
+            ENDIF
             AAdd( Atail( aAllSetup )[ 2 ], aItem )
          ENDIF
       NEXT

@@ -22,8 +22,9 @@
 #define CFG_BRWKEYTO   22                    // browse field to
 #define CFG_BRWKEYTO2  23                    // browse field2 to
 #define CFG_BRWVALUE   24                    // browse key value
-#define CFG_BRWEDIT    25                    // can edit browse values
-#define CFG_COMBOLIST 26                    // array for combo
+#define CFG_BRWEDIT    25                    // browse editable
+#define CFG_BRWTITLE   26                    // browse title
+#define CFG_COMBOLIST  26                    // array for combo
 
 #define CFG_EMPTY { "", "C", 1, 0, .F., "", "", {}, "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil, Nil }
 
