@@ -24,11 +24,6 @@ REQUEST DBFCDX
    SET EXCLUSIVE OFF
    SET FILECASE LOWER
    SET DIRCASE  LOWER
-#ifdef DLGAUTO_AS_LIB
-   #ifdef HBMK_HAS_HMGE
-      Init()
-   #endif
-#endif
    gui_Init()
    RddSetDefault( "DBFCDX" )
    test_DBF()
@@ -75,6 +70,7 @@ REQUEST DBFCDX
 
    /* checkbox */
    aCheckList := { ;
+      { "CLCLIENT", "CLDATE" }, ;
       { "DBCLIENT", "CLSTATUS" } }
 
    aDatePickerList := { ;

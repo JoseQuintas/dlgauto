@@ -5,11 +5,15 @@ frm_Edit - Create textbox/label on dialog
 #include "hbclass.ch"
 #include "frm_class.ch"
 
+//MEMVAR cTxtCode
+
 FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aList := {}
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
    LOCAL aKeyCodeList, aDlgKeyCodeList := {}, xTabPage, nHeight
+
+   //PRIVATE cTxtCode := ""
 
    FOR EACH aItem IN ::aEditList
       IF aItem[ CFG_CTLTYPE ] != Nil .AND. aItem[ CFG_CTLTYPE ] != TYPE_BROWSE
@@ -35,9 +39,9 @@ FUNCTION frm_Edit( Self )
          nHeight := 5
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
-            nLen := ( Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 ) * 12
+            nLen := ( Max( 15, Len( aItem[ CFG_CAPTION ] ) ) + Max( 15, aItem[ CFG_FLEN ] + 3 ) ) * 12
          ELSE
-            nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
+            nLen := ( Max( 15, Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) ) + 3 ) * 12
          ENDIF
       CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
@@ -47,7 +51,7 @@ FUNCTION frm_Edit( Self )
          ENDIF
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
-         IF aItem[ CFG_FLEN ] > 100
+         IF aItem[ CFG_FLEN ] > 100 .OR. aItem[ CFG_FTYPE ] == "M"
             aItem[ CFG_CTLTYPE ] := TYPE_EDITML
             nLen := ::nDlgWidth - 30
             nHeight := iif( aItem[ CFG_FTYPE ] == "M", 5, Round( aItem[ CFG_FLEN ] / 100, 0 ) )
@@ -96,9 +100,6 @@ FUNCTION frm_Edit( Self )
                EXIT
             ENDIF
          NEXT
-#ifdef HBMK_HAS_GTWVG
-         aKeyCodeList := {}
-#else
          IF aItem[ CFG_BRWEDIT ]
             aKeyCodeList := { ;
                { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BRWTABLE ] ) } }, ;
@@ -107,10 +108,9 @@ FUNCTION frm_Edit( Self )
          ELSE
             aKeyCodeList := {}
          ENDIF
-#endif
          nRow2 := nRow + ::nLineSpacing
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_BRWTITLE ], .F. )
+            nRow + 2, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_BRWTITLE ], .F. )
          gui_Browse( ::xDlg, xTabPage, @aItem[ CFG_FCONTROL ], nRow2, 5, ;
             ::nDlgWidth - 30, nHeight * ::nLineHeight, ;
             oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyCodeList, @aDlgKeyCodeList )
@@ -120,7 +120,7 @@ FUNCTION frm_Edit( Self )
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDITML
          nRow2 := nRow + ::nLineSpacing
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+            nRow + 2, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
          gui_MLTextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, 5, ::nDlgWidth-30, nHeight * ::nLineHeight, @aItem[ CFG_VALUE ] )
          nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * ::nLineSpacing  )
@@ -135,9 +135,9 @@ FUNCTION frm_Edit( Self )
          ENDIF
 
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
          gui_ComboCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, nLen, ::nLineHeight, aItem[ CFG_COMBOLIST ] )
+            nRow2, nCol2, Max( 10, Len( aItem[ CFG_CAPTION ] ) ) * 12, ::nLineHeight, aItem[ CFG_COMBOLIST ] )
          nCol += nLen
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
@@ -150,7 +150,7 @@ FUNCTION frm_Edit( Self )
          ENDIF
 
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+            nRow + 2, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
          gui_CheckboxCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, nCol2, nLen, ::nLineHeight )
          nCol += nLen
@@ -165,7 +165,7 @@ FUNCTION frm_Edit( Self )
          ENDIF
 
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+            nRow + 2, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
          gui_DatePickerCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, nCol2, nLen, ::nLineHeight, aItem[ CFG_VALUE ] ) // aItem[ CFG_FPICTURE ] )
          nCol += nLen
@@ -179,7 +179,7 @@ FUNCTION frm_Edit( Self )
             nCol2 := nCol
          ENDIF
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
 
          gui_TextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, nCol2, aItem[ CFG_FLEN ] * 12 + 12, ::nLineHeight, ;

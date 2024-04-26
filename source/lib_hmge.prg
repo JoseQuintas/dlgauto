@@ -4,8 +4,15 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 #include "frm_class.ch"
 
+//MEMVAR cTxtCode
+
 FUNCTION gui_Init()
 
+#ifdef DLGAUTO_AS_LIB
+   #ifdef HBMK_HAS_HMGE
+      Init()
+   #endif
+#endif
    SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
@@ -181,16 +188,15 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       ITEMS aList
    END COMBOBOX
    //single test to write source code
-   //hb_MemoWrit( "d:\temp\test.txt", ;
-   //   [DEFINE COMBOBOX ( "] + xControl + [" )] + hb_Eol() + ;
-   //   [   PARENT ( "] + xDlg + [" )] + hb_Eol() + ;
-   //   [   ROW ] + Ltrim( Str( nRow ) ) + hb_Eol() + ;
-   //   [   COL ] + Ltrim( Str( nCol ) ) + hb_Eol() + ;
-   //   [   VALUE 1] + hb_Eol() + ;
-   //   [   WIDTH ] + Ltrim( Str( nWidth ) ) + hb_Eol() + ;
-   //   [   HEIGHT ] + Ltrim( Str( nHeight ) ) + hb_Eol() + ;
-   //   [   ITEMS ] + hb_ValToExp( aList ) + hb_Eol() + ;
-   //   [END COMBOBOX] + hb_Eol() )
+   //cTxtCode += [DEFINE COMBOBOX ( "] + xControl + [" )] + hb_Eol()
+   //cTxtCode += [   PARENT ( "] + xDlg + [" )] + hb_Eol()
+   //cTxtCode += [   ROW ] + Ltrim( Str( nRow ) ) + hb_Eol()
+   //cTxtCode += [   COL ] + Ltrim( Str( nCol ) ) + hb_Eol()
+   //cTxtCode += [   VALUE 1] + hb_Eol()
+   //cTxtCode += [   WIDTH ] + Ltrim( Str( nWidth ) ) + hb_Eol()
+   //cTxtCode += [   HEIGHT ] + Ltrim( Str( nHeight ) ) + hb_Eol()
+   //cTxtCode += [   ITEMS ] + hb_ValToExp( aList ) + hb_Eol()
+   //cTxtCode += [END COMBOBOX] + hb_Eol() )
    ( nHeight )
 
    RETURN Nil
