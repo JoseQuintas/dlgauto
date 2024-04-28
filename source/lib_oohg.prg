@@ -23,7 +23,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       FOR EACH aGroupList IN aMenuList
          DEFINE POPUP "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
             FOR EACH cDBF IN aGroupList
-               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup ) ICON "APPICON"
+               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup ) ICON "ICOWINDOW"
             NEXT
          END POPUP
       NEXT
