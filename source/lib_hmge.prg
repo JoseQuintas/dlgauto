@@ -259,7 +259,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
       WIDTH nWidth ;
       HEIGHT nHeight ;
       TITLE cTitle ;
-      ICON "AppIcon" ;
+      ICON "ICOWINDOW" ;
       ; // MODAL ; // bad using WINDOW MAIN OFF
       ON INIT Eval( bInit ) ;
       ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
