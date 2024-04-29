@@ -7,7 +7,7 @@ test_DBF - Create DBF for test
 
 FUNCTION Test_DBF()
 
-   LOCAL lLoadStru := .F.
+   LOCAL nCount
 
    IF ! File( "DBCLIENT.DBF" )
       dbCreate( "DBCLIENT", { ;
@@ -164,7 +164,6 @@ FUNCTION Test_DBF()
       INDEX ON field->idField TAG primary
       INDEX ON field->Dbf + Str( field->IDFIELD, 6 ) tag dbf
       USE
-      lLoadStru := .T.
    ENDIF
    IF ! File ( "DBDBF.DBF" )
       dbCreate( "DBDBF", { ;
@@ -173,15 +172,17 @@ FUNCTION Test_DBF()
       USE DBDBF
       INDEX ON field->IdDbf tag primary
       USE
-      lLoadStru := .T.
    ENDIF
-   IF lLoadStru
-      LoadStru()
+   USE DBDBF
+   nCount := LastRec()
+   USE
+   IF nCount < 1
+      SaveTestStru()
    ENDIF
 
    RETURN Nil
 
-STATIC FUNCTION LoadStru()
+STATIC FUNCTION SaveTestStru()
 
    LOCAL aList := {}, aStru, aField, aFile, nCont := 1
 
@@ -230,7 +231,7 @@ STATIC FUNCTION SaveTestData()
 
    aStru := dbStruct()
    FOR nCont = 1 TO 9
-      cText := Substr( Alias(), 2 ) + " "
+      cText := Substr( Alias(), 3 ) + " "
       DO CASE
       CASE nCont == 1 ; cText += "ONE"
       CASE nCont == 2 ; cText += "TWO"

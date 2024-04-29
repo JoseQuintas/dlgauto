@@ -18,6 +18,7 @@ REQUEST DBFCDX
    LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList, aDatePickerList
 
    SET CONFIRM OFF
+   SET CENTURY ON
    SET DATE    BRITISH
    SET DELETED ON
    SET EPOCH TO Year( Date() ) - 90
