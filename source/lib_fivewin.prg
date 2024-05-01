@@ -2,6 +2,7 @@
 lib_fivewin- fivewin source selected by lib.prg
 
 Note: work in progress
+note: dialog and window use are not the same
 */
 
 #pragma -w1

@@ -21,6 +21,7 @@ FUNCTION Test_DBF()
          { "CLVALUE",  "N", 14, 2 }, ;
          { "CLSELLER", "N", 6, 0 }, ;
          { "CLBANK",   "N", 6, 0 }, ;
+         { "CLPAYTERM","N", 3, 0 }, ;
          { "CLSTATUS", "N", 1, 0 }, ;
          { "CLCOMMENT", "C", 255, 0 } } )
       USE DBCLIENT

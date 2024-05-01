@@ -183,7 +183,7 @@ METHOD EditOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-      ELSEIF hb_AScan( { TYPE_EDIT, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      ELSEIF hb_AScan( { TYPE_EDIT, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ]
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
@@ -205,7 +205,7 @@ METHOD EditOff() CLASS frm_Class
    LOCAL aItem
 
    FOR EACH aItem IN ::aControlList
-      IF hb_AScan( { TYPE_EDIT, TYPE_HWGUIBUG , TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      IF hb_AScan( { TYPE_EDIT, TYPE_HWGUIBUG , TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
@@ -256,7 +256,7 @@ METHOD DataLoad() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       DO CASE
-      CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. hb_AScan( { TYPE_EDIT, TYPE_EDITML, TYPE_DATEPICKER }, aItem[ CFG_CTLTYPE ] ) != 0
+      CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. hb_AScan( { TYPE_EDIT, TYPE_EDITML, TYPE_DATEPICKER, TYPE_SPINNER }, aItem[ CFG_CTLTYPE ] ) != 0
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
@@ -318,7 +318,7 @@ METHOD DataSave() CLASS frm_Class
             CASE aItem[ CFG_FTYPE ] == "C"; xValue := iif( xValue, "Y", "N" )
             ENDCASE
             FieldPut( FieldNum( aItem[ CFG_FNAME ] ), xValue )
-         CASE hb_AScan( { TYPE_EDIT, TYPE_EDITML, TYPE_DATEPICKER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
+         CASE hb_AScan( { TYPE_EDIT, TYPE_EDITML, TYPE_DATEPICKER, TYPE_SPINNER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
          CASE aItem[ CFG_ISKEY ]
          OTHERWISE
             xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )

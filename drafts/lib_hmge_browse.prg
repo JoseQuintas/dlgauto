@@ -81,7 +81,8 @@ FUNCTION BrowseKeys( hWnd, nMsg, wParam, lParam )
       RETURN Nil
    ENDIF
 
-   IF ! _IsControlDefined( cBrowseName, cWindowName ) .OR. GetHwndFrom( lParam ) != GetProperty( cWindowName, cBrowseName, "Handle" )
+   IF ! _IsControlDefined( cBrowseName, cWindowName ) .OR. ;
+      GetHwndFrom( lParam ) != GetProperty( cWindowName, cBrowseName, "Handle" )
       RETURN Nil
    ENDIF
 

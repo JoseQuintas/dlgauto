@@ -128,7 +128,7 @@ STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, 
    ENDIF
    IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyCodeList, { | e | e[ 2 ] == VK_RETURN } ) != 0
       cType := GetProperty( xDlg, GetProperty( xDlg, "FOCUSEDCONTROL" ), "TYPE" )
-      IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT" }, { | e | e == cType } ) != 0
+      IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT", "SPINNER", "DATEPICKER", "CHECKBOX" }, { | e | e == cType } ) != 0
          _SetNextFocus()
       ENDIF
    ENDIF
@@ -201,6 +201,26 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+
+   IF Empty( xControl )
+      xControl := gui_newctlname( "SPI" )
+   ENDIF
+   DEFINE SPINNER ( xControl )
+      PARENT ( xDlg )
+      ROW nRow
+      COL nCol
+      VALUE 1
+      WIDTH nWidth
+      //ON GOTFOCUS  SetProperty( xDlg, xControl, "BACKCOLOR", { 255, 255, 0 } )
+      //ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", { 255, 255, 255 } )
+      RANGEMIN aList[ 1 ]
+      RANGEMAX aList[ 2 ]
+   END SPINNER
+   ( nHeight )
+
+   RETURN Nil
+
 FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
@@ -212,6 +232,8 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
       ROW	nRow
       COL	nCol
       VALUE dValue
+      ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", { 255, 255, 0 } )
+      ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", { 255, 255, 255 } )
       //DATEFORMAT "99/99/99"
       TOOLTIP 'DatePicker Control'
       SHOWNONE .F.
@@ -223,6 +245,8 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
    (nWidth);(nHeight)
 
    RETURN Nil
+
+
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
@@ -259,7 +283,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
       WIDTH nWidth ;
       HEIGHT nHeight ;
       TITLE cTitle ;
-      ICON "ICOWINDOW" ;
+      ICON "APPICON" ;
       ; // MODAL ; // bad using WINDOW MAIN OFF
       ON INIT Eval( bInit ) ;
       ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )

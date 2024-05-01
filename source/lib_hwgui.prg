@@ -137,6 +137,13 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
    RETURN Nil
 
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+
+   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, 0 )
+   (aList)
+
+   RETURN Nil
+
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    // xDlg:Center()

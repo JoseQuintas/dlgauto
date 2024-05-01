@@ -25,6 +25,7 @@
 #define CFG_BRWEDIT    25                    // browse editable
 #define CFG_BRWTITLE   26                    // browse title
 #define CFG_COMBOLIST  26                    // array for combo
+#define CFG_SPINNER    26                    // min/max for spinner
 
 #define CFG_EMPTY { "", "C", 1, 0, .F., "", "", {}, "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil, Nil }
 
@@ -39,6 +40,7 @@
 #define TYPE_STATUSBAR  11
 #define TYPE_DATEPICKER 12
 #define TYPE_EDITML     13 // multiline
+#define TYPE_SPINNER    14
 
 #ifdef HBMK_HAS_HWGUI
    #include "hwgui.ch"

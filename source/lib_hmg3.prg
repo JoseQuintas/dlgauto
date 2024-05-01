@@ -188,6 +188,24 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+
+   IF Empty( xControl )
+      xControl := gui_newctlname( "SPI" )
+   ENDIF
+   DEFINE SPINNER ( xControl )
+      PARENT ( xDlg )
+      ROW nRow
+      COL nCol
+      VALUE 1
+      WIDTH nWidth
+      RANGEMIN aList[ 1 ]
+      RANGEMAX aList[ 2 ]
+   END SPINNER
+   ( nHeight )
+
+   RETURN Nil
+
 FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 

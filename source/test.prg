@@ -15,7 +15,8 @@ REQUEST DBFCDX
 #endif
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList, aDatePickerList
+   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList
+   LOCAL aDatePickerList, aSpinnerList
 
    SET CONFIRM OFF
    SET CENTURY ON
@@ -77,6 +78,9 @@ REQUEST DBFCDX
    aDatePickerList := { ;
       { "DBFINANC", "FIDATTOPAY" } }
 
+   aSpinnerList := { ;
+      { "DBCLIENT", "CLPAYTERM", { 0, 120 } } }
+
    aAllSetup := {}
    aList := Directory( "*.dbf" )
    FOR EACH aFile IN aList
@@ -99,14 +103,14 @@ REQUEST DBFCDX
             aItem[ CFG_ISKEY ] := .T.
          ENDIF
          /* to search */
-         IF ( nSeekPos := hb_ASCan( aSeekList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
-            aItem[ CFG_VTABLE ] := aSeekList[ nSeekPos, 3 ]
-            aItem[ CFG_VFIELD ] := aSeekList[ nSeekPos, 4 ]
-            aItem[ CFG_VSHOW ]  := aSeekList[ nSeekPos, 5 ]
+         IF ( nPos := hb_ASCan( aSeekList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+            aItem[ CFG_VTABLE ] := aSeekList[ nPos, 3 ]
+            aItem[ CFG_VFIELD ] := aSeekList[ nPos, 4 ]
+            aItem[ CFG_VSHOW ]  := aSeekList[ nPos, 5 ]
          ENDIF
          /* combotext */
-         IF ( nSeekPos := hb_Ascan( aComboList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
-            aItem[ CFG_COMBOLIST ] := aComboList[ nSeekPos, 3 ]
+         IF ( nPos := hb_Ascan( aComboList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+            aItem[ CFG_COMBOLIST ] := aComboList[ nPos, 3 ]
             aItem[ CFG_CTLTYPE ] := TYPE_COMBOBOX
          ENDIF
          /* checkbox */
@@ -117,6 +121,12 @@ REQUEST DBFCDX
          IF hb_Ascan( aDatePickerList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
             aItem[ CFG_CTLTYPE ] := TYPE_DATEPICKER
          ENDIF
+         /* spinner */
+         IF ( nPos := hb_Ascan( aSpinnerList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+            aItem[ CFG_SPINNER ] := aSpinnerList[ nPos, 3 ]
+            aItem[ CFG_CTLTYPE ] := TYPE_SPINNER
+         ENDIF
+
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT
       /* in browse */

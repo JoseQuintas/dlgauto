@@ -37,17 +37,26 @@ FUNCTION frm_Edit( Self )
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          nLen := ::nDlgWidth - 30
          nHeight := 5
+
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nLen := ( Max( 15, Len( aItem[ CFG_CAPTION ] ) ) + Max( 15, aItem[ CFG_FLEN ] + 3 ) ) * 12
          ELSE
             nLen := ( Max( 15, Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) ) + 3 ) * 12
          ENDIF
+
       CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nLen := ( Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 ) * 12
          ELSE
             nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
+         ENDIF
+
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_SPINNER
+         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+            nLen := ( Max( 15, Len( aItem[ CFG_CAPTION ] ) ) + Max( 6, aItem[ CFG_FLEN ] + 3 ) ) * 12
+         ELSE
+            nLen := ( Max( 6, Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) ) + 3 ) * 12
          ENDIF
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
@@ -168,6 +177,21 @@ FUNCTION frm_Edit( Self )
             nRow + 2, nCol, nLen * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
          gui_DatePickerCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, nCol2, nLen, ::nLineHeight, aItem[ CFG_VALUE ] ) // aItem[ CFG_FPICTURE ] )
+         nCol += nLen
+
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_SPINNER
+         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+            nRow2 := nRow
+            nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
+         ELSE
+            nRow2 := nRow + ::nLineSpacing
+            nCol2 := nCol
+         ENDIF
+
+         gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12, ::nLineHeight, aItem[ CFG_CAPTION ], .F. )
+         gui_SpinnerCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
+            nRow2, nCol2, Max( 6, Len( aItem[ CFG_CAPTION ] ) ) * 12, ::nLineHeight, aItem[ CFG_SPINNER ] )
          nCol += nLen
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT

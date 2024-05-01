@@ -127,7 +127,6 @@ STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, 
    IF nKey == VK_RETURN .OR. lReturn == Nil .OR. lReturn
       cFocusedControl := GetProperty( xDlg, "FOCUSEDCONTROL" )
       cType := GetControlObject( cFocusedControl, xDlg ):Type
-      gui_MsgBox( cType )
       IF hb_AScan( { "NUMTEXT", "TEXT" }, { | e | e == cType } ) != 0
          _SetNextFocus()
       ENDIF
@@ -186,6 +185,24 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       //HEIGHT nHeight // do not define height, it limits can list size to zero
       ITEMS aList
    END COMBOBOX
+   ( nHeight )
+
+   RETURN Nil
+
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+
+   IF Empty( xControl )
+      xControl := gui_newctlname( "SPI" )
+   ENDIF
+   DEFINE SPINNER ( xControl )
+      PARENT ( xDlg )
+      ROW nRow
+      COL nCol
+      VALUE 1
+      WIDTH nWidth
+      RANGEMIN aList[ 1 ]
+      RANGEMAX aList[ 2 ]
+   END SPINNER
    ( nHeight )
 
    RETURN Nil
