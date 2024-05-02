@@ -46,7 +46,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
-   @ nRow, nCol BUTTONBMP xControl PIXEL PROMPT cCaption OF xDlg SIZE nWidth, nHeight RESOURCE cResName TOP ACTION Eval( bAction )
+   @ nRow, nCol BUTTONBMP xControl PIXEL  PROMPT cCaption OF xDlg SIZE nWidth, nHeight RESOURCE cResName TOP ACTION Eval( bAction )
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
 
    RETURN Nil
@@ -245,6 +245,13 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
    //DoMethod( xDlg, xControl, "SETFOCUS" )
    (xDlg);(xControl)
+
+   RETURN Nil
+
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+
+   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, ;
+            0, "999", Nil, Nil, Nil, Nil )
 
    RETURN Nil
 
