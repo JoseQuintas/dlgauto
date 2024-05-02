@@ -246,18 +246,11 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
    RETURN Nil
 
-
-
 FUNCTION gui_DialogActivate( xDlg, bCode )
-
-   //LOCAL xControl
 
    IF ! Empty( bCode )
       Eval( bCode )
    ENDIF
-   //FOR EACH xControl IN HMG_GetFormControls( xDlg, "BUTTONEX" )
-   //   SetHandCursor( GetControlHandle( xControl, xDlg ) )
-   //NEXT
    DoMethod( xDlg, "CENTER" )
    DoMethod( xDlg, "ACTIVATE" )
 
