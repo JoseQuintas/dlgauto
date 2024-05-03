@@ -265,8 +265,8 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
       ROW	nRow
       COL	nCol
       VALUE dValue
-      ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
-      ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
+      //ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
+      //ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
       //DATEFORMAT "99/99/99"
       TOOLTIP 'DatePicker Control'
       SHOWNONE .F.
@@ -345,6 +345,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    IF Empty( xControl )
       xControl := gui_newctlname( "LBL" )
    ENDIF
+   //nHeight := Round( nHeight, 0 )
    // não mostra borda
    DEFINE LABEL ( xControl )
       PARENT ( xDlg )
@@ -353,6 +354,8 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
       WIDTH nWidth
       HEIGHT nHeight
       VALUE xValue
+      //FONTNAME "Times New Roman"
+      //FONTSIZE nHeight - 6
       IF lBorder
          BORDER lBorder
          BACKCOLOR HMG_n2RGB( COLOR_GREEN )

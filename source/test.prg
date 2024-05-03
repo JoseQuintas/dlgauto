@@ -76,10 +76,10 @@ MEMVAR cTxtCode
 
    /* checkbox */
    aCheckList := { ;
-      { "CLCLIENT", "CLDATE" }, ;
       { "DBCLIENT", "CLSTATUS" } }
 
    aDatePickerList := { ;
+      { "DBCLIENT", "CLDATE" }, ;
       { "DBFINANC", "FIDATTOPAY" } }
 
    aSpinnerList := { ;
