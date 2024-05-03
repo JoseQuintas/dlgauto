@@ -5,10 +5,13 @@ frm_Dialog - create the dialog for data
 #include "frm_class.ch"
 #include "inkey.ch"
 
+MEMVAR cTxtCode
+
 FUNCTION frm_Dialog( Self )
 
    LOCAL aItem, aFile
 
+   cTxtCode := ""
    SELECT ( Select( ::cFileDbf ) )
    USE
    USE ( ::cFileDBF )

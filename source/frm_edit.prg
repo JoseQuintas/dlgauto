@@ -5,15 +5,13 @@ frm_Edit - Create textbox/label on dialog
 #include "hbclass.ch"
 #include "frm_class.ch"
 
-//MEMVAR cTxtCode
+MEMVAR cTxtCode
 
 FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aList := {}
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
    LOCAL aKeyCodeList, aDlgKeyCodeList := {}, xTabPage, nHeight
-
-   //PRIVATE cTxtCode := ""
 
    FOR EACH aItem IN ::aEditList
       IF aItem[ CFG_CTLTYPE ] != Nil .AND. aItem[ CFG_CTLTYPE ] != TYPE_BROWSE
@@ -243,5 +241,6 @@ FUNCTION frm_Edit( Self )
    //gui_Statusbar( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ] )
    (nRow2)
    (nCol2)
+   hb_MemoWrit( "testcode.txt", cTxtCode )
 
    RETURN Nil

@@ -4,7 +4,7 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 #include "frm_class.ch"
 
-//MEMVAR cTxtCode
+MEMVAR cTxtCode
 
 FUNCTION gui_Init()
 
@@ -74,6 +74,28 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       FLAT       .T.
       NOXPSTYLE  .T.
    END BUTTONEX
+
+   cTxtCode += [   DEFINE BUTTONEX ( ] + ToPRG( xControl ) + [)] + hb_Eol()
+   cTxtCode += [      PARENT ( ] + ToPRG( xDlg ) + [ )] + hb_Eol()
+   cTxtCode += [      ROW         ] + ToPRG( nRow ) + hb_Eol()
+   cTxtCode += [      COL         ] + ToPRG( nCol ) + hb_Eol()
+   cTxtCode += [      WIDTH       ] + ToPRG( nWidth ) + hb_Eol()
+   cTxtCode += [      HEIGHT      ] + ToPRG( nHeight ) + hb_Eol()
+   cTxtCode += [      ICON        ] + ToPRG( cResName ) + hb_Eol()
+   cTxtCode += [      IMAGEWIDTH  -1] + hb_Eol()
+   cTxtCode += [      IMAGEHEIGHT -1] + hb_Eol()
+   cTxtCode += [      CAPTION     ] + ToPRG( cCaption ) + hb_Eol()
+   cTxtCode += [      ACTION      Eval( ] + ToPrg( bAction ) + [ )] + hb_Eol()
+   cTxtCode += [      FONTNAME    ] + ToPRG( DEFAULT_FONTNAME ) + hb_Eol()
+   cTxtCode += [      FONTSIZE    9] + hb_Eol()
+   cTxtCode += [      FONTBOLD    .T.] + hb_Eol()
+   cTxtCode += [      FONTCOLOR   ] + ToPRG( COLOR_BLACK ) + hb_Eol()
+   cTxtCode += [      VERTICAL   .T.] + hb_Eol()
+   cTxtCode += [      BACKCOLOR  ] + ToPrg( COLOR_WHITE ) + hb_Eol()
+   cTxtCode += [      FLAT       .T.] + hb_Eol()
+   cTxtCode += [      NOXPSTYLE  .T.] + hb_Eol()
+   cTxtCode += [   END BUTTONEX] + hb_Eol()
+   cTxtCode += hb_Eol()
 
    RETURN Nil
 
@@ -171,6 +193,16 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       CAPTION ""
    END CHECKBOX
 
+   cTxtCode += [   DEFINE CHECKBOX ( ] + ToPrg( xControl ) + [ )] + hb_Eol()
+   cTxtCode += [      PARENT ( ] + ToPrg( xDlg ) + [ )] + hb_Eol()
+   cTxtCode += [      Row ] + ToPrg( nRow ) + hb_Eol()
+   cTxtCode += [      COL ] + ToPrg( nCol ) + hb_Eol()
+   cTxtCode += [      WIDTH ] + ToPrg( nWidth ) + hb_Eol()
+   cTxtCode += [      HEIGHT ] + ToPrg( nHeight ) + hb_Eol()
+   cTxtCode += [      CAPTION ""] + hb_Eol()
+   cTxtCode += [   END CHECKBOX] + hb_Eol()
+   cTxtCode += hb_Eol()
+
    RETURN Nil
 
 FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
@@ -187,16 +219,17 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       //HEIGHT nHeight // do not define height, it can limit list size to zero
       ITEMS aList
    END COMBOBOX
-   //single test to write source code
-   //cTxtCode += [DEFINE COMBOBOX ( "] + xControl + [" )] + hb_Eol()
-   //cTxtCode += [   PARENT ( "] + xDlg + [" )] + hb_Eol()
-   //cTxtCode += [   ROW ] + Ltrim( Str( nRow ) ) + hb_Eol()
-   //cTxtCode += [   COL ] + Ltrim( Str( nCol ) ) + hb_Eol()
-   //cTxtCode += [   VALUE 1] + hb_Eol()
-   //cTxtCode += [   WIDTH ] + Ltrim( Str( nWidth ) ) + hb_Eol()
-   //cTxtCode += [   HEIGHT ] + Ltrim( Str( nHeight ) ) + hb_Eol()
-   //cTxtCode += [   ITEMS ] + hb_ValToExp( aList ) + hb_Eol()
-   //cTxtCode += [END COMBOBOX] + hb_Eol() )
+
+   cTxtCode += [   DEFINE COMBOBOX ( ] + ToPRG( xControl ) + [ )] + hb_Eol()
+   cTxtCode += [      PARENT ( ] + ToPRG( xDlg ) + [ )] + hb_Eol()
+   cTxtCode += [      ROW ] + ToPRG( nRow ) + hb_Eol()
+   cTxtCode += [      COL ] + ToPRG( nCol ) + hb_Eol()
+   cTxtCode += [      VALUE 1] + hb_Eol()
+   cTxtCode += [      WIDTH ] + ToPRG( nWidth ) + hb_Eol()
+   cTxtCode += [      HEIGHT ] + ToPRG( nHeight ) + hb_Eol()
+   cTxtCode += [      ITEMS ] + ToPRG( aList ) + hb_Eol()
+   cTxtCode += [   END COMBOBOX] + hb_Eol()
+   cTxtCode += hb_Eol()
    ( nHeight )
 
    RETURN Nil
@@ -232,8 +265,8 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
       ROW	nRow
       COL	nCol
       VALUE dValue
-      ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", { 255, 255, 0 } )
-      ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", { 255, 255, 255 } )
+      ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
+      ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
       //DATEFORMAT "99/99/99"
       TOOLTIP 'DatePicker Control'
       SHOWNONE .F.
@@ -253,6 +286,11 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
    ENDIF
    DoMethod( xDlg, "CENTER" )
    DoMethod( xDlg, "ACTIVATE" )
+
+   cTxtCode += [   DoMethod( ] + ToPrg( xDlg ) + [, "CENTER" )] + hb_Eol()
+   cTxtCode += [   DoMethod( ] + ToPrg( xDlg ) + [, "ACTIVATE" )] + hb_Eol()
+   cTxtCode += hb_Eol()
+
 
    RETURN Nil
 
@@ -286,6 +324,16 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
       gui_Statusbar( xDlg, "" )
    END WINDOW
 
+   cTxtCode += [   DEFINE WINDOW ( ] + ToPrg( xDlg ) + [ ) ;] + hb_Eol()
+   cTxtCode += [      AT ] + ToPrg( nCol ) + [, ] + ToPrg( nRow ) + [;] + hb_Eol()
+   cTxtCode += [      WIDTH ] + ToPrg( nWidth ) + [;] + hb_Eol()
+   cTxtCode += [      HEIGHT ] + ToPrg( nHeight ) + [ ;] + hb_Eol()
+   cTxtCode += [      TITLE ] + ToPrg( cTitle ) + [;] + hb_Eol()
+   cTxtCode += [      ICON "APPICON" ;] + hb_Eol()
+   cTxtCode += [      ON INIT Eval( ] + ToPrg( bInit ) + [ ) ;] + hb_Eol()
+   cTxtCode += [   END WINDOW] + hb_Eol()
+   cTxtCode += hb_Eol()
+
    RETURN Nil
 
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
@@ -310,6 +358,20 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
          BACKCOLOR HMG_n2RGB( COLOR_GREEN )
       ENDIF
    END LABEL
+
+   cTxtCode += [   DEFINE LABEL ( ] + ToPrg( xControl ) + [ )] + hb_Eol()
+   cTxtCode += [      PARENT ( ] + ToPrg( xDlg ) + [ )] + hb_Eol()
+   cTxtCode += [      COL ] + ToPrg( nCol ) + hb_Eol()
+   cTxtCode += [      ROW ] + ToPrg( nRow ) + hb_Eol()
+   cTxtCode += [      WIDTH ] + ToPrg( nWidth ) + hb_Eol()
+   cTxtCode += [      HEIGHT ] + ToPrg( nHeight ) + hb_Eol()
+   cTxtCode += [      VALUE ] + ToPrg( xValue ) + hb_Eol()
+   IF lBorder
+      cTxtCode += [      BORDER ] + ToPrg( lBorder ) + hb_Eol()
+      cTxtCode += [      BACKCOLOR ] + ToPrg( COLOR_GREEN ) + hb_Eol()
+   ENDIF
+   cTxtCode += [   END LABEL] + hb_Eol()
+   cTxtCode += hb_Eol()
 
    RETURN Nil
 
@@ -384,6 +446,14 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       HEIGHT nHeight ;
       HOTTRACK
 
+   cTxtCode += [   DEFINE TAB ( ] + ToPrg( xControl ) + [) ;] + hb_Eol()
+   cTxtCode += [      PARENT ( ] + ToPrg( xDlg ) + [) ;] + hb_Eol()
+   cTxtCode += [      AT ] + ToPRG( nRow ) + [, ] + ToPrg( nCol ) + [;] + hb_Eol()
+   cTxtCode += [      WIDTH ] + ToPrg( nWidth ) + [ ;] + hb_Eol()
+   cTxtCode += [      HEIGHT ] + ToPRG( nHeight ) + [ ;] + hb_Eol()
+   cTxtCode += [      HOTTRACK] + hb_Eol()
+   cTxtCode += hb_Eol()
+
    RETURN Nil
 
 FUNCTION gui_TabEnd()
@@ -401,6 +471,9 @@ FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 
    PAGE ( cText ) IMAGE "bmpfolder"
+
+   cTxtCode += [   PAGE ( ] + ToPRG( cText ) + [ ) IMAGE "bmpfolder"] + hb_Eol()
+   cTxtCode += hb_Eol()
    xPage := xControl
    // BACKCOLOR { 50, 50, 50 }
    (xDlg); (xControl); (cText); (nPageCount)
@@ -410,6 +483,9 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    END PAGE
+
+   cTxtCode += [   END PAGE] + hb_Eol()
+   cTxtCode += hb_Eol()
    (xDlg); (xControl)
 
    RETURN Nil
@@ -491,3 +567,22 @@ STATIC FUNCTION gui_newctlname( cPrefix )
    hb_Default( @cPrefix, "ANY" )
 
    RETURN cPrefix + StrZero( nCount, 10 )
+
+STATIC FUNCTION ToPRG( xValue )
+
+   DO CASE
+   CASE ValType( xValue ) == "N"
+      xValue := Ltrim( Str( xValue ) )
+   CASE ValType( xValue ) == "C"
+      xValue := ["] + xValue + ["]
+   CASE ValType( xValue ) == "D"
+      xValue := [Stod( ] + ToPRG( Dtos( Date() ) ) + [ )]
+   CASE ValType( xValue ) == "L"
+      xValue := iif( xValue, ".T.", ".F." )
+   CASE ValType( xValue ) == "A"
+      xValue := hb_ValToExp( xValue )
+   CASE ValType( xValue ) == "B"
+      xValue := [{ || Nil } /] + [* can't translate *] + [/]
+   ENDCASE
+
+   RETURN xValue
