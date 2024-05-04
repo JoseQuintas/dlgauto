@@ -54,6 +54,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
    IF Empty( xControl )
       xControl := gui_newctlname( "BTN" )
    ENDIF
+
    DEFINE BUTTONEX ( xControl )
       PARENT ( xDlg )
       ROW         nRow
@@ -65,8 +66,8 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       IMAGEHEIGHT -1
       CAPTION     cCaption
       ACTION      Eval( bAction )
-      FONTNAME    DEFAULT_FONTNAME
-      FONTSIZE    9
+      FONTNAME    APP_FONTNAME
+      FONTSIZE    8
       FONTBOLD    .T.
       FONTCOLOR   COLOR_BLACK
       VERTICAL   .T.
@@ -86,8 +87,8 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
    cTxtCode += [      IMAGEHEIGHT -1] + hb_Eol()
    cTxtCode += [      CAPTION     ] + ToPRG( cCaption ) + hb_Eol()
    cTxtCode += [      ACTION      Eval( ] + ToPrg( bAction ) + [ )] + hb_Eol()
-   cTxtCode += [      FONTNAME    ] + ToPRG( DEFAULT_FONTNAME ) + hb_Eol()
-   cTxtCode += [      FONTSIZE    9] + hb_Eol()
+   cTxtCode += [      FONTNAME    ] + ToPRG( APP_FONTNAME ) + hb_Eol()
+   cTxtCode += [      FONTSIZE    8] + hb_Eol()
    cTxtCode += [      FONTBOLD    .T.] + hb_Eol()
    cTxtCode += [      FONTCOLOR   ] + ToPRG( COLOR_BLACK ) + hb_Eol()
    cTxtCode += [      VERTICAL   .T.] + hb_Eol()
@@ -107,6 +108,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    IF Empty( xControl )
       xControl := gui_newctlname( "BRW" )
    ENDIF
+
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
@@ -184,6 +186,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
    IF Empty( xControl )
       xControl := gui_NewCtlName( "CHK" )
    ENDIF
+
    DEFINE CHECKBOX ( xControl )
       PARENT ( xDlg )
       Row nRow
@@ -210,6 +213,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
    IF Empty( xControl )
       xControl := gui_newctlname( "CBO" )
    ENDIF
+
    DEFINE COMBOBOX ( xControl )
       PARENT ( xDlg )
       ROW nRow
@@ -239,6 +243,7 @@ FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
    IF Empty( xControl )
       xControl := gui_newctlname( "SPI" )
    ENDIF
+
    DEFINE SPINNER ( xControl )
       PARENT ( xDlg )
       ROW nRow
@@ -260,6 +265,7 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
    IF Empty( xControl )
       xControl := gui_newctlname( "DTP" )
    ENDIF
+
    DEFINE DATEPICKER (xControl)
       PARENT ( xDlg )
       ROW	nRow
@@ -267,7 +273,7 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
       VALUE dValue
       //ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
       //ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
-      //DATEFORMAT "99/99/99"
+      //DATEFORMAT "99/99/9999"
       TOOLTIP 'DatePicker Control'
       SHOWNONE .F.
       TITLEBACKCOLOR BLACK
@@ -309,12 +315,14 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
    IF Empty( bInit )
       bInit := { || Nil }
    ENDIF
+
    DEFINE WINDOW ( xDlg ) ;
       AT nCol, nRow ;
       WIDTH nWidth ;
       HEIGHT nHeight ;
       TITLE cTitle ;
       ICON "APPICON" ;
+      FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
       ; // MODAL ; // bad using WINDOW MAIN OFF
       ON INIT Eval( bInit ) ;
       ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
@@ -330,6 +338,8 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
    cTxtCode += [      HEIGHT ] + ToPrg( nHeight ) + [ ;] + hb_Eol()
    cTxtCode += [      TITLE ] + ToPrg( cTitle ) + [;] + hb_Eol()
    cTxtCode += [      ICON "APPICON" ;] + hb_Eol()
+   cTxtCode += [      FONTNAME ] + ToPrg( APP_FONTNAME ) + hb_Eol()
+   cTxtCode += [      FONTSIZE ] + ToPrg( APP_FONTSIZE_NORMAL ) + hb_Eol()
    cTxtCode += [      ON INIT Eval( ] + ToPrg( bInit ) + [ ) ;] + hb_Eol()
    cTxtCode += [   END WINDOW] + hb_Eol()
    cTxtCode += hb_Eol()
@@ -340,11 +350,12 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       RETURN GetProperty( xDlg, "FOCUSEDCONTROL" )  == xControl
 
-FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder, nFontSize )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "LBL" )
    ENDIF
+
    //nHeight := Round( nHeight, 0 )
    // não mostra borda
    DEFINE LABEL ( xControl )
@@ -354,8 +365,8 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
       WIDTH nWidth
       HEIGHT nHeight
       VALUE xValue
-      //FONTNAME "Times New Roman"
-      //FONTSIZE nHeight - 6
+      FONTNAME "Arial"
+      FONTSIZE nFontSize
       IF lBorder
          BORDER lBorder
          BACKCOLOR HMG_n2RGB( COLOR_GREEN )
@@ -393,6 +404,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
    IF Empty( xControl )
       xControl := gui_newctlname( "MLTXT" )
    ENDIF
+
    DEFINE EDITBOX ( xControl )
       PARENT ( xDlg )
       COL nCol
@@ -442,6 +454,7 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
    IF Empty( xControl )
       xControl := gui_newctlname( "TAB" )
    ENDIF
+
    DEFINE TAB ( xControl ) ;
       PARENT ( xDlg ) ;
       AT nRow, nCol;
@@ -499,6 +512,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    IF Empty( xControl )
       xControl := gui_newctlname( "TXT" )
    ENDIF
+
    //IF ! Empty( cImage )
       //DEFINE BTNTEXTBOX ( xControl )
    //ELSE
@@ -509,7 +523,8 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       COL nCol
       HEIGHT nHeight
       WIDTH nWidth
-      FONTNAME DEFAULT_FONTNAME
+      FONTNAME APP_FONTNAME
+      FONTSIZE APP_FONTSIZE_NORMAL
       IF ValType( xValue ) == "N"
          NUMERIC .T.
          INPUTMASK cPicture

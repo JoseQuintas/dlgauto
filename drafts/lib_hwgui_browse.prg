@@ -52,7 +52,7 @@ FUNCTION MakeBrowse( Self, cTitle, cnSQL, oBrowseList, cFilterList, bCode )
    hb_Default( @cFilter, "" )
 
    INIT DIALOG xDlg ;
-      AT 0, 0 SIZE ::nDlgWidth, ::nDlgHeight ;
+      AT 0, 0 SIZE APP_DLG_WIDTH, APP_DLG_HEIGHT ;
       TITLE cTitle ;
       STYLE WS_DLGFRAME + WS_SYSMENU ;
       BACKCOLOR STYLE_BACK
@@ -176,10 +176,10 @@ STATIC FUNCTION CreateButtons( Self, xDlg, oBrowse, oBtnList )
          TEXT oBtn[ 1 ] COORDINATES 5, BUTTON_SIZE - TEXT_SIZE, BUTTON_SIZE - 5, TEXT_SIZE ;
          Tooltip oBtn[ 1 ]
       oBtn:aStyle := STYLE_BTN_ALL
-      IF nCol > ::nDlgWidth - 10 - BUTTON_SIZE - BUTTON_SPACE
+      IF nCol > APP_DLG_WIDTH - 10 - BUTTON_SIZE - BUTTON_SPACE
          nRowLine += 1
          nRow += BUTTON_SIZE + BUTTON_SPACE
-         nCol := ::nDlgWidth - BUTTON_SIZE - BUTTON_SPACE
+         nCol := APP_DLG_WIDTH - BUTTON_SIZE - BUTTON_SPACE
       ENDIF
       AAdd( oBtnList, oBtn )
       nCol += iif( nRowLine == 1, 1, -1 ) * ( BUTTON_SIZE + BUTTON_SPACE )

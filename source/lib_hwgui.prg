@@ -166,7 +166,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
    IF Empty( bInit )
       bInit := { || Nil }
    ENDIF
-   oFont := HFont():Add( DEFAULT_FONTNAME, 0, -11 )
+   oFont := HFont():Add( APP_FONTNAME, 0, -11 )
    INIT DIALOG xDlg ;
       CLIPPER ;
       FONT oFont ;

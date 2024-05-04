@@ -21,9 +21,9 @@ FUNCTION frm_Preview( cFileMask )
       { "Next",     { || Button_Click( "Next",     aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
       { "Last",     { || Button_Click( "Last",     aFileList, @nIndex, oFrm:xDlg, oEdit ) } } }
 
-   gui_DialogCreate( @oFrm:xDlg, 0, 0, oFrm:nDlgWidth, oFrm:nDlgHeight, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:xDlg ) } )
+   gui_DialogCreate( @oFrm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:xDlg ) } )
    frm_Buttons( oFrm, .F. )
-   gui_MLTextCreate( oFrm:xDlg, @oEdit, 65, 10, oFrm:nDlgWidth - 40, oFrm:nDlgHeight - 120, "" )
+   gui_MLTextCreate( oFrm:xDlg, @oEdit, 65, 10, APP_DLG_WIDTH - 40, APP_DLG_HEIGHT - 120, "" )
    gui_DialogActivate( oFrm:xDlg )
 
    RETURN Nil

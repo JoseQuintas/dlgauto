@@ -271,8 +271,8 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 //   WITH OBJECT xDlg := TForm():Define()
 //      :Row := 500
 //      :Col := 1000
-//      :Width := ::nDlgWidth
-//      :Height := ::nDlgHeight
+//      :Width := APP_DLG_WIDTH
+//      :Height := APP_DLG_HEIGHT
 //      :Title := ::cFileDbf
 //      // :Init := ::DataLoad()
 //   ENDWITH
@@ -431,7 +431,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       COL      nCol
       HEIGHT   nHeight
       WIDTH    nWidth
-      FONTNAME DEFAULT_FONTNAME
+      FONTNAME APP_FONTNAME
       IF ValType( xValue ) == "N"
          NUMERIC .T.
       ELSEIF ValType( xValue ) == "D"

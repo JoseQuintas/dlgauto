@@ -21,14 +21,6 @@ CREATE CLASS frm_Class
    VAR nEditStyle      INIT 3
    VAR lWithTab        INIT .T.
 
-   VAR nDlgWidth       INIT 1024
-   VAR nDlgHeight      INIT 768
-   VAR nLineSpacing    INIT 21
-   VAR nLineHeight     INIT 20
-   VAR nButtonSize     INIT 50
-   VAR nButtonSpace    INIT 3
-   VAR nTextSize       INIT 15
-
    VAR xDlg
    VAR aControlList   INIT {}
    VAR aAllSetup      INIT {}

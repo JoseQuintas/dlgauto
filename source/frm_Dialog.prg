@@ -51,7 +51,7 @@ FUNCTION frm_Dialog( Self )
 
    SELECT ( Select( ::cFileDbf ) )
 
-   gui_DialogCreate( @::xDlg, 0, 0, ::nDlgWidth, ::nDlgHeight, ::cTitle )
+   gui_DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle )
    ::CreateControls()
    gui_DialogActivate( ::xDlg, { || ::EditOff(), ::DataLoad() } )
 

@@ -50,40 +50,54 @@ MEMVAR cTxtCode
       { "DBFIELDS",    "IDFIELD", 2 } }
 
    /* table, field, table to search, key field, field to show */
-   aSeekList := { ;
+   aSeekList := {}
+/*
       { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
       { "DBCLIENT",  "CLBANK",    "DBBANK",    "IDBANK",    "BANAME" }, ;
       { "DBTICKET",  "TICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
-      ; // { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "STNAME" }, ;
+      { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "STNAME" }, ;
       { "DBPRODUCT", "IEUNIT",    "DBUNIT",    "IDUNIT",    "UNNAME" }, ;
       { "DBSTOCK",   "STCLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBSTOCK",   "STPRODUCT", "DBPRODUCT", "IDPRODUCT", "PRNAME" }, ;
       { "DBSTOCK",   "STGROUP",   "DBGROUP",   "IDGROUP",   "GRNAME" }, ;
       { "DBFINANC",  "FICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
       { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
+*/
 
    /* Related browse */
-   aBrowseList := { ;
+   aBrowseList := {}
+/*
       { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F., "PROD LIST" }, ;
       { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F., "DBF LIST" } , ;
       { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F., "STOCK LIST" }, ;
       { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T., "FINANC LIST" }, ;
       { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F., "TICKET LIST" } }
+*/
 
    /* Combotext */
-   aComboList := { ;
+   aComboList := {}
+/*
       { "DBCLIENT", "CLSTATE", { "AC", "RS", "SP", "RJ", "PR", "RN" } } }
+*/
 
    /* checkbox */
-   aCheckList := { ;
+   aCheckList := {}
+/*
       { "DBCLIENT", "CLSTATUS" } }
+*/
 
-   aDatePickerList := { ;
+   /* datepicker */
+   aDatePickerList := {}
+/*
       { "DBCLIENT", "CLDATE" }, ;
       { "DBFINANC", "FIDATTOPAY" } }
+*/
 
-   aSpinnerList := { ;
+   /* spinner */
+   aSpinnerList := {}
+/*
       { "DBCLIENT", "CLPAYTERM", { 0, 120 } } }
+*/
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )

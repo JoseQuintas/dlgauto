@@ -410,7 +410,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       COL nCol
       HEIGHT    nHeight
       WIDTH     nWidth
-      FONTNAME DEFAULT_FONTNAME
+      FONTNAME APP_FONTNAME
       IF ValType( xValue ) == "N"
          NUMERIC .T.
          INPUTMASK cPicture

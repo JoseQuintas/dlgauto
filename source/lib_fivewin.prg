@@ -1,8 +1,10 @@
 /*
 lib_fivewin- fivewin source selected by lib.prg
 
-Note: work in progress
-note: dialog and window use are not the same
+Important:
+Only basic use
+Need a fivewin user to complete
+
 */
 
 #pragma -w1
@@ -35,8 +37,6 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       xDlg:SetMenu( oMenu )
 
       @ 400, 400 CALENDAR oCalendar VAR dDate OF xDlg PIXEL SIZE 220, 157 WEEKNUMBER DAYSTATE
-
-      //DEFINE CALEX oCalex OF xDlg FROM 400, 400 TO 1000, 1000 FIRST_DATE 0 ALL
 
    gui_DialogActivate( xDlg )
 
@@ -248,7 +248,7 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList )
 
    gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, ;
             0, "999", Nil, Nil, Nil, Nil )
