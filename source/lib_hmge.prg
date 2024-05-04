@@ -67,7 +67,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       CAPTION     cCaption
       ACTION      Eval( bAction )
       FONTNAME    APP_FONTNAME
-      FONTSIZE    8
+      FONTSIZE    7
       FONTBOLD    .T.
       FONTCOLOR   COLOR_BLACK
       VERTICAL   .T.
@@ -88,7 +88,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
    cTxtCode += [      CAPTION     ] + ToPRG( cCaption ) + hb_Eol()
    cTxtCode += [      ACTION      Eval( ] + ToPrg( bAction ) + [ )] + hb_Eol()
    cTxtCode += [      FONTNAME    ] + ToPRG( APP_FONTNAME ) + hb_Eol()
-   cTxtCode += [      FONTSIZE    8] + hb_Eol()
+   cTxtCode += [      FONTSIZE    7] + hb_Eol()
    cTxtCode += [      FONTBOLD    .T.] + hb_Eol()
    cTxtCode += [      FONTCOLOR   ] + ToPRG( COLOR_BLACK ) + hb_Eol()
    cTxtCode += [      VERTICAL   .T.] + hb_Eol()
@@ -238,7 +238,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "SPI" )
@@ -248,10 +248,10 @@ FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       PARENT ( xDlg )
       ROW nRow
       COL nCol
-      VALUE 1
+      VALUE nValue
       WIDTH nWidth
-      //ON GOTFOCUS  SetProperty( xDlg, xControl, "BACKCOLOR", { 255, 255, 0 } )
-      //ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", { 255, 255, 255 } )
+      //ON GOTFOCUS  SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
+      //ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
       RANGEMIN aList[ 1 ]
       RANGEMAX aList[ 2 ]
    END SPINNER
@@ -266,7 +266,7 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
       xControl := gui_newctlname( "DTP" )
    ENDIF
 
-   DEFINE DATEPICKER (xControl)
+   DEFINE DATEPICKER ( xControl )
       PARENT ( xDlg )
       ROW	nRow
       COL	nCol
@@ -490,7 +490,7 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 
    cTxtCode += [   PAGE ( ] + ToPRG( cText ) + [ ) IMAGE "bmpfolder"] + hb_Eol()
    cTxtCode += hb_Eol()
-   xPage := xControl
+   xPage := xDlg
    // BACKCOLOR { 50, 50, 50 }
    (xDlg); (xControl); (cText); (nPageCount)
 

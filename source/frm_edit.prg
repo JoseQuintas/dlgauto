@@ -32,7 +32,7 @@ FUNCTION frm_Edit( Self )
    FOR EACH aItem IN ::aControlList
       nHeight := 1
       DO CASE
-      CASE hb_AScan( { TYPE_BROWSE, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_SPINNER, TYPE_EDIT, TYPE_EDITML }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0
+      CASE hb_AScan( { TYPE_TAB, TYPE_TABPAGE, TYPE_HWGUIBUG, TYPE_BUTTON }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          // Nothing to do
          LOOP
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
@@ -53,7 +53,7 @@ FUNCTION frm_Edit( Self )
             nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
          ENDIF
 
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_SPINNER
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_SPINNER .OR. aItem[ CFG_CTLTYPE ] == TYPE_DATEPICKER
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nLen := ( Max( 15, Len( aItem[ CFG_CAPTION ] ) ) + Max( 6, aItem[ CFG_FLEN ] + 3 ) ) * 12
          ELSE
@@ -67,9 +67,9 @@ FUNCTION frm_Edit( Self )
             nHeight := iif( aItem[ CFG_FTYPE ] == "M", 5, Round( aItem[ CFG_FLEN ] / 100, 0 ) )
          ELSE
             IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
-               nLen := ( Len( aItem[ CFG_CAPTION ] ) + 1 + aItem[ CFG_FLEN ] + 3 ) * 12
+               nLen := ( Len( aItem[ CFG_CAPTION ] ) + 1 + Max( aItem[ CFG_FLEN ], 5 ) + 3 ) * 12
             ELSE
-               nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
+               nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), Max( aItem[ CFG_FLEN ], 5 ) ) + 3 ) * 12
             ENDIF
             IF ! Empty( aItem[ CFG_VTABLE ] )
                nLen += ( aItem[ CFG_VLEN ] + 3 ) * 12
@@ -200,7 +200,7 @@ FUNCTION frm_Edit( Self )
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nRow2 := nRow
-            nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 )
+            nCol2 := nCol + ( ( Max( Len( aItem[ CFG_CAPTION ] ), 5 ) + 3 ) * 12 )
          ELSE
             nRow2 := nRow + APP_LINE_SPACING
             nCol2 := nCol
@@ -209,17 +209,19 @@ FUNCTION frm_Edit( Self )
             nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
 
          gui_TextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, aItem[ CFG_FLEN ] * 12 + 12, APP_LINE_HEIGHT, ;
+            nRow2, nCol2, Max( aItem[ CFG_FLEN ], 5 ) * 12 + 12, APP_LINE_HEIGHT, ;
             @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
             { || ::Validate( aItem ) }, ;
             iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), { || gui_Msgbox( "click" ) }, Nil ), ;
             iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), "bmpsearch", Nil ) )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
             gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_VCONTROL ], ;
-               nRow2, nCol2 + ( aItem[ CFG_FLEN ] * 12 + 42 ), aItem[ CFG_VLEN ] * 12, ;
+               nRow2, nCol2 + ( Max( aItem[ CFG_FLEN ], 5 ) * 12 + 42 ), aItem[ CFG_VLEN ] * 12, ;
                APP_LINE_HEIGHT, Space( aItem[ CFG_VLEN ] ), .T., APP_FONTSIZE_NORMAL )
          ENDIF
          nCol := nCol + nLen + 30
+      OTHERWISE
+         gui_MsgBox( "This control is not available " + hb_ValToExp( aItem[ CFG_CTLTYPE ] ) )
       ENDCASE
       IF ::lWithTab
          IF ! aItem[ CFG_ISKEY ]

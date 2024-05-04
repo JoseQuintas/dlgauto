@@ -189,7 +189,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "SPI" )
@@ -198,7 +198,7 @@ FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       PARENT ( xDlg )
       ROW nRow
       COL nCol
-      VALUE 1
+      VALUE nValue
       WIDTH nWidth
       RANGEMIN aList[ 1 ]
       RANGEMAX aList[ 2 ]

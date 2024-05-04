@@ -79,11 +79,11 @@
    #endif
 #endif
 
-#define COLOR_BLACK   WIN_RGB( 0, 0, 0 )
-#define COLOR_WHITE   WIN_RGB( 255, 255, 255 )
-#define COLOR_YELLOW  WIN_RGB( 255, 255, 0 )
-#define COLOR_GREEN   12507070
-#define APP_FONTNAME "verdana"
+#define COLOR_BLACK         WIN_RGB( 0, 0, 0 )
+#define COLOR_WHITE         WIN_RGB( 255, 255, 255 )
+#define COLOR_YELLOW        WIN_RGB( 255, 255, 0 )
+#define COLOR_GREEN         12507070
+#define APP_FONTNAME        "verdana"
 #define APP_FONTSIZE_NORMAL 10
 #define APP_FONTSIZE_SMALL  8
 #define APP_LINE_HEIGHT     20
@@ -92,4 +92,4 @@
 #define APP_BUTTON_BETWEEN  3
 #define APP_DLG_WIDTH       1024
 #define APP_DLG_HEIGHT      768
-#define PREVIEW_FONTNAME "Courier New"
+#define PREVIEW_FONTNAME    "Courier New"

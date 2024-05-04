@@ -137,9 +137,9 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
 
-   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, 0 )
+   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @nValue )
    (aList)
 
    RETURN Nil
