@@ -1,10 +1,8 @@
 /*
 lib_fivewin- fivewin source selected by lib.prg
 
-Important:
-Only basic use
-Need a fivewin user to complete
-
+Can't be used on current simulator.
+Basic screen only
 */
 
 #pragma -w1
