@@ -8,8 +8,6 @@ REQUEST DBFCDX
 #include "dbstruct.ch"
 #include "frm_class.ch"
 
-MEMVAR cTxtCode
-
 #ifdef DLGAUTO_AS_LIB
    PROCEDURE DlgAuto()
 #else
@@ -19,8 +17,6 @@ MEMVAR cTxtCode
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList
    LOCAL aDatePickerList, aSpinnerList
-
-   PRIVATE cTxtCode := ""
 
    SET CONFIRM OFF
    SET CENTURY ON
