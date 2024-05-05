@@ -101,8 +101,8 @@ MEMVAR cTxtCode
          aItem[ CFG_FTYPE ]    := aField[ DBS_TYPE ]
          aItem[ CFG_FLEN ]     := aField[ DBS_LEN ]
          aItem[ CFG_FDEC ]     := aField[ DBS_DEC ]
-         aItem[ CFG_VALUE ]    := aField[ DBS_NAME ]
-         aItem[ CFG_CAPTION ]  := Upper( Substr( aField[ DBS_NAME ], 1, 1 ) ) + Lower( Substr( aField[ DBS_NAME ], 2 ) )
+         aItem[ CFG_VALUE ]    := FieldGet( aField:__EnumIndex )
+         aItem[ CFG_CAPTION ]  := aField[ DBS_NAME ]
          aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
          /* is key */
          IF hb_ASCan( aKeyList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
