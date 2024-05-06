@@ -11,9 +11,12 @@ FUNCTION frm_Edit( Self )
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
    LOCAL aKeyCodeList, aDlgKeyCodeList := {}, xTabPage, nHeight
 
+   /* began control list with fields */
    FOR EACH aItem IN ::aEditList
       AAdd( ::aControlList, AClone( aItem ) )
    NEXT
+
+   /* create tab, if use tab */
    IF ::lWithTab
       gui_TabCreate( ::xDlg, @xTab, 70, 5, APP_DLG_WIDTH - 19, APP_DLG_HEIGHT - 75 )
       AAdd( ::aControlList, CFG_EMPTY )
@@ -25,10 +28,12 @@ FUNCTION frm_Edit( Self )
    ENDIF
    nCol := 10
    FOR EACH aItem IN ::aControlList
+
+     /* check needed size */
       nHeight := 1
       DO CASE
       CASE hb_AScan( { TYPE_TAB, TYPE_TABPAGE, TYPE_HWGUIBUG, TYPE_BUTTON }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
-         // Nothing to do
+         /* these controls do not need additional code */
          LOOP
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          nLen := APP_DLG_WIDTH - 30
@@ -73,12 +78,16 @@ FUNCTION frm_Edit( Self )
       OTHERWISE
          gui_MsgBox( "Check about control type " + hb_ValToExp( aItem[ CFG_CTLTYPE ] ) )
       ENDCASE
+
+      /* check max row and max col */
       IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + nLen > APP_DLG_WIDTH - 40 )
          IF ! lFirst
             nRow += ( APP_LINE_SPACING * iif( ::nEditStyle < 3, 1, 2 ) )
          ENDIF
          nCol := 10
       ENDIF
+
+      /* check if create a new tabpage */
       IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  ) > APP_DLG_HEIGHT - 100
          IF nPageCount > 0
             gui_TabPageEnd( ::xDlg, xTab, xTabPage )
@@ -93,6 +102,8 @@ FUNCTION frm_Edit( Self )
          lFirst := .T.
          (lFirst)
       ENDIF
+
+      /* create control */
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
@@ -107,6 +118,7 @@ FUNCTION frm_Edit( Self )
                EXIT
             ENDIF
          NEXT
+         /* if editable browse, keys to do that */
          IF aItem[ CFG_BRWEDIT ]
             aKeyCodeList := { ;
                { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BRWTABLE ] ) } }, ;
@@ -226,7 +238,7 @@ FUNCTION frm_Edit( Self )
       lFirst := .F.
    NEXT
 #ifdef HBMK_HAS_HWGUI
-   // dummy textbox to works last valid
+   /* dummy textbox to works last valid */
    AAdd( ::aControlList, CFG_EMPTY )
    Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_HWGUIBUG
    gui_TextCreate( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
