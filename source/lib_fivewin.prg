@@ -151,19 +151,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
 FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
-/*
-   DEFINE DATEPICKER (xControl)
-      PARENT ( xDlg )
-      ROW	nRow
-      COL	nCol
-      VALUE dValue
-      TOOLTIP 'DatePicker Control'
-      SHOWNONE .F.
-      TITLEBACKCOLOR BLACK
-      TITLEFONTCOLOR YELLOW
-      TRAILINGFONTCOLOR PURPLE
-   END DATEPICKER
-*/
+   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, dValue )
    (nWidth);(nHeight);(xDlg);(xControl);(nRow);(nCol);(dValue)
 
    RETURN Nil

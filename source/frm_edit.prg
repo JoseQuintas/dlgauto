@@ -237,13 +237,13 @@ FUNCTION frm_Edit( Self )
       ENDIF
       lFirst := .F.
    NEXT
-#ifdef HBMK_HAS_HWGUI
-   /* dummy textbox to works last valid */
-   AAdd( ::aControlList, CFG_EMPTY )
-   Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_HWGUIBUG
-   gui_TextCreate( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-      nRow, nCol, 0, 0, "", "", 0, { || .T. } )
-#endif
+   IF gui_LibName() == "HWGUI"
+      /* dummy textbox to works last valid */
+      AAdd( ::aControlList, CFG_EMPTY )
+      Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_HWGUIBUG
+      gui_TextCreate( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+         nRow, nCol, 0, 0, "", "", 0, { || .T. } )
+   ENDIF
    IF ::lWithTab
       gui_TabPageEnd( ::xDlg, xTab )
       gui_TabNavigate( ::xDlg, xTab, aList )

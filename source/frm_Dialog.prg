@@ -56,7 +56,7 @@ FUNCTION frm_Dialog( Self )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
 #endif
-   //fivewin do not wait dialog close
+   //fivewin window is not modal
    //CLOSE DATABASES
 
    RETURN Nil

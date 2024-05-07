@@ -7,9 +7,7 @@ lib_hmge - HMG Extended source selected by lib.prg
 FUNCTION gui_Init()
 
 #ifdef DLGAUTO_AS_LIB
-   #ifdef HBMK_HAS_HMGE
-      Init()
-   #endif
+   Init()
 #endif
    SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
    SET MENUSTYLE EXTENDED
@@ -274,6 +272,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
       TITLE cTitle ;
       ICON "APPICON" ;
       FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
+      ; // BACKCOLOR { 226, 220, 213 } ;
       ; // MODAL ; // bad using WINDOW MAIN OFF
       ON INIT Eval( bInit ) ;
       ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
@@ -385,6 +384,7 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       AT nRow, nCol;
       WIDTH nWidth ;
       HEIGHT nHeight ;
+      ; // BACKCOLOR { 226, 220, 213 } ;
       HOTTRACK
 
    RETURN Nil
