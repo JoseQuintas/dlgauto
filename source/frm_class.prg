@@ -117,7 +117,9 @@ METHOD ButtonSaveOn( lSave ) CLASS frm_Class
    hb_Default( @lSave, .T. )
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF aItem[ CFG_CAPTION ] $ "Cancel" + iif( lSave, ",Save", "" )
+         IF lSave .AND. gui_LibName() == "HMGE" .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+         ELSEIF aItem[ CFG_CAPTION ] $ "Cancel" + iif( lSave, ",Save", "" )
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          ELSE
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
@@ -134,6 +136,8 @@ METHOD ButtonSaveOff() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
+         ELSEIF gui_LibName() == "HMGE" .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
@@ -174,6 +178,9 @@ METHOD EditOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
+            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+      ELSEIF gui_LibName() == "HMGE" .AND. aItem[ CFG_CTLTYPE ] == TYPE_BUTTON ;
+         .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
       ELSEIF hb_AScan( { TYPE_EDIT, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ]

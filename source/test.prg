@@ -62,8 +62,8 @@ REQUEST DBFCDX
    aBrowseList := { ;
       { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F., "PROD LIST" }, ;
       { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F., "DBF LIST" } , ;
-      { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F., "STOCK LIST" }, ;
       { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T., "FINANC LIST" }, ;
+      { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F., "STOCK LIST" }, ;
       { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F., "TICKET LIST" } }
 
    /* Combotext */

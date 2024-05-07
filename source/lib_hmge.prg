@@ -75,14 +75,16 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
    RETURN Nil
 
 FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
-   cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
+   cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList, aControlList )
 
-   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
+   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
 
    IF Empty( xControl )
       xControl := gui_newctlname( "BRW" )
    ENDIF
-
+   IF ValType( aKeyCodeList ) != "A"
+      aKeyCodeList := {}
+   ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
@@ -97,7 +99,6 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       WIDTH nWidth - 20
       HEIGHT nHeight - 20
       IF ValType( aKeyCodeList ) != "A"
-         aKeyCodeList := {}
          ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
       ENDIF
       HEADERS aHeaderList
@@ -106,6 +107,19 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       FIELDS aFieldList
       SET BROWSESYNC ON
    END BROWSE
+   IF Len( aKeyCodeList ) != 0
+      FOR EACH aThisKey IN aKeyCodeList
+         AAdd( aControlList, CFG_EMPTY )
+         Atail( aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
+         Atail( aControlList )[ CFG_FCONTROL ] := gui_NewCtlName( "BTNBRW" )
+         gui_ButtonCreate( xDlg, @Atail( aControlList )[ CFG_FCONTROL ], ;
+         nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+         iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
+         iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
+         iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
+      NEXT
+      // some buttons
+   ENDIF
    FOR EACH aItem IN aKeyCodeList
       AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
       _DefineHotKey( xDlg, 0, aItem[ 1 ], ;
