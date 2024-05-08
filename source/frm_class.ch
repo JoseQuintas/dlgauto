@@ -27,8 +27,9 @@
 #define CFG_COMBOLIST  26                    // array for combo
 #define CFG_SPINNER    26                    // min/max for spinner
 
-#define CFG_EMPTY { "", "C", 1, 0, .F., "", "", {}, "", "", "", Nil, 0, TYPE_EDIT, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil, Nil }
+#define CFG_EMPTY { "", "C", 1, 0, .F., "", "", {}, "", "", "", Nil, 0, TYPE_NONE, Nil, Nil, Nil, Nil, Nil, Nil, 1, Nil, Nil, Nil, Nil, Nil }
 
+#define TYPE_NONE       0
 #define TYPE_BUTTON     1
 #define TYPE_EDIT       2
 #define TYPE_TAB        3
@@ -42,33 +43,8 @@
 #define TYPE_EDITML     13 // multiline
 #define TYPE_SPINNER    14
 
-#ifdef HBMK_HAS_HWGUI
-   #include "hwgui.ch"
-#endif
-
-#ifdef HBMK_HAS_HMG3
-   #include "hmg.ch"
-   #include "i_altsyntax.ch"
-#endif
-
-#ifdef HBMK_HAS_HMGE
-   #include "hmg.ch"
-   #include "i_altsyntax.ch"
-   #include "i_winuser.ch"
-#endif
-
-#ifdef HBMK_HAS_OOHG
-   #include "oohg.ch"
-   #include "i_altsyntax.ch"
-#endif
-
 #ifdef HBMK_HAS_GTWVG
    #include "gtwvg.ch"
-#endif
-
-#ifdef HBMK_HAS_FIVEWIN
-   #include "fivewin.ch"
-   #include "calendar.ch"
 #endif
 
 #ifndef WIN_RGB

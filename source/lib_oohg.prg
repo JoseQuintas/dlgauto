@@ -5,6 +5,8 @@ Note: Or use name or object, but can't mix on this source code
 */
 
 #include "frm_class.ch"
+#include "oohg.ch"
+#include "i_altsyntax.ch"
 
 FUNCTION gui_Init()
 
@@ -72,12 +74,15 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
    RETURN Nil
 
 FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
-   cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
+   cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList, aControlList )
 
-   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
+   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
 
    IF Empty( xControl )
       xControl := gui_newctlname( "BROWSE" )
+   ENDIF
+   IF ValType( aKeyCodeList ) != "A"
+      aKeyCodeList := {}
    ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
@@ -104,6 +109,19 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
          WORKAREA ( workarea ) ;
          FIELDS aFieldList ;
          ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+   ENDIF
+   IF Len( aKeyCodeList ) != 0
+      FOR EACH aThisKey IN aKeyCodeList
+         AAdd( aControlList, CFG_EMPTY )
+         Atail( aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
+         Atail( aControlList )[ CFG_FCONTROL ] := gui_NewCtlName( "BTNBRW" )
+         gui_ButtonCreate( xDlg, @Atail( aControlList )[ CFG_FCONTROL ], ;
+         nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+         iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
+         iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
+         iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
+      NEXT
+      // some buttons
    ENDIF
    IF ! Empty( aKeyCodeList )
       FOR EACH aItem IN aKeyCodeList

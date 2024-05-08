@@ -3,6 +3,7 @@ lib_hwgui - hwgui source selected by lib.prg
 */
 
 #include "frm_class.ch"
+#include "hwgui.ch"
 
 STATIC lDrawboard := .F.
 

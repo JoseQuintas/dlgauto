@@ -7,6 +7,8 @@ Basic screen only
 
 #pragma -w1
 #include "frm_class.ch"
+#include "fivewin.ch"
+#include "calendar.ch"
 
 FUNCTION gui_Init()
 

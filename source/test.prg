@@ -16,7 +16,7 @@ REQUEST DBFCDX
 
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList
-   LOCAL aDatePickerList, aSpinnerList
+   LOCAL aDatePickerList, aSpinnerList, cFieldName
 
    SET CONFIRM OFF
    SET CENTURY ON
@@ -93,6 +93,7 @@ REQUEST DBFCDX
       aStru := dbStruct()
       FOR EACH aField IN aStru
          aItem := CFG_EMPTY
+         aItem[ CFG_CTLTYPE ]  := TYPE_EDIT
          aItem[ CFG_FNAME ]    := aField[ DBS_NAME ]
          aItem[ CFG_FTYPE ]    := aField[ DBS_TYPE ]
          aItem[ CFG_FLEN ]     := aField[ DBS_LEN ]
@@ -100,18 +101,19 @@ REQUEST DBFCDX
          aItem[ CFG_VALUE ]    := FieldGet( aField:__EnumIndex )
          aItem[ CFG_CAPTION ]  := aField[ DBS_NAME ]
          aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
+         cFieldName := aItem[ CFG_FNAME ]
          /* is key */
-         IF hb_ASCan( aKeyList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
+         IF hb_ASCan( aKeyList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) != 0
             aItem[ CFG_ISKEY ] := .T.
          ENDIF
          /* to search */
-         IF ( nPos := hb_ASCan( aSeekList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+         IF ( nPos := hb_ASCan( aSeekList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) ) != 0
             aItem[ CFG_VTABLE ] := aSeekList[ nPos, 3 ]
             aItem[ CFG_VFIELD ] := aSeekList[ nPos, 4 ]
             aItem[ CFG_VSHOW ]  := aSeekList[ nPos, 5 ]
          ENDIF
          /* combotext */
-         IF ( nPos := hb_Ascan( aComboList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+         IF ( nPos := hb_Ascan( aComboList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) ) != 0
             aItem[ CFG_COMBOLIST ] := aComboList[ nPos, 3 ]
             aItem[ CFG_CTLTYPE ] := TYPE_COMBOBOX
          ENDIF
@@ -120,11 +122,11 @@ REQUEST DBFCDX
             aItem[ CFG_CTLTYPE ] := TYPE_CHECKBOX
          ENDIF
          /* datepicker */
-         IF hb_Ascan( aDatePickerList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
+         IF hb_Ascan( aDatePickerList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) != 0
             aItem[ CFG_CTLTYPE ] := TYPE_DATEPICKER
          ENDIF
          /* spinner */
-         IF ( nPos := hb_Ascan( aSpinnerList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) ) != 0
+         IF ( nPos := hb_Ascan( aSpinnerList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) ) != 0
             aItem[ CFG_SPINNER ] := aSpinnerList[ nPos, 3 ]
             aItem[ CFG_CTLTYPE ] := TYPE_SPINNER
          ENDIF

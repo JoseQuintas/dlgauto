@@ -4,6 +4,11 @@ frm_Edit - Create textbox/label on dialog
 
 #include "hbclass.ch"
 #include "frm_class.ch"
+#ifndef VK_INSERT
+   #define VK_INSERT  45
+   #define VK_DELETE  46
+   #define VK_RETURN  13
+#endif
 
 FUNCTION frm_Edit( Self )
 
@@ -37,7 +42,7 @@ FUNCTION frm_Edit( Self )
          LOOP
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          nLen := APP_DLG_WIDTH - 30
-         nHeight := 5
+         nHeight := 7
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
@@ -207,7 +212,7 @@ FUNCTION frm_Edit( Self )
       CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nRow2 := nRow
-            nCol2 := nCol + ( ( Max( Len( aItem[ CFG_CAPTION ] ), 5 ) + 3 ) * 12 )
+            nCol2 := nCol + ( Max( Len( aItem[ CFG_CAPTION ] ), 5 ) * 12 )
          ELSE
             nRow2 := nRow + APP_LINE_SPACING
             nCol2 := nCol

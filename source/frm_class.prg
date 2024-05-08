@@ -18,7 +18,7 @@ CREATE CLASS frm_Class
    VAR aOptionList     INIT {}
    VAR cSelected       INIT "NONE"
 
-   VAR nEditStyle      INIT 3
+   VAR nEditStyle      INIT 2
    VAR lWithTab        INIT .T.
 
    VAR xDlg

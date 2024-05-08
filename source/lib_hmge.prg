@@ -3,6 +3,9 @@ lib_hmge - HMG Extended source selected by lib.prg
 */
 
 #include "frm_class.ch"
+#include "hmg.ch"
+#include "i_altsyntax.ch"
+#include "i_winuser.ch"
 
 FUNCTION gui_Init()
 
@@ -118,7 +121,6 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
          iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
          iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
       NEXT
-      // some buttons
    ENDIF
    FOR EACH aItem IN aKeyCodeList
       AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
