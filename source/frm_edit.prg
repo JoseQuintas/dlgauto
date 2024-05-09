@@ -65,9 +65,9 @@ FUNCTION frm_Edit( Self )
             nLen := ( Max( 6, Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) ) + 3 ) * 12
          ENDIF
 
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_TEXT
          IF aItem[ CFG_FLEN ] > 100 .OR. aItem[ CFG_FTYPE ] == "M"
-            aItem[ CFG_CTLTYPE ] := TYPE_EDITML
+            aItem[ CFG_CTLTYPE ] := TYPE_MLTEXT
             nLen := APP_DLG_WIDTH - 30
             nHeight := iif( aItem[ CFG_FTYPE ] == "M", 5, Round( aItem[ CFG_FLEN ] / 100, 0 ) )
          ELSE
@@ -141,14 +141,6 @@ FUNCTION frm_Edit( Self )
          SELECT ( Select( ::cFileDBF ) )
          nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  )
 
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_EDITML
-         nRow2 := nRow + APP_LINE_SPACING
-         gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
-         gui_MLTextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, 5, APP_DLG_WIDTH - 30, nHeight * APP_LINE_HEIGHT, @aItem[ CFG_VALUE ] )
-         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  )
-
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nRow2 := nRow
@@ -209,7 +201,15 @@ FUNCTION frm_Edit( Self )
             nRow2, nCol2, Max( 6, Len( aItem[ CFG_CAPTION ] ) ) * 12, APP_LINE_HEIGHT, @aItem[ CFG_VALUE ], aItem[ CFG_SPINNER ] )
          nCol += nLen
 
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_MLTEXT // multiline
+         nRow2 := nRow + APP_LINE_SPACING
+         gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
+            nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
+         gui_MLTextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
+            nRow2, 5, APP_DLG_WIDTH - 30, nHeight * APP_LINE_HEIGHT, @aItem[ CFG_VALUE ] )
+         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  )
+
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_TEXT
          IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
             nRow2 := nRow
             nCol2 := nCol + ( Max( Len( aItem[ CFG_CAPTION ] ), 5 ) * 12 )

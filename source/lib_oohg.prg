@@ -90,7 +90,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       AAdd( aWidthList, ( 1 + Max( Len( aItem[1] ), ;
          Len( Transform( FieldGet( FieldNum(aItem[ 1 ] ) ), aItem[ 3 ] ) ) ) ) * 13 )
    NEXT
-   IF ValType( aKeyCodeList ) == "A"
+   IF Len( aKeyCodeList ) != 0
       @ nRow, nCol BROWSE ( xControl ) ;
          OF ( xParent ) ;
          WIDTH nWidth - 20 ;

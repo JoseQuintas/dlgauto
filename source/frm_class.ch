@@ -31,7 +31,7 @@
 
 #define TYPE_NONE       0
 #define TYPE_BUTTON     1
-#define TYPE_EDIT       2
+#define TYPE_TEXT       2
 #define TYPE_TAB        3
 #define TYPE_TABPAGE    4
 #define TYPE_BROWSE     5
@@ -40,7 +40,7 @@
 #define TYPE_CHECKBOX   10
 #define TYPE_STATUSBAR  11
 #define TYPE_DATEPICKER 12
-#define TYPE_EDITML     13 // multiline
+#define TYPE_MLTEXT     13 // multiline
 #define TYPE_SPINNER    14
 
 #ifdef HBMK_HAS_GTWVG

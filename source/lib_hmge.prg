@@ -101,7 +101,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       COL nCol
       WIDTH nWidth - 20
       HEIGHT nHeight - 20
-      IF ValType( aKeyCodeList ) != "A"
+      IF Len( aKeyCodeList ) == 0
          ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
       ENDIF
       HEADERS aHeaderList
@@ -110,6 +110,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       FIELDS aFieldList
       SET BROWSESYNC ON
    END BROWSE
+   /* create buttons on browse for defined keys */
    IF Len( aKeyCodeList ) != 0
       FOR EACH aThisKey IN aKeyCodeList
          AAdd( aControlList, CFG_EMPTY )
@@ -122,6 +123,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
          iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
       NEXT
    ENDIF
+   /* redefine keys with cumulative actions */
    FOR EACH aItem IN aKeyCodeList
       AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
       _DefineHotKey( xDlg, 0, aItem[ 1 ], ;
@@ -142,6 +144,7 @@ STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, 
    ENDIF
    IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyCodeList, { | e | e[ 2 ] == VK_RETURN } ) != 0
       cType := GetProperty( xDlg, GetProperty( xDlg, "FOCUSEDCONTROL" ), "TYPE" )
+      /* ENTER next focus, because a defined key can change default */
       IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT", "SPINNER", "DATEPICKER", "CHECKBOX" }, { | e | e == cType } ) != 0
          _SetNextFocus()
       ENDIF
@@ -479,6 +482,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    //ELSE
       END GETBOX
    //ENDIF
+   /* F9 on key fields will make a browse */
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
       IF aItem[ CFG_ISKEY ]
          AAdd( aDlgKeyCodeList, { xControl, VK_F9, { || gui_MsgBox( "browse" ) } } )
@@ -523,22 +527,3 @@ STATIC FUNCTION gui_newctlname( cPrefix )
    hb_Default( @cPrefix, "ANY" )
 
    RETURN cPrefix + StrZero( nCount, 10 )
-
-STATIC FUNCTION ToPRG( xValue )
-
-   DO CASE
-   CASE ValType( xValue ) == "N"
-      xValue := Ltrim( Str( xValue ) )
-   CASE ValType( xValue ) == "C"
-      xValue := ["] + xValue + ["]
-   CASE ValType( xValue ) == "D"
-      xValue := [Stod( ] + ToPRG( Dtos( Date() ) ) + [ )]
-   CASE ValType( xValue ) == "L"
-      xValue := iif( xValue, ".T.", ".F." )
-   CASE ValType( xValue ) == "A"
-      xValue := hb_ValToExp( xValue )
-   CASE ValType( xValue ) == "B"
-      xValue := [{ || Nil } /] + [* can't translate *] + [/]
-   ENDCASE
-
-   RETURN xValue

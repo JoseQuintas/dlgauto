@@ -25,7 +25,7 @@ FUNCTION frm_Print( Self )
          nLin := 2
          nCol := 0
          FOR EACH aItem IN ::aEditList
-            IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+            IF aItem[ CFG_CTLTYPE ] == TYPE_TEXT
                nLen := Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), aItem[ CFG_FPICTURE ] ) ) )
                IF nCol != 0 .AND. nCol + nLen > PAGE_COLS - 1
                   nLin += 1
@@ -40,7 +40,7 @@ FUNCTION frm_Print( Self )
       nCol := 0
       nLinAnt := nLin
       FOR EACH aItem IN ::aEditList
-         IF aItem[ CFG_CTLTYPE ] == TYPE_EDIT
+         IF aItem[ CFG_CTLTYPE ] == TYPE_TEXT
             nLen := Max( Len( aItem[ CFG_CAPTION ] ), Len( Transform( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ), aItem[ CFG_FPICTURE ] ) ) )
             IF nCol != 0 .AND. nCol + nLen > PAGE_COLS - 1
                nLin += 1

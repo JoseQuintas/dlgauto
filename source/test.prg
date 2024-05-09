@@ -93,7 +93,7 @@ REQUEST DBFCDX
       aStru := dbStruct()
       FOR EACH aField IN aStru
          aItem := CFG_EMPTY
-         aItem[ CFG_CTLTYPE ]  := TYPE_EDIT
+         aItem[ CFG_CTLTYPE ]  := TYPE_TEXT
          aItem[ CFG_FNAME ]    := aField[ DBS_NAME ]
          aItem[ CFG_FTYPE ]    := aField[ DBS_TYPE ]
          aItem[ CFG_FLEN ]     := aField[ DBS_LEN ]
