@@ -436,7 +436,7 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
    RETURN Nil
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
-            xValue, cPicture, nMaxLength, bValid, bAction, cImage  )
+            xValue, cPicture, nMaxLength, bValid, bAction, cImage, aDlgKeyCodeList, aItem  )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "TXT" )
@@ -479,6 +479,15 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    //ELSE
       END GETBOX
    //ENDIF
+   IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
+      IF aItem[ CFG_ISKEY ]
+         AAdd( aDlgKeyCodeList, { xControl, VK_F9, { || gui_MsgBox( "browse" ) } } )
+      ELSE
+         AAdd( aDlgKeyCodeList, { xControl, VK_F9, { || gui_MsgBox( "browse" ) } } )
+      ENDIF
+      _DefineHotKey( xDlg, 0, VK_F9, ;
+         { || gui_DlgKeyDown( xDlg, xControl, VK_F9, aItem[ CFG_VTABLE ], aItem[ CFG_VFIELD ], @aItem[ CFG_VALUE ], aDlgKeyCodeList ) } )
+   ENDIF
    (bValid)
 
    RETURN Nil

@@ -46,7 +46,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
-   @ nRow, nCol BUTTONBMP xControl PIXEL  PROMPT cCaption OF xDlg SIZE nWidth, nHeight RESOURCE cResName TOP ACTION Eval( bAction )
+   @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xDlg SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
 
    RETURN Nil

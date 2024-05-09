@@ -2,11 +2,7 @@
 frm_print - single report
 */
 
-#define CFG_FNAME     1
-#define CFG_FPICTURE  6
-#define CFG_CAPTION   7
-#define CFG_CTLTYPE   14
-#define TYPE_EDIT     2
+#include "frm_class.ch"
 #define PAGE_ROWS     66
 #define PAGE_COLS     132
 
