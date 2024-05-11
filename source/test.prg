@@ -92,7 +92,7 @@ REQUEST DBFCDX
       USE ( cFile )
       aStru := dbStruct()
       FOR EACH aField IN aStru
-         aItem := CFG_EMPTY
+         aItem := EmptyFrmClassItem()
          aItem[ CFG_CTLTYPE ]  := TYPE_TEXT
          aItem[ CFG_FNAME ]    := aField[ DBS_NAME ]
          aItem[ CFG_FTYPE ]    := aField[ DBS_TYPE ]
@@ -136,7 +136,7 @@ REQUEST DBFCDX
       /* in browse */
       FOR EACH aBrowse IN aBrowseList
          IF aBrowse[ 1 ] == cFile
-            aItem := CFG_EMPTY
+            aItem := EmptyFrmClassItem()
             aItem[ CFG_CTLTYPE ]    := TYPE_BROWSE
             aItem[ CFG_BRWKEYFROM ] := aBrowse[ 2 ]
             aItem[ CFG_BRWTABLE ]   := aBrowse[ 3 ]

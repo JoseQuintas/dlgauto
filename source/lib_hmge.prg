@@ -113,7 +113,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    /* create buttons on browse for defined keys */
    IF Len( aKeyCodeList ) != 0
       FOR EACH aThisKey IN aKeyCodeList
-         AAdd( aControlList, CFG_EMPTY )
+         AAdd( aControlList, EmptyFrmClassItem() )
          Atail( aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
          Atail( aControlList )[ CFG_FCONTROL ] := gui_NewCtlName( "BTNBRW" )
          gui_ButtonCreate( xDlg, @Atail( aControlList )[ CFG_FCONTROL ], ;
@@ -439,7 +439,7 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
    RETURN Nil
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
-            xValue, cPicture, nMaxLength, bValid, bAction, cImage, aDlgKeyCodeList, aItem  )
+            xValue, cPicture, nMaxLength, bValid, bAction, cImage, aDlgKeyCodeList, aItem, cWorkArea, oFrmClass  )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "TXT" )
@@ -484,11 +484,8 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    //ENDIF
    /* F9 on key fields will make a browse */
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
-      IF aItem[ CFG_ISKEY ]
-         AAdd( aDlgKeyCodeList, { xControl, VK_F9, { || gui_MsgBox( "browse" ) } } )
-      ELSE
-         AAdd( aDlgKeyCodeList, { xControl, VK_F9, { || gui_MsgBox( "browse" ) } } )
-      ENDIF
+      AAdd( aDlgKeyCodeList, { xControl, VK_F9, ;
+         { || frm_Browse( oFrmClass, xDlg, xControl, cWorkArea ) } } )
       _DefineHotKey( xDlg, 0, VK_F9, ;
          { || gui_DlgKeyDown( xDlg, xControl, VK_F9, aItem[ CFG_VTABLE ], aItem[ CFG_VFIELD ], @aItem[ CFG_VALUE ], aDlgKeyCodeList ) } )
    ENDIF

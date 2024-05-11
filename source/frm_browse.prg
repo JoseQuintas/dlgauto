@@ -47,7 +47,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    oThisForm:cOptions := ""
    gui_DialogCreate( @oThisForm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, gui_libName() + " " + cTable, { || Nil } )
    frm_Buttons( oThisForm, .F. )
-   AAdd( oThisForm:aControlList, CFG_EMPTY )
+   AAdd( oThisForm:aControlList, EmptyFrmClassItem() )
    aItem := Atail( oThisForm:aControlList )
    aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
    gui_Browse( oThisForm:xDlg, oThisForm:xDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;

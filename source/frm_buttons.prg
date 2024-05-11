@@ -40,7 +40,7 @@ FUNCTION frm_Buttons( Self, lDefault )
    nCol := 10
    nRow := 10
    FOR EACH aItem IN aList
-      AAdd( ::aControlList, CFG_EMPTY )
+      AAdd( ::aControlList, EmptyFrmClassItem() )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_BUTTON
       Atail( ::aControlList )[ CFG_CAPTION ] := aItem[1]
       Atail( ::aControlList )[ CFG_ACTION ]   := aItem[ 2 ]

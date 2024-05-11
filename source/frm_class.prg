@@ -330,3 +330,38 @@ METHOD DataSave() CLASS frm_Class
    ::cSelected := "NONE"
 
    RETURN Nil
+
+FUNCTION EmptyFrmClassItem()
+
+   LOCAL aItem
+
+   aItem := Array(26)
+   aItem[ CFG_FNAME ]      := ""
+   aItem[ CFG_FTYPE ]      := "C"
+   aItem[ CFG_FLEN ]       := 1
+   aItem[ CFG_FDEC ]       := 0
+   aItem[ CFG_ISKEY ]      := .F.
+   aItem[ CFG_FPICTURE ]   := ""
+   aItem[ CFG_CAPTION ]    := ""
+   aItem[ CFG_VALID ]      := {}
+   aItem[ CFG_VTABLE ]     := ""
+   aItem[ CFG_VFIELD ]     := ""
+   aItem[ CFG_VSHOW ]      := ""
+   //aItem[ CFG_VALUE ]      := Nil
+   aItem[ CFG_VLEN ]       := 0
+   aItem[ CFG_CTLTYPE ]    := TYPE_NONE
+   //aItem[ CFG_FCONTROL ]   := Nil
+   //aItem[ CFG_CCONTROL ]   := Nil
+   //aItem[ CFG_VCONTROL ]   := Nil
+   //aItem[ CFG_ACTION ]     := Nil
+   //aItem[ CFG_BRWTABLE ]   := Nil
+   //aItem[ CFG_BRWKEYFROM ] := Nil
+   //aItem[ CFG_BRWIDXORD ]  := Nil
+   //aItem[ CFG_BRWKEYTO ]   := Nil
+   //aItem[ CFG_BRWKEYTO2 ]  := Nil
+   //aItem[ CFG_BRWVALUE ]   := Nil
+   //aItem[ CFG_BRWEDIT ]    := Nil
+   //aItem[ CFG_BRWTITLE ]   := Nil
+
+   RETURN aItem
+

@@ -109,7 +109,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    ENDIF
    IF Len( aKeyCodeList ) != 0
       FOR EACH aThisKey IN aKeyCodeList
-         AAdd( aControlList, CFG_EMPTY )
+         AAdd( aControlList, EmptyFrmClassItem() )
          Atail( aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
          Atail( aControlList )[ CFG_FCONTROL ] := gui_NewCtlName( "BTNBRW" )
          gui_ButtonCreate( xDlg, @Atail( aControlList )[ CFG_FCONTROL ], ;
