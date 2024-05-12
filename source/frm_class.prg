@@ -47,6 +47,8 @@ CREATE CLASS frm_Class
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
    METHOD Validate( aItem )    INLINE frm_Valid( aItem, Self )
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
+   METHOD frmDefBrowseAction( aItem, cOption ) INLINE ;
+      gui_MsgBox( aItem[ CFG_BRWTABLE ] + " option " + cOption )
 
    ENDCLASS
 

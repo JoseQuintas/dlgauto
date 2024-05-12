@@ -127,9 +127,9 @@ FUNCTION frm_Edit( Self )
          /* if editable browse, keys to do that */
          IF aItem[ CFG_BRWEDIT ]
             aKeyCodeList := { ;
-               { VK_INSERT, { || gui_MsgBox( "INSERT " + aItem[ CFG_BRWTABLE ] ) } }, ;
-               { VK_DELETE, { || gui_MsgBox( "DELETE " + aItem[ CFG_BRWTABLE ] ) } }, ;
-               { VK_RETURN, { || gui_MsgBox( "EDIT "   + aItem[ CFG_BRWTABLE ] ) } } }
+               { VK_INSERT, { || ::FrmDefBrowseAction( aItem, "INSERT" ) } }, ;
+               { VK_DELETE, { || ::FrmDefBrowseAction( aItem, "DELETE" ) } }, ;
+               { VK_RETURN, { || ::FrmDefBrowseAction( aItem, "EDIT" ) } } }
          ELSE
             aKeyCodeList := {}
          ENDIF
@@ -256,5 +256,7 @@ FUNCTION frm_Edit( Self )
       gui_TabNavigate( ::xDlg, xTab, aList )
       gui_TabEnd( xTab, nPageCount )
    ENDIF
+   // will be used later
+   // gui_DlgSetKey( ::xDlg, aDlgKeyCodeList )
 
    RETURN Nil
