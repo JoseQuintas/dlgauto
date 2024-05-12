@@ -32,6 +32,7 @@ FUNCTION frm_Edit( Self )
       nRow := 40
    ENDIF
    nCol := 10
+
    FOR EACH aItem IN ::aControlList
 
      /* check needed size */
@@ -255,11 +256,5 @@ FUNCTION frm_Edit( Self )
       gui_TabNavigate( ::xDlg, xTab, aList )
       gui_TabEnd( xTab, nPageCount )
    ENDIF
-
-   //AAdd( ::aControlList, EmptyFrmClassItem() )
-   //Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_STATUSBAR
-   //gui_Statusbar( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ] )
-   (nRow2)
-   (nCol2)
 
    RETURN Nil

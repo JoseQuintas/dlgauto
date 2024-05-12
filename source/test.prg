@@ -201,8 +201,10 @@ STATIC FUNCTION PictureFromValue( oValue )
 
    RETURN cPicture
 
+#ifndef DLGAUTO_AS_LIB
 FUNCTION AppVersaoExe(); RETURN ""
 FUNCTION AppUserName(); RETURN ""
+#endif
 
 /* above functions not in use, for tests purpose */
 
