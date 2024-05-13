@@ -127,9 +127,9 @@ FUNCTION frm_Edit( Self )
          /* if editable browse, keys to do that */
          IF aItem[ CFG_BRWEDIT ]
             aKeyCodeList := { ;
-               { VK_INSERT, { || ::FrmDefBrowseAction( aItem, "INSERT" ) } }, ;
-               { VK_DELETE, { || ::FrmDefBrowseAction( aItem, "DELETE" ) } }, ;
-               { VK_RETURN, { || ::FrmDefBrowseAction( aItem, "EDIT" ) } } }
+               { VK_INSERT, { || ::BrowseAction( aItem, VK_INSERT ) } }, ;
+               { VK_DELETE, { || ::BrowseAction( aItem, VK_DELETE ) } }, ;
+               { VK_RETURN, { || ::BrowseAction( aItem, VK_RETURN ) } } }
          ELSE
             aKeyCodeList := {}
          ENDIF
