@@ -352,7 +352,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       ROW      nRow
       COL      nCol
       HEIGHT   nHeight
-      WIDTH    nWidth
+      WIDTH    nWidth - 30 /* scrollbar */
       FONTNAME PREVIEW_FONTNAME
       VALUE     xValue
       SETBREAK  .T.

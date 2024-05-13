@@ -334,7 +334,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       PARENT ( xDlg )
       COL nCol
       ROW nRow
-      WIDTH nWidth
+      WIDTH nWidth - 30 /* scrollbar */
       HEIGHT nHeight
       VALUE xValue
       FONTNAME PREVIEW_FONTNAME

@@ -207,7 +207,7 @@ FUNCTION frm_Edit( Self )
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
             nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
          gui_MLTextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, 5, APP_DLG_WIDTH - 30 - 30 /* scrollbar */, nHeight * APP_LINE_HEIGHT, @aItem[ CFG_VALUE ] )
+            nRow2, 5, APP_DLG_WIDTH - 30, nHeight * APP_LINE_HEIGHT, @aItem[ CFG_VALUE ] )
          nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_TEXT
