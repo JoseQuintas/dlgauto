@@ -56,7 +56,7 @@ FUNCTION frm_Valid( aItem, Self )
       ENDIF
       lFound := ! Eof()
       IF ! lFound
-         frm_Browse( Self, ::xDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
+         ::Browse( ::xDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
          gui_SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
       ENDIF
       IF ! Empty( aItem[ CFG_VSHOW ] )

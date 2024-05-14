@@ -38,7 +38,7 @@ CREATE CLASS frm_Class
    METHOD EditOff()
    METHOD Print()              INLINE frm_Print( Self )
    METHOD Execute()            INLINE frm_Dialog( Self )
-   METHOD View()               INLINE frm_Browse( Self, "", "", ::cFileDbf, Nil ), ::DataLoad()
+   METHOD View()               INLINE ::Browse( "", "", ::cFileDbf, Nil ), ::DataLoad()
    METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditKeyOn()
    METHOD Delete()
    METHOD Insert()             INLINE ::cSelected := "INSERT", ::EditKeyOn()

@@ -439,7 +439,8 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
    RETURN Nil
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
-            xValue, cPicture, nMaxLength, bValid, bAction, cImage, aDlgKeyCodeList, aItem, cWorkArea, oFrmClass  )
+            xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
+            aDlgKeyCodeList, aItem, cWorkArea, Self )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "TXT" )
@@ -485,7 +486,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    /* F9 on key fields will make a browse */
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
       AAdd( aDlgKeyCodeList, { xControl, VK_F9, ;
-         { || frm_Browse( oFrmClass, xDlg, xControl, cWorkArea ) } } )
+         { || ::Browse( xDlg, xControl, cWorkArea ) } } )
       _DefineHotKey( xDlg, 0, VK_F9, ;
          { || gui_DlgKeyDown( xDlg, xControl, VK_F9, aItem[ CFG_VTABLE ], aItem[ CFG_VFIELD ], @aItem[ CFG_VALUE ], aDlgKeyCodeList ) } )
    ENDIF

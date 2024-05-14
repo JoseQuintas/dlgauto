@@ -72,16 +72,6 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    xControl:nMoveType := 0
    xControl:CreateFromCode()
 
-      //IF ValType( aKeyCodeList ) != "A"
-         //aKeyCodeList := {}
-         //ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
-      //ENDIF
-   //FOR EACH aItem IN aKeyCodeList
-      //AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
-      //_DefineHotKey( xDlg, 0, aItem[ 1 ], ;
-         //{ || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
-   //NEXT
-*/
    (xDlg);(cField);(xValue);(workarea);(aKeyCodeList);(xControl);(nRow);(nCol);(nWidth)
    (nHeight);(oTBrowse);(aDlgKeyCodeList);(oCol)
    (xValue)
@@ -90,21 +80,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
 /*
 STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyCodeList )
-   LOCAL nPos, cType
-
-   nPos := hb_AScan( aDlgKeyCodeList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
-   IF nPos != 0
-      Eval( aDlgKeyCodeList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
-   ENDIF
-   IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyCodeList, { | e | e[ 2 ] == VK_RETURN } ) != 0
-      cType := GetProperty( xDlg, GetProperty( xDlg, "FOCUSEDCONTROL" ), "TYPE" )
-      IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT" }, { | e | e == cType } ) != 0
-         _SetNextFocus()
-      ENDIF
-   ENDIF
-   (xControl); (workarea); (xDlg);(nKey);(xValue);(cField);(aDlgKeyCodeList)
-
-   RETURN .T.
+   RETURN Nil
    */
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
@@ -113,14 +89,11 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
       xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
    (xControl);(xDlg)
-   //DoMethod( xDlg, "RELEASE" )
 
    RETURN Nil
 
 FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
-   //SetProperty( xDlg, xControl, "VALUE", RecNo() )
-   //DoMethod( xDlg, xControl, "REFRESH" )
    (xDlg);(xControl)
 
    RETURN Nil
@@ -187,7 +160,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       (xDlg);(xControl)
-      RETURN .F. // GetProperty( xDlg, "FOCUSEDCONTROL" )  == xControl
+      RETURN .F.
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
@@ -231,7 +204,6 @@ FUNCTION gui_MsgYesNo( cText )
 
 FUNCTION gui_SetFocus( xDlg, xControl )
 
-   //DoMethod( xDlg, xControl, "SETFOCUS" )
    (xDlg);(xControl)
 
    RETURN Nil
