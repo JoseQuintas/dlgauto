@@ -14,9 +14,9 @@ REQUEST DBFCDX
    PROCEDURE Main()
 #endif
 
+   LOCAL aKeyList := {}, aSeekList := {}, aBrowseList := {}, aTypeList := {}
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL aKeyList, aSeekList, aBrowseList, aBrowse, nPos, aComboList, aCheckList
-   LOCAL aDatePickerList, aSpinnerList, cFieldName
+   LOCAL cFieldName, aBrowse, nPos, aSetup
 
    SET CONFIRM OFF
    SET CENTURY ON
@@ -29,59 +29,22 @@ REQUEST DBFCDX
    gui_Init()
    RddSetDefault( "DBFCDX" )
    test_DBF()
-   /* table, key, browse index */
-   aKeyList := { ;
-      { "DBCLIENT",    "IDCLIENT", 2 }, ;
-      { "DBPRODUCT",   "IDPRODUCT", 2 }, ;
-      { "DBUNIT",      "IDUNIT", 2 }, ;
-      { "DBSELLER",    "IDSELLER", 2 }, ;
-      { "DBBANK",      "IDBANK", 2 }, ;
-      { "DBGROUP",     "IDGROUP", 2 }, ;
-      { "DBSTOCK",     "IDSTOCK" }, ;
-      { "DBFINANC",    "IDFINANC" }, ;
-      { "DBSTATE",     "IDSTATE", 2 }, ;
-      { "DBTICKET",    "IDTICKET" }, ;
-      { "DBTICKETPRO", "IDTICKETPRO" }, ;
-      { "DBDBF",       "IDDBF", 2 }, ;
-      { "DBFIELDS",    "IDFIELD", 2 } }
-
-   /* table, field, table to search, key field, field to show */
-   aSeekList := { ;
-      { "DBCLIENT",  "CLSELLER",  "DBSELLER",  "IDSELLER",  "SENAME" }, ;
-      { "DBCLIENT",  "CLBANK",    "DBBANK",    "IDBANK",    "BANAME" }, ;
-      { "DBTICKET",  "TICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
-      { "DBCLIENT",  "CLSTATE",   "DBSTATE",   "IDSTATE",   "STNAME" }, ;
-      { "DBPRODUCT", "IEUNIT",    "DBUNIT",    "IDUNIT",    "UNNAME" }, ;
-      { "DBSTOCK",   "STCLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
-      { "DBSTOCK",   "STPRODUCT", "DBPRODUCT", "IDPRODUCT", "PRNAME" }, ;
-      { "DBSTOCK",   "STGROUP",   "DBGROUP",   "IDGROUP",   "GRNAME" }, ;
-      { "DBFINANC",  "FICLIENT",  "DBCLIENT",  "IDCLIENT",  "CLNAME" }, ;
-      { "DBFINANC",  "FIBANK",    "DBBANK",    "IDBANK",    "BANAME" } }
-
-   /* Related browse */
-   aBrowseList := { ;
-      { "DBTICKET", "IDTICKET", "DBTICKETPRO", 2, "TPTICKET", "IDTICKEDPRO", .F., "PROD LIST" }, ;
-      { "DBDBF",    "NAME",     "DBFIELDS",    2, "DBF",  "IDFIELD", .F., "DBF LIST" } , ;
-      { "DBCLIENT", "IDCLIENT", "DBFINANC",    2, "FICLIENT", "IDFINANC", .T., "FINANC LIST" }, ;
-      { "DBCLIENT", "IDCLIENT", "DBSTOCK",     2, "STCLIENT", "IDSTOCK", .F., "STOCK LIST" }, ;
-      { "DBCLIENT", "IDCLIENT", "DBTICKET",    2, "TICLIENT", "IDTICKET", .F., "TICKET LIST" } }
-
-   /* Combotext */
-   aComboList := { ;
-      { "DBCLIENT", "CLSTATE", { "AC", "RS", "SP", "RJ", "PR", "RN" } } }
-
-   /* checkbox */
-   aCheckList := { ;
-      { "DBCLIENT", "CLSTATUS" } }
-
-   /* datepicker */
-   aDatePickerList := { ;
-      { "DBCLIENT", "CLDATE" }, ;
-      { "DBFINANC", "FIDATTOPAY" } }
-
-   /* spinner */
-   aSpinnerList := { ;
-      { "DBCLIENT", "CLPAYTERM", { 0, 120 } } }
+   IF File( "dlgauto.json" )
+      aSetup := hb_JsonDecode( MemoRead( "dlgauto.json" ) )
+      IF ValType( aSetup ) == "A" // test if valid setup
+         FOR EACH aItem IN aSetup
+            DO CASE
+            CASE ValType( aItem ) != "A"         // test if valid setup
+            CASE Len( aItem ) != 2               // test if valid setup
+            CASE ValType( aItem[ 2 ] ) != "A"    // test if valid setup
+            CASE aItem[ 1 ] == "KEYLIST";        aKeyList        := aItem[ 2 ]
+            CASE aItem[ 1 ] == "SEEKLIST";       aSeekList       := aItem[ 2 ]
+            CASE aItem[ 1 ] == "BROWSELIST";     aBrowseList     := aItem[ 2 ]
+            CASE aItem[ 1 ] == "TYPELIST";       aTypeList       := aItem[ 2 ]
+            ENDCASE
+         NEXT
+      ENDIF
+   ENDIF
 
    aAllSetup := {}
    aList := Directory( "*.dbf" )
@@ -112,23 +75,20 @@ REQUEST DBFCDX
             aItem[ CFG_VFIELD ] := aSeekList[ nPos, 4 ]
             aItem[ CFG_VSHOW ]  := aSeekList[ nPos, 5 ]
          ENDIF
-         /* combotext */
-         IF ( nPos := hb_Ascan( aComboList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) ) != 0
-            aItem[ CFG_COMBOLIST ] := aComboList[ nPos, 3 ]
-            aItem[ CFG_CTLTYPE ] := TYPE_COMBOBOX
-         ENDIF
-         /* checkbox */
-         IF hb_Ascan( aCheckList, { | e | e[1] == cFile .AND. e[2] == aItem[ CFG_FNAME ] } ) != 0
-            aItem[ CFG_CTLTYPE ] := TYPE_CHECKBOX
-         ENDIF
-         /* datepicker */
-         IF hb_Ascan( aDatePickerList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) != 0
-            aItem[ CFG_CTLTYPE ] := TYPE_DATEPICKER
-         ENDIF
-         /* spinner */
-         IF ( nPos := hb_Ascan( aSpinnerList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) ) != 0
-            aItem[ CFG_SPINNER ] := aSpinnerList[ nPos, 3 ]
-            aItem[ CFG_CTLTYPE ] := TYPE_SPINNER
+         /* TypeList */
+         IF ( nPos := hb_Ascan( aTypeList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) ) != 0
+            DO CASE
+            CASE aTypeList[ nPos, 3 ] == "COMBOBOX"
+               aItem[ CFG_COMBOLIST ] := AClone( aTypeList[ nPos, 4 ] )
+               aItem[ CFG_CTLTYPE ] := TYPE_COMBOBOX
+            CASE aTypeList[ nPos, 3 ] == "CHECKBOX"
+               aItem[ CFG_CTLTYPE ] := TYPE_CHECKBOX
+            CASE aTypeList[ nPos, 3 ] == "DATEPICKER"
+               aItem[ CFG_CTLTYPE ] := TYPE_DATEPICKER
+            CASE aTypeList[ nPos, 3 ] == "SPINNER"
+               aItem[ CFG_SPINNER ] := AClone( aTypeList[ nPos, 4 ] )
+               aItem[ CFG_CTLTYPE ] := TYPE_SPINNER
+            ENDCASE
          ENDIF
 
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
