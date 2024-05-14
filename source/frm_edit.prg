@@ -14,7 +14,7 @@ FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aList := {}
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
-   LOCAL aKeyCodeList, aDlgKeyCodeList := {}, xTabPage, nHeight
+   LOCAL aKeyDownList, xTabPage, nHeight
 
    /* began control list with fields */
    FOR EACH aItem IN ::aEditList
@@ -126,19 +126,19 @@ FUNCTION frm_Edit( Self )
          NEXT
          /* if editable browse, keys to do that */
          IF aItem[ CFG_BRWEDIT ]
-            aKeyCodeList := { ;
+            aKeyDownList := { ;
                { VK_INSERT, { || ::BrowseAction( aItem, VK_INSERT ) } }, ;
                { VK_DELETE, { || ::BrowseAction( aItem, VK_DELETE ) } }, ;
                { VK_RETURN, { || ::BrowseAction( aItem, VK_RETURN ) } } }
          ELSE
-            aKeyCodeList := {}
+            aKeyDownList := {}
          ENDIF
          nRow2 := nRow + APP_LINE_SPACING
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
             nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_BRWTITLE ], .F., APP_FONTSIZE_SMALL )
          gui_Browse( ::xDlg, xTabPage, @aItem[ CFG_FCONTROL ], nRow2, 5, ;
             APP_DLG_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
-            oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyCodeList, @aDlgKeyCodeList, @::aControlList )
+            oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
          SELECT ( Select( ::cFileDBF ) )
          nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  )
 
@@ -226,7 +226,7 @@ FUNCTION frm_Edit( Self )
             @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
             { || ::Validate( aItem ) }, ;
             iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), { || gui_Msgbox( "click" ) }, Nil ), ;
-            iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), "bmpsearch", Nil ), @aDlgKeyCodeList, @aItem, ;
+            iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), "bmpsearch", Nil ), @::aDlgKeyDown, @aItem, ;
             iif( aItem[ CFG_ISKEY ], ::cFileDbf, aItem[ CFG_VTABLE ] ), Self )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
             gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_VCONTROL ], ;
@@ -257,6 +257,6 @@ FUNCTION frm_Edit( Self )
       gui_TabEnd( xTab, nPageCount )
    ENDIF
    // will be used later
-   // gui_DlgSetKey( ::xDlg, aDlgKeyCodeList )
+   // gui_DlgSetKey( ::xDlg, ::aDlgKeyDown )
 
    RETURN Nil

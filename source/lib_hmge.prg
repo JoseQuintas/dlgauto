@@ -78,15 +78,15 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
    RETURN Nil
 
 FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
-   cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList, aControlList )
+   cField, xValue, workarea, aKeyDownList, Self )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
 
    IF Empty( xControl )
       xControl := gui_newctlname( "BRW" )
    ENDIF
-   IF ValType( aKeyCodeList ) != "A"
-      aKeyCodeList := {}
+   IF ValType( aKeyDownList ) != "A"
+      aKeyDownList := {}
    ENDIF
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
@@ -101,7 +101,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       COL nCol
       WIDTH nWidth - 20
       HEIGHT nHeight - 20
-      IF Len( aKeyCodeList ) == 0
+      IF Len( aKeyDownList ) == 0
          ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
       ENDIF
       HEADERS aHeaderList
@@ -111,12 +111,12 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       SET BROWSESYNC ON
    END BROWSE
    /* create buttons on browse for defined keys */
-   IF Len( aKeyCodeList ) != 0
-      FOR EACH aThisKey IN aKeyCodeList
-         AAdd( aControlList, EmptyFrmClassItem() )
-         Atail( aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
-         Atail( aControlList )[ CFG_FCONTROL ] := gui_NewCtlName( "BTNBRW" )
-         gui_ButtonCreate( xDlg, @Atail( aControlList )[ CFG_FCONTROL ], ;
+   IF Len( aKeyDownList ) != 0
+      FOR EACH aThisKey IN aKeyDownList
+         AAdd( ::aControlList, EmptyFrmClassItem() )
+         Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
+         Atail( ::aControlList )[ CFG_FCONTROL ] := gui_NewCtlName( "BTNBRW" )
+         gui_ButtonCreate( xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
          nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
          iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
          iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
@@ -124,25 +124,25 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       NEXT
    ENDIF
    /* redefine keys with cumulative actions */
-   FOR EACH aItem IN aKeyCodeList
-      AAdd( aDlgKeyCodeList, { xControl, aItem[ 1 ], aItem[ 2 ] } )
+   FOR EACH aItem IN aKeyDownList
+      AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
       _DefineHotKey( xDlg, 0, aItem[ 1 ], ;
-         { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, aDlgKeyCodeList ) } )
+         { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, ::aDlgKeyDown ) } )
    NEXT
 
-   (xDlg);(cField);(xValue);(workarea);(aKeyCodeList)
+   (xDlg);(cField);(xValue);(workarea);(aKeyDownList)
 
    RETURN Nil
 
-STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyCodeList )
+STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyDownList )
 
    LOCAL nPos, cType
 
-   nPos := hb_AScan( aDlgKeyCodeList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
+   nPos := hb_AScan( aDlgKeyDownList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
    IF nPos != 0
-      Eval( aDlgKeyCodeList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
+      Eval( aDlgKeyDownList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
    ENDIF
-   IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyCodeList, { | e | e[ 2 ] == VK_RETURN } ) != 0
+   IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyDownList, { | e | e[ 2 ] == VK_RETURN } ) != 0
       cType := GetProperty( xDlg, GetProperty( xDlg, "FOCUSEDCONTROL" ), "TYPE" )
       /* ENTER next focus, because a defined key can change default */
       IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT", "SPINNER", "DATEPICKER", "CHECKBOX" }, { | e | e == cType } ) != 0
@@ -440,7 +440,7 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
-            aDlgKeyCodeList, aItem, cWorkArea, Self )
+            aDlgKeyDownList, aItem, cWorkArea, Self )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "TXT" )
@@ -485,10 +485,10 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    //ENDIF
    /* F9 on key fields will make a browse */
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
-      AAdd( aDlgKeyCodeList, { xControl, VK_F9, ;
+      AAdd( aDlgKeyDownList, { xControl, VK_F9, ;
          { || ::Browse( xDlg, xControl, cWorkArea ) } } )
       _DefineHotKey( xDlg, 0, VK_F9, ;
-         { || gui_DlgKeyDown( xDlg, xControl, VK_F9, aItem[ CFG_VTABLE ], aItem[ CFG_VFIELD ], @aItem[ CFG_VALUE ], aDlgKeyCodeList ) } )
+         { || gui_DlgKeyDown( xDlg, xControl, VK_F9, aItem[ CFG_VTABLE ], aItem[ CFG_VFIELD ], @aItem[ CFG_VALUE ], aDlgKeyDownList ) } )
    ENDIF
    (bValid)
 

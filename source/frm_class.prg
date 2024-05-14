@@ -24,6 +24,7 @@ CREATE CLASS frm_Class
    VAR xDlg
    VAR aControlList   INIT {}
    VAR aAllSetup      INIT {}
+   VAR aDlgKeyDown    INIT {}
 
    METHOD First()
    METHOD Last()

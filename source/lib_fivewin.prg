@@ -52,7 +52,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
    RETURN Nil
 
 FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
-   cField, xValue, workarea, aKeyCodeList, aDlgKeyCodeList )
+   cField, xValue, workarea, aKeyDownList, Self )
 
    LOCAL aItem, oCol
 
@@ -72,14 +72,14 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    xControl:nMoveType := 0
    xControl:CreateFromCode()
 
-   (xDlg);(cField);(xValue);(workarea);(aKeyCodeList);(xControl);(nRow);(nCol);(nWidth)
-   (nHeight);(oTBrowse);(aDlgKeyCodeList);(oCol)
+   (xDlg);(cField);(xValue);(workarea);(aKeyDownList);(xControl);(nRow);(nCol);(nWidth)
+   (nHeight);(oTBrowse);(oCol)
    (xValue)
 
    RETURN Nil
 
 /*
-STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyCodeList )
+STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyDownList )
    RETURN Nil
    */
 

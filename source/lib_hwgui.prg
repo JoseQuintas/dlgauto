@@ -58,12 +58,12 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyCodeList )
+FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, Self )
 
    LOCAL aItem
 
-   IF ValType( aKeyCodeList ) != "A"
-      aKeyCodeList:= { { VK_RETURN, { || gui_BrowseEnter( cField, @xValue, xDlg, xControl ) } } }
+   IF ValType( aKeyDownList ) != "A"
+      aKeyDownList := { { VK_RETURN, { || gui_BrowseEnter( cField, @xValue, xDlg, xControl ) } } }
    ENDIF
 
    @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
@@ -81,7 +81,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
    //xControl:bEnter := { || hwg_MsgInfo( "teste"), gui_browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
    xControl:bKeyDown := { | o, nKey | (o), ;
-      gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xvalue, aKeyCodeList ) }
+      gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xvalue, aKeyDownList ) }
    //xControl:bGetFocus := { | o | o:Refresh(), hwg_SetFocus( o:Handle ), o:Refresh() }
    //xDlg:bGetFocus := { || xDlg:xControl:SetFocus() }
 
@@ -89,13 +89,13 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
    RETURN Nil
 
-STATIC FUNCTION gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xValue, aKeyCodeList )
+STATIC FUNCTION gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xValue, aKeyDownList )
 
    LOCAL nPos
 
-   nPos := hb_AScan( aKeyCodeList, { | e | nKey == e[ 1 ] } )
+   nPos := hb_AScan( aKeyDownList, { | e | nKey == e[ 1 ] } )
    IF nPos != 0
-      Eval( aKeyCodeList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
+      Eval( aKeyDownList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
    ENDIF
    (workarea)
    // return value is used by hwgui
