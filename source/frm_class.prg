@@ -254,7 +254,7 @@ METHOD Delete() CLASS frm_Class
 
 METHOD DataLoad() CLASS frm_Class
 
-   LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope
+   LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl
 
    FOR EACH aItem IN ::aControlList
       DO CASE
@@ -282,6 +282,9 @@ METHOD DataLoad() CLASS frm_Class
          gui_LabelSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
+         xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
+         xValueControl := hb_AScan( aItem[ CFG_COMBOLIST ], { | e | e == xValue } )
+         gui_TextSetValue( ::xDLg, aItem[ CFG_FCONTROL ], xValueControl )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
@@ -312,6 +315,13 @@ METHOD DataSave() CLASS frm_Class
          DO CASE
          CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
          CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
+            xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+            IF xValue == 0 .OR. xValue > Len( aItem[ CFG_COMBOLIST ] )
+               xValue := Space( aItem[ CFG_FLEN ] )
+            ELSE
+               xValue := aItem[ CFG_COMBOLIST ][ xValue ]
+            ENDIF
+            fieldput( FieldNum( aItem[ CFG_FNAME ] ), xValue )
          CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
             xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
             DO CASE
@@ -338,7 +348,7 @@ FUNCTION EmptyFrmClassItem()
 
    LOCAL aItem
 
-   aItem := Array(26)
+   aItem := Array(28)
    aItem[ CFG_FNAME ]      := ""
    aItem[ CFG_FTYPE ]      := "C"
    aItem[ CFG_FLEN ]       := 1

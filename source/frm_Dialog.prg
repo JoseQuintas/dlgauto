@@ -60,3 +60,18 @@ FUNCTION frm_Dialog( Self )
    //CLOSE DATABASES
 
    RETURN Nil
+
+//STATIC FUNCTION TestVar( nCount, Self )
+
+//   LOCAL aItem
+
+//   FOR EACH aItem IN ::aControlList
+//      IF aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
+//         gui_MsgBox( "test " + Str( nCount, 1 ) + ": " + hb_ValToExp( aItem[ CFG_COMBOLIST ] ) )
+//      ENDIF
+//   NEXT
+
+//   RETURN Nil
+
+
+

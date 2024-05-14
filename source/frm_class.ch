@@ -24,8 +24,8 @@
 #define CFG_BRWVALUE   24    // browse key value
 #define CFG_BRWEDIT    25    // browse editable
 #define CFG_BRWTITLE   26    // browse title
-#define CFG_COMBOLIST  26    // array for combo
-#define CFG_SPINNER    26    // min/max for spinner
+#define CFG_COMBOLIST  27    // array for combo
+#define CFG_SPINNER    28    // min/max for spinner
 // note: EmptyfrmClassItem() creates the empty array
 
 #define TYPE_NONE       0

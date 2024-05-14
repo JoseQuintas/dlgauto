@@ -85,7 +85,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    //xControl:bGetFocus := { | o | o:Refresh(), hwg_SetFocus( o:Handle ), o:Refresh() }
    //xDlg:bGetFocus := { || xDlg:xControl:SetFocus() }
 
-   (xDlg); (workarea); (xParent)
+   (xDlg); (workarea); (xParent);(Self)
 
    RETURN Nil
 

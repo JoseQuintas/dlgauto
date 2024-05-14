@@ -232,7 +232,7 @@ STATIC FUNCTION SaveTestData()
 
    aStru := dbStruct()
    FOR nCont = 1 TO 9
-      cText := Substr( Alias(), 3 ) + " "
+      cText := ""
       DO CASE
       CASE nCont == 1 ; cText += "ONE"
       CASE nCont == 2 ; cText += "TWO"
@@ -245,6 +245,7 @@ STATIC FUNCTION SaveTestData()
       CASE nCont == 9 ; cText += "NINE"
       OTHERWISE   ; cText += "ANY"
       ENDCASE
+      cText := cText + " " + Substr( Alias(), 3 )
       cText := Replicate( cText, 10 )
       APPEND BLANK
       FOR nField = 1 TO Len( aStru )
