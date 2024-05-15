@@ -29,21 +29,22 @@ REQUEST DBFCDX
    gui_Init()
    RddSetDefault( "DBFCDX" )
    test_DBF()
-   IF File( "dlgauto.json" )
-      aSetup := hb_JsonDecode( MemoRead( "dlgauto.json" ) )
-      IF ValType( aSetup ) == "A" // test if valid setup
-         FOR EACH aItem IN aSetup
-            DO CASE
-            CASE ValType( aItem ) != "A"         // test if valid setup
-            CASE Len( aItem ) != 2               // test if valid setup
-            CASE ValType( aItem[ 2 ] ) != "A"    // test if valid setup
-            CASE aItem[ 1 ] == "KEYLIST";        aKeyList        := aItem[ 2 ]
-            CASE aItem[ 1 ] == "SEEKLIST";       aSeekList       := aItem[ 2 ]
-            CASE aItem[ 1 ] == "BROWSELIST";     aBrowseList     := aItem[ 2 ]
-            CASE aItem[ 1 ] == "TYPELIST";       aTypeList       := aItem[ 2 ]
-            ENDCASE
-         NEXT
-      ENDIF
+   IF ! File( "dlgauto.json" )
+      hb_MemoWrit( "dlgauto.json", test_Setup() )
+   ENDIF
+   aSetup := hb_JsonDecode( MemoRead( "dlgauto.json" ) )
+   IF ValType( aSetup ) == "A" // test if valid setup
+      FOR EACH aItem IN aSetup
+         DO CASE
+         CASE ValType( aItem ) != "A"         // test if valid setup
+         CASE Len( aItem ) != 2               // test if valid setup
+         CASE ValType( aItem[ 2 ] ) != "A"    // test if valid setup
+         CASE aItem[ 1 ] == "KEYLIST";        aKeyList        := aItem[ 2 ]
+         CASE aItem[ 1 ] == "SEEKLIST";       aSeekList       := aItem[ 2 ]
+         CASE aItem[ 1 ] == "BROWSELIST";     aBrowseList     := aItem[ 2 ]
+         CASE aItem[ 1 ] == "TYPELIST";       aTypeList       := aItem[ 2 ]
+         ENDCASE
+      NEXT
    ENDIF
 
    aAllSetup := {}

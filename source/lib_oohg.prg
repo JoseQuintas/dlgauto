@@ -116,40 +116,36 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
          Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
          Atail( ::aControlList )[ CFG_FCONTROL ] := gui_NewCtlName( "BTNBRW" )
          gui_ButtonCreate( xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-         nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
-         iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
-         iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
-         iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
+            nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
+            APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+            iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
+            iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
+            iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
       NEXT
-      // some buttons
-   ENDIF
-   IF ! Empty( aKeyDownList )
       FOR EACH aItem IN aKeyDownList
          AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
-         _DefineHotKey( xDlg, 0, aItem[ 1 ], { || gui_DlgKeyDown( xDlg, xControl, ;
-            aItem[ 1 ], workarea, cField, xValue, ::aDlgKeyDown ) } )
       NEXT
    ENDIF
    (cField);(xValue)
 
    RETURN Nil
 
-STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyDownList )
+STATIC FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
 
    LOCAL nPos, cFocusedControl, lReturn := .T., cType
 
-   nPos := hb_AScan( aDlgKeyDownList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
+   nPos := hb_AScan( ::aDlgKeyDown, { | e | GetProperty( ::xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
    IF nPos != 0
-      lReturn := Eval( aDlgKeyDownList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
+      lReturn := Eval( ::aDlgKeyDown[ nPos ][ 3 ] )
    ENDIF
    IF nKey == VK_RETURN .OR. lReturn == Nil .OR. lReturn
-      cFocusedControl := GetProperty( xDlg, "FOCUSEDCONTROL" )
-      cType := GetControlObject( cFocusedControl, xDlg ):Type
+      cFocusedControl := GetProperty( ::xDlg, "FOCUSEDCONTROL" )
+      cType := GetControlObject( cFocusedControl, ::xDlg ):Type
       IF hb_AScan( { "NUMTEXT", "TEXT" }, { | e | e == cType } ) != 0
          _SetNextFocus()
       ENDIF
    ENDIF
-   (xControl); (workarea)
+   (xControl)
 
    RETURN .T.
 
@@ -500,3 +496,14 @@ STATIC FUNCTION gui_newctlname( cPrefix )
    nCount += 1
 
    RETURN cPrefix  + StrZero( nCount, 10 )
+
+FUNCTION gui_DlgSetKey( Self )
+
+   LOCAL aItem
+
+   FOR EACH aItem IN ::aDlgKeyDown
+         _DefineHotKey( ::xDlg, 0, aItem[ 2 ], { || gui_DlgKeyDown( aItem[1], ;
+            aItem[ 2 ], Self ) } )
+   NEXT
+
+   RETURN Nil

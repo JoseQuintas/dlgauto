@@ -126,30 +126,28 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    /* redefine keys with cumulative actions */
    FOR EACH aItem IN aKeyDownList
       AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
-      _DefineHotKey( xDlg, 0, aItem[ 1 ], ;
-         { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, ::aDlgKeyDown ) } )
    NEXT
 
    (xDlg);(cField);(xValue);(workarea);(aKeyDownList)
 
    RETURN Nil
 
-STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyDownList )
+STATIC FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
 
    LOCAL nPos, cType
 
-   nPos := hb_AScan( aDlgKeyDownList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
+   nPos := hb_AScan( ::aDlgKeyDown, { | e | GetProperty( ::xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
    IF nPos != 0
-      Eval( aDlgKeyDownList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
+      Eval( ::aDlgKeyDown[ nPos ][ 3 ] )
    ENDIF
-   IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyDownList, { | e | e[ 2 ] == VK_RETURN } ) != 0
-      cType := GetProperty( xDlg, GetProperty( xDlg, "FOCUSEDCONTROL" ), "TYPE" )
+   IF nKey == VK_RETURN .AND. hb_ASCan( ::aDlgKeyDown, { | e | e[ 2 ] == VK_RETURN } ) != 0
+      cType := GetProperty( ::xDlg, GetProperty( ::xDlg, "FOCUSEDCONTROL" ), "TYPE" )
       /* ENTER next focus, because a defined key can change default */
       IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT", "SPINNER", "DATEPICKER", "CHECKBOX" }, { | e | e == cType } ) != 0
          _SetNextFocus()
       ENDIF
    ENDIF
-   (xControl); (workarea)
+   (xControl)
 
    RETURN .T.
 
@@ -440,7 +438,7 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
-            aDlgKeyDownList, aItem, cWorkArea, Self )
+            aItem, Self )
 
    IF Empty( xControl )
       xControl := gui_newctlname( "TXT" )
@@ -485,10 +483,8 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    //ENDIF
    /* F9 on key fields will make a browse */
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
-      AAdd( aDlgKeyDownList, { xControl, VK_F9, ;
-         { || ::Browse( xDlg, xControl, cWorkArea ) } } )
-      _DefineHotKey( xDlg, 0, VK_F9, ;
-         { || gui_DlgKeyDown( xDlg, xControl, VK_F9, aItem[ CFG_VTABLE ], aItem[ CFG_VFIELD ], @aItem[ CFG_VALUE ], aDlgKeyDownList ) } )
+      AAdd( ::aDlgKeyDown, { xControl, VK_F9, ;
+         { || ::Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], ::cFileDbf, aItem[ CFG_VTABLE ] ) ) } } )
    ENDIF
    (bValid)
 
@@ -525,3 +521,14 @@ STATIC FUNCTION gui_newctlname( cPrefix )
    hb_Default( @cPrefix, "ANY" )
 
    RETURN cPrefix + StrZero( nCount, 10 )
+
+FUNCTION gui_DlgSetKey( Self )
+
+   LOCAL aItem
+
+   FOR EACH aItem IN ::aDlgKeyDown
+         _DefineHotKey( ::xDlg, 0, aItem[ 2 ], { || gui_DlgKeyDown( aItem[1], ;
+            aItem[ 2 ], Self ) } )
+   NEXT
+
+   RETURN Nil

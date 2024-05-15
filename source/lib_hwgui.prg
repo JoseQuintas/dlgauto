@@ -380,3 +380,11 @@ STATIC FUNCTION BtnSetImageText( hHandle, cCaption, cResName, nWidth, nHeight )
 
    RETURN Nil
 
+FUNCTION gui_DlgSetKey( Self )
+
+   LOCAL aItem
+
+   FOR EACH aItem IN ::aDlgKeyDown
+   NEXT
+
+   RETURN Nil

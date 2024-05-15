@@ -247,8 +247,8 @@ FUNCTION frm_Edit( Self )
             @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
             { || ::Validate( aItem ) }, ;
             iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), { || gui_Msgbox( "click" ) }, Nil ), ;
-            iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), "bmpsearch", Nil ), @::aDlgKeyDown, @aItem, ;
-            iif( aItem[ CFG_ISKEY ], ::cFileDbf, aItem[ CFG_VTABLE ] ), Self )
+            iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), "bmpsearch", Nil ), @aItem, ;
+            Self )
 
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
 
@@ -286,7 +286,7 @@ FUNCTION frm_Edit( Self )
       gui_TabEnd( xTab, nPageCount )
 
    ENDIF
-   // will be used later
-   // gui_DlgSetKey( ::xDlg, ::aDlgKeyDown )
+
+   gui_DlgSetKey( Self )
 
    RETURN Nil

@@ -1,17 +1,18 @@
 test.prg
+test_dbf.prg
+test_dlgmenu.prg
+test_setup.prg
+test.rc
+frm_browse.prg
 frm_class.prg
+frm_buttons.prg
 frm_dialog.prg
 frm_edit.prg
-frm_browse.prg
-frm_buttons.prg
-test_dbf.prg
-lib.prg
 frm_main.prg
-test_dlgmenu.prg
 frm_preview.prg
 frm_print.prg
 frm_valid.prg
-test.rc
+lib.prg
 
 -otest
 -w3

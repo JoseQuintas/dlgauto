@@ -78,10 +78,8 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
    RETURN Nil
 
-/*
-STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyDownList )
+FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
    RETURN Nil
-   */
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
@@ -305,5 +303,14 @@ FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
 
    xControl:SetText( xValue )
    (xDlg);(xControl);(xValue)
+
+   RETURN Nil
+
+FUNCTION gui_DlgSetKey( Self )
+
+   LOCAL aItem
+
+   FOR EACH aItem IN ::aDlgKeyDown
+   NEXT
 
    RETURN Nil

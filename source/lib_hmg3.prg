@@ -122,9 +122,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    ENDIF
    IF ! Empty( aKeyDownList )
       FOR EACH aItem IN aKeyDownList
-         AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
-         _DefineHotKey( xDlg, 0, aItem[ 1 ], ;
-            { || gui_DlgKeyDown( xDlg, xControl, aItem[ 1 ], workarea, cField, xValue, ::aDlgKeyDown ) } )
+         AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], Self } )
       NEXT
    ENDIF
 
@@ -132,24 +130,24 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
    RETURN Nil
 
-STATIC FUNCTION gui_DlgKeyDown( xDlg, xControl, nKey, workarea, cField, xValue, aDlgKeyDownList )
+STATIC FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
 
    LOCAL nPos, cType, cFocusedControl
 
-   nPos := hb_AScan( aDlgKeyDownList, { | e | GetProperty( xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
+   nPos := hb_AScan( ::aDlgKeyDown, { | e | GetProperty( ::xDlg, "FOCUSEDCONTROL" ) == e[1] .AND. nKey == e[ 2 ] } )
    IF nPos != 0
-      Eval( aDlgKeyDownList[ nPos ][ 3 ], cField, @xValue, xDlg, xControl )
+      Eval( ::aDlgKeyDown[ nPos ][ 3 ] )
    ENDIF
-   IF nKey == VK_RETURN .AND. hb_ASCan( aDlgKeyDownList, { | e | e[ 2 ] == VK_RETURN } ) != 0
-      cFocusedControl := GetProperty( xDlg, "FOCUSEDCONTROL" )
+   IF nKey == VK_RETURN .AND. hb_ASCan( ::aDlgKeyDown, { | e | e[ 2 ] == VK_RETURN } ) != 0
+      cFocusedControl := GetProperty( ::xDlg, "FOCUSEDCONTROL" )
       IF ! Empty( cFocusedControl )
-         cType := GetProperty( xDlg, cFocusedControl, "TYPE" )
+         cType := GetProperty( ::xDlg, cFocusedControl, "TYPE" )
          IF hb_AScan( { "GETBOX", "MASKEDTEXT", "TEXT" }, { | e | e == cType } ) != 0
             _SetNextFocus()
          ENDIF
       ENDIF
    ENDIF
-   (xControl); (workarea)
+   (xControl)
 
    RETURN .T.
 
@@ -471,3 +469,14 @@ STATIC FUNCTION gui_newctlname( cPrefix )
    hb_Default( @cPrefix, "ANY" )
 
    RETURN cPrefix + StrZero( nCount, 10 )
+
+FUNCTION gui_DlgSetKey( Self )
+
+   LOCAL aItem
+
+   FOR EACH aItem IN ::aDlgKeyDown
+         _DefineHotKey( ::xDlg, 0, aItem[ 2 ], { || gui_DlgKeyDown( aItem[1], ;
+            aItem[ 2 ], Self ) } )
+   NEXT
+
+   RETURN Nil
