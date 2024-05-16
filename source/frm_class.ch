@@ -26,6 +26,7 @@
 #define CFG_BRWTITLE   26    // browse title
 #define CFG_COMBOLIST  27    // array for combo
 #define CFG_SPINNER    28    // min/max for spinner
+#define CFG_SAVEONLY   29    // not load from database
 // note: EmptyfrmClassItem() creates the empty array
 
 #define TYPE_NONE       0

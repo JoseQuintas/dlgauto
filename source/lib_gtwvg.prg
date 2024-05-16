@@ -249,7 +249,7 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_TextGetValue( xDlg, xControl )
+FUNCTION gui_ControlGetValue( xDlg, xControl )
 
    (xDlg);(xControl)
 
@@ -297,7 +297,7 @@ FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
+FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    xControl:SetData( xValue )
    (xDlg);(xControl);(xValue)

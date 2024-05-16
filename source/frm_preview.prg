@@ -15,6 +15,7 @@ FUNCTION frm_Preview( cFileMask )
 
    oFrm := frm_Class():New()
    oFrm:cOptions := ""
+   oFrm:lNavigate := .F.
    oFrm:aOptionList := { ;
       { "First",    { || Button_Click( "First",    aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
       { "Previous", { || Button_Click( "Previous", aFileList, @nIndex, oFrm:xDlg, oEdit ) } }, ;
@@ -22,7 +23,7 @@ FUNCTION frm_Preview( cFileMask )
       { "Last",     { || Button_Click( "Last",     aFileList, @nIndex, oFrm:xDlg, oEdit ) } } }
 
    gui_DialogCreate( @oFrm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:xDlg ) } )
-   frm_Buttons( oFrm, .F. )
+   frm_Buttons( oFrm )
    gui_MLTextCreate( oFrm:xDlg, @oEdit, 65, 10, APP_DLG_WIDTH - 40, APP_DLG_HEIGHT - 120, "" )
    gui_DialogActivate( oFrm:xDlg )
 
@@ -37,7 +38,7 @@ STATIC FUNCTION frm_SetText( oEdit, aFileList, nIndex, xDlg )
    ELSE
       cTxt := MemoRead( aFileList[ nIndex, F_NAME ] )
    ENDIF
-   gui_TextSetValue( xDlg, oEdit, cTxt )
+   gui_ControlSetValue( xDlg, oEdit, cTxt )
 
    RETURN Nil
 

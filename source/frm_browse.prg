@@ -30,7 +30,7 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    DialogBrowse( oTBrowse, cTable, cField, @xValue )
 
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
-      gui_TextSetValue( xDlg, xControl, xValue )
+      gui_ControlSetValue( xDlg, xControl, xValue )
    ENDIF
    SET ORDER TO ( nIndexOrd )
 

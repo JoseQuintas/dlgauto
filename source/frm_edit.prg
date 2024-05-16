@@ -48,21 +48,21 @@ FUNCTION frm_Edit( Self )
          nHeight := 7
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         IF ::nLayout == 1 .OR. ::nLayout == 2
             nLen := ( Max( 15, Len( aItem[ CFG_CAPTION ] ) ) + Max( 15, aItem[ CFG_FLEN ] + 3 ) ) * 12
          ELSE
             nLen := ( Max( 15, Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) ) + 3 ) * 12
          ENDIF
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         IF ::nLayout == 1 .OR. ::nLayout == 2
             nLen := ( Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 ) * 12
          ELSE
             nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
          ENDIF
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_SPINNER .OR. aItem[ CFG_CTLTYPE ] == TYPE_DATEPICKER
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         IF ::nLayout == 1 .OR. ::nLayout == 2
             nLen := ( Max( 15, Len( aItem[ CFG_CAPTION ] ) ) + Max( 6, aItem[ CFG_FLEN ] + 3 ) ) * 12
          ELSE
             nLen := ( Max( 6, Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) ) + 3 ) * 12
@@ -74,7 +74,7 @@ FUNCTION frm_Edit( Self )
             nLen := APP_DLG_WIDTH - 30
             nHeight := iif( aItem[ CFG_FTYPE ] == "M", 5, Round( aItem[ CFG_FLEN ] / 100, 0 ) )
          ELSE
-            IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+            IF ::nLayout == 1 .OR. ::nLayout == 2
                nLen := ( Len( aItem[ CFG_CAPTION ] ) + 1 + Max( aItem[ CFG_FLEN ], 5 ) + 3 ) * 12
             ELSE
                nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), Max( aItem[ CFG_FLEN ], 5 ) ) + 3 ) * 12
@@ -88,15 +88,15 @@ FUNCTION frm_Edit( Self )
       ENDCASE
 
       /* check max row and max col */
-      IF ::nEditStyle == 1 .OR. ( nCol != 10 .AND. nCol + 30 + nLen > APP_DLG_WIDTH - 40 )
+      IF ::nLayout == 1 .OR. ( nCol != 10 .AND. nCol + 30 + nLen > APP_DLG_WIDTH - 40 )
          IF ! lFirst
-            nRow += ( APP_LINE_SPACING * iif( ::nEditStyle < 3, 1, 2 ) )
+            nRow += ( APP_LINE_SPACING * iif( ::nLayout < 3, 1, 2 ) )
          ENDIF
          nCol := 10
       ENDIF
 
       /* check if create a new tabpage */
-      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  ) > APP_DLG_HEIGHT - 100
+      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  ) > APP_DLG_HEIGHT - 100
          IF nPageCount > 0
 
             gui_TabPageEnd( ::xDlg, xTab, xTabPage )
@@ -149,10 +149,10 @@ FUNCTION frm_Edit( Self )
             oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
 
          SELECT ( Select( ::cFileDBF ) )
-         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  )
+         nRow += ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         IF ::nLayout == 1 .OR. ::nLayout == 2
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
          ELSE
@@ -169,7 +169,7 @@ FUNCTION frm_Edit( Self )
          nCol += nLen
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         IF ::nLayout == 1 .OR. ::nLayout == 2
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
          ELSE
@@ -186,7 +186,7 @@ FUNCTION frm_Edit( Self )
          nCol += nLen
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_DATEPICKER
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         IF ::nLayout == 1 .OR. ::nLayout == 2
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
          ELSE
@@ -203,7 +203,7 @@ FUNCTION frm_Edit( Self )
          nCol += nLen
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_SPINNER
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         IF ::nLayout == 1 .OR. ::nLayout == 2
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
          ELSE
@@ -228,10 +228,10 @@ FUNCTION frm_Edit( Self )
          gui_MLTextCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, 5, APP_DLG_WIDTH - 30, nHeight * APP_LINE_HEIGHT, @aItem[ CFG_VALUE ] )
 
-         nRow += ( ( nHeight + iif( ::nEditStyle < 3, 1, 2 ) ) * APP_LINE_SPACING  )
+         nRow += ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_TEXT
-         IF ::nEditStyle == 1 .OR. ::nEditStyle == 2
+         IF ::nLayout == 1 .OR. ::nLayout == 2
             nRow2 := nRow
             nCol2 := nCol + ( Max( Len( aItem[ CFG_CAPTION ] ), 5 ) * 12 )
          ELSE

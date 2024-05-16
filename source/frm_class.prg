@@ -17,8 +17,10 @@ CREATE CLASS frm_Class
    VAR cOptions        INIT "IED"
    VAR aOptionList     INIT {}
    VAR cSelected       INIT "NONE"
+   VAR lNavigate       INIT .T.
+   VAR lSingleEdit     INIT .F.
 
-   VAR nEditStyle      INIT 2
+   VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
 
    VAR xDlg
@@ -48,8 +50,7 @@ CREATE CLASS frm_Class
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
    METHOD Validate( aItem )    INLINE frm_Valid( aItem, Self )
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
-   METHOD BrowseAction( aItem, nKey ) INLINE ;
-      gui_MsgBox( aItem[ CFG_BRWTABLE ] + " option " + hb_ValToExp( nKey ) )
+   METHOD BrowseAction( aItem, nKey )
 
    ENDCLASS
 
@@ -185,7 +186,7 @@ METHOD EditOn() CLASS frm_Class
       ELSEIF gui_LibName() == "HMGE" .AND. aItem[ CFG_CTLTYPE ] == TYPE_BUTTON ;
          .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-      ELSEIF hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      ELSEIF hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ]
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
@@ -207,7 +208,7 @@ METHOD EditOff() CLASS frm_Class
    LOCAL aItem
 
    FOR EACH aItem IN ::aControlList
-      IF hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_HWGUIBUG , TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      IF hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_HWGUIBUG , TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
@@ -258,9 +259,10 @@ METHOD DataLoad() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       DO CASE
+      CASE aItem[ CFG_SAVEONLY ]
       CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }, aItem[ CFG_CTLTYPE ] ) != 0
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
-         gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
+         gui_ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
             nSelect := Select()
             SELECT ( Select( aItem[ CFG_VTABLE ] ) )
@@ -284,7 +286,7 @@ METHOD DataLoad() CLASS frm_Class
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          xValueControl := hb_AScan( aItem[ CFG_COMBOLIST ], { | e | e == xValue } )
-         gui_TextSetValue( ::xDLg, aItem[ CFG_FCONTROL ], xValueControl )
+         gui_ControlSetValue( ::xDLg, aItem[ CFG_FCONTROL ], xValueControl )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
@@ -315,7 +317,7 @@ METHOD DataSave() CLASS frm_Class
          DO CASE
          CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
          CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
-            xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+            xValue := gui_ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
             IF xValue == 0 .OR. xValue > Len( aItem[ CFG_COMBOLIST ] )
                xValue := Space( aItem[ CFG_FLEN ] )
             ELSE
@@ -323,7 +325,7 @@ METHOD DataSave() CLASS frm_Class
             ENDIF
             fieldput( FieldNum( aItem[ CFG_FNAME ] ), xValue )
          CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
-            xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+            xValue := gui_ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
             DO CASE
             CASE aItem[ CFG_FTYPE ] == "L"
             CASE aItem[ CFG_FTYPE ] == "N"; xValue := iif( xValue, 1, 0 )
@@ -333,7 +335,7 @@ METHOD DataSave() CLASS frm_Class
          CASE hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
          CASE aItem[ CFG_ISKEY ]
          OTHERWISE
-            xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+            xValue := gui_ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
             FieldPut( FieldNum( aItem[ CFG_FNAME ] ), xValue )
          ENDCASE
       NEXT
@@ -344,11 +346,16 @@ METHOD DataSave() CLASS frm_Class
 
    RETURN Nil
 
+METHOD BrowseAction( aItem, nKey ) CLASS frm_Class
+
+   frm_BrowseAction( aItem, nKey, Self )
+
+   RETURN Nil
+
 FUNCTION EmptyFrmClassItem()
 
-   LOCAL aItem
+   LOCAL aItem := Array(29)
 
-   aItem := Array(28)
    aItem[ CFG_FNAME ]      := ""
    aItem[ CFG_FTYPE ]      := "C"
    aItem[ CFG_FLEN ]       := 1
@@ -363,6 +370,7 @@ FUNCTION EmptyFrmClassItem()
    //aItem[ CFG_VALUE ]      := Nil
    aItem[ CFG_VLEN ]       := 0
    aItem[ CFG_CTLTYPE ]    := TYPE_NONE
+   aItem[ CFG_SAVEONLY ]   := .F.
    //aItem[ CFG_FCONTROL ]   := Nil
    //aItem[ CFG_CCONTROL ]   := Nil
    //aItem[ CFG_VCONTROL ]   := Nil

@@ -17,7 +17,7 @@ FUNCTION frm_Valid( aItem, Self )
       ENDIF
    ENDIF
 
-   xValue := gui_TextGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+   xValue := gui_ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
    IF aItem[ CFG_ISKEY ]
       IF aItem[ CFG_FTYPE ] == "C"
          SEEK Pad( xValue, aItem[ CFG_FLEN ] )
@@ -43,7 +43,7 @@ FUNCTION frm_Valid( aItem, Self )
          SKIP 0
       ENDIF
       ::DataLoad()
-      gui_TextSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
+      gui_ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
       ::EditOn()
    ELSEIF ! Empty( aItem[ CFG_VTABLE ] )
       // if setup to find on another dbf

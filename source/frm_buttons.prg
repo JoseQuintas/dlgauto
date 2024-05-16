@@ -4,11 +4,10 @@ frm_buttons - create the buttons
 
 #include "frm_class.ch"
 
-FUNCTION frm_Buttons( Self, lDefault )
+FUNCTION frm_Buttons( Self )
 
    LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
 
-   hb_Default( @lDefault, .T. )
    IF "I" $ ::cOptions
       AAdd( aList, { "Insert",   { || ::Insert() } } )
    ENDIF
@@ -18,7 +17,7 @@ FUNCTION frm_Buttons( Self, lDefault )
    IF "D" $ ::cOptions
       AAdd( aList, { "Delete",   { || ::Delete() } } )
    ENDIF
-   IF lDefault
+   IF ::lNavigate
       AAdd( aList, { "View",     { || ::View() } } )
       AAdd( aList, { "First",    { || ::First() } } )
       AAdd( aList, { "Previous", { || ::Previous() } } )
@@ -31,7 +30,7 @@ FUNCTION frm_Buttons( Self, lDefault )
    FOR EACH aItem IN ::aOptionList
       AAdd( aList, { aItem[1], aItem[2] } )
    NEXT
-   IF "E" $ ::cOptions
+   IF "E" $ ::cOptions .OR. "S" $ ::cOptions
       AAdd( aList, { "Save",     { || ::DataSave() } } )
       AAdd( aList, { "Cancel",   { || ::Cancel() } } )
    ENDIF

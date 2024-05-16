@@ -4,6 +4,7 @@ test_dlgmenu.prg
 test_setup.prg
 test.rc
 frm_browse.prg
+frm_browseaction.prg
 frm_class.prg
 frm_buttons.prg
 frm_dialog.prg

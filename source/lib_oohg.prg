@@ -32,7 +32,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       DEFINE POPUP "Sair"
          MENUITEM "Sair" ACTION gui_DialogClose( xDlg ) ICON "ICODOOR"
       END POPUP
-      DEFINE MONTHCALENDAR("mcal001")
+      DEFINE MONTHCALENDAR( gui_NewName( "CAL" ) )
          PARENT ( xDlg )
          COL 400
          ROW 400
@@ -47,7 +47,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "BUTTON" )
+      xControl := gui_NewName( "BUTTON" )
    ENDIF
 
    IF cCaption == "Cancel"
@@ -73,13 +73,13 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
-   cField, xValue, workarea, aKeyDownList, Self )
+FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
+   nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, Self )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "BROWSE" )
+      xControl := gui_NewName( "BROWSE" )
    ENDIF
    IF ValType( aKeyDownList ) != "A"
       aKeyDownList := {}
@@ -114,7 +114,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       FOR EACH aThisKey IN aKeyDownList
          AAdd( ::aControlList, EmptyFrmClassItem() )
          Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
-         Atail( ::aControlList )[ CFG_FCONTROL ] := gui_NewCtlName( "BTNBRW" )
+         Atail( ::aControlList )[ CFG_FCONTROL ] := gui_NewName( "BTNBRW" )
          gui_ButtonCreate( xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
             nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
             APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
@@ -172,7 +172,7 @@ FUNCTION gui_BrowseRefresh( xDlg, xControl )
 FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := gui_NewCtlName( "CHK" )
+      xControl := gui_NewName( "CHK" )
    ENDIF
    DEFINE CHECKBOX ( xControl )
       PARENT ( xDlg )
@@ -188,7 +188,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "CBO" )
+      xControl := gui_NewName( "CBO" )
    ENDIF
    DEFINE COMBOBOX ( xControl )
       PARENT ( xDlg )
@@ -206,7 +206,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "SPI" )
+      xControl := gui_NewName( "SPI" )
    ENDIF
    DEFINE SPINNER ( xControl )
       PARENT ( xDlg )
@@ -225,7 +225,7 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "DTP" )
+      xControl := gui_NewName( "DTP" )
    ENDIF
    DEFINE DATEPICKER (xControl)
       PARENT ( xDlg )
@@ -263,7 +263,7 @@ FUNCTION gui_DialogClose( xDlg )
 FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    IF Empty( xDlg )
-      xDlg := gui_newctlname( "DIALOG" )
+      xDlg := gui_NewName( "DIALOG" )
    ENDIF
    IF Empty( bInit )
       bInit := { || Nil }
@@ -300,7 +300,7 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "LABEL" )
+      xControl := gui_NewName( "LABEL" )
    ENDIF
    IF lBorder
       @ nRow, nCol LABEL ( xControl ) ;
@@ -340,7 +340,7 @@ FUNCTION gui_LibName()
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "MLTEXT" )
+      xControl := gui_NewName( "MLTEXT" )
    ENDIF
    //* not multiline */
    DEFINE EDITBOX ( xControl )
@@ -376,7 +376,7 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 FUNCTION gui_Statusbar( xDlg, xControl )
 
    IF Empty( xControl )
-      xControl := gui_NewCtlName( "STA" )
+      xControl := gui_NewName( "STA" )
    ENDIF
 
 	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8 PARENT (xDlg )
@@ -392,7 +392,7 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "TAB" )
+      xControl := gui_NewName( "TAB" )
    ENDIF
    DEFINE TAB ( xControl ) ;
       PARENT ( xDlg ) ;
@@ -437,7 +437,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid )
 
    IF Empty( xControl )
-      xControl := gui_newctlname( "TEXT" )
+      xControl := gui_NewName( "TEXT" )
    ENDIF
    DEFINE TEXTBOX ( xControl )
       PARENT ( xDlg )
@@ -475,20 +475,20 @@ FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_TextGetValue( xDlg, xControl )
+FUNCTION gui_ControlGetValue( xDlg, xControl )
 
    (xDlg)
 
    RETURN GetProperty( xDlg, xControl, "VALUE" )
 
-FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
+FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    // NOTE: string value, except if declared different on textbox creation
    SetProperty( xDlg, xControl, "VALUE", iif( ValType( xValue ) == "D", hb_Dtoc( xValue ), xValue ) )
 
    RETURN Nil
 
-STATIC FUNCTION gui_newctlname( cPrefix )
+STATIC FUNCTION gui_NewName( cPrefix )
 
    STATIC nCount := 0
 

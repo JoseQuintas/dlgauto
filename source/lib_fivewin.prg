@@ -290,7 +290,7 @@ FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_TextGetValue( xDlg, xControl )
+FUNCTION gui_ControlGetValue( xDlg, xControl )
 
    LOCAL xValue
 
@@ -299,7 +299,7 @@ FUNCTION gui_TextGetValue( xDlg, xControl )
 
    RETURN xValue
 
-FUNCTION gui_TextSetValue( xDlg, xControl, xValue )
+FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    xControl:SetText( xValue )
    (xDlg);(xControl);(xValue)

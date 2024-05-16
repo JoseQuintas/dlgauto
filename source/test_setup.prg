@@ -1,3 +1,7 @@
+/*
+test_dbf - setup on json, may change at any time
+*/
+
 FUNCTION test_Setup()
 
    LOCAL cTxt := ""
