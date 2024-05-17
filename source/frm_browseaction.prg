@@ -25,7 +25,7 @@ FUNCTION   frm_BrowseAction( aItemOld, nKey, oFrmOld )
       :aAllSetup := AClone( oFrmOld:aAllSetup )
        nPos := hb_ASCan( :aAllSetup, { | e | e[ 1 ] == aItemOld[ CFG_BRWTABLE ] } )
       :aEditList := :aAllSetup[ nPos, 2 ]
-      FOR EACH aItem IN oFrm:aAllSetup
+      FOR EACH aItem IN oFrm:aEditList
          DO CASE
          CASE aItem[ CFG_FNAME ] == aItemOld[ CFG_BRWKEYTO ]
             aItem[ CFG_SAVEONLY ] := .T.

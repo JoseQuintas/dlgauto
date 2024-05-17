@@ -159,7 +159,7 @@ METHOD EditKeyOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_TEXT .AND. aItem[ CFG_ISKEY ]
+      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_TEXT .AND. aItem[ CFG_ISKEY ] .AND. ! aItem[ CFG_SAVEONLY ]
          gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound .AND. aItem[ CFG_ISKEY ]
             lFound := .T.
@@ -187,7 +187,7 @@ METHOD EditOn() CLASS frm_Class
          .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
       ELSEIF hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
-         IF aItem[ CFG_ISKEY ]
+         IF aItem[ CFG_ISKEY ] .OR. aItem[ CFG_SAVEONLY ]
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
