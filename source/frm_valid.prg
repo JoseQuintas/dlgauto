@@ -56,7 +56,10 @@ FUNCTION frm_Valid( aItem, Self )
       ENDIF
       lFound := ! Eof()
       IF ! lFound
-         ::Browse( ::xDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
+         IF MsgYesNo( "Code does not exists. Create new one?" )
+            frm_Main( aItem[ CFG_VTABLE ], ::aAllSetup, .T. )
+         ENDIF
+         //::Browse( ::xDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
          gui_SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
       ENDIF
       IF ! Empty( aItem[ CFG_VSHOW ] )

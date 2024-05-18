@@ -19,6 +19,8 @@ CREATE CLASS frm_Class
    VAR cSelected       INIT "NONE"
    VAR lNavigate       INIT .T.
    VAR lSingleEdit     INIT .F.
+   VAR nRecnoInit
+   VAR lModal          INIT .F.
 
    VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
@@ -50,9 +52,24 @@ CREATE CLASS frm_Class
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
    METHOD Validate( aItem )    INLINE frm_Valid( aItem, Self )
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
-   METHOD BrowseAction( aItem, nKey )
+   METHOD BrowseAction( aItem, nKey ) INLINE frm_BrowseAction( aItem, nKey, Self )
+   METHOD DlgInit()
 
    ENDCLASS
+
+METHOD DlgInit() CLASS frm_Class
+
+   ::DataLoad()
+   IF ::lSingleEdit()
+      ::EditOn()
+   ELSE
+      ::EditOff()
+   ENDIF
+   IF ::nRecnoInit != Nil
+      GOTO ::nRecnoInit
+   ENDIF
+
+   RETURN Nil
 
 METHOD First() CLASS frm_Class
 
@@ -343,12 +360,6 @@ METHOD DataSave() CLASS frm_Class
       UNLOCK
    ENDIF
    ::cSelected := "NONE"
-
-   RETURN Nil
-
-METHOD BrowseAction( aItem, nKey ) CLASS frm_Class
-
-   frm_BrowseAction( aItem, nKey, Self )
 
    RETURN Nil
 

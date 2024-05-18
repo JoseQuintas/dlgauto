@@ -9,20 +9,22 @@ frm_browseaction - action for browse
    #define VK_RETURN  13
 #endif
 
-FUNCTION   frm_BrowseAction( aItemOld, nKey, oFrmOld )
+FUNCTION frm_BrowseAction( aItemOld, nKey, oFrmOld )
 
    LOCAL oFrm, nPos, aItem, nSelect
 
    nSelect := Select()
    oFrm := frm_Class():New()
    WITH OBJECT oFrm
-      :cFileDbf := aItemOld[ CFG_BRWTABLE ]
-      :cTitle := gui_LibName() + " - BROWSE " + :cFileDbf + "KEY:" + Ltrim( Str( nkey ) )
-      :cOptions := "S"
-      :lNavigate := .F.
+      :cFileDbf    := aItemOld[ CFG_BRWTABLE ]
+      :cTitle      := gui_LibName() + " - BROWSE " + :cFileDbf + "KEY:" + Ltrim( Str( nkey ) )
+      :cOptions    := "S"
+      :lNavigate   := .F.
       :lSingleEdit := .T.
-      :nLayout := oFrmOld:nLayout
-      :aAllSetup := AClone( oFrmOld:aAllSetup )
+      :lModal      := .T.
+      :nLayout     := oFrmOld:nLayout
+      :aAllSetup   := AClone( oFrmOld:aAllSetup )
+
        nPos := hb_ASCan( :aAllSetup, { | e | e[ 1 ] == aItemOld[ CFG_BRWTABLE ] } )
       :aEditList := :aAllSetup[ nPos, 2 ]
       FOR EACH aItem IN oFrm:aEditList

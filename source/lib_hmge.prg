@@ -275,7 +275,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOldDlg )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
 
    IF Empty( xDlg )
       xDlg := gui_NewName( "DLG" )
@@ -284,23 +284,44 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOl
    IF Empty( bInit )
       bInit := { || Nil }
    ENDIF
+   hb_Default( @lModal, .T. )
 
-   DEFINE WINDOW ( xDlg ) ;
-      AT nCol, nRow ;
-      WIDTH nWidth ;
-      HEIGHT nHeight ;
-      TITLE cTitle ;
-      ICON "APPICON" ;
-      FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
-      ; // BACKCOLOR { 226, 220, 213 } ;
-      ; // MODAL ; // bad using WINDOW MAIN OFF
-      ON INIT Eval( bInit ) ;
-      ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
-      IF ! Empty( xOldDlg )
-         ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
-      ENDIF
-      gui_Statusbar( xDlg, "" )
-   END WINDOW
+   IF lModal
+      DEFINE WINDOW ( xDlg ) ;
+         AT nCol, nRow ;
+         WIDTH nWidth ;
+         HEIGHT nHeight ;
+         TITLE cTitle ;
+         ICON "APPICON" ;
+         FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
+         MODAL ;
+         ON INIT Eval( bInit )
+         ; // BACKCOLOR { 226, 220, 213 } ;
+         ; // MODAL ; // bad using WINDOW MAIN OFF
+         //ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
+         //IF ! Empty( xOldDlg )
+         //   ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
+         //ENDIF
+         gui_Statusbar( xDlg, "" )
+      END WINDOW
+   ELSE
+      DEFINE WINDOW ( xDlg ) ;
+         AT nCol, nRow ;
+         WIDTH nWidth ;
+         HEIGHT nHeight ;
+         TITLE cTitle ;
+         ICON "APPICON" ;
+         FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
+         ON INIT Eval( bInit )
+         ; // BACKCOLOR { 226, 220, 213 } ;
+         ; // MODAL ; // bad using WINDOW MAIN OFF
+         //ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
+         //IF ! Empty( xOldDlg )
+         //   ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
+         //ENDIF
+         gui_Statusbar( xDlg, "" )
+      END WINDOW
+   ENDIF
 
    RETURN Nil
 

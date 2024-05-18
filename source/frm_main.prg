@@ -7,10 +7,11 @@ frm_main - dialog for each data and main use of class
 #include "frm_class.ch"
 #include "inkey.ch"
 
-FUNCTION frm_main( cDBF, aAllSetup )
+FUNCTION frm_main( cDBF, aAllSetup, lModal )
 
    LOCAL oFrm, nPos
 
+   hb_Default( @lModal, .F. )
 #ifdef HBMK_HAS_GTWVG
    hb_gtReload( "WVG" )  // do not use WGU
    SetMode(30,100)
@@ -26,6 +27,7 @@ FUNCTION frm_main( cDBF, aAllSetup )
    oFrm:cTitle     := gui_LibName() + " - " + cDBF
    oFrm:cOptions   := "IEDP"
    oFrm:aAllSetup  := aAllSetup
+   oFrm:lModal     := lModal
    AAdd( oFrm:aOptionList, { "Mail", { || Nil } } ) // example of aditional button
 
    nPos := hb_ASCan( aAllSetup, { | e | e[ 1 ] == cDBF } )

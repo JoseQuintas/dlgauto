@@ -146,12 +146,12 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, xOldDlg )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW"
 
    gui_StatusBar( xDlg, "" )
-   (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit);(xOldDlg)
+   (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
 
    RETURN Nil
 
