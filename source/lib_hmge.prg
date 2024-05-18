@@ -15,7 +15,7 @@ FUNCTION gui_Init()
    SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
-   SET WINDOW MAIN OFF
+   //SET WINDOW MAIN OFF
 
    RETURN Nil
 
@@ -23,7 +23,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
+   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle,,,.T. )
 
    DEFINE MAIN MENU OF ( xDlg )
       FOR EACH aGroupList IN aMenuList
@@ -275,7 +275,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, lMain )
 
    IF Empty( xDlg )
       xDlg := gui_NewName( "DLG" )
@@ -285,8 +285,27 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
       bInit := { || Nil }
    ENDIF
    hb_Default( @lModal, .T. )
+   hb_Default( @lMain, .F. )
 
-   IF lModal
+   IF lMain
+      DEFINE WINDOW ( xDlg ) ;
+         AT nCol, nRow ;
+         WIDTH nWidth ;
+         HEIGHT nHeight ;
+         TITLE cTitle ;
+         ICON "APPICON" ;
+         FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
+         MAIN ;
+         ON INIT Eval( bInit )
+         ; // BACKCOLOR { 226, 220, 213 } ;
+         ; // MODAL ; // bad using WINDOW MAIN OFF
+         //ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
+         //IF ! Empty( xOldDlg )
+         //   ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
+         //ENDIF
+         gui_Statusbar( xDlg, "" )
+      END WINDOW
+   ELSEIF lModal
       DEFINE WINDOW ( xDlg ) ;
          AT nCol, nRow ;
          WIDTH nWidth ;
@@ -498,8 +517,8 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       IF ! Empty( cImage )
          IMAGE cImage
       ENDIF
-      //ON LOSTFOCUS Eval( bValid )
-      VALID bValid
+      ON LOSTFOCUS Eval( bValid )
+      //VALID bValid // bug on HMG Extended
    //IF ! Empty( cImage )
       //END BTNTEXTBOX
    //ELSE

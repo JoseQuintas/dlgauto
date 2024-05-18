@@ -196,6 +196,8 @@ METHOD EditKeyOn() CLASS frm_Class
 METHOD EditOn() CLASS frm_Class
 
    LOCAL aItem, oFirstEdit, lFound := .F.
+   LOCAL aEnableList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_COMBOBOX, TYPE_CHECKBOX, ;
+      TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE }
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_HWGUIBUG
@@ -203,7 +205,7 @@ METHOD EditOn() CLASS frm_Class
       ELSEIF gui_LibName() == "HMGE" .AND. aItem[ CFG_CTLTYPE ] == TYPE_BUTTON ;
          .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-      ELSEIF hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      ELSEIF hb_AScan( aEnableList, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ] .OR. aItem[ CFG_SAVEONLY ]
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
@@ -223,9 +225,11 @@ METHOD EditOn() CLASS frm_Class
 METHOD EditOff() CLASS frm_Class
 
    LOCAL aItem
+   LOCAL aDisableList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_HWGUIBUG , TYPE_COMBOBOX, ;
+      TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE }
 
    FOR EACH aItem IN ::aControlList
-      IF hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_HWGUIBUG , TYPE_COMBOBOX, TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      IF hb_AScan( aDisableList, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
       ENDIF
    NEXT
