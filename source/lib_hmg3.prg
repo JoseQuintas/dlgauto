@@ -31,8 +31,8 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
             NEXT
          END POPUP
       NEXT
-      DEFINE POPUP "Sair"
-         MENUITEM "Sair" ACTION gui_DialogClose( xDlg )
+      DEFINE POPUP "Exit"
+         MENUITEM "Exit" ACTION gui_DialogClose( xDlg )
       END POPUP
       DEFINE MONTHCALENDAR ( gui_NewName( "CAL" ) )
          PARENT ( xDlg )
@@ -121,7 +121,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       // some buttons
    ENDIF
    FOR EACH aItem IN aKeyDownList
-      AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], Self } )
+      AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
    NEXT
 
    (xDlg);(cField);(xValue);(workarea);(xParent)

@@ -29,9 +29,9 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
             NEXT
          ENDMENU
       NEXT
-      MENUITEM "Sair"
+      MENUITEM "Exit"
          MENU
-         MENUITEM "Sair" ACTION gui_DialogClose( xDlg )
+         MENUITEM "Exit" ACTION gui_DialogClose( xDlg )
          ENDMENU
       ENDMENU
       xDlg:SetMenu( oMenu )

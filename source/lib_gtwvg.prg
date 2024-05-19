@@ -30,7 +30,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       NEXT
       oMainMenu:AddItem( oMenuGroup, "Data" + Ltrim( Str( aGroupList:__EnumIndex ) ) )
    NEXT
-   oMainMenu:AddItem( "Sair", { || __Quit() } )
+   oMainMenu:AddItem( "Exit", { || __Quit() } )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
    (xDlg);(cTitle)
