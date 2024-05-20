@@ -518,7 +518,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          IMAGE cImage
       ENDIF
       ON LOSTFOCUS Eval( bValid )
-      //VALID bValid // bug on HMG Extended
+      //VALID bValid // testing about bug?
    //IF ! Empty( cImage )
       //END BTNTEXTBOX
    //ELSE

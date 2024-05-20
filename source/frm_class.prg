@@ -277,11 +277,26 @@ METHOD Delete() CLASS frm_Class
 METHOD DataLoad() CLASS frm_Class
 
    LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl
+   LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
 
    FOR EACH aItem IN ::aControlList
       DO CASE
+      CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
+         SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
+         SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
+         xScope := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM ] ) ) )
+         nLenScope := ( ::cFileDbf )->( FieldLen( aItem[ CFG_BRWKEYFROM ] ) )
+         IF ValType( xScope ) == "C"
+            SET SCOPE TO xScope
+         ELSE
+            SET SCOPE TO Str( xScope, nLenScope )
+         ENDIF
+         GOTO TOP
+         gui_BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+         SELECT ( Select( ::cFileDbf ) ) // HMG Extended
+      CASE Empty( aItem[ CFG_FNAME ] )
       CASE aItem[ CFG_SAVEONLY ]
-      CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }, aItem[ CFG_CTLTYPE ] ) != 0
+      CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          gui_ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
@@ -304,24 +319,11 @@ METHOD DataLoad() CLASS frm_Class
          ENDCASE
          gui_LabelSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
 
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
+      CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          xValueControl := hb_AScan( aItem[ CFG_COMBOLIST ], { | e | e == xValue } )
          gui_ControlSetValue( ::xDLg, aItem[ CFG_FCONTROL ], xValueControl )
 
-      CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
-         SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
-         SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
-         xScope := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM ] ) ) )
-         nLenScope := ( ::cFileDbf )->( FieldLen( aItem[ CFG_BRWKEYFROM ] ) )
-         IF ValType( xScope ) == "C"
-            SET SCOPE TO xScope
-         ELSE
-            SET SCOPE TO Str( xScope, nLenScope )
-         ENDIF
-         GOTO TOP
-         gui_BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
-         SELECT ( Select( ::cFileDbf ) ) // HMG Extended
       ENDCASE
    NEXT
    (cText)
@@ -331,6 +333,7 @@ METHOD DataLoad() CLASS frm_Class
 METHOD DataSave() CLASS frm_Class
 
    LOCAL aItem, xValue
+   LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
 
    ::EditOff()
    IF RLock()
@@ -353,7 +356,7 @@ METHOD DataSave() CLASS frm_Class
             CASE aItem[ CFG_FTYPE ] == "C"; xValue := iif( xValue, "Y", "N" )
             ENDCASE
             FieldPut( FieldNum( aItem[ CFG_FNAME ] ), xValue )
-         CASE hb_AScan( { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
+         CASE hb_AScan( aCommonList, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
          CASE aItem[ CFG_ISKEY ]
          OTHERWISE
             xValue := gui_ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
