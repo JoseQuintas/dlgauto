@@ -18,9 +18,11 @@ CREATE CLASS frm_Class
    VAR aOptionList     INIT {}
    VAR cSelected       INIT "NONE"
    VAR lNavigate       INIT .T.
-   VAR lSingleEdit     INIT .F.
-   VAR nRecnoInit
    VAR lModal          INIT .F.
+   VAR nInitRecno
+   VAR aInitValue1
+   VAR aInitValue2
+   VAR bActivate
 
    VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
@@ -59,14 +61,22 @@ CREATE CLASS frm_Class
 
 METHOD DlgInit() CLASS frm_Class
 
-   ::DataLoad()
-   IF ::lSingleEdit()
-      ::EditOn()
-   ELSE
-      ::EditOff()
+   LOCAL nPos
+
+   IF ::nInitRecno != Nil
+      GOTO ::nInitRecno
    ENDIF
-   IF ::nRecnoInit != Nil
-      GOTO ::nRecnoInit
+   ::DataLoad()
+   ::EditOff()
+   IF ::aInitValue1 != Nil .AND. ::aInitValue2 != Nil
+      IF ( nPos := hb_AScan( ::aControlList, { | e | e[ CFG_FNAME ] == ::aInitValue1[1] } ) ) != 0
+         ::aControlList[ nPos ][ CFG_VALUE ]    := ::aInitValue1[2]
+         ::aControlList[ nPos ][ CFG_SAVEONLY ] := .T.
+      ENDIF
+      IF ( nPos := hb_AScan( ::aControlList, { | e | e[ CFG_FNAME ] == ::aInitValue2[1] } ) ) != 0
+         ::aControlList[ nPos ][ CFG_VALUE ] := ::aInitValue2[2]
+         ::aControlList[ nPos ][ CFG_SAVEONLY ] := .T.
+      ENDIF
    ENDIF
 
    RETURN Nil
@@ -294,7 +304,7 @@ METHOD DataLoad() CLASS frm_Class
          GOTO TOP
          gui_BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
          SELECT ( Select( ::cFileDbf ) ) // HMG Extended
-      CASE Empty( aItem[ CFG_FNAME ] )
+      CASE Empty( aItem[ CFG_FNAME ] ) // not a field
       CASE aItem[ CFG_SAVEONLY ]
       CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
@@ -339,7 +349,7 @@ METHOD DataSave() CLASS frm_Class
    IF RLock()
       FOR EACH aItem IN ::aControlList
          DO CASE
-         CASE Empty( aItem[ CFG_FNAME ] )       // do not have name
+         CASE Empty( aItem[ CFG_FNAME ] ) // not a field
          CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
             xValue := gui_ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
             IF xValue == 0 .OR. xValue > Len( aItem[ CFG_COMBOLIST ] )

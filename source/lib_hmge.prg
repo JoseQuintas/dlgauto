@@ -259,13 +259,17 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
    RETURN Nil
 
-FUNCTION gui_DialogActivate( xDlg, bCode )
+FUNCTION gui_DialogActivate( xDlg, bInit, bActivate )
 
-   IF ! Empty( bCode )
-      Eval( bCode )
+   IF ! Empty( bInit )
+      Eval( bInit )
    ENDIF
    DoMethod( xDlg, "CENTER" )
-   DoMethod( xDlg, "ACTIVATE" )
+   IF ! Empty( bActivate )
+      DoMethod( xDlg, "SHOW" )
+      Eval( bActivate )
+   ENDIF
+   DoMethod( xDlg, "Activate" )
 
    RETURN Nil
 
@@ -412,7 +416,11 @@ FUNCTION gui_MsgYesNo( cText )
 
 FUNCTION gui_SetFocus( xDlg, xControl )
 
-   DoMethod( xDlg, xControl, "SETFOCUS" )
+   IF Empty( xControl )
+      DoMethod( xDlg, "SETFOCUS" )
+   ELSE
+      DoMethod( xDlg, xControl, "SETFOCUS" )
+   ENDIF
 
    RETURN Nil
 

@@ -11,35 +11,33 @@ frm_browseaction - action for browse
 
 FUNCTION frm_BrowseAction( aItemOld, nKey, oFrmOld )
 
-   LOCAL oFrm, nPos, aItem, nSelect
+   LOCAL oFrm, nPos, nSelect
 
    nSelect := Select()
    oFrm := frm_Class():New()
    WITH OBJECT oFrm
       :cFileDbf    := aItemOld[ CFG_BRWTABLE ]
-      :cTitle      := gui_LibName() + " - BROWSE " + :cFileDbf + "KEY:" + Ltrim( Str( nkey ) )
+      :cTitle      := gui_LibName() + " - BROWSE " + :cFileDbf
       :cOptions    := "S"
       :lNavigate   := .F.
-      :lSingleEdit := .T.
       :lModal      := .T.
       :nLayout     := oFrmOld:nLayout
       :aAllSetup   := AClone( oFrmOld:aAllSetup )
 
-       nPos := hb_ASCan( :aAllSetup, { | e | e[ 1 ] == aItemOld[ CFG_BRWTABLE ] } )
-      :aEditList := :aAllSetup[ nPos, 2 ]
-      FOR EACH aItem IN oFrm:aEditList
-         DO CASE
-         CASE aItem[ CFG_FNAME ] == aItemOld[ CFG_BRWKEYTO ]
-            aItem[ CFG_SAVEONLY ] := .T.
-            aItem[ CFG_VALUE ] := ( nSelect )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) )
-         CASE aItem[ CFG_FNAME ] == aItemOld[ CFG_BRWKEYTO2 ]
-            aItem[ CFG_SAVEONLY ] := .T.
-            aItem[ CFG_VALUE ] := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
-          ENDCASE
-      NEXT
+      nPos := hb_ASCan( :aAllSetup, { | e | e[ 1 ] == aItemOld[ CFG_BRWTABLE ] } )
+      :aEditList   := :aAllSetup[ nPos, 2 ]
+      :nInitRecno  := RecNo()
+      :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cFileDbf )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
+      :aInitValue2 := { aItemOld[ CFG_BRWKEYTO2 ], ( nSelect )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYTO2 ] ) ) ) }
+      DO CASE
+      CASE nKey == VK_INSERT; :bActivate := { || :Insert() }
+      CASE nKey == VK_DELETE; :bActivate := { || :Delete() }
+      CASE nKey == VK_RETURN; :bActivate := { || :Edit() }
+      ENDCASE
       :Execute()
    ENDWITH
    SELECT ( nSelect )
+   gui_SetFocus( oFrmOld:xDlg )
 
    RETURN Nil
 

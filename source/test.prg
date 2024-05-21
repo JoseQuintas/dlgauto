@@ -2,6 +2,7 @@
 test - main program
 */
 REQUEST DBFCDX
+REQUEST HB_CODEPAGE_PTISO
 
 #include "hbclass.ch"
 #include "directry.ch"
@@ -26,6 +27,7 @@ REQUEST DBFCDX
    SET EXCLUSIVE OFF
    SET FILECASE LOWER
    SET DIRCASE  LOWER
+   Set( _SET_CODEPAGE, "PTISO" )
    gui_Init()
    RddSetDefault( "DBFCDX" )
    test_DBF()
