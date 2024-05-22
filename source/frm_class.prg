@@ -4,8 +4,6 @@ frm_Class - Class for data and bypass for functions
 
 #include "hbclass.ch"
 #include "frm_class.ch"
-      #include "hmg.ch"
-      #include "i_altsyntax.ch"
 
 CREATE CLASS frm_Class
 

@@ -194,6 +194,7 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
+   hb_Default( @lBorder, .F. )
    IF lBorder
       @ nCol, nRow SAY xControl ;
          CAPTION xValue ;

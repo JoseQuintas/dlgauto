@@ -307,7 +307,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    //   VALUE xValue
    //   BORDER lBorder
    //END LABEL
-
+   hb_Default( @lBorder, .F. )
    IF lBorder
       @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
          VALUE xValue WIDTH nWidth HEIGHT nHeight BORDER
@@ -443,7 +443,9 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          MAXLENGTH nMaxLength
       ENDIF
       VALUE     xValue
-      ON LOSTFOCUS Eval( bValid )
+      IF ! Empty( bValid )
+         ON LOSTFOCUS Eval( bValid )
+      ENDIF
    END TEXTBOX
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
       AAdd( ::aDlgKeyDown, { xControl, VK_F9, ;

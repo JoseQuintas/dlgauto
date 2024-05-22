@@ -1,5 +1,6 @@
 test.prg
 test_dbf.prg
+test_dlglogin.prg
 test_dlgmenu.prg
 test_setup.prg
 test.rc

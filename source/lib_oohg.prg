@@ -308,6 +308,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    IF Empty( xControl )
       xControl := gui_NewName( "LABEL" )
    ENDIF
+   hb_Default( @lBorder, .F. )
    IF lBorder
       @ nRow, nCol LABEL ( xControl ) ;
          PARENT ( xDlg ) ;
@@ -460,7 +461,9 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          MAXLENGTH nMaxLength
       ENDIF
       VALUE     xValue
-      ON LOSTFOCUS Eval( bValid )
+      IF ! Empty( bValid )
+         ON LOSTFOCUS Eval( bValid )
+      ENDIF
    END TEXTBOX
    (bValid); (cPicture)
 

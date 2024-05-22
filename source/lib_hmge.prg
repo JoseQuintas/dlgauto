@@ -15,7 +15,7 @@ FUNCTION gui_Init()
    SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
-   //SET WINDOW MAIN OFF
+   SET WINDOW MAIN OFF
 
    RETURN Nil
 
@@ -359,7 +359,8 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    IF Empty( xControl )
       xControl := gui_NewName( "LBL" )
    ENDIF
-
+   hb_Default( @lBorder, .F. )
+   hb_Default( @nFontSize, APP_FONTSIZE_NORMAL )
    //nHeight := Round( nHeight, 0 )
    // não mostra borda
    DEFINE LABEL ( xControl )
@@ -491,12 +492,13 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
-            aItem, Self )
+            aItem, Self, lPassword )
 
    IF Empty( xControl )
       xControl := gui_NewName( "TEXT" )
    ENDIF
 
+   hb_Default( @lPassword, .F. )
    //IF ! Empty( cImage )
       //DEFINE BTNTEXTBOX ( xControl )
    //ELSE
@@ -527,7 +529,13 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       IF ! Empty( cImage )
          IMAGE cImage
       ENDIF
-      ON LOSTFOCUS Eval( bValid )
+      IF ! Empty( bValid )
+         ON LOSTFOCUS Eval( bValid )
+      ENDIF
+      IF lPassword
+         PASSWORD .T.
+         UPPERCASE .T.
+      ENDIF
       //VALID bValid // testing about bug?
    //IF ! Empty( cImage )
       //END BTNTEXTBOX

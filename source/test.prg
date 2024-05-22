@@ -9,6 +9,8 @@ REQUEST HB_CODEPAGE_PTISO
 #include "dbstruct.ch"
 #include "frm_class.ch"
 
+MEMVAR lLogin, cUser, cPass
+
 #ifdef DLGAUTO_AS_LIB
    PROCEDURE DlgAuto()
 #else
@@ -17,7 +19,8 @@ REQUEST HB_CODEPAGE_PTISO
 
    LOCAL aKeyList := {}, aSeekList := {}, aBrowseList := {}, aTypeList := {}
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL cFieldName, aBrowse, nPos, aSetup
+   LOCAL cFieldName, aBrowse, nPos, aSetup, lMakeLogin
+   PRIVATE lLogin := .F., cUser := "", cPass := ""
 
    SET CONFIRM OFF
    SET CENTURY ON
@@ -30,6 +33,7 @@ REQUEST HB_CODEPAGE_PTISO
    Set( _SET_CODEPAGE, "PTISO" )
    gui_Init()
    RddSetDefault( "DBFCDX" )
+
    test_DBF()
    IF ! File( "dlgauto.json" )
       hb_MemoWrit( "dlgauto.json", test_Setup() )
@@ -45,8 +49,16 @@ REQUEST HB_CODEPAGE_PTISO
          CASE aItem[ 1 ] == "SEEKLIST";       aSeekList       := aItem[ 2 ]
          CASE aItem[ 1 ] == "BROWSELIST";     aBrowseList     := aItem[ 2 ]
          CASE aItem[ 1 ] == "TYPELIST";       aTypeList       := aItem[ 2 ]
+         CASE aItem[ 1 ] == "LOGIN";          lMakeLogin      := aItem[ 2 ][ 1 ]
          ENDCASE
       NEXT
+   ENDIF
+   hb_Default( @lMakeLogin, .F. )
+   IF lMakeLogin
+      Test_DlgLogin()
+      IF ! lLogin
+         RETURN
+      ENDIF
    ENDIF
 
    aAllSetup := {}
