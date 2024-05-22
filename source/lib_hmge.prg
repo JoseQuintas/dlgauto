@@ -259,17 +259,19 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
    RETURN Nil
 
-FUNCTION gui_DialogActivate( xDlg, bInit, bActivate )
+FUNCTION gui_DialogActivate( xDlg, bInit )
 
    IF ! Empty( bInit )
       Eval( bInit )
    ENDIF
    DoMethod( xDlg, "CENTER" )
-   IF ! Empty( bActivate )
-      DoMethod( xDlg, "SHOW" )
-      Eval( bActivate )
-   ENDIF
    DoMethod( xDlg, "Activate" )
+
+   RETURN Nil
+
+FUNCTION gui_DialogShow( xDlg )
+
+   DoMethod( xDlg, "SHOW" )
 
    RETURN Nil
 

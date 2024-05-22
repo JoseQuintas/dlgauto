@@ -4,6 +4,8 @@ frm_Class - Class for data and bypass for functions
 
 #include "hbclass.ch"
 #include "frm_class.ch"
+      #include "hmg.ch"
+      #include "i_altsyntax.ch"
 
 CREATE CLASS frm_Class
 
@@ -77,6 +79,9 @@ METHOD DlgInit() CLASS frm_Class
          ::aControlList[ nPos ][ CFG_VALUE ] := ::aInitValue2[2]
          ::aControlList[ nPos ][ CFG_SAVEONLY ] := .T.
       ENDIF
+   ENDIF
+   IF ! Empty( ::bActivate )
+      Eval( ::bActivate )
    ENDIF
 
    RETURN Nil

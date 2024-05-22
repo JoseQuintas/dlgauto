@@ -30,9 +30,9 @@ FUNCTION frm_BrowseAction( aItemOld, nKey, oFrmOld )
       :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cFileDbf )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
       :aInitValue2 := { aItemOld[ CFG_BRWKEYTO2 ], ( nSelect )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYTO2 ] ) ) ) }
       DO CASE
-      CASE nKey == VK_INSERT; :bActivate := { || :Insert() }
-      CASE nKey == VK_DELETE; :bActivate := { || :Delete() }
-      CASE nKey == VK_RETURN; :bActivate := { || :Edit() }
+      CASE nKey == VK_INSERT; :cOptions := "IS" ; :bActivate := { || :Insert() }
+      CASE nKey == VK_DELETE; :cOptions := "D" // :bActivate := { || :Delete() }
+      CASE nKey == VK_RETURN; :cOptions := "ES"; :bActivate := { || :Edit() }
       ENDCASE
       :Execute()
    ENDWITH
