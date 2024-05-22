@@ -7,7 +7,7 @@ FUNCTION test_Setup()
    LOCAL cTxt := ""
 
    cTxt += '[' + hb_Eol()
-   cTxt += '[ "LOGIN", [ true ] ],' + hb_Eol()
+   //cTxt += '[ "LOGIN", [ true ] ],' + hb_Eol()
    cTxt += '[ "KEYLIST", [' + hb_Eol()
    cTxt += '[ "cDbfName",    "cFieldName", "nBrowseOrder"],' + hb_Eol()
    cTxt += '[ "DBCLIENT",    "IDCLIENT",   2 ],' + hb_Eol()
