@@ -11,7 +11,9 @@ FUNCTION frm_Dialog( Self )
 
    SELECT ( Select( ::cFileDbf ) )
    USE
-   USE ( ::cFileDBF )
+   IF ! Empty( ::cFileDbf )
+      USE ( ::cFileDBF )
+   ENDIF
    IF hb_ASCan( ::aEditList, { | e | e[ CFG_ISKEY ] } ) != 0
       SET INDEX TO ( ::cFileDBF )
    ENDIF
@@ -45,8 +47,9 @@ FUNCTION frm_Dialog( Self )
          ENDIF
       NEXT
    NEXT
-
-   SELECT ( Select( ::cFileDbf ) )
+   IF ! Empty( ::cFileDbf )
+      SELECT ( Select( ::cFileDbf ) )
+   ENDIF
 
    gui_DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle,, ::lModal )
    ::CreateControls()

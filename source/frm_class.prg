@@ -67,7 +67,12 @@ METHOD DlgInit() CLASS frm_Class
       GOTO ::nInitRecno
    ENDIF
    ::DataLoad()
-   ::EditOff()
+   IF Empty( ::cFileDbf )
+      AEval( ::aControlList, { | e | ;
+         iif( e[ CFG_CTLTYPE ] == TYPE_TEXT, gui_ControlEnable( ::xDlg, e[ CFG_FCONTROL ], .T. ), Nil ) } )
+   ELSE
+      ::EditOff()
+   ENDIF
    IF ::aInitValue1 != Nil .AND. ::aInitValue2 != Nil
       IF ( nPos := hb_AScan( ::aControlList, { | e | e[ CFG_FNAME ] == ::aInitValue1[1] } ) ) != 0
          ::aControlList[ nPos ][ CFG_VALUE ]    := ::aInitValue1[2]

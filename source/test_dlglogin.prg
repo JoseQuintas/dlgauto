@@ -1,3 +1,7 @@
+/*
+test_DlgLogin - login
+*/
+
 #include "frm_class.ch"
 
 MEMVAR lLogin, cUser, cPass
