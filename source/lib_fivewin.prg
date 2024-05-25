@@ -10,6 +10,8 @@ Basic screen only
 #include "fivewin.ch"
 #include "calendar.ch"
 
+STATIC nWindow := 0
+
 FUNCTION gui_Init()
 
    RETURN Nil
@@ -134,7 +136,11 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
    IF ! Empty( bCode )
       EVAL( bCode )
    ENDIF
-   ACTIVATE WINDOW xDlg CENTERED
+   IF nWindow <= 1
+      ACTIVATE WINDOW xDlg CENTERED
+   ELSE
+      ACTIVATE DIALOG xDlg CENTERED
+   ENDIF
    (bCode)
 
    RETURN Nil
@@ -154,9 +160,14 @@ FUNCTION gui_DialogClose( xDlg )
 
 FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
-   DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW"
+   //nWindow += 1
 
-   gui_StatusBar( xDlg, "" )
+   IF nWindow <= 1
+      DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW"
+      gui_StatusBar( xDlg, "" )
+   ELSE
+      DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW"
+   ENDIF
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
 
    RETURN Nil

@@ -2,7 +2,7 @@
 test - main program
 */
 REQUEST DBFCDX
-REQUEST HB_CODEPAGE_PTISO
+REQUEST HB_CODEPAGE_PT850
 
 #include "hbclass.ch"
 #include "directry.ch"
@@ -30,7 +30,7 @@ MEMVAR lLogin, cUser, cPass
    SET EXCLUSIVE OFF
    SET FILECASE LOWER
    SET DIRCASE  LOWER
-   Set( _SET_CODEPAGE, "PTISO" )
+   Set( _SET_CODEPAGE, "PT850" )
    gui_Init()
    RddSetDefault( "DBFCDX" )
 

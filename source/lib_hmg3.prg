@@ -427,7 +427,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    IF Empty( xControl )
       xControl := gui_NewName( "TEXT" )
    ENDIF
-   DEFINE TEXTBOX ( xControl )
+   DEFINE GETTBOX ( xControl )
       PARENT ( xDlg )
       ROW nRow
       COL nCol
@@ -446,7 +446,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       IF ! Empty( bValid )
          ON LOSTFOCUS Eval( bValid )
       ENDIF
-   END TEXTBOX
+   END GETBOX
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
       AAdd( ::aDlgKeyDown, { xControl, VK_F9, ;
          { || ::Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], ::cFileDbf, aItem[ CFG_VTABLE ] ) ) } } )

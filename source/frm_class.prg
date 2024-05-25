@@ -24,7 +24,7 @@ CREATE CLASS frm_Class
    VAR aInitValue2
    VAR bActivate
 
-   VAR nLayout         INIT 2
+   VAR nLayout         INIT 3
    VAR lWithTab        INIT .T.
 
    VAR xDlg
@@ -392,21 +392,21 @@ FUNCTION EmptyFrmClassItem()
 
    LOCAL aItem := Array(29)
 
-   aItem[ CFG_FNAME ]      := ""
-   aItem[ CFG_FTYPE ]      := "C"
-   aItem[ CFG_FLEN ]       := 1
-   aItem[ CFG_FDEC ]       := 0
-   aItem[ CFG_ISKEY ]      := .F.
-   aItem[ CFG_FPICTURE ]   := ""
-   aItem[ CFG_CAPTION ]    := ""
-   aItem[ CFG_VALID ]      := {}
-   aItem[ CFG_VTABLE ]     := ""
-   aItem[ CFG_VFIELD ]     := ""
-   aItem[ CFG_VSHOW ]      := ""
+   aItem[ CFG_FNAME ]       := ""
+   aItem[ CFG_FTYPE ]       := "C"
+   aItem[ CFG_FLEN ]        := 1
+   aItem[ CFG_FDEC ]        := 0
+   aItem[ CFG_ISKEY ]       := .F.
+   aItem[ CFG_FPICTURE ]    := ""
+   aItem[ CFG_CAPTION ]     := ""
+   aItem[ CFG_VALID ]       := {}
+   aItem[ CFG_VTABLE ]      := ""
+   aItem[ CFG_VFIELD ]      := ""
+   aItem[ CFG_VSHOW ]       := ""
+   aItem[ CFG_VLEN ]        := 0
+   aItem[ CFG_CTLTYPE ]     := TYPE_NONE
+   aItem[ CFG_SAVEONLY ]    := .F.
    //aItem[ CFG_VALUE ]      := Nil
-   aItem[ CFG_VLEN ]       := 0
-   aItem[ CFG_CTLTYPE ]    := TYPE_NONE
-   aItem[ CFG_SAVEONLY ]   := .F.
    //aItem[ CFG_FCONTROL ]   := Nil
    //aItem[ CFG_CCONTROL ]   := Nil
    //aItem[ CFG_VCONTROL ]   := Nil

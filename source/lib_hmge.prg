@@ -86,7 +86,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, Self )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
-
+   LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}
    IF Empty( xControl )
       xControl := gui_NewName( "BRW" )
    ENDIF
@@ -98,6 +98,8 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       AAdd( aFieldList, aItem[2] )
       AAdd( aWidthList, ( 1 + Max( Len( aItem[3] ), ;
          Len( Transform( ( workarea )->( FieldGet( FieldNum( aItem[ 1 ] ) ) ), "" ) ) ) ) * 13 )
+      AAdd( aBrowseBackColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 222,222,222 }, { 250,250,250 } ) } )
+      AAdd( aBrowseForeColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 0,0,0 }, { 0,0,0 } ) } )
    NEXT
 
    DEFINE BROWSE ( xControl )
@@ -113,6 +115,8 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       WIDTHS aWidthList
       WORKAREA ( workarea )
       FIELDS aFieldList
+      DYNAMICBACKCOLOR aBrowseBackColor
+      DYNAMICFORECOLOR aBrowseForeColor
       SET BROWSESYNC ON
    END BROWSE
    /* create buttons on browse for defined keys */
@@ -535,13 +539,13 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          IMAGE cImage
       ENDIF
       IF ! Empty( bValid )
-         ON LOSTFOCUS Eval( bValid )
+         ON LOSTFOCUS Eval( bValid ) // bug because it lost the focus
       ENDIF
+      //VALID bValid // bug on next window
       IF lPassword
          PASSWORD .T.
          UPPERCASE .T.
       ENDIF
-      //VALID bValid // testing about bug?
    //IF ! Empty( cImage )
       //END BTNTEXTBOX
    //ELSE
