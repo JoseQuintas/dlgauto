@@ -51,7 +51,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    aItem := Atail( oThisForm:aControlList )
    aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
    gui_Browse( oThisForm:xDlg, oThisForm:xDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
-      APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 80, ;
+      APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
       oTbrowse, cField, @xValue, cTable, {}, oThisForm )
    // works for hmge from button
    gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] )
