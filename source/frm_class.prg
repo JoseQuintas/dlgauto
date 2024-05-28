@@ -24,7 +24,7 @@ CREATE CLASS frm_Class
    VAR aInitValue2
    VAR bActivate
 
-   VAR nLayout         INIT 3
+   VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
 
    VAR xDlg

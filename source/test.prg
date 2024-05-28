@@ -49,7 +49,7 @@ MEMVAR lLogin, cUser, cPass
          CASE aItem[ 1 ] == "SEEKLIST";       aSeekList       := aItem[ 2 ]
          CASE aItem[ 1 ] == "BROWSELIST";     aBrowseList     := aItem[ 2 ]
          CASE aItem[ 1 ] == "TYPELIST";       aTypeList       := aItem[ 2 ]
-         //CASE aItem[ 1 ] == "LOGIN";          lMakeLogin      := aItem[ 2 ][ 1 ]
+         CASE aItem[ 1 ] == "LOGIN";          lMakeLogin      := aItem[ 2 ][ 1 ]
          ENDCASE
       NEXT
    ENDIF
