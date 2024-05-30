@@ -4,7 +4,6 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 #include "frm_class.ch"
 #include "hmg.ch"
-#include "i_altsyntax.ch"
 #include "i_winuser.ch"
 
 FUNCTION gui_Init()
@@ -15,7 +14,7 @@ FUNCTION gui_Init()
    SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
-   SET WINDOW MAIN OFF
+   //SET WINDOW MAIN OFF
    Set( _SET_DEBUG, .F. )
 
    RETURN Nil
@@ -118,7 +117,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       FIELDS aFieldList
       DYNAMICBACKCOLOR aBrowseBackColor
       DYNAMICFORECOLOR aBrowseForeColor
-      SET BROWSESYNC ON
+      //SET BROWSESYNC ON
    END BROWSE
    /* create buttons on browse for defined keys */
    IF Len( aKeyDownList ) != 0
@@ -214,7 +213,8 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       COL nCol
       VALUE 1
       WIDTH nWidth
-      //HEIGHT nHeight // do not define height, it can limit list size to zero
+      // do not define height, it can limit list size to zero
+      // HEIGHT nHeight
       ITEMS aList
    END COMBOBOX
 
@@ -234,8 +234,9 @@ FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue,
       COL nCol
       VALUE nValue
       WIDTH nWidth
-      //ON GOTFOCUS  SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
-      //ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
+      // Depending Windows version ?, do not accepts to change color
+      // ON GOTFOCUS  SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
+      // ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
       RANGEMIN aList[ 1 ]
       RANGEMAX aList[ 2 ]
    END SPINNER
@@ -255,9 +256,10 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
       ROW	nRow
       COL	nCol
       VALUE dValue
-      //ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
-      //ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
-      //DATEFORMAT "99/99/9999"
+      // Depending Windows version ?, do not accepts to change color
+      // ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
+      // ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
+      // DATEFORMAT "99/99/9999"
       TOOLTIP 'DatePicker Control'
       SHOWNONE .F.
       TITLEBACKCOLOR BLACK
@@ -269,13 +271,13 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
    RETURN Nil
 
-FUNCTION gui_DialogActivate( xDlg, bInit )
+FUNCTION gui_DialogActivate( xDlg, bCode )
 
-   IF ! Empty( bInit )
-      Eval( bInit )
+   IF ! Empty( bCode )
+      Eval( bCode )
    ENDIF
    DoMethod( xDlg, "CENTER" )
-   DoMethod( xDlg, "Activate" )
+   DoMethod( xDlg, "ACTIVATE" )
 
    RETURN Nil
 
@@ -313,12 +315,6 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
          FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
          MAIN ;
          ON INIT Eval( bInit )
-         ; // BACKCOLOR { 226, 220, 213 } ;
-         ; // MODAL ; // bad using WINDOW MAIN OFF
-         //ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
-         //IF ! Empty( xOldDlg )
-         //   ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
-         //ENDIF
          gui_Statusbar( xDlg, "" )
       END WINDOW
    ELSEIF lModal
@@ -331,12 +327,6 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
          FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
          MODAL ;
          ON INIT Eval( bInit )
-         ; // BACKCOLOR { 226, 220, 213 } ;
-         ; // MODAL ; // bad using WINDOW MAIN OFF
-         //ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
-         //IF ! Empty( xOldDlg )
-         //   ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
-         //ENDIF
          gui_Statusbar( xDlg, "" )
       END WINDOW
    ELSE
@@ -348,12 +338,12 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
          ICON "APPICON" ;
          FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
          ON INIT Eval( bInit )
-         ; // BACKCOLOR { 226, 220, 213 } ;
-         ; // MODAL ; // bad using WINDOW MAIN OFF
-         //ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
-         //IF ! Empty( xOldDlg )
-         //   ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
-         //ENDIF
+         // BACKCOLOR { 226, 220, 213 } ;
+         // MODAL ; // bad using WINDOW MAIN OFF
+         // ON RELEASE iif( Empty( xOldDlg ), Nil, DoMethod( xOldDlg, "SETFOCUS" ) )
+         // IF ! Empty( xOldDlg )
+         //    ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
+         // ENDIF
          gui_Statusbar( xDlg, "" )
       END WINDOW
    ENDIF
@@ -371,8 +361,6 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    ENDIF
    hb_Default( @lBorder, .F. )
    hb_Default( @nFontSize, APP_FONTSIZE_NORMAL )
-   //nHeight := Round( nHeight, 0 )
-   // não mostra borda
    DEFINE LABEL ( xControl )
       PARENT ( xDlg )
       COL nCol
@@ -444,9 +432,7 @@ FUNCTION gui_Statusbar( xDlg, xControl )
    ENDIF
 
 	DEFINE STATUSBAR FONT 'MS Sans Serif' SIZE 8 PARENT ( xDlg )
-		STATUSITEM "DlgAuto/FiveLibs" // ACTION MsgInfo('Click! 1')
-		//STATUSITEM "Item 2" 	WIDTH 100 ACTION MsgInfo('Click! 2')
-		//STATUSITEM 'A Car!'	WIDTH 100 ICON 'Car.Ico'
+		STATUSITEM "DlgAuto/FiveLibs" // ACTION MsgInfo( "Click! 1" )
 		CLOCK
 		DATE
 	END STATUSBAR
@@ -465,8 +451,8 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       AT nRow, nCol;
       WIDTH nWidth ;
       HEIGHT nHeight ;
-      ; // BACKCOLOR { 226, 220, 213 } ;
       HOTTRACK
+      // BACKCOLOR { 226, 220, 213 }
 
    RETURN Nil
 
@@ -509,11 +495,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    ENDIF
 
    hb_Default( @lPassword, .F. )
-   //IF ! Empty( cImage )
-      //DEFINE BTNTEXTBOX ( xControl )
-   //ELSE
-      DEFINE GETBOX ( xControl )
-   //ENDIF
+   DEFINE GETBOX ( xControl )
       PARENT ( xDlg )
       ROW nRow
       COL nCol
@@ -540,19 +522,16 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          IMAGE cImage
       ENDIF
       IF ! Empty( bValid )
-         ON LOSTFOCUS Eval( bValid ) // bug because it lost the focus
+         ON LOSTFOCUS Eval( bValid )
       ENDIF
-      //VALID bValid // bug on next window
+      /* when call a dialog from bvalid, valid on next dialog does not works */
+      // VALID bValid
       IF lPassword
          PASSWORD .T.
          UPPERCASE .T.
       ENDIF
-   //IF ! Empty( cImage )
-      //END BTNTEXTBOX
-   //ELSE
       END GETBOX
-   //ENDIF
-   /* F9 on key fields will make a browse */
+   /* F9 on key fields will make a browse but click on button does the same */
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
       AAdd( ::aDlgKeyDown, { xControl, VK_F9, ;
          { || ::Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], ::cFileDbf, aItem[ CFG_VTABLE ] ) ) } } )
@@ -578,8 +557,7 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 
 FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
-   // NOTE: textbox string value, except if declared different on textbox creation
-   // getbox????
+   /* textbox string value, but depends textbox creation */
    SetProperty( xDlg, xControl, "VALUE", xValue )
 
    RETURN Nil
