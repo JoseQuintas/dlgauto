@@ -77,10 +77,12 @@ METHOD DlgInit() CLASS frm_Class
       IF ( nPos := hb_AScan( ::aControlList, { | e | e[ CFG_FNAME ] == ::aInitValue1[1] } ) ) != 0
          ::aControlList[ nPos ][ CFG_VALUE ]    := ::aInitValue1[2]
          ::aControlList[ nPos ][ CFG_SAVEONLY ] := .T.
+         gui_ControlSetValue( ::xDlg, ::aControlList[ nPos ][ CFG_FCONTROL ], ::aInitValue1[2] )
       ENDIF
       IF ( nPos := hb_AScan( ::aControlList, { | e | e[ CFG_FNAME ] == ::aInitValue2[1] } ) ) != 0
          ::aControlList[ nPos ][ CFG_VALUE ] := ::aInitValue2[2]
          ::aControlList[ nPos ][ CFG_SAVEONLY ] := .T.
+         gui_ControlSetValue( ::xDlg, ::aControlList[ nPos ][ CFG_FCONTROL ], ::aInitValue2[2] )
       ENDIF
    ENDIF
    IF ! Empty( ::bActivate )
@@ -311,11 +313,13 @@ METHOD DataLoad() CLASS frm_Class
          ENDIF
          GOTO TOP
          gui_BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
-         SELECT ( Select( ::cFileDbf ) ) // HMG Extended
+         SELECT ( Select( ::cFileDbf ) ) // not all libraries need this
       CASE Empty( aItem[ CFG_FNAME ] ) // not a field
       CASE aItem[ CFG_SAVEONLY ]
       CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
-         xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
+         IF ! aItem[ CFG_SAVEONLY ]
+            xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
+         ENDIF
          gui_ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
             nSelect := Select()
@@ -406,6 +410,7 @@ FUNCTION EmptyFrmClassItem()
    aItem[ CFG_VLEN ]        := 0
    aItem[ CFG_CTLTYPE ]     := TYPE_NONE
    aItem[ CFG_SAVEONLY ]    := .F.
+   // default
    //aItem[ CFG_VALUE ]      := Nil
    //aItem[ CFG_FCONTROL ]   := Nil
    //aItem[ CFG_CCONTROL ]   := Nil

@@ -64,22 +64,9 @@ FUNCTION frm_Dialog( Self )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
 #endif
-   //fivewin window is not modal
-   //CLOSE DATABASES
+   // nested calls can't close databases
+   // IF gui_LibName() != "FIVEWIN"
+   //    CLOSE DATABASES
+   // ENDIF
 
    RETURN Nil
-
-//STATIC FUNCTION TestVar( nCount, Self )
-
-//   LOCAL aItem
-
-//   FOR EACH aItem IN ::aControlList
-//      IF aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
-//         gui_MsgBox( "test " + Str( nCount, 1 ) + ": " + hb_ValToExp( aItem[ CFG_COMBOLIST ] ) )
-//      ENDIF
-//   NEXT
-
-//   RETURN Nil
-
-
-
