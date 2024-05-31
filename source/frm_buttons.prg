@@ -83,6 +83,8 @@ STATIC FUNCTION IconFromCaption( cCaption )
 
    IF ( nPos := hb_AScan( aList, { | e | e[1] == cCaption } ) ) != 0
       cResName := aList[ nPos, 2 ]
+   ELSE
+      cResName := "icowindow"
    ENDIF
 
    RETURN cResName

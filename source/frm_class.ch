@@ -42,6 +42,7 @@
 #define TYPE_DATEPICKER 12
 #define TYPE_MLTEXT     13 // multiline
 #define TYPE_SPINNER    14
+#define TYPE_ADDBUTTON  15
 
 #ifdef HBMK_HAS_GTWVG
    #include "gtwvg.ch"

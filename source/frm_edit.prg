@@ -40,7 +40,7 @@ FUNCTION frm_Edit( Self )
      /* check needed size */
       nHeight := 1
       DO CASE
-      CASE hb_AScan( { TYPE_TAB, TYPE_TABPAGE, TYPE_HWGUIBUG, TYPE_BUTTON }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      CASE hb_AScan( { TYPE_TAB, TYPE_TABPAGE, TYPE_HWGUIBUG, TYPE_BUTTON, TYPE_ADDBUTTON }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          /* these controls do not need additional code */
          LOOP
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE

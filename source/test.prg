@@ -19,7 +19,7 @@ MEMVAR lLogin, cUser, cPass
 
    LOCAL aKeyList := {}, aSeekList := {}, aBrowseList := {}, aTypeList := {}
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
-   LOCAL cFieldName, aBrowse, nPos, aSetup, lMakeLogin
+   LOCAL cFieldName, aBrowse, nPos, aSetup, lMakeLogin, aAddOptionList, aButton
    PRIVATE lLogin := .F., cUser := "", cPass := ""
 
    SET CONFIRM OFF
@@ -34,7 +34,11 @@ MEMVAR lLogin, cUser, cPass
    gui_Init()
    RddSetDefault( "DBFCDX" )
 
+   /* create dbfs */
    test_DBF()
+
+   /* setup */
+
    IF ! File( "dlgauto.json" )
       hb_MemoWrit( "dlgauto.json", test_Setup() )
    ENDIF
@@ -54,6 +58,13 @@ MEMVAR lLogin, cUser, cPass
       NEXT
    ENDIF
    hb_Default( @lMakeLogin, .F. )
+
+   /* another setup with codeblock */
+
+   aAddOptionList := { ;
+      { "DBCLIENT", "Option1",  { || gui_MsgBox( "Option1" ) } }, ;
+      { "DBCLIENT", "Option2",  { || gui_MsgBox( "Option2" ) } } }
+
    IF lMakeLogin
       Test_DlgLogin()
       IF ! lLogin
@@ -129,6 +140,17 @@ MEMVAR lLogin, cUser, cPass
          ENDIF
       NEXT
       USE
+      /* extra button */
+      FOR EACH aButton IN aAddOptionList
+         IF aButton[1] == cFile
+            aItem := EmptyFrmClassItem()
+            aItem[ CFG_CTLTYPE ] := TYPE_ADDBUTTON
+            aItem[ CFG_CAPTION ] := aButton[2]
+            aItem[ CFG_ACTION ]  := aButton[3]
+            AAdd( Atail( aAllSetup )[ 2 ], aItem )
+         ENDIF
+      NEXT
+      /* browse order for key */
       nPos := hb_AScan( aKeyList, { | e | e[1] == cFile } )
       IF nPos != 0
          IF Len( aKeyList[ nPos ] ) > 2

@@ -50,6 +50,11 @@ FUNCTION frm_Dialog( Self )
    IF ! Empty( ::cFileDbf )
       SELECT ( Select( ::cFileDbf ) )
    ENDIF
+   FOR EACH aItem IN ::aEditList
+      IF aItem[ CFG_CTLTYPE ] == TYPE_ADDBUTTON
+         AAdd( ::aOptionList, { aItem[ CFG_CAPTION ], aItem[ CFG_ACTION ] } )
+      ENDIF
+   NEXT
 
    gui_DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle,, ::lModal )
    ::CreateControls()
