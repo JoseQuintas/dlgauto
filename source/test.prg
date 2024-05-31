@@ -59,11 +59,9 @@ MEMVAR lLogin, cUser, cPass
    ENDIF
    hb_Default( @lMakeLogin, .F. )
 
-   /* another setup with codeblock */
-
-   aAddOptionList := { ;
-      { "DBCLIENT", "Option1",  { || gui_MsgBox( "Option1" ) } }, ;
-      { "DBCLIENT", "Option2",  { || gui_MsgBox( "Option2" ) } } }
+   /* another setup with codeblock, can't be on json */
+   aAddOptionList := {}
+   //   { "DBCLIENT", "AddBut",  { || gui_MsgBox( "A single button added" ) } } }
 
    IF lMakeLogin
       Test_DlgLogin()
