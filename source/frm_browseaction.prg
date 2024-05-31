@@ -26,7 +26,7 @@ FUNCTION frm_BrowseAction( aItemOld, nKey, oFrmOld )
 
       nPos := hb_ASCan( :aAllSetup, { | e | e[ 1 ] == aItemOld[ CFG_BRWTABLE ] } )
       :aEditList   := :aAllSetup[ nPos, 2 ]
-      :nInitRecno  := RecNo()
+      :nInitRecno  := ( aItemOld[ CFG_BRWTABLE ] )->( RecNo() )
       :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cFileDbf )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
       IF nKey == VK_INSERT
          SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
@@ -47,7 +47,6 @@ FUNCTION frm_BrowseAction( aItemOld, nKey, oFrmOld )
       :Execute()
    ENDWITH
    SELECT ( nSelect )
-   GOTO ( nRecNo )
    gui_SetFocus( oFrmOld:xDlg )
 
    RETURN Nil
