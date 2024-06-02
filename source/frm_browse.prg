@@ -35,7 +35,7 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    SET ORDER TO ( nIndexOrd )
 
    SELECT ( nSelect )
-   (xDlg)
+   gui_SetFocus( ::xDlg )
 
    RETURN Nil
 

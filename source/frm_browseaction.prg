@@ -11,7 +11,7 @@ frm_browseaction - action for browse
 
 FUNCTION frm_BrowseAction( aItemOld, nKey, oFrmOld )
 
-   LOCAL oFrm, nPos, nSelect, nRecNo
+   LOCAL oFrm, nPos, nSelect
 
    nSelect := Select()
    oFrm := frm_Class():New()
@@ -30,10 +30,9 @@ FUNCTION frm_BrowseAction( aItemOld, nKey, oFrmOld )
       :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cFileDbf )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
       IF nKey == VK_INSERT
          SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
-         nRecNo := RecNo()
          GOTO BOTTOM // fail, SET SCOPE is activated
          :aInitValue2 := { aItemOld[ CFG_BRWKEYTO2 ], ( aItemOld[ CFG_BRWTABLE ] )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYTO2 ] ) ) ) + 1 }
-         GOTO ( nRecNo )
+         GOTO ( LastRec() + 1 )
          SELECT ( nSelect )
          gui_MsgBox( :aInitValue2[ 2 ] )
       ELSE
