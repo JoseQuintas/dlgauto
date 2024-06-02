@@ -262,8 +262,8 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
    RETURN ""
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
-            xValue, cPicture, nMaxLength, bValid )
-
+            xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
+            aItem, Self, lPassword )
    /*
    xControl := wvgStatic():New()
    WITH OBJECT xControl

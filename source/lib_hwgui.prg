@@ -335,7 +335,8 @@ STATIC FUNCTION gui_TabSetLostFocus( oEdit, oTab, nPageNext, oEditNext )
    RETURN Nil
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
-            xValue, cPicture, nMaxLength, bValid )
+            xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
+            aItem, Self, lPassword )
 
    @ nCol, nRow GET xControl ;
       VAR       xValue ;
@@ -345,7 +346,8 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       ; // MAXLENGTH nMaxLength ;
       PICTURE   iif( Empty( cPicture ), Nil, cPicture ) ;
       VALID     bValid
-   (nMaxLength)
+
+   (nMaxLength);(bAction);(cImage);(aItem);(Self);(lPassword)
 
    RETURN Nil
 

@@ -87,12 +87,15 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
    LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}
+
    IF Empty( xControl )
       xControl := gui_NewName( "BRW" )
    ENDIF
+
    IF ValType( aKeyDownList ) != "A"
       aKeyDownList := {}
    ENDIF
+
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, aItem[2] )
@@ -359,8 +362,10 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    IF Empty( xControl )
       xControl := gui_NewName( "LBL" )
    ENDIF
+
    hb_Default( @lBorder, .F. )
    hb_Default( @nFontSize, APP_FONTSIZE_NORMAL )
+
    DEFINE LABEL ( xControl )
       PARENT ( xDlg )
       COL nCol
@@ -495,6 +500,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    ENDIF
 
    hb_Default( @lPassword, .F. )
+
    DEFINE GETBOX ( xControl )
       PARENT ( xDlg )
       ROW nRow
@@ -530,7 +536,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          PASSWORD .T.
          UPPERCASE .T.
       ENDIF
-      END GETBOX
+   END GETBOX
    /* F9 on key fields will make a browse but click on button does the same */
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
       AAdd( ::aDlgKeyDown, { xControl, VK_F9, ;

@@ -81,9 +81,11 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    IF Empty( xControl )
       xControl := gui_NewName( "BROWSE" )
    ENDIF
+
    IF ValType( aKeyDownList ) != "A"
       aKeyDownList := {}
    ENDIF
+
    FOR EACH aItem IN oTbrowse
       AAdd( aHeaderList, aItem[1] )
       AAdd( aFieldList, { || Transform( FieldGet( FieldNum( aItem[2] ) ), aItem[3] ) } )
@@ -174,6 +176,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
    IF Empty( xControl )
       xControl := gui_NewName( "CHK" )
    ENDIF
+
    DEFINE CHECKBOX ( xControl )
       PARENT ( xDlg )
       Row nRow
@@ -190,6 +193,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
    IF Empty( xControl )
       xControl := gui_NewName( "CBO" )
    ENDIF
+
    DEFINE COMBOBOX ( xControl )
       PARENT ( xDlg )
       ROW nRow
@@ -227,6 +231,7 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
    IF Empty( xControl )
       xControl := gui_NewName( "DTP" )
    ENDIF
+
    DEFINE DATEPICKER (xControl)
       PARENT ( xDlg )
       ROW	nRow
@@ -349,7 +354,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
    IF Empty( xControl )
       xControl := gui_NewName( "MLTEXT" )
    ENDIF
-   //* not multiline */
+
    DEFINE EDITBOX ( xControl )
       PARENT ( xDlg )
       ROW      nRow
@@ -362,6 +367,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       MAXLENGTH 510000
       /* NOHSCROLLBAR .T. */
    END EDITBOX
+
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (xValue)
 
    RETURN Nil
@@ -436,16 +442,21 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    END PAGE
+
    (xDlg); (xControl)
 
    RETURN Nil
 
 FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
-            xValue, cPicture, nMaxLength, bValid )
+            xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
+            aItem, Self, lPassword )
 
    IF Empty( xControl )
       xControl := gui_NewName( "TEXT" )
    ENDIF
+
+   hb_Default( @lPassword, .F. )
+
    DEFINE TEXTBOX ( xControl )
       PARENT ( xDlg )
       ROW      nRow
@@ -455,8 +466,10 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       FONTNAME APP_FONTNAME
       IF ValType( xValue ) == "N"
          NUMERIC .T.
+         INPUTMASK cPicture
       ELSEIF ValType( xValue ) == "D"
          DATE .T.
+         DATEFORMAT cPicture
       ELSE
          MAXLENGTH nMaxLength
       ENDIF
@@ -464,8 +477,14 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       IF ! Empty( bValid )
          ON LOSTFOCUS Eval( bValid )
       ENDIF
+      IF lPassword
+         PASSWORD .T.
+         UPPERCASE .T.
+      ENDIF
    END TEXTBOX
-   (bValid); (cPicture)
+
+   (bAction);(cImage)
+   (aItem);(Self)
 
    RETURN Nil
 
