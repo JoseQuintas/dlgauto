@@ -60,8 +60,8 @@ MEMVAR lLogin, cUser, cPass
    hb_Default( @lMakeLogin, .F. )
 
    /* another setup with codeblock, can't be on json */
-   aAddOptionList := {}
-   //   { "DBCLIENT", "AddBut",  { || gui_MsgBox( "A single button added" ) } } }
+   aAddOptionList := { ;
+      { "DBCLIENT", "History",  { || gui_MsgBox( "History of changes, not available" ) } } }
 
    IF lMakeLogin
       Test_DlgLogin()

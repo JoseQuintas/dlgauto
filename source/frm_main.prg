@@ -28,8 +28,6 @@ FUNCTION frm_main( cDBF, aAllSetup, lModal )
    oFrm:cOptions   := "IEDP"
    oFrm:aAllSetup  := aAllSetup
    oFrm:lModal     := lModal
-   //AAdd( oFrm:aOptionList, { "Mail", { || Nil } } ) // example of aditional button
-   //AAdd( oFrm:aOptionList, { "client", { || frm_Main( "DBCLIENT", ( oFrm:aAllSetup ), .T. ) } } )
 
    nPos := hb_ASCan( aAllSetup, { | e | e[ 1 ] == cDBF } )
 

@@ -2,9 +2,10 @@
 #define APP_MANIFEST 1
 APP_MANIFEST RT_MANIFEST "..\\resource\\exe.manifest"
 
-AppIcon       ICON   "..\\resource\\icoBook.ico"
+AppIcon       ICON   "..\\resource\\icoGrid.ico"
 bmpfolder     BITMAP "..\\resource\\bmpfolder.bmp"
 bmpsearch     BITMAP "..\\resource\\bmpsearch.bmp"
+icoBook       ICON   "..\\resource\\icoBook.ico"
 icoDoor       ICON   "..\\resource\\icoDoor.ico"
 icoEdit       ICON   "..\\resource\\icoEdit.ico"
 icoGoFirst    ICON   "..\\resource\\icoGoFirst.ico"
