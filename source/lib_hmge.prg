@@ -120,7 +120,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       FIELDS aFieldList
       DYNAMICBACKCOLOR aBrowseBackColor
       DYNAMICFORECOLOR aBrowseForeColor
-      //SET BROWSESYNC ON
+      SET BROWSESYNC ON // if remove, browse action and DLG keydown on wrong record
    END BROWSE
    /* create buttons on browse for defined keys */
    IF Len( aKeyDownList ) != 0
