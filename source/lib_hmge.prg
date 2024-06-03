@@ -86,7 +86,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, Self )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
-   LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}
+   LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}, nPos
 
    IF Empty( xControl )
       xControl := gui_NewName( "BRW" )
@@ -113,6 +113,8 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       HEIGHT nHeight - 20
       IF Len( aKeyDownList ) == 0
          ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+         ONDBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
       ENDIF
       HEADERS aHeaderList
       WIDTHS aWidthList
