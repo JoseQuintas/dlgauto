@@ -104,7 +104,7 @@ FUNCTION frm_Edit( Self )
          ENDIF
          nPageCount += 1
 
-         gui_TabPageBegin( ::xDlg, xTab, @xTabPage, nPageCount, "Pag." + Str( nPageCount, 2 ) )
+         gui_TabPageBegin( ::xDlg, xTab, @xTabPage, nPageCount, "Page" + Str( nPageCount, 2 ) )
 
          AAdd( ::aControlList, EmptyFrmClassItem() )
          Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TABPAGE
