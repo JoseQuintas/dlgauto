@@ -72,7 +72,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyDownList, Self )
 
-   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
+   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey, nPos
 
    IF Empty( xControl )
       xControl := gui_NewName( "BRW" )
@@ -85,28 +85,22 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       AAdd( aFieldList, aItem[2] )
       AAdd( aWidthList, ( 1 + Max( Len( aItem[3] ), Len( Transform(FieldGet(FieldNum(aItem[1] ) ), "" ) ) ) ) * 13 )
    NEXT
-   IF Len( aKeyDownList ) != 0
-      @ nRow, nCol GRID ( xControl ) ;
-         OF ( xParent ) ;
-         WIDTH nWidth - 40 ;
-         HEIGHT nHeight - 40 ;
-         HEADERS aHeaderList ;
-         WIDTHS aWidthList ;
-         VIRTUAL ;
-         ROWSOURCE ( workarea ) ;
-         COLUMNFIELDS aFieldList
-   ELSE
-      @ nRow, nCol GRID ( xControl ) ;
-         OF ( xDlg ) ;
-         WIDTH nWidth - 40 ;
-         HEIGHT nHeight - 40 ;
-         ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) ;
-         HEADERS aHeaderList ;
-         WIDTHS aWidthList ;
-         VIRTUAL ;
-         ROWSOURCE ( workarea ) ;
-         COLUMNFIELDS aFieldList
-   ENDIF
+   DEFINE GRID ( xControl )
+      ROW          nRow
+      COL          nCol
+      WIDTH        nWidth - 40
+      HEIGHT       nHeight - 40
+      IF Len( aKeyDownList ) == 0
+         ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+         ONDBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
+      ENDIF
+      HEADERS      aHeaderList
+      WIDTHS       aWidthList
+      ROWSOURCE    ( workarea )
+      COLUMNFIELDS aFieldList
+      // VIRTUAL
+   END GRID
    IF Len( aKeyDownList ) != 0
       FOR EACH aThisKey IN aKeyDownList
          AAdd( ::aControlList, EmptyFrmClassItem() )
@@ -118,7 +112,6 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
          iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
          iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
       NEXT
-      // some buttons
    ENDIF
    FOR EACH aItem IN aKeyDownList
       AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
@@ -359,7 +352,11 @@ FUNCTION gui_MsgYesNo( cText )
 
 FUNCTION gui_SetFocus( xDlg, xControl )
 
-   DoMethod( xDlg, xControl, "SETFOCUS" )
+   IF Empty( xControl )
+      DoMethod( xDlg, "SETFOCUS" )
+   ELSE
+      DoMethod( xDlg, xControl, "SETFOCUS" )
+   ENDIF
 
    RETURN Nil
 
@@ -427,6 +424,8 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    IF Empty( xControl )
       xControl := gui_NewName( "TEXT" )
    ENDIF
+
+   hb_Default( @lPassword, .F. )
    DEFINE TEXTBOX ( xControl )
       PARENT ( xDlg )
       ROW nRow
