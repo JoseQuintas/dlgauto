@@ -286,12 +286,6 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
 
    RETURN Nil
 
-FUNCTION gui_DialogShow( xDlg )
-
-   DoMethod( xDlg, "SHOW" )
-
-   RETURN Nil
-
 FUNCTION gui_DialogClose( xDlg )
 
    DoMethod( xDlg, "RELEASE" )

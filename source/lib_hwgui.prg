@@ -156,12 +156,6 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
 
    RETURN Nil
 
-FUNCTION gui_DialogShow( xDlg )
-
-   (xDlg)
-
-   RETURN Nil
-
 FUNCTION gui_DialogClose( xDlg )
 
    RETURN xDlg:Close()
@@ -380,7 +374,7 @@ STATIC FUNCTION BtnSetImageText( hHandle, cCaption, cResName, nWidth, nHeight )
 
    LOCAL oIcon, hIcon
 
-   oIcon := HICON():AddResource( cResName, nWidth - 20, nHeight - 20 )
+   oIcon := HICON():AddResource( cResName, Int( nWidth / 2.5 ), Int( nHeight / 2.5 ) )
    IF ValType( oIcon ) == "O"
       hIcon := oIcon:Handle
    ENDIF

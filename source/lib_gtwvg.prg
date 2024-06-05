@@ -127,12 +127,6 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
 
    RETURN Nil
 
-FUNCTION gui_DialogShow( xDlg )
-
-   (xDlg)
-
-   RETURN Nil
-
 FUNCTION gui_DialogClose( xDlg )
 
    xDlg:Destroy()
