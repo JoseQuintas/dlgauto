@@ -14,7 +14,7 @@ FUNCTION test_DlgLogin()
       aItem := EmptyFrmClassItem()
    NEXT
 
-   gui_DialogCreate( @xDlg, 0, 0, 300, 200, "Login", , .T. )
+   gui_DialogCreate( @xDlg, 0, 0, 300, 200, "Login",, .T. )
 
    gui_LabelCreate( xDlg, @aControl[1][CFG_FNAME], 30, 20, 80, 20, "User" )
    gui_TextCreate( xDlg, @aControl[2][CFG_FNAME], 30, 90, 170, 20, cUser,,,,,,aControl[2] )

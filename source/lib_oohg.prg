@@ -265,7 +265,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
 
    IF Empty( xDlg )
       xDlg := gui_NewName( "DIALOG" )
@@ -274,16 +274,28 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
       bInit := { || Nil }
    ENDIF
 
-   DEFINE WINDOW ( xDlg ) ;
-      AT     nCol, nRow ;
-      WIDTH  nWidth ;
-      HEIGHT nHeight ;
-      TITLE  cTitle ;
-      ICON "ICOWINDOW" ;
-      MODAL ;
-      ON INIT Eval( bInit )
-      gui_Statusbar( xDlg, "" )
-   END WINDOW
+   IF lModal
+      DEFINE WINDOW ( xDlg ) ;
+         AT     nCol, nRow ;
+         WIDTH  nWidth ;
+         HEIGHT nHeight ;
+         TITLE  cTitle ;
+         ICON "ICOWINDOW" ;
+         MODAL ;
+         ON INIT Eval( bInit )
+         gui_Statusbar( xDlg, "" )
+      END WINDOW
+   ELSE
+      DEFINE WINDOW ( xDlg ) ;
+         AT     nCol, nRow ;
+         WIDTH  nWidth ;
+         HEIGHT nHeight ;
+         TITLE  cTitle ;
+         ICON "ICOWINDOW" ;
+         ON INIT Eval( bInit )
+         gui_Statusbar( xDlg, "" )
+      END WINDOW
+   ENDIF
 
    RETURN Nil
 

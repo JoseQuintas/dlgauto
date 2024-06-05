@@ -196,51 +196,6 @@ STATIC FUNCTION PictureFromValue( oValue )
 
    RETURN cPicture
 
-#ifndef DLGAUTO_AS_LIB
-FUNCTION AppVersaoExe(); RETURN ""
-FUNCTION AppUserName(); RETURN ""
-#endif
-
-/* above functions not in use, for tests purpose */
-
-/*
-FUNCTION AppVersaoExe(); RETURN ""
-FUNCTION AppUserName(); RETURN ""
-
-FUNCTION AppConexao()
-
-   STATIC cnConexao
-
-   IF Empty( cnConexao )
-      cnConexao := win_OleCreateObject( "ADODB.Connection" )
-   ENDIF
-
-   RETURN cnConexao
-
-FUNCTION ADOLocal()
-
-   LOCAL cnSQL
-
-   cnSQL := ADOClass():New()
-   cnSQL:cn := AppConexao()
-
-   RETURN cnSQL
-
-CREATE CLASS ADOClass
-   VAR  cn
-   VAR rs
-   METHOD Open() INLINE Nil
-   METHOD CloseRecordset() INLINE Nil
-   METHOD CloseConnection() INLINE Nil
-   METHOD Execute() INLINE Nil
-   METHOD ExecuteNoReturn() INLINE Nil
-   METHOD QueryCreate() INLINE Nil
-   METHOD QueryAdd() INLINE Nil
-   METHOD QueryExecuteInsert() INLINE Nil
-   METHOD QueryExecuteUpdate() INLINE Nil
-   ENDCLASS
-*/
-
 #ifdef HBMK_HAS_GTWVG
 
 PROCEDURE HB_GTSYS

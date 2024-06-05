@@ -6,6 +6,8 @@ lib_hmge - HMG Extended source selected by lib.prg
 #include "hmg.ch"
 #include "i_winuser.ch"
 
+STATIC nWindow := 0
+
 FUNCTION gui_Init()
 
 #ifdef DLGAUTO_AS_LIB
@@ -14,7 +16,8 @@ FUNCTION gui_Init()
    SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
-   //SET WINDOW MAIN OFF
+   SET WINDOW MODAL PARENT HANDLE ON
+   SET WINDOW MAIN OFF
    Set( _SET_DEBUG, .F. )
 
    RETURN Nil
@@ -292,7 +295,9 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, lMain )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
+
+   //nWindow += 1
 
    IF Empty( xDlg )
       xDlg := gui_NewName( "DLG" )
@@ -301,10 +306,10 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
    IF Empty( bInit )
       bInit := { || Nil }
    ENDIF
-   hb_Default( @lModal, .T. )
-   hb_Default( @lMain, .F. )
 
-   IF lMain
+   hb_Default( @lModal, .T. )
+
+   IF nWindow == 1
       DEFINE WINDOW ( xDlg ) ;
          AT nCol, nRow ;
          WIDTH nWidth ;
