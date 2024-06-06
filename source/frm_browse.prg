@@ -54,6 +54,9 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    gui_Browse( oThisForm:xDlg, oThisForm:xDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
       APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
       oTbrowse, cField, @xValue, cTable, {}, oThisForm )
+   IF gui_LibName() == "HWGUI"
+      aItem[ CFG_FCONTROL ]:lInFocus := .T.
+   ENDIF
    // works for hmge from button
    gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] )
    gui_DialogActivate( oThisForm:xDlg, { || gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] ) } )

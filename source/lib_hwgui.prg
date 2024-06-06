@@ -78,6 +78,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
             Len( Transform( (workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) ) ) ) );
          JUSTIFY LINE DT_LEFT
    NEXT
+   // xControl:lInFocus := .T. // only if called from frm_browse
 
    //xControl:bEnter := { || hwg_MsgInfo( "teste"), gui_browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
    xControl:bKeyDown := { | o, nKey | (o), ;
@@ -267,7 +268,11 @@ FUNCTION gui_MsgYesNo( cText )
 FUNCTION gui_SetFocus( xDlg, xControl )
 
    (xDlg); (xControl)
-   xControl:SetFocus()
+   IF Empty( xControl )
+      //xDlg:SetFocus()
+   ELSE
+      xControl:SetFocus()
+   ENDIF
 
    RETURN Nil
 
