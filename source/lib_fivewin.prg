@@ -160,7 +160,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
       DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW"
       gui_StatusBar( xDlg, "" )
    ELSE
-      DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW"
+      DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW" TRUEPIXEL
    ENDIF
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
 
@@ -281,6 +281,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
             aItem, Self, lPassword )
 
+// EDIT for dialog
    IF Empty( bAction )
       @ nRow, nCol GET xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) )
    ELSE
