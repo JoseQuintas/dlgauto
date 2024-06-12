@@ -262,6 +262,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
    IF Empty( bInit )
       bInit := { || Nil }
    ENDIF
+   hb_Default( @lModal, .F. )
 
    IF lModal
       DEFINE WINDOW ( xDlg ) ;
