@@ -148,9 +148,8 @@ FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue,
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
-   // xDlg:Center()
    IF Empty( bCode )
-      ACTIVATE DIALOG xDLG CENTER // xDlg:Activate()
+      ACTIVATE DIALOG xDLG CENTER
    ELSE
       ACTIVATE DIALOG xDlg CENTER ON ACTIVATE bCode
    ENDIF
@@ -161,7 +160,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN xDlg:Close()
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
 
    LOCAL oFont
 
@@ -177,7 +176,8 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
       AT        nRow, nCol ;
       SIZE      nWidth, nHeight ;
       BACKCOLOR COLOR_WHITE ;
-      ON INIT   bInit
+      ON INIT bInit
+   (xDlg);(lModal)
 
    RETURN Nil
 

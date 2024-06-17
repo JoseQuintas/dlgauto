@@ -339,7 +339,7 @@ METHOD DataLoad() CLASS frm_Class
          CASE aItem[ CFG_FTYPE ] == "C"
             xValue := ( xValue == "Y" )
          ENDCASE
-         gui_LabelSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
+         gui_ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
 
       CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
