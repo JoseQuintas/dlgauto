@@ -135,13 +135,22 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
-   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, dValue )
+   LOCAL oFont := HFont():Add( "MS Sans Serif", 0, 10 )
+
+   @ nCol, nRow DATESELECT xControl ;
+      OF xDlg ;
+      SIZE nWidth / 3, nHeight FONT oFont ;
+      INIT dValue
 
    RETURN Nil
 
 FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
 
-   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @nValue )
+   LOCAL oFont := HFont():Add( "MS Sans Serif", 0, 10 )
+
+   @ nCol, nRow GET UPDOWN xControl VAR nValue ;
+      RANGE aList[1], aList[2] OF xDlg  SIZE nWidth, nHeight WIDTH 15 FONT oFont
+   //gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @nValue )
    (aList)
 
    RETURN Nil

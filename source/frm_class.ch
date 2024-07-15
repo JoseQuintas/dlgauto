@@ -35,14 +35,15 @@
 #define TYPE_TAB        3
 #define TYPE_TABPAGE    4
 #define TYPE_BROWSE     5
-#define TYPE_HWGUIBUG   8
-#define TYPE_COMBOBOX   9
-#define TYPE_CHECKBOX   10
-#define TYPE_STATUSBAR  11
-#define TYPE_DATEPICKER 12
-#define TYPE_MLTEXT     13 // multiline
-#define TYPE_SPINNER    14
-#define TYPE_ADDBUTTON  15
+#define TYPE_COMBOBOX   6
+#define TYPE_CHECKBOX   7
+#define TYPE_STATUSBAR  8
+#define TYPE_DATEPICKER 9
+#define TYPE_MLTEXT     10 // multiline
+#define TYPE_SPINNER    11
+#define TYPE_ADDBUTTON  12
+#define TYPE_BUG_HWGUI  13
+#define TYPE_BUG_HMGE   14
 
 #ifdef HBMK_HAS_GTWVG
    #include "gtwvg.ch"

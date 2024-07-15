@@ -9,6 +9,7 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    LOCAL oTBrowse := {}, aItem, xValue, cField, nSelect, nPos, nIndexOrd
 
    nSelect := Select()
+
    SELECT ( cTable )
    nIndexOrd := IndexOrd()
 

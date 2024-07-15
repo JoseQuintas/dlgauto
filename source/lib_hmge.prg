@@ -17,6 +17,7 @@ FUNCTION gui_Init()
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
    SET WINDOW MODAL PARENT HANDLE ON
+
    SET WINDOW MAIN OFF
    Set( _SET_DEBUG, .F. )
 
@@ -26,7 +27,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle,,,.T. )
+   gui_DialogCreate( @xDlg, 0, 0, 1024, 768, cTitle,,,.T. )
 
    DEFINE MAIN MENU OF ( xDlg )
       FOR EACH aGroupList IN aMenuList
@@ -356,7 +357,15 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
-      RETURN GetProperty( xDlg, "FOCUSEDCONTROL" )  == xControl
+   LOCAL lOk
+
+   IF PCount() == 1
+      lOk := ( GetActiveWindow() == GetProperty( XDlg, "HANDLE" ) )
+   ELSE
+      lOk := ( GetProperty( xDlg, "FOCUSEDCONTROL" )  == xControl )
+   ENDIF
+
+   RETURN lOk
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder, nFontSize )
 

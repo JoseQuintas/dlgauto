@@ -188,7 +188,7 @@ STATIC FUNCTION SaveTestData()
       CASE nCont == 9 ; cText += "NINE"
       OTHERWISE   ; cText += "ANY"
       ENDCASE
-      cText := cText + " " + Substr( Alias(), 3 )
+      cText := cText + " " + Substr( Alias(), 3 ) + " "
       cText := Replicate( cText, 10 )
       APPEND BLANK
       FOR nField = 1 TO Len( aStru )

@@ -40,9 +40,11 @@ FUNCTION frm_Edit( Self )
      /* check needed size */
       nHeight := 1
       DO CASE
-      CASE hb_AScan( { TYPE_TAB, TYPE_TABPAGE, TYPE_HWGUIBUG, TYPE_BUTTON, TYPE_ADDBUTTON }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+      CASE hb_AScan( { TYPE_TAB, TYPE_TABPAGE, TYPE_BUTTON, TYPE_ADDBUTTON, ;
+         TYPE_BUG_HWGUI, TYPE_BUG_HMGE }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          /* these controls do not need additional code */
          LOOP
+
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          nLen := APP_DLG_WIDTH - 30
          nHeight := 7
@@ -272,10 +274,10 @@ FUNCTION frm_Edit( Self )
    IF gui_LibName() == "HWGUI"
       /* dummy textbox to works last valid */
       AAdd( ::aControlList, EmptyFrmClassItem() )
-      Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_HWGUIBUG
+      Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUG_HWGUI
 
       gui_TextCreate( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-         nRow, nCol, 0, 0, "", "", 0, { || .T. } )
+         nRow, nCol, 0, 0, "", "", 0, { || .T. },,,@::aControlList[ CFG_FCONTROL ], Self )
 
    ENDIF
    IF ::lWithTab
