@@ -8,7 +8,7 @@ FUNCTION frm_Valid( aItem, Self )
 
    LOCAL nSelect, lFound := .T., xValue, nPos
 
-   IF ! gui_IsCurrentFocus( ::xDlg )
+   IF ! gui_LibName() == "HWGUI" .AND. ! gui_IsCurrentFocus( ::xDlg )
       //this affects external programs
       //gui_SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] )
       RETURN .F.

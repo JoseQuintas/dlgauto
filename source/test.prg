@@ -14,7 +14,7 @@ MEMVAR lLogin, cUser, cPass
 #ifdef DLGAUTO_AS_LIB
    PROCEDURE DlgAuto()
 #else
-   PROCEDURE Main()
+   PROCEDURE Main
 #endif
 
    LOCAL aKeyList := {}, aSeekList := {}, aBrowseList := {}, aTypeList := {}

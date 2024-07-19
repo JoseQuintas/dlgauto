@@ -10,17 +10,25 @@ Basic screen only
 #include "fivewin.ch"
 #include "calendar.ch"
 
-STATIC nWindow := 0
+//STATIC oFont
 
 FUNCTION gui_Init()
+
+   //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, - APP_FONTSIZE_NORMAL
 
    RETURN Nil
 
 FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
-   LOCAL oMenu, aGroupList, cDBF, dDate := Date(), oCalendar
-
    gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
+
+   gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) } )
+
+   RETURN Nil
+
+FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
+
+   LOCAL oMenu, aGroupList, cDBF, dDate := Date(), oCalendar
 
    MENU oMenu OF xDlg
       FOR EACH aGroupList IN aMenuList
@@ -40,8 +48,6 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
       @ 400, 400 CALENDAR oCalendar VAR dDate OF xDlg PIXEL SIZE 220, 157 WEEKNUMBER DAYSTATE
 
-   gui_DialogActivate( xDlg )
-
    (xDlg);(aMenuList);(aAllSetup);(cTitle);(oMenu);(oCalendar)
 
    RETURN Nil
@@ -49,6 +55,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xDlg SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
+
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
 
    RETURN Nil
@@ -88,6 +95,7 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
    IF ! Empty( cField )
       xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
    ENDIF
+
    (xControl);(xDlg)
 
    RETURN Nil
@@ -126,7 +134,9 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
 FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
+
    gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, dValue )
+
    (nWidth);(nHeight);(xDlg);(xControl);(nRow);(nCol);(dValue)
 
    RETURN Nil
@@ -134,13 +144,11 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
    IF ! Empty( bCode )
-      EVAL( bCode )
-   ENDIF
-   IF nWindow <= 1
-      ACTIVATE WINDOW xDlg CENTERED
+      ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
    ELSE
-      ACTIVATE DIALOG xDlg CENTERED
+      ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
    ENDIF
+
    (bCode)
 
    RETURN Nil
@@ -148,20 +156,17 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
 FUNCTION gui_DialogClose( xDlg )
 
    xDlg:End()
+
    (xDlg)
 
    RETURN Nil
 
 FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
-   //nWindow += 1
+   DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+      PIXEL TRUEPIXEL TITLE cTitle ICON "ICOWINDOW" ;
+      // FONT oFont
 
-   IF nWindow <= 1
-      DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW"
-      gui_StatusBar( xDlg, "" )
-   ELSE
-      DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth PIXEL TITLE cTitle ICON "ICOWINDOW" TRUEPIXEL
-   ENDIF
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
 
    RETURN Nil
@@ -169,15 +174,16 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       (xDlg);(xControl)
+
       RETURN .F.
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    hb_Default( @lBorder, .F. )
    IF lBorder
-      @ nRow, nCol SAY xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT BORDER
+      @ ToDialog( nRow ), ToDialog( nCol ) SAY xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) COLOR CLR_BLUE TRANSPARENT BORDER
    ELSE
-      @ nRow, nCol SAY xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT
+      @ ToDialog( nRow ), ToDialog( nCol ) SAY xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) COLOR CLR_BLUE TRANSPARENT
    ENDIF
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
@@ -187,6 +193,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
 
    xControl:SetText( xValue )
+
    (xDlg);(xControl);(xValue)
 
    RETURN Nil
@@ -197,7 +204,7 @@ FUNCTION gui_LibName()
 
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
-   @ nRow, nCol GET xControl VAR xValue MEMO OF xDlg PIXEL SIZE nWidth, nHeight
+   @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue MEMO OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue)
 
@@ -228,6 +235,7 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 
    DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;
       SIZES 150, 200, 240
+
    (xDlg); (xControl)
 
    RETURN Nil
@@ -252,6 +260,7 @@ FUNCTION gui_TabEnd( xTab, nPageCount )
 FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    xTab:aDialogs[1]:SetFocus()
+
    (xDlg);(xTab);(aList)
 
    RETURN Nil
@@ -273,6 +282,7 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
    /*
    END PAGE
    */
+
    (xDlg); (xControl)
 
    RETURN Nil
@@ -283,9 +293,9 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
 // EDIT for dialog
    IF Empty( bAction )
-      @ nRow, nCol GET xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) )
+      @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) )
    ELSE
-      @ nRow, nCol GET xControl VAR xValue OF xDlg PIXEL SIZE nWidth, nHeight PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
+      @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
       ACTION Eval( bAction ) BITMAP cImage
    ENDIF
    (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bAction);(cImage)
@@ -308,6 +318,7 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
    LOCAL xValue
 
    xValue := xControl:GetText()
+
    (xDlg);(xControl)
 
    RETURN xValue
@@ -315,6 +326,7 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    xControl:SetText( xValue )
+
    (xDlg);(xControl);(xValue)
 
    RETURN Nil
@@ -325,5 +337,13 @@ FUNCTION gui_DlgSetKey( Self )
 
    FOR EACH aItem IN ::aDlgKeyDown
    NEXT
+
+   RETURN Nil
+
+FUNCTION ToDialog( x )
+
+   RETURN x / 2
+
+FUNCTION DoNothing(...)
 
    RETURN Nil

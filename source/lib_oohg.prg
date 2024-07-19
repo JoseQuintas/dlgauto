@@ -312,8 +312,16 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
-   // not used, solved on button using CANCEL
-   RETURN GetFocus() == GetProperty( xDlg, xControl, "HWND" )
+   LOCAL lOk
+
+   IF PCount() == 1
+      lOk := ( GetActiveWindow() == GetProperty( XDlg, "HANDLE" ) )
+   ELSE
+      // not used, solved on button using CANCEL
+      lOk := GetFocus() == GetProperty( xDlg, xControl, "HWND" )
+   ENDIF
+
+   RETURN lOk
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
@@ -473,10 +481,10 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       FONTNAME APP_FONTNAME
       IF ValType( xValue ) == "N"
          NUMERIC .T.
-         INPUTMASK cPicture
+         //INPUTMASK cPicture
       ELSEIF ValType( xValue ) == "D"
          DATE .T.
-         DATEFORMAT cPicture
+         //DATEFORMAT cPicture
       ELSE
          MAXLENGTH nMaxLength
       ENDIF
@@ -490,7 +498,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       ENDIF
    END TEXTBOX
 
-   (bAction);(cImage)
+   (bAction);(cImage);(cPicture)
    (aItem);(Self)
 
    RETURN Nil

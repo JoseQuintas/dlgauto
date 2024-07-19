@@ -192,9 +192,15 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
-      (xDlg)
+   LOCAL lOk
 
-      RETURN hwg_SelfFocus( xControl:Handle )
+   IF PCount() == 1
+      lOk := hwg_SelfFocus( xDlg:Handle )
+   ELSE
+      lOk := hwg_SelfFocus( xControl:Handle )
+   ENDIF
+
+   RETURN lOk
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
