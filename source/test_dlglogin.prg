@@ -22,7 +22,7 @@ FUNCTION test_DlgLogin()
    gui_TextCreate( xDlg, @aControl[4][CFG_FNAME], 2 * APP_LINE_SPACING, 90, 170, APP_LINE_HEIGHT, cPass,,,,,,aControl[4],,.T. )
    gui_ButtonCreate( xDlg, @aControl[5][CFG_FNAME], 4 * APP_LINE_SPACING, 85, 50, APP_LINE_SPACING, "Login",, { || Login_Click( xDlg ) } )
    gui_ButtonCreate( xDlg, @aControl[6][CFG_FNAME], 4 * APP_LINE_SPACING, 155, 50, APP_LINE_SPACING, "Cancel",, { || Cancel_Click( xDlg ) } )
-   gui_SetFocus( xDlg, aControl[2][CFG_FNAME] )
+   //gui_SetFocus( xDlg, aControl[2][CFG_FNAME] )
 
    gui_DialogActivate( xDlg )
 

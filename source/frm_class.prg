@@ -247,7 +247,7 @@ METHOD EditOff() CLASS frm_Class
    LOCAL aItem
    LOCAL aDisableList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_COMBOBOX, ;
       TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE, ;
-      TYPE_BUG_HWGUI, TYPE_BUG_HMGE }
+      TYPE_BUG_HWGUI }
 
    FOR EACH aItem IN ::aControlList
       IF hb_AScan( aDisableList, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
