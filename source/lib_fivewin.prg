@@ -10,6 +10,8 @@ Basic screen only
 #include "fivewin.ch"
 #include "calendar.ch"
 
+#define ISDIALOG .F.
+
 //STATIC oFont
 
 FUNCTION gui_Init()
@@ -21,8 +23,12 @@ FUNCTION gui_Init()
 FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
-
-   gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) } )
+   IF ISDIALOG
+      gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) } )
+   ELSE
+      gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
+      gui_DialogActivate( xDlg )
+   ENDIF
 
    RETURN Nil
 
@@ -46,7 +52,7 @@ FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
       ENDMENU
       xDlg:SetMenu( oMenu )
 
-      @ 400, 400 CALENDAR oCalendar VAR dDate OF xDlg PIXEL SIZE 220, 157 WEEKNUMBER DAYSTATE
+      @ 400, 400 CALENDAR oCalendar VAR dDate OF xDlg PIXEL SIZE 220, 157 /* WEEKNUMBER */ DAYSTATE
 
    (xDlg);(aMenuList);(aAllSetup);(cTitle);(oMenu);(oCalendar)
 
@@ -54,7 +60,11 @@ FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
 
 FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
-   @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xDlg SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
+   IF cCaption == "Cancel" .OR. cCaption == "Exit"
+      @ ToDialog( nRow ), ToDialog( nCol ) BUTTONBMP xControl PROMPT cCaption OF xDlg SIZE ToDialog( nWidth ), ToDialog( nHeight ) PIXEL RESOURCE cResName TOP ACTION Eval( bAction ) CANCEL
+   ELSE
+      @ ToDialog( nRow ), ToDialog( nCol ) BUTTONBMP xControl PROMPT cCaption OF xDlg SIZE ToDialog( nWidth ), ToDialog( nHeight ) PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
+   ENDIF
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
 
@@ -65,8 +75,8 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
    LOCAL aItem, oCol
 
-   @ nRow, nCol XBROWSE xControl ;
-      SIZE nWidth, nHeight PIXEL ;
+   @ ToDialog( nRow ), ToDialog( nCol ) XBROWSE xControl ;
+      SIZE ToDialog( nWidth ), ToDialog( nHeight ) PIXEL ;
       DATASOURCE workarea ;
       OF xParent
       //LINES CELL
@@ -143,10 +153,18 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
 FUNCTION gui_DialogActivate( xDlg, bCode )
 
-   IF ! Empty( bCode )
-      ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+   IF ISDIALOG
+      IF ! Empty( bCode )
+         ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+      ELSE
+         ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+      ENDIF
    ELSE
-      ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+      IF ! Empty( bCode )
+         ACTIVATE WINDOW xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+      ELSE
+         ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+      ENDIF
    ENDIF
 
    (bCode)
@@ -163,9 +181,17 @@ FUNCTION gui_DialogClose( xDlg )
 
 FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
-   DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-      PIXEL TRUEPIXEL TITLE cTitle ICON "ICOWINDOW" ;
-      // FONT oFont
+   // truepixel causes irregular metric
+
+   IF ISDIALOG
+      DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+         PIXEL /* TRUEPIXEL */ TITLE cTitle ICON "ICOWINDOW" ;
+         // FONT oFont
+   ELSE
+      DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+         PIXEL /* TRUEPIXEL */ TITLE cTitle ICON "ICOWINDOW" ;
+         // FONT oFont
+   ENDIF
 
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
 
@@ -193,8 +219,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
 
    xControl:SetText( xValue )
-
-   (xDlg);(xControl);(xValue)
+   xControl:Refresh()
 
    RETURN Nil
 
@@ -242,10 +267,10 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
-   @ nRow, nCol FOLDER xControl PIXEL ;
+   @ ToDialog( nRow ), ToDialog( nCol ) FOLDER xControl PIXEL ;
       PROMPT "Page 1" ;
       ;//BITMAPS "bmpfolder" ; // folderex
-      OF xDlg SIZE nWidth, nHeight
+      OF xDlg SIZE ToDialog( nWidth ), ToDialog( nHeight )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -325,7 +350,8 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 
 FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
-   xControl:SetText( xValue )
+   xControl:cText( xValue )
+   xControl:Refresh()
 
    (xDlg);(xControl);(xValue)
 
@@ -342,7 +368,7 @@ FUNCTION gui_DlgSetKey( Self )
 
 FUNCTION ToDialog( x )
 
-   RETURN x / 2
+   RETURN iif( ISDIALOG, x / 2, x )
 
 FUNCTION DoNothing(...)
 
