@@ -42,7 +42,7 @@
 #define TYPE_MLTEXT     10 // multiline
 #define TYPE_SPINNER    11
 #define TYPE_ADDBUTTON  12
-#define TYPE_BUG_HWGUI  13
+#define TYPE_BUG_GET    13
 
 #ifdef HBMK_HAS_GTWVG
    #include "gtwvg.ch"

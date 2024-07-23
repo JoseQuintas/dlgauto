@@ -9,8 +9,9 @@ Basic screen only
 #include "frm_class.ch"
 #include "fivewin.ch"
 #include "calendar.ch"
+#include "dtpicker.ch"
 
-#define ISDIALOG .F.
+#define ISDIALOG .T.
 
 //STATIC oFont
 
@@ -41,7 +42,7 @@ FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
          MENU
             FOR EACH cDBF IN aGroupList
-               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+               MENUITEM cDBF ACTION hb_ThreadStart( { || frm_Main( cDBF, aAllSetup ) } )
             NEXT
          ENDMENU
       NEXT
@@ -120,7 +121,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    LOCAL xValue := .F.
 
-   @ nRow, nCol CHECKBOX xControl VAR xValue PROMPT "" PIXEL SIZE nWidth, nHeight OF xDlg
+   @ ToDialog( nRow ), ToDialog( nCol ) CHECKBOX xControl VAR xValue PROMPT "" PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) OF xDlg
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -130,7 +131,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    LOCAL cAny
 
-   @ nRow, nCol COMBOBOX xControl VAR cAny OF xDlg PIXEL SIZE nWidth, nHeight ;
+   @ ToDialog( nRow ), ToDialog( nCol  )COMBOBOX xControl VAR cAny OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) ;
       ITEMS aList ;
       STYLE CBS_DROPDOWN // ON CHANGE QueDia( cDia )
 
@@ -145,7 +146,8 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
-   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, dValue )
+   @ ToDialog( nRow ), ToDialog( nCol ) DTPICKER xControl VAR dValue ;
+      OF xDlg SIZE ToDialog( nWidth ), ToDialog( nHeight ) PIXEL
 
    (nWidth);(nHeight);(xDlg);(xControl);(nRow);(nCol);(dValue)
 
@@ -179,10 +181,10 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
 
    // truepixel causes irregular metric
-
+   hb_Default( @lModal, .F. )
    IF ISDIALOG
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
          PIXEL /* TRUEPIXEL */ TITLE cTitle ICON "ICOWINDOW" ;
@@ -244,8 +246,11 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
 FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList )
 
-   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, ;
-            0, "999", Nil, Nil, Nil, Nil )
+   @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR nValue OF xDlg ;
+      SIZE ToDialog( nWidth ), ToDialog( nHeight ) PIXEL ;
+      PICTURE "999999" ; // cPicture ;
+      SPINNER MIN aRangeList[1] MAX aRangeList[2]
+      // VALID iif( Empty( bValid ), .T., Eval( bValid ) )
 
    RETURN Nil
 
@@ -260,9 +265,11 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
+   // on dialog need create with all tabpages
+
    @ ToDialog( nRow ), ToDialog( nCol ) FOLDER xControl PIXEL ;
-      PROMPT "Page 1" ;
-      ;//BITMAPS "bmpfolder" ; // folderex
+      PROMPT ".", ".", ".", ".", ".", ".", ".", ".", ".", "."  ;
+      ; //BITMAPS "bmpfolder" ; // folderex
       OF xDlg SIZE ToDialog( nWidth ), ToDialog( nHeight )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
@@ -270,6 +277,14 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
    RETURN Nil
 
 FUNCTION gui_TabEnd( xTab, nPageCount )
+
+   LOCAL aItem
+
+   FOR EACH aItem IN xTab:aDialogs
+      IF aItem:cCaption == "."
+         aItem:Hide()
+      ENDIF
+   NEXT
 
    (xTab);(nPageCount)
 
@@ -285,18 +300,20 @@ FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
 FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 
-   IF nPageCount == 1
-      xControl:aPrompts[ 1 ] := cText
+   IF nPageCount <= Len( xControl:aDialogs )
+      xControl:aPrompts[ nPageCount ] := cText
    ELSE
       xControl:AddItem( cText )
    ENDIF
-   xPage := Atail( xControl:aDialogs )
+   xPage := xControl:aDialogs[ nPageCount ]
+   xControl:Refresh()
 
    (xDlg); (xControl); (cText); (xPage); (nPageCount)
 
    RETURN Nil
 
 FUNCTION gui_TabPageEnd( xDlg, xControl )
+
    /*
    END PAGE
    */
@@ -311,9 +328,13 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
 
 // EDIT for dialog
    IF Empty( bAction )
-      @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) )
+      @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue OF xDlg PIXEL ;
+         SIZE ToDialog( nWidth ), ToDialog( nHeight ) PICTURE cPicture ;
+         VALID iif( Empty( bValid ), .T., Eval( bValid ) )
    ELSE
-      @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) PICTURE cPicture VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
+      @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue OF xDlg PIXEL ;
+         SIZE ToDialog( nWidth ), ToDialog( nHeight ) PICTURE cPicture ;
+         VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
       ACTION Eval( bAction ) BITMAP cImage
    ENDIF
    (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bAction);(cImage)
@@ -345,9 +366,9 @@ FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    DO CASE
    CASE xControl:ClassName $ "TSAY,TCOMBOBOX,TCHECKBOX";  xControl:SetText( xValue )
-   CASE xControl:ClassName $ "TGET,TMULTIGET" ; xControl:cText( xValue )
+   CASE xControl:ClassName $ "TGET,TMULTIGET,TDATEPICK" ; xControl:cText( xValue )
    OTHERWISE
-      gui_MsgBox( xControl:ClassName )
+      gui_MsgBox( "SetValue pra " + xControl:ClassName )
    ENDCASE
    xControl:Refresh()
 
