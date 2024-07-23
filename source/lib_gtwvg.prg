@@ -186,13 +186,6 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 
    RETURN Nil
 
-FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
-
-   xControl:SetCaption( AllTrim( Transform( xValue, "" ) ) )
-   (xDlg);(xControl);(xValue)
-
-   RETURN Nil
-
 FUNCTION gui_LibName()
 
    RETURN "GTWVG"
@@ -299,7 +292,11 @@ FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
 
 FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
-   xControl:SetData( xValue )
+   IF xControl:ClassName == "LABEL"
+      xControl:SetCaption( AllTrim( Transform( xValue, "" ) ) )
+   ELSE
+      xControl:SetData( xValue )
+   ENDIF
    (xDlg);(xControl);(xValue)
 
    RETURN Nil

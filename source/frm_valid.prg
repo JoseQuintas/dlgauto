@@ -70,7 +70,7 @@ FUNCTION frm_Valid( aItem, Self )
       ENDIF
       IF ! Empty( aItem[ CFG_VSHOW ] )
          xValue := FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) )
-         gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], xValue )
+         gui_ControlSetValue( ::xDlg, aItem[ CFG_VCONTROL ], xValue )
       ENDIF
       SELECT ( nSelect )
    ENDIF

@@ -328,7 +328,7 @@ METHOD DataLoad() CLASS frm_Class
             SEEK xValue
             cText := ( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
             SELECT ( nSelect )
-            gui_LabelSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
+            gui_ControlSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX

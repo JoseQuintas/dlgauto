@@ -247,14 +247,6 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 
 //   RETURN Nil
 
-FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
-
-   xControl:SetText( xValue )
-   xControl:Refresh()
-   (xDlg)
-
-   RETURN Nil
-
 FUNCTION gui_LibName()
 
    RETURN "HWGUI"
@@ -384,9 +376,15 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 
 FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
-   ( xDlg )
+   DO CASE
+   CASE xControl:WinClass $ "STATIC,BUTTON"; xControl:SetText( xValue )
+   CASE xControl:WinClass $ "EDIT,COMBOBOX,HBOARD"; xControl:Value := xValue
+   OTHERWISE
+      gui_MsgBox( xControl:WinClass )
+   ENDCASE
+ ; xControl:Refresh()
 
-   xControl:Value := xValue
+  (xDlg)
 
    RETURN Nil
 

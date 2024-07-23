@@ -216,13 +216,6 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 
    RETURN Nil
 
-FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
-
-   xControl:SetText( xValue )
-   xControl:Refresh()
-
-   RETURN Nil
-
 FUNCTION gui_LibName()
 
    RETURN "FIVEWIN"
@@ -350,10 +343,15 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 
 FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
-   xControl:cText( xValue )
+   DO CASE
+   CASE xControl:ClassName $ "TSAY,TCOMBOBOX,TCHECKBOX";  xControl:SetText( xValue )
+   CASE xControl:ClassName $ "TGET,TMULTIGET" ; xControl:cText( xValue )
+   OTHERWISE
+      gui_MsgBox( xControl:ClassName )
+   ENDCASE
    xControl:Refresh()
 
-   (xDlg);(xControl);(xValue)
+   (xDlg)
 
    RETURN Nil
 

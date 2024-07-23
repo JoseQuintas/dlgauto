@@ -393,12 +393,6 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 
    RETURN Nil
 
-FUNCTION gui_LabelSetValue( xDlg, xControl, xValue )
-
-   SetProperty( xDlg, xControl, "VALUE", xValue )
-
-   RETURN Nil
-
 FUNCTION gui_LibName()
 
    RETURN "HMGE"
