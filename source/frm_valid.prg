@@ -8,15 +8,15 @@ FUNCTION frm_Valid( aItem, Self )
 
    LOCAL nSelect, lFound := .T., xValue, nPos
 
-   IF ! gui_LibName() == "HWGUI" .AND. ! gui_IsCurrentFocus( ::xDlg )
+   //IF ! gui_LibName() == "HWGUI" .AND. ! gui_IsCurrentFocus( ::xDlg )
       //this affects external programs
       //gui_SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] )
-      RETURN .F.
-   ENDIF
+      //RETURN .F.
+   //ENDIF
    // if btn cancel abort validate (current on hwgui only)
    nPos := hb_AScan( ::aControlList, { | e | e[ CFG_CTLTYPE ] == TYPE_BUTTON .AND. ;
       e[ CFG_CAPTION ] == "Cancel" } )
-   IF nPos != 0
+   IF nPos != 0 .AND. ! gui_LibName() == "FIVEWIN"
       IF gui_IsCurrentFocus( ::xDlg, ::aControlList[ nPos, CFG_FCONTROL ] )
          RETURN .T.
       ENDIF

@@ -85,6 +85,19 @@ METHOD DlgInit() CLASS frm_Class
          gui_ControlSetValue( ::xDlg, ::aControlList[ nPos ][ CFG_FCONTROL ], ::aInitValue2[2] )
       ENDIF
    ENDIF
+   // no success
+   //IF gui_LibName() == "FIVEWIN"
+   //   FOR EACH aControl IN ::aControlList
+   //      IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
+   //         FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
+   //            IF cText == "."
+   //               aControl[ CFG_FCONTROL ]:aDialogs[ cText:__EnumIndex() ]:Hide()
+   //            ENDIF
+   //         NEXT
+   //         aControl[ CFG_FCONTROL ]:Refresh()
+   //      ENDIF
+   //   NEXT
+   //ENDIF
    IF ! Empty( ::bActivate )
       Eval( ::bActivate )
    ENDIF

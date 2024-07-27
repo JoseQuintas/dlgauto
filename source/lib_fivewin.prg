@@ -18,6 +18,7 @@ Basic screen only
 FUNCTION gui_Init()
 
    //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, - APP_FONTSIZE_NORMAL
+   SetGetColorFocus( RGB( 255,255,0 ) )
 
    RETURN Nil
 
@@ -42,7 +43,7 @@ FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
          MENU
             FOR EACH cDBF IN aGroupList
-               MENUITEM cDBF ACTION hb_ThreadStart( { || frm_Main( cDBF, aAllSetup ) } )
+               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
             NEXT
          ENDMENU
       NEXT
@@ -99,6 +100,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    RETURN Nil
 
 FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
+
    RETURN Nil
 
 FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
@@ -112,6 +114,8 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
    RETURN Nil
 
 FUNCTION gui_BrowseRefresh( xDlg, xControl )
+
+   xControl:Refresh()
 
    (xDlg);(xControl)
 
@@ -153,13 +157,24 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
    RETURN Nil
 
-FUNCTION gui_DialogActivate( xDlg, bCode )
+FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
+
+   hb_Default( @lModal, .T. )
 
    IF ISDIALOG
-      IF ! Empty( bCode )
-         ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+      IF lModal
+         IF ! Empty( bCode )
+            ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+         ELSE
+            ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+         ENDIF
       ELSE
-         ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+         IF ! Empty( bCode )
+            ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
+               ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+         ELSE
+            ACTIVATE DIALOG xDlg CENTERED NOMODAL ON INIT gui_StatusBar( xDlg, "" )
+         ENDIF
       ENDIF
    ELSE
       IF ! Empty( bCode )
@@ -203,13 +218,14 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       (xDlg);(xControl)
 
-      RETURN .F.
+      RETURN .T.
 
 FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    hb_Default( @lBorder, .F. )
    IF lBorder
-      @ ToDialog( nRow ), ToDialog( nCol ) SAY xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) COLOR CLR_BLUE TRANSPARENT BORDER
+      @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) READONLY
+      //@ ToDialog( nRow ), ToDialog( nCol ) SAY xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) COLOR CLR_BLUE TRANSPARENT BORDER
    ELSE
       @ ToDialog( nRow ), ToDialog( nCol ) SAY xControl VAR xValue OF xDlg PIXEL SIZE ToDialog( nWidth ), ToDialog( nHeight ) COLOR CLR_BLUE TRANSPARENT
    ENDIF
@@ -239,6 +255,12 @@ FUNCTION gui_MsgYesNo( cText )
    RETURN MsgYesNo( cText )
 
 FUNCTION gui_SetFocus( xDlg, xControl )
+
+   IF PCount() < 2
+      xDlg:SetFocus()
+   ELSE
+      xControl:SetFocus()
+   ENDIF
 
    (xDlg);(xControl)
 
@@ -276,15 +298,18 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION gui_TabEnd( xTab, nPageCount )
+FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
    LOCAL aItem
 
-   FOR EACH aItem IN xTab:aDialogs
-      IF aItem:cCaption == "."
-         aItem:Hide()
-      ENDIF
-   NEXT
+   IF ! ISDIALOG
+      FOR EACH aItem IN xTab:aDialogs
+         IF aItem:__EnumIndex > nPageCount
+            aItem:Hide()
+         ENDIF
+      NEXT
+      xDlg:Refresh()
+   ENDIF
 
    (xTab);(nPageCount)
 
@@ -335,7 +360,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       @ ToDialog( nRow ), ToDialog( nCol ) GET xControl VAR xValue OF xDlg PIXEL ;
          SIZE ToDialog( nWidth ), ToDialog( nHeight ) PICTURE cPicture ;
          VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
-      ACTION Eval( bAction ) BITMAP cImage
+         ACTION Eval( bAction ) BITMAP cImage
    ENDIF
    (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bAction);(cImage)
 
@@ -356,7 +381,19 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 
    LOCAL xValue
 
-   xValue := xControl:GetText()
+   DO CASE
+   CASE xControl:ClassName == "TSAY";       xValue := xControl:GetText()
+   CASE xControl:ClassName == "TCOMBOBOX" ; xValue := xControl:VarGet()
+   CASE xControl:ClassName == "TCHECKBOX";  xValue := xControl:lchecked()
+   CASE xControl:ClassName == "TGET";       xValue := xControl:Value()
+   CASE xControl:ClassName == "TMULTIGET";  xValue := xControl:GetText()
+   CASE xControl:ClassName == "TDATEPICK";  xValue := xControl:Value()
+   CASE xControl:ClassName == "TRADIO";     xValue := xControl:nOption()
+   OTHERWISE // GetText() ??
+      gui_MsgBox( "SetValue for " + xControl:ClassName )
+   ENDCASE
+
+   xValue := xControl:Value() // GetText()
 
    (xDlg);(xControl)
 
@@ -365,10 +402,15 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    DO CASE
-   CASE xControl:ClassName $ "TSAY,TCOMBOBOX,TCHECKBOX";  xControl:SetText( xValue )
-   CASE xControl:ClassName $ "TGET,TMULTIGET,TDATEPICK" ; xControl:cText( xValue )
-   OTHERWISE
-      gui_MsgBox( "SetValue pra " + xControl:ClassName )
+   CASE xControl:ClassName == "TSAY";       xControl:SetText( xValue )
+   CASE xControl:ClassName == "TCOMBOBOX" ; xControl:Set( xValue )
+   CASE xControl:ClassName == "TCHECKBOX";  xControl:SetCheck( xValue )
+   CASE xControl:ClassName == "TGET";       xControl:cText( xValue )
+   CASE xControl:ClassName == "TMULTIGET";  xControl:cText( xValue )
+   CASE xControl:ClassName == "TDATEPICK";  xControl:cText( xValue )
+   CASE xControl:ClassName == "TRADIO";     xControl:SetOption( xValue )
+   OTHERWISE // cText(x) ??
+      gui_MsgBox( "SetValue for " + xControl:ClassName )
    ENDCASE
    xControl:Refresh()
 

@@ -271,13 +271,13 @@ FUNCTION frm_Edit( Self )
       ENDIF
       lFirst := .F.
    NEXT
-   IF gui_LibName() $ "FIVEWIN, HWGUI"
+   IF gui_LibName() $ "FIVEWIN,HWGUI"
       /* dummy textbox to works last valid */
       AAdd( ::aControlList, EmptyFrmClassItem() )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUG_GET
 
       gui_TextCreate( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-         nRow, nCol, 0, 0, "", "", 0, { || .T. },,,@::aControlList[ CFG_FCONTROL ], Self )
+         nRow, nCol, 0, 0, " ", "", 0, { || .T. },,,@::aControlList[ CFG_FCONTROL ], Self )
 
    ENDIF
    IF ::lWithTab
@@ -286,7 +286,7 @@ FUNCTION frm_Edit( Self )
 
       gui_TabNavigate( ::xDlg, xTab, aList )
 
-      gui_TabEnd( xTab, nPageCount )
+      gui_TabEnd( ::xDlg, xTab, nPageCount )
 
    ENDIF
 

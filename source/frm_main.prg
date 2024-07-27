@@ -13,7 +13,6 @@ FUNCTION frm_main( cDBF, aAllSetup, lModal )
 
    hb_Default( @lModal, .F. )
 #ifdef HBMK_HAS_GTWVG
-   hb_gtReload( "WVG" )  // do not use WGU
    SetMode(30,100)
    SetColor("W/B")
    CLS
