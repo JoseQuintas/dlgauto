@@ -1,5 +1,6 @@
 /*
 frm_Edit - Create textbox/label on dialog
+called from frmclass
 */
 
 #include "hbclass.ch"
@@ -135,9 +136,9 @@ FUNCTION frm_Edit( Self )
          /* if editable browse, keys to do that */
          IF aItem[ CFG_BRWEDIT ]
             aKeyDownList := { ;
-               { VK_INSERT, { || ::BrowseAction( aItem, VK_INSERT ) } }, ;
-               { VK_DELETE, { || ::BrowseAction( aItem, VK_DELETE ) } }, ;
-               { VK_RETURN, { || ::BrowseAction( aItem, VK_RETURN ) } } }
+               { VK_INSERT, { || ::BrowseClick( aItem, VK_INSERT ) } }, ;
+               { VK_DELETE, { || ::BrowseClick( aItem, VK_DELETE ) } }, ;
+               { VK_RETURN, { || ::BrowseClick( aItem, VK_RETURN ) } } }
          ELSE
             aKeyDownList := {}
          ENDIF

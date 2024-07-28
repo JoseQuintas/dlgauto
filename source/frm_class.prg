@@ -52,9 +52,9 @@ CREATE CLASS frm_Class
    METHOD Exit()               INLINE gui_DialogClose( ::xDlg )
    METHOD DataSave()
    METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
-   METHOD Validate( aItem )    INLINE frm_Valid( aItem, Self )
+   METHOD Validate( aItem )    INLINE frm_Valid( Self, aItem )
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
-   METHOD BrowseAction( aItem, nKey ) INLINE frm_BrowseAction( aItem, nKey, Self )
+   METHOD BrowseClick( aItem, nKey ) INLINE frm_BrowseClick( Self, aItem, nKey )
    METHOD DlgInit()
 
    ENDCLASS

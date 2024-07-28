@@ -1,5 +1,6 @@
 /*
 frm_buttons - create the buttons
+called from frmclass
 */
 
 #include "frm_class.ch"

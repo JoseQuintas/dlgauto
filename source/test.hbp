@@ -6,7 +6,7 @@ test_setup.prg
 test_nodatabase.prg
 test.rc
 frm_browse.prg
-frm_browseaction.prg
+frm_BrowseClick.prg
 frm_class.prg
 frm_buttons.prg
 frm_dialog.prg

@@ -1,5 +1,6 @@
 /*
 frm_Dialog - create the dialog for data
+called from frm_class
 */
 
 #include "frm_class.ch"

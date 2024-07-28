@@ -1,10 +1,11 @@
 /*
 frm_Valid - valid used on getbox, edit, textbox
+called from frm_class
 */
 
 #include "frm_class.ch"
 
-FUNCTION frm_Valid( aItem, Self )
+FUNCTION frm_Valid( Self, aItem )
 
    LOCAL nSelect, lFound := .T., xValue, nPos
 

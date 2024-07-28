@@ -1,5 +1,6 @@
 /*
-frm_browseaction - action for browse
+frm_browseClick - action for browse
+called from frm_class
 */
 
 #include "frm_class.ch"
@@ -9,7 +10,7 @@ frm_browseaction - action for browse
    #define VK_RETURN  13
 #endif
 
-FUNCTION frm_BrowseAction( aItemOld, nKey, oFrmOld )
+FUNCTION frm_BrowseClick( oFrmOld, aItemOld, nKey )
 
    LOCAL oFrm, nPos, nSelect, aOrdScope
 

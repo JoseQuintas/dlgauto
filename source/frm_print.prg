@@ -1,5 +1,6 @@
 /*
 frm_print - single report
+called from frm_class
 */
 
 #include "frm_class.ch"
