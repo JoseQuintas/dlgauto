@@ -66,9 +66,9 @@ FUNCTION frm_Edit( Self )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_SPINNER .OR. aItem[ CFG_CTLTYPE ] == TYPE_DATEPICKER
          IF ::nLayout == 1 .OR. ::nLayout == 2
-            nLen := ( Max( 5, Len( aItem[ CFG_CAPTION ] ) ) + Max( 10, aItem[ CFG_FLEN ] + 3 ) ) * 12
+            nLen := ( Max( 5, Len( aItem[ CFG_CAPTION ] ) ) + Max( 15, aItem[ CFG_FLEN ] + 3 ) ) * 12
          ELSE
-            nLen := ( Max( 5, Max( Len( aItem[ CFG_CAPTION ] ), Max( 10, aItem[ CFG_FLEN ] ) ) ) + 3 ) * 12
+            nLen := ( Max( 5, Max( Len( aItem[ CFG_CAPTION ] ), Max( 15, aItem[ CFG_FLEN ] ) ) ) + 3 ) * 12
          ENDIF
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_TEXT
@@ -198,10 +198,10 @@ FUNCTION frm_Edit( Self )
          ENDIF
 
          gui_LabelCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, 10 * 12 + 30, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 30, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
 
          gui_DatePickerCreate( iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, nLen, APP_LINE_HEIGHT, aItem[ CFG_VALUE ] ) // aItem[ CFG_FPICTURE ] )
+            nRow2, nCol2, 10 * 12, APP_LINE_HEIGHT, aItem[ CFG_VALUE ] ) // aItem[ CFG_FPICTURE ] )
 
          nCol += nLen
 
