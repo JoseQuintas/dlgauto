@@ -11,6 +11,8 @@ Basic screen only
 #include "calendar.ch"
 #include "dtpicker.ch"
 
+#define USE_DIALOG .T. // workaround
+
 //STATIC oFont
 
 FUNCTION gui_Init()
@@ -78,7 +80,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyDownList, Self )
 
-   LOCAL nMult := 1, aItem, oCol
+   LOCAL nMult := 1, aItem, oCol, aThisKey
 
    IF IsDialog( xDlg )
       nMult := 0.5
@@ -98,6 +100,18 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
    xControl:nMoveType := 0
    xControl:CreateFromCode()
+   /* create buttons on browse for defined keys */
+   IF Len( aKeyDownList ) != 0
+      FOR EACH aThisKey IN aKeyDownList
+         AAdd( ::aControlList, EmptyFrmClassItem() )
+         Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
+         gui_ButtonCreate( xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+         nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+         iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
+         iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
+         iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
+      NEXT
+   ENDIF
 
    (xDlg);(cField);(xValue);(workarea);(aKeyDownList);(xControl);(nRow);(nCol);(nWidth)
    (nHeight);(oTBrowse);(oCol)
@@ -217,7 +231,10 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
    // truepixel causes irregular metric
    hb_Default( @lModal, .F. )
-   IF .T. .OR. lModal // Só DIALOG é modal
+   IF USE_DIALOG
+      lModal := .T.
+   ENDIF
+   IF lModal // Só DIALOG é modal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
          PIXEL /* TRUEPIXEL */ TITLE cTitle ICON "ICOWINDOW" ;
          // FONT oFont
@@ -481,15 +498,16 @@ FUNCTION DoNothing(...)
 
 FUNCTION IsDialog( xDlg )
 
-   LOCAL lIsDlg
+   LOCAL lIsDlg := USE_DIALOG
 
-   DO CASE
-   CASE xDlg:ClassName() == "TDIALOG"; lIsDlg := .T.
-   CASE xDlg:ClassName() == "TWINDOW"; lIsDlg := .F.
-   ENDCASE
-   IF lIsDlg == Nil
-      lIsDlg := IsDialog( xDlg:Parent )
-   ENDIF
-   lIsDlg := iif( lIsDlg, .T., .T. )
+   //DO WHILE ! Empty( xDlg:Parent )
+   //   xDlg := xDlg:Parent
+   //ENDDO
+   //DO CASE
+   //CASE xDlg:ClassName() == "TDIALOG"; lIsDlg := .T.
+   //CASE xDlg:ClassName() == "TWINDOW"; lIsDlg := .F.
+   //ENDCASE
+
+   (xDlg)
 
    RETURN lIsDlg

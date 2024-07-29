@@ -115,7 +115,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    IF Len( aKeyDownList ) != 0
       FOR EACH aThisKey IN aKeyDownList
          AAdd( ::aControlList, EmptyFrmClassItem() )
-         Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON
+         Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
          Atail( ::aControlList )[ CFG_FCONTROL ] := gui_NewName( "BTNBRW" )
          gui_ButtonCreate( xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
             nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;

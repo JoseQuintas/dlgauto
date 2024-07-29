@@ -42,7 +42,7 @@ FUNCTION frm_Edit( Self )
       nHeight := 1
       DO CASE
       CASE hb_AScan( { TYPE_TAB, TYPE_TABPAGE, TYPE_BUTTON, TYPE_ADDBUTTON, ;
-         TYPE_BUG_GET }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
+         TYPE_BUG_GET, TYPE_BUTTON_BRW }, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          /* these controls do not need additional code */
          LOOP
 

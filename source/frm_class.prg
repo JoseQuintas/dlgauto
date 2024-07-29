@@ -170,10 +170,10 @@ METHOD ButtonSaveOn( lSave ) CLASS frm_Class
 
    hb_Default( @lSave, .T. )
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
-         IF lSave .AND. gui_LibName() == "HMGE" .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
-            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-         ELSEIF aItem[ CFG_CAPTION ] $ "Cancel" + iif( lSave, ",Save", "" )
+      IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON_BRW
+         gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], lSave )
+      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
+         IF aItem[ CFG_CAPTION ] $ "Cancel" + iif( lSave, ",Save", "" )
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          ELSE
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
@@ -188,10 +188,10 @@ METHOD ButtonSaveOff() CLASS frm_Class
    LOCAL aItem
 
    FOR EACH aItem IN ::aControlList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
+      IF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON_BRW
+         gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
+      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON
          IF aItem[ CFG_CAPTION ] $ "Save,Cancel"
-            gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
-         ELSEIF gui_LibName() == "HMGE" .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
