@@ -78,13 +78,23 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyDownList, Self )
 
-   LOCAL aItem, oCol, aThisKey
+   LOCAL aItem, oCol, aThisKey, nPos
 
-   @ DlgSize( nRow ), DlgSize( nCol ) XBROWSE xControl ;
-      SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL ;
-      DATASOURCE workarea ;
-      OF xParent
-      //LINES CELL
+   IF Len( aKeyDownList ) == 0
+      @ DlgSize( nRow ), DlgSize( nCol ) XBROWSE xControl ;
+         SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL ;
+         DATASOURCE workarea ;
+         OF xParent ;
+         ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+         //LINES CELL
+   ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+      @ DlgSize( nRow ), DlgSize( nCol ) XBROWSE xControl ;
+         SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL ;
+         DATASOURCE workarea ;
+         OF xParent ;
+         ON DBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
+         //LINES CELL
+   ENDIF
 
    FOR EACH aItem IN oTbrowse
       ADD oCol TO xControl ;
