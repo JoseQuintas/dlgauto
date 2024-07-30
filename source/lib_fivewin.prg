@@ -92,7 +92,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
          SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL ;
          DATASOURCE workarea ;
          OF xParent ;
-         ON DBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
+         ON DBLCLICK BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
          //LINES CELL
    ENDIF
 
@@ -110,12 +110,12 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       FOR EACH aThisKey IN aKeyDownList
          AAdd( ::aControlList, EmptyFrmClassItem() )
          Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
-         gui_ButtonCreate( xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-         nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
-         APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
-         iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
-         iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
-         iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
+         gui_ButtonCreate( xParent, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+            nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
+            APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+            iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
+            iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
+            iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
       NEXT
       xControl:bKeyDown := { | nKey | BrowseKeyDown( nKey, aKeyDownList ) }
    ENDIF
@@ -126,18 +126,22 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
    RETURN Nil
 
-FUNCTION BrowseKeyDown( nKey, aKeyDownList )
+FUNCTION BrowseKeyDown( nKey, aKeyDownList, workarea )
 
-   LOCAL nPos
+   LOCAL nPos, nSelect
 
    nPos := hb_AScan( aKeyDownList, { | e | e[ 1 ] == nKey } )
    IF nPos != 0
+      nSelect := Select()
+      SELECT ( Select( workarea ) )
       Eval( aKeyDownList[ nPos, 2 ] )
    ENDIF
 
    RETURN Nil
 
 FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
+
+   (xControl);(nKey);(Self)
 
    RETURN Nil
 
@@ -267,10 +271,10 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
 
    hb_Default( @lBorder, .F. )
    IF lBorder
-      @ DlgSize( nRow ), DlgSize( nCol ) GET xControl VAR xValue OF xDlg PIXEL ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) READONLY
-      //@ DlgSize( nRow ), DlgSize( nCol ) SAY xControl VAR xValue OF xDlg PIXEL ;
-      //   SIZE DlgSize( nWidth ), DlgSize( nHeight ) COLOR CLR_BLUE TRANSPARENT BORDER
+      //@ DlgSize( nRow ), DlgSize( nCol ) GET xControl VAR xValue OF xDlg PIXEL ;
+      //   SIZE DlgSize( nWidth ), DlgSize( nHeight ) READONLY
+      @ DlgSize( nRow ), DlgSize( nCol ) SAY xControl VAR xValue OF xDlg PIXEL ;
+         SIZE DlgSize( nWidth ), DlgSize( nHeight ) COLOR CLR_BLUE TRANSPARENT BORDER
    ELSE
       @ DlgSize( nRow ), DlgSize( nCol ) SAY xControl VAR xValue OF xDlg PIXEL ;
          SIZE DlgSize( nWidth ), DlgSize( nHeight ) COLOR CLR_BLUE TRANSPARENT
@@ -415,6 +419,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
          VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
          ACTION Eval( bAction ) BITMAP cImage
    ENDIF
+
    (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bAction);(cImage)
 
    RETURN Nil
@@ -426,6 +431,7 @@ FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
    ELSE
       xControl:Disable()
    ENDIF
+
    (xDlg);(xControl);(lEnable)
 
    RETURN Nil
@@ -455,7 +461,7 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    DO CASE
-   CASE xControl:ClassName == "TSAY";       xControl:SetText( xValue )
+   CASE xControl:ClassName == "TSAY";       xControl:VarPut( xValue )
    CASE xControl:ClassName == "TCOMBOBOX" ; xControl:Set( xValue )
    CASE xControl:ClassName == "TCHECKBOX";  xControl:SetCheck( xValue )
    CASE xControl:ClassName == "TGET";       xControl:cText( xValue )

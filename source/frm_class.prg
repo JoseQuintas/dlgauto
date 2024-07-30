@@ -235,8 +235,7 @@ METHOD EditOn() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUG_GET
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-      ELSEIF gui_LibName() == "HMGE" .AND. aItem[ CFG_CTLTYPE ] == TYPE_BUTTON ;
-         .AND. Left( aItem[ CFG_FCONTROL ], 6 ) == "BTNBRW"
+      ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON_BRW
             gui_ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
       ELSEIF hb_AScan( aEnableList, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ] .OR. aItem[ CFG_SAVEONLY ]
@@ -260,7 +259,7 @@ METHOD EditOff() CLASS frm_Class
    LOCAL aItem
    LOCAL aDisableList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_COMBOBOX, ;
       TYPE_CHECKBOX, TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE, ;
-      TYPE_BUG_GET }
+      TYPE_BUG_GET, TYPE_BUTTON_BRW }
 
    FOR EACH aItem IN ::aControlList
       IF hb_AScan( aDisableList, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
@@ -332,7 +331,7 @@ METHOD DataLoad() CLASS frm_Class
       CASE aItem[ CFG_SAVEONLY ]
       CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
          IF ! aItem[ CFG_SAVEONLY ]
-            xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
+            xValue := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
          ENDIF
          gui_ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
