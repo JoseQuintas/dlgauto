@@ -278,7 +278,7 @@ FUNCTION frm_Edit( Self )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUG_GET
 
       gui_TextCreate( ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-         nRow, nCol, 0, 0, " ", "", 0, { || .T. },,,@::aControlList[ CFG_FCONTROL ], Self )
+         nRow, nCol, 0, 0, " ", "", 0, { || .T. },,,@Atail( ::aControlList )[ CFG_FCONTROL ], Self )
 
    ENDIF
    IF ::lWithTab
