@@ -205,6 +205,8 @@ FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
 
    hb_Default( @lModal, .T. )
 
+   lModal := iif( DIALOG_NOT_WINDOW, .T., .T. )
+
    IF DIALOG_NOT_WINDOW
       IF lModal
          IF ! Empty( bCode )
@@ -340,13 +342,13 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    // on dialog need create with all tabpages
    IF DIALOG_NOT_WINDOW
-      @ DlgSize( nRow ), DlgSize( nCol ) FOLDER xControl PIXEL ;
-         PROMPT ".", ".", ".", ".", ".", ".", ".", ".", ".", "."  ;
+      @ DlgSize( nRow ), DlgSize( nCol ) FOLDEREX xControl PIXEL ;
+         PAGES ".", ".", ".", ".", ".", ".", ".", ".", ".", "."  ;
          ; //BITMAPS "bmpfolder" ; // folderex
          OF xDlg SIZE DlgSize( nWidth ), DlgSize( nHeight )
    ELSE
-      @ DlgSize( nRow ), DlgSize( nCol ) FOLDER xControl PIXEL ;
-         PROMPT "." ;
+      @ DlgSize( nRow ), DlgSize( nCol ) FOLDEREX xControl PIXEL ;
+         PAGES "." ;
          ; //BITMAPS "bmpfolder" ; // folderex
          OF xDlg SIZE DlgSize( nWidth ), DlgSize( nHeight )
    ENDIF

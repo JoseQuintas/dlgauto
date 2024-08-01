@@ -61,7 +61,7 @@ CREATE CLASS frm_Class
 
 METHOD DlgInit() CLASS frm_Class
 
-   LOCAL nPos
+   LOCAL nPos, aControl
 
    IF ::nInitRecno != Nil
       GOTO ::nInitRecno
@@ -86,8 +86,11 @@ METHOD DlgInit() CLASS frm_Class
       ENDIF
    ENDIF
    // no success
-   //IF gui_LibName() == "FIVEWIN"
-   //   FOR EACH aControl IN ::aControlList
+   IF gui_LibName() == "FIVEWIN"
+      FOR EACH aControl IN ::aControlList
+         IF aControl[ CFG_FCONTROL ]:ClassName() == "TGET"
+            aControl[ CFG_FCONTROL ]:nHeight := APP_LINE_HEIGHT
+         ENDIF
    //      IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
    //         FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
    //            IF cText == "."
@@ -96,8 +99,8 @@ METHOD DlgInit() CLASS frm_Class
    //         NEXT
    //         aControl[ CFG_FCONTROL ]:Refresh()
    //      ENDIF
-   //   NEXT
-   //ENDIF
+      NEXT
+   ENDIF
    IF ! Empty( ::bActivate )
       Eval( ::bActivate )
    ENDIF

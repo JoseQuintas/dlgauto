@@ -50,11 +50,7 @@
 #endif
 
 #ifndef WIN_RGB
-   #ifdef HBMK_HAS_HWGUI
-      #define WIN_RGB( r, g, b ) hwg_ColorRGB2N( r, g, b )
-   #else
-      #define WIN_RGB( r, g, b ) ( r * 256 ) + ( b * 16 ) + c
-   #endif
+   #define WIN_RGB( r, g, b ) ( r * 256 ) + ( b * 16 ) + c
 #endif
 
 #define COLOR_BLACK         WIN_RGB( 0, 0, 0 )
