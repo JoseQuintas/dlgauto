@@ -140,6 +140,7 @@ STATIC FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
          ENDIF
       ENDIF
    ENDIF
+
    (xControl)
 
    RETURN .T.
@@ -160,6 +161,7 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "REFRESH" )
+
    (xDlg)
 
    RETURN Nil
@@ -211,7 +213,8 @@ FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, n
       RANGEMIN aList[ 1 ]
       RANGEMAX aList[ 2 ]
    END SPINNER
-   ( nHeight )
+
+   ( nHeight ); (Self)
 
    RETURN Nil
 
@@ -316,6 +319,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
       @ nRow, nCol LABEL ( xControl ) PARENT ( xDlg ) ;
          VALUE xValue WIDTH nWidth HEIGHT nHeight
    ENDIF
+
    (xDlg)
 
    RETURN Nil
@@ -340,6 +344,7 @@ FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
       TOOLTIP 'EditBox'
       /* NOHSCROLLBAR .T. */
    END EDITBOX
+
    (xDlg)
 
    RETURN Nil
@@ -388,6 +393,7 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       AT nRow, nCol;
       WIDTH nWidth ;
       HEIGHT nHeight
+
    (xDlg)
 
    RETURN Nil
@@ -408,6 +414,7 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 
    PAGE ( cText )
    xPage := xControl
+
    (xDlg); (xControl); (cText); (nPageCount)
 
    RETURN Nil
@@ -415,6 +422,7 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    END PAGE
+
    (xDlg); (xControl)
 
    RETURN Nil
@@ -456,6 +464,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       AAdd( ::aDlgKeyDown, { xControl, VK_F9, ;
          { || ::Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], ::cFileDbf, aItem[ CFG_VTABLE ] ) ) } } )
    ENDIF
+
    (bValid); (xDlg); (cImage); (bAction)
 
    RETURN Nil

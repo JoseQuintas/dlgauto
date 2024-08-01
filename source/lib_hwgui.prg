@@ -54,6 +54,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       ON INIT  { || ;
          BtnSetImageText( xControl:Handle, cCaption, cResName, nWidth, nHeight ) } ;
          TOOLTIP cCaption
+
    ( xDlg )
 
    RETURN Nil
@@ -98,6 +99,7 @@ STATIC FUNCTION gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xValu
    IF nPos != 0
       Eval( aKeyDownList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
    ENDIF
+
    (workarea)
    // return value is used by hwgui
 
@@ -109,6 +111,7 @@ STATIC FUNCTION gui_BrowseEnter( cField, xValue, xDlg )
       xValue := FieldGet( FieldNum( cField ) )
    ENDIF
    hwg_EndDialog()
+
    (xDlg)
 
    RETURN Nil
@@ -116,6 +119,7 @@ STATIC FUNCTION gui_BrowseEnter( cField, xValue, xDlg )
 FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    xControl:Refresh()
+
    (xDlg)
 
    RETURN Nil
@@ -142,6 +146,8 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
       SIZE nWidth / 3, nHeight FONT oFont ;
       INIT dValue
 
+   (Self)
+
    RETURN Nil
 
 FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
@@ -151,6 +157,7 @@ FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, n
    @ nCol, nRow GET UPDOWN xControl VAR nValue ;
       RANGE aList[1], aList[2] OF xDlg  SIZE nWidth, nHeight WIDTH 15 FONT oFont
    //gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @nValue )
+
    (aList)
 
    RETURN Nil
@@ -186,6 +193,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
       SIZE      nWidth, nHeight ;
       BACKCOLOR COLOR_WHITE ;
       ON INIT bInit
+
    (xDlg);(lModal)
 
    RETURN Nil
@@ -221,6 +229,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
          COLOR   COLOR_BLACK ;
          TRANSPARENT
    ENDIF
+
    (xDlg); (lBorder)
 
    RETURN Nil
@@ -274,12 +283,13 @@ FUNCTION gui_MsgYesNo( cText )
 
 FUNCTION gui_SetFocus( xDlg, xControl )
 
-   (xDlg); (xControl)
    IF Empty( xControl )
       //xDlg:SetFocus()
    ELSE
       xControl:SetFocus()
    ENDIF
+
+   (xDlg); (xControl)
 
    RETURN Nil
 
@@ -315,6 +325,7 @@ FUNCTION gui_TabNavigate( xDlg, xTab, aList )
       nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
       gui_TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, nPageNext, aList[ nPageNext, 1 ] )
    NEXT
+
    (xDlg)
 
    RETURN Nil
@@ -323,6 +334,7 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 
    BEGIN PAGE cText OF xControl
    xPage := xControl
+
    (xDlg);(nPageCount)
 
    RETURN Nil
@@ -330,6 +342,7 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    END PAGE OF xControl
+
    (xDlg)
 
    RETURN Nil
@@ -364,6 +377,7 @@ FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
    ELSE
       xControl:Disable()
    ENDIF
+
    (xDlg)
 
    RETURN Nil

@@ -128,6 +128,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
          AAdd( ::aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
       NEXT
    ENDIF
+
    (cField);(xValue)
 
    RETURN Nil
@@ -147,6 +148,7 @@ STATIC FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
          _SetNextFocus()
       ENDIF
    ENDIF
+
    (xControl)
 
    RETURN .T.
@@ -167,6 +169,7 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "REFRESH" )
+
    (xDlg)
 
    RETURN Nil
@@ -203,6 +206,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       //HEIGHT nHeight // do not define height, it limits can list size to zero
       ITEMS aList
    END COMBOBOX
+
    ( nHeight )
 
    RETURN Nil
@@ -221,7 +225,8 @@ FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, n
       RANGEMIN aList[ 1 ]
       RANGEMAX aList[ 2 ]
    END SPINNER
-   ( nHeight )
+
+   ( nHeight );(Self)
 
    RETURN Nil
 
@@ -350,6 +355,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
    //   :Height := nHeight
    //   //:Border := lBorder
    //ENDWITH
+
    (xDlg); (lBorder)
 
    RETURN Nil
@@ -424,6 +430,7 @@ FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       VALUE 1
 
    xControl := xDlg // because they are not on tab
+
    (nRow); (nCol); (nWidth); (nHeight); (xDlg)
 
    RETURN Nil
@@ -444,6 +451,7 @@ FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
 
    DEFINE PAGE cText
    xPage := xControl
+
    (xDlg); (xControl); (cText); (nPageCount)
 
    RETURN Nil

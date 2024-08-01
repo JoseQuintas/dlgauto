@@ -249,7 +249,7 @@ FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, n
       RANGEMIN aList[ 1 ]
       RANGEMAX aList[ 2 ]
    END SPINNER
-   ( nHeight )
+   ( nHeight );(Self)
 
    RETURN Nil
 

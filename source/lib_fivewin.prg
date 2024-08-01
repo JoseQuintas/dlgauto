@@ -176,17 +176,17 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
 FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
-   LOCAL cAny
+   LOCAL cAny := 1
 
    @ DlgSize( nRow ), DlgSize( nCol  ) COMBOBOX xControl VAR cAny OF xDlg PIXEL ;
       SIZE DlgSize( nWidth ), DlgSize( nHeight ) ;
       ITEMS aList ;
-      STYLE CBS_DROPDOWN // ON CHANGE QueDia( cDia )
-
+      //STYLE CBS_DROPDOWN
+      //UPDATE
    //oCbx:oGet:bKeyChar = { | nKey | If( nKey == VK_RETURN,;
    //                                  ( cDia := oCbx:oGet:GetText(), Eval( oCbx:bChange() ) ),),;
    //                                    oCbx:GetKeyChar( nKey ) }
-
+   gui_MsgBox( hb_ValToExp( xControl:nAt ) )
    (nHeight);(xDlg);(xControl);(nRow);(nCol);(nWidth);(aList)
 
    RETURN Nil
@@ -455,8 +455,6 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
       gui_MsgBox( "SetValue for " + xControl:ClassName )
    ENDCASE
 
-   xValue := xControl:Value() // GetText()
-
    (xDlg);(xControl)
 
    RETURN xValue
@@ -465,7 +463,7 @@ FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    DO CASE
    CASE xControl:ClassName == "TSAY";       xControl:VarPut( xValue )
-   CASE xControl:ClassName == "TCOMBOBOX" ; xControl:Set( xValue )
+   CASE xControl:ClassName == "TCOMBOBOX" ; (xValue) // xControl:VarPut( xValue )
    CASE xControl:ClassName == "TCHECKBOX";  xControl:SetCheck( xValue )
    CASE xControl:ClassName == "TGET";       xControl:cText( xValue )
    CASE xControl:ClassName == "TMULTIGET";  xControl:cText( xValue )

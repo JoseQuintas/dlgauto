@@ -33,6 +33,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
    oMainMenu:AddItem( "Exit", { || __Quit() } )
    DO WHILE Inkey(1) != K_ESC
    ENDDO
+
    (xDlg);(cTitle)
 
    RETURN Nil
@@ -48,6 +49,7 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
       :SetCaption( cCaption )
       :Activate := bAction
    ENDWITH
+
    (xDlg); (xControl); (nRow); (nCol); (nWidth); (nHeight); (cCaption); (cResName); (bAction)
 
    RETURN Nil
@@ -63,6 +65,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
       :setColorFG( "W+" )
       :setColorBG( "B*" )
    ENDWITH
+
    (nHeight)
 
    RETURN Nil
@@ -102,6 +105,7 @@ FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
    ELSE
       xControl:Disable()
    ENDIF
+
    (xDlg);(xControl);(lEnable)
 
    RETURN Nil
@@ -113,8 +117,8 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    RETURN Nil
 
 FUNCTION gui_BrowseRefresh( xDlg, xControl )
-   (xDlg)
-   (xControl)
+
+   (xDlg); (xControl)
 
    RETURN Nil
 
@@ -123,6 +127,7 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
    IF ! Empty( bCode )
       Eval( bCode )
    ENDIF
+
    (xDlg)
 
    RETURN Nil
@@ -130,7 +135,9 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
 FUNCTION gui_DialogClose( xDlg )
 
    xDlg:Destroy()
+
    (xDlg)
+
    QUIT
 
    RETURN Nil
@@ -159,6 +166,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
    //xDlg:Show()
    //SetColor( "W/B" )
    //CLS
+
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
 
    RETURN Nil
@@ -182,6 +190,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
       :SetFont( "Arial" )
       :Create(xDlg,,{nCol,nRow},{nWidth,nHeight})
    ENDWITH
+
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
 
    RETURN Nil
@@ -192,7 +201,7 @@ FUNCTION gui_LibName()
 
 FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
-   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue)
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(Self)
 
    RETURN Nil
 
@@ -210,6 +219,7 @@ FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, n
 
    gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, ;
             0, "999", Nil, Nil, Nil, Nil )
+
    (nValue);(aRangeList)
 
    RETURN Nil
@@ -269,6 +279,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
       :Create( xDlg,,{nCol,nRow},{nWidth,nHeight})
       :SetData( Transform( xValue, "" ) )
    ENDWITH
+
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bValid)
 
    RETURN Nil
@@ -286,6 +297,7 @@ FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
    ELSE
       xControl:Disable()
    ENDIF
+
    (xDlg);(xControl);(lEnable)
 
    RETURN Nil
@@ -297,6 +309,7 @@ FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
    ELSE
       xControl:SetData( xValue )
    ENDIF
+
    (xDlg);(xControl);(xValue)
 
    RETURN Nil
