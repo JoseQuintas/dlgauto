@@ -207,7 +207,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
+FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
 
    IF Empty( xControl )
       xControl := gui_NewName( "SPI" )

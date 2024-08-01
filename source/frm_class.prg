@@ -23,6 +23,7 @@ CREATE CLASS frm_Class
    VAR aInitValue1
    VAR aInitValue2
    VAR bActivate
+   VAR aInitFix        INIT {}
 
    VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
@@ -63,6 +64,9 @@ METHOD DlgInit() CLASS frm_Class
 
    LOCAL nPos, aControl
 
+   IF ! Empty( ::aInitFix )
+      Eval( hb_ArrayToParams( ::aInitFix ) )
+   ENDIF
    IF ::nInitRecno != Nil
       GOTO ::nInitRecno
    ENDIF

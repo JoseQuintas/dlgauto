@@ -144,7 +144,7 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
+FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
 
    LOCAL oFont := HFont():Add( "MS Sans Serif", 0, 10 )
 

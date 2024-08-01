@@ -319,13 +319,14 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList )
+FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList )
 
    @ DlgSize( nRow ), DlgSize( nCol ) GET xControl VAR nValue OF xDlg ;
       SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL ;
       PICTURE "999999" ; // cPicture ;
       SPINNER MIN aRangeList[1] MAX aRangeList[2]
       // VALID iif( Empty( bValid ), .T., Eval( bValid ) )
+   AAdd( ::aInitFix, { || xControl:nHeight := nHeight } )
 
    RETURN Nil
 

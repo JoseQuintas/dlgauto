@@ -206,7 +206,7 @@ FUNCTION gui_MsgYesNo( cText )
 
    RETURN .F.
 
-FUNCTION gui_SpinnerCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList )
+FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList )
 
    gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, ;
             0, "999", Nil, Nil, Nil, Nil )
