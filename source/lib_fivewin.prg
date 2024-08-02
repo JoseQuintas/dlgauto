@@ -11,10 +11,6 @@ Basic screen only
 #include "calendar.ch"
 #include "dtpicker.ch"
 
-#define WORK_DIALOG .T. // workaround
-
-//STATIC oFont
-
 FUNCTION gui_Init()
 
    //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, - APP_FONTSIZE_NORMAL
@@ -26,7 +22,7 @@ FUNCTION gui_Init()
 FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
-   IF WORK_DIALOG // xDlg:ClassName() == "TDIALOG"
+   IF xDlg:ClassName() == "TDIALOG"
       gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) } )
    ELSE
       gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
@@ -61,14 +57,16 @@ FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
 
    RETURN Nil
 
-FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
+FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
+
+   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
 
    IF cCaption == "Cancel" .OR. cCaption == "Exit"
-      @ DlgSize( nRow ), DlgSize( nCol ) BUTTONBMP xControl PROMPT cCaption OF xDlg ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL RESOURCE cResName TOP ACTION Eval( bAction ) CANCEL
+      @ nRow * nMult, nCol * nMult BUTTONBMP xControl PROMPT cCaption OF xParent ;
+         SIZE Int( nWidth * nMult ), Int( nHeight * nMult ) PIXEL RESOURCE cResName TOP ACTION Eval( bAction ) CANCEL
    ELSE
-      @ DlgSize( nRow ), DlgSize( nCol ) BUTTONBMP xControl PROMPT cCaption OF xDlg ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
+      @ nRow * nMult, nCol * nMult BUTTONBMP xControl PROMPT cCaption OF xParent ;
+         SIZE nWidth * nMult, nHeight * nMult PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
    ENDIF
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
@@ -78,18 +76,18 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyDownList, Self )
 
-   LOCAL aItem, oCol, aThisKey, nPos
+   LOCAL aItem, oCol, aThisKey, nPos, nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
 
    IF Len( aKeyDownList ) == 0
-      @ DlgSize( nRow ), DlgSize( nCol ) XBROWSE xControl ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL ;
+      @ nRow * nMult, nCol * nMult XBROWSE xControl ;
+         SIZE nWidth * nMult, nHeight * nMult PIXEL ;
          DATASOURCE workarea ;
          OF xParent ;
          ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
          //LINES CELL
    ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
-      @ DlgSize( nRow ), DlgSize( nCol ) XBROWSE xControl ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL ;
+      @ nRow * nMult, nCol * nMult XBROWSE xControl ;
+         SIZE nWidth * nMult, nHeight * nMult PIXEL ;
          DATASOURCE workarea ;
          OF xParent ;
          ON DBLCLICK BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
@@ -110,7 +108,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
       FOR EACH aThisKey IN aKeyDownList
          AAdd( ::aControlList, EmptyFrmClassItem() )
          Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
-         gui_ButtonCreate( xParent, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+         gui_ButtonCreate( xDlg, xParent, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
             nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
             APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
             iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
@@ -163,23 +161,23 @@ FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
-   LOCAL xValue := .F.
+   LOCAL xValue := .F., nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
 
-   @ DlgSize( nRow ), DlgSize( nCol ) CHECKBOX xControl VAR xValue PROMPT "" PIXEL ;
-      SIZE DlgSize( nWidth ), DlgSize( nHeight ) OF xDlg
+   @ nRow * nMult, nCol * nMult CHECKBOX xControl VAR xValue PROMPT "" PIXEL ;
+      SIZE nWidth * nMult, nHeight * nMult OF xParent
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
    RETURN Nil
 
-FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList )
 
-   LOCAL cAny := 1
+   LOCAL cAny := 1, nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
 
-   @ DlgSize( nRow ), DlgSize( nCol  ) COMBOBOX xControl VAR cAny OF xDlg PIXEL ;
-      SIZE DlgSize( nWidth ), DlgSize( nHeight ) ;
+   @ nRow * nMult, nCol * nMult COMBOBOX xControl VAR cAny OF xParent PIXEL ;
+      SIZE nWidth * nMult, nHeight * nMult ;
       ITEMS aList ;
       //STYLE CBS_DROPDOWN
       //UPDATE
@@ -191,11 +189,13 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
-FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
+FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
-   @ DlgSize( nRow ), DlgSize( nCol ) DTPICKER xControl VAR dValue ;
-      OF xDlg SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL
+   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
+
+   @ nRow * nMult, nCol * nMult DTPICKER xControl VAR dValue ;
+      OF xParent SIZE nWidth * nMult, nHeight * nMult PIXEL
 
    (nWidth);(nHeight);(xDlg);(xControl);(nRow);(nCol);(dValue)
 
@@ -205,9 +205,7 @@ FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
 
    hb_Default( @lModal, .T. )
 
-   lModal := WORK_DIALOG
-
-   IF WORK_DIALOG
+   IF lModal .OR. xDlg:ClassName() == "TDIALOG"
       IF lModal
          IF ! Empty( bCode )
             ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
@@ -246,15 +244,14 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
    // truepixel causes irregular metric
    hb_Default( @lModal, .F. )
-   lModal := WORK_DIALOG
 
    IF lModal // only DIALOG is modal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL /* TRUEPIXEL */ TITLE cTitle ICON "ICOWINDOW" ;
+         PIXEL /* TRUEPIXEL */ TITLE cTitle + " (DIALOG)" ICON "ICOWINDOW" ;
          // FONT oFont
    ELSE
       DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL /* TRUEPIXEL */ TITLE cTitle ICON "ICOWINDOW" ;
+         PIXEL /* TRUEPIXEL */ TITLE cTitle + " (WINDOW)" ICON "ICOWINDOW" ;
          // FONT oFont
    ENDIF
 
@@ -268,17 +265,19 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
       RETURN .T.
 
-FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+
+   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
 
    hb_Default( @lBorder, .F. )
    IF lBorder
-      //@ DlgSize( nRow ), DlgSize( nCol ) GET xControl VAR xValue OF xDlg PIXEL ;
-      //   SIZE DlgSize( nWidth ), DlgSize( nHeight ) READONLY
-      @ DlgSize( nRow ), DlgSize( nCol ) SAY xControl VAR xValue OF xDlg PIXEL ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) COLOR CLR_BLUE TRANSPARENT BORDER
+      //@ nRow * nMult, nCol * nMult GET xControl VAR xValue OF xParent PIXEL ;
+      //   SIZE nWidth * nMult, nHeight * nMult READONLY
+      @ nRow * nMult, nCol * nMult SAY xControl VAR xValue OF xParent PIXEL ;
+         SIZE nWidth * nMult, nHeight * nMult COLOR CLR_BLUE TRANSPARENT BORDER
    ELSE
-      @ DlgSize( nRow ), DlgSize( nCol ) SAY xControl VAR xValue OF xDlg PIXEL ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) COLOR CLR_BLUE TRANSPARENT
+      @ nRow * nMult, nCol * nMult SAY xControl VAR xValue OF xParent PIXEL ;
+         SIZE nWidth * nMult, nHeight * nMult COLOR CLR_BLUE TRANSPARENT
    ENDIF
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
@@ -289,10 +288,12 @@ FUNCTION gui_LibName()
 
    RETURN "FIVEWIN"
 
-FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
-   @ DlgSize( nRow ), DlgSize( nCol ) GET xControl VAR xValue MEMO OF xDlg PIXEL ;
-      SIZE DlgSize( nWidth ), DlgSize( nHeight )
+   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
+
+   @ nRow * nMult, nCol * nMult GET xControl VAR xValue MEMO OF xParent PIXEL ;
+      SIZE nWidth * nMult, nHeight * nMult
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue)
 
@@ -318,10 +319,12 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList )
+FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList, Self )
 
-   @ DlgSize( nRow ), DlgSize( nCol ) GET xControl VAR nValue OF xDlg ;
-      SIZE DlgSize( nWidth ), DlgSize( nHeight ) PIXEL ;
+   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
+
+   @ nRow * nMult, nCol * nMult GET xControl VAR nValue OF xParent ;
+      SIZE nWidth * nMult, nHeight * nMult PIXEL ;
       PICTURE "999999" ; // cPicture ;
       SPINNER MIN aRangeList[1] MAX aRangeList[2]
       // VALID iif( Empty( bValid ), .T., Eval( bValid ) )
@@ -338,19 +341,21 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
+
+   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
 
    // on dialog need create with all tabpages
-   IF WORK_DIALOG
-      @ DlgSize( nRow ), DlgSize( nCol ) FOLDEREX xControl PIXEL ;
+   IF xDlg:ClassName() == "TDIALOG"
+      @ nRow * nMult, nCol * nMult FOLDEREX xControl PIXEL ;
          PAGES ".", ".", ".", ".", ".", ".", ".", ".", ".", "."  ;
          ; //BITMAPS "bmpfolder" ; // folderex
-         OF xDlg SIZE DlgSize( nWidth ), DlgSize( nHeight )
+         OF xParent SIZE nWidth * nMult, nHeight * nMult
    ELSE
-      @ DlgSize( nRow ), DlgSize( nCol ) FOLDEREX xControl PIXEL ;
+      @ nRow * nMult, nCol * nMult FOLDEREX xControl PIXEL ;
          PAGES "." ;
          ; //BITMAPS "bmpfolder" ; // folderex
-         OF xDlg SIZE DlgSize( nWidth ), DlgSize( nHeight )
+         OF xParent SIZE nWidth * nMult, nHeight * nMult
    ENDIF
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
@@ -361,7 +366,7 @@ FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
    LOCAL aItem
 
-   IF WORK_DIALOG
+   IF xDlg:ClassName() == "TDIALOG"
       FOR EACH aItem IN xTab:aDialogs
          IF aItem:__EnumIndex > nPageCount
             aItem:Hide()
@@ -382,7 +387,7 @@ FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    RETURN Nil
 
-FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
+FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
 
    IF nPageCount <= Len( xControl:aDialogs )
       xControl:aPrompts[ nPageCount ] := cText
@@ -406,18 +411,20 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
+FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
             aItem, Self, lPassword )
 
+   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 0.5, 1 )
+
 // EDIT for dialog
    IF Empty( bAction )
-      @ DlgSize( nRow ), DlgSize( nCol ) GET xControl VAR xValue OF xDlg PIXEL ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) PICTURE cPicture ;
+      @ nRow * nMult, nCol * nMult GET xControl VAR xValue OF xParent PIXEL ;
+         SIZE nWidth * nMult, nHeight * nMult PICTURE cPicture ;
          VALID iif( Empty( bValid ), .T., Eval( bValid ) )
    ELSE
-      @ DlgSize( nRow ), DlgSize( nCol ) GET xControl VAR xValue OF xDlg PIXEL ;
-         SIZE DlgSize( nWidth ), DlgSize( nHeight ) PICTURE cPicture ;
+      @ nRow * nMult, nCol * nMult GET xControl VAR xValue OF xParent PIXEL ;
+         SIZE nWidth * nMult, nHeight * nMult PICTURE cPicture ;
          VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
          ACTION Eval( bAction ) BITMAP cImage
    ENDIF
@@ -489,9 +496,3 @@ FUNCTION gui_DlgSetKey( Self )
 FUNCTION DoNothing(...)
 
    RETURN Nil
-
-FUNCTION DlgSize( nPixel )
-
-   nPixel := Int( nPixel / 2 )
-
-   RETURN nPixel

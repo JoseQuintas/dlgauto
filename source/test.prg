@@ -196,6 +196,17 @@ STATIC FUNCTION PictureFromValue( oValue )
 
    RETURN cPicture
 
+FUNCTION gui_MsgDebug( ... )
+
+   LOCAL aList, cText := "", xValue
+
+   aList := hb_AParams()
+   FOR EACH xValue IN aList
+      cText += hb_ValToExp( xValue ) + iif( xValue:__EnumIsLast(), "", hb_Eol() )
+   NEXT
+
+   RETURN gui_Msgbox( cText )
+
 #ifdef HBMK_HAS_GTWVG
 
 PROCEDURE HB_GTSYS

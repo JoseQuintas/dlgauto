@@ -49,7 +49,7 @@ FUNCTION frm_Buttons( Self )
       IF aItem[ CFG_CTLTYPE ] != TYPE_BUTTON
          LOOP
       ENDIF
-      gui_ButtonCreate( ::xDlg, @aItem[ CFG_FCONTROL ], nRow, nCol, APP_BUTTON_SIZE, APP_BUTTON_SIZE, ;
+      gui_ButtonCreate( ::xDlg, ::xDlg, @aItem[ CFG_FCONTROL ], nRow, nCol, APP_BUTTON_SIZE, APP_BUTTON_SIZE, ;
          aItem[ CFG_CAPTION ], IconFromCaption( aItem[ CFG_CAPTION ] ), aItem[ CFG_ACTION ] )
 
       IF nCol > APP_DLG_WIDTH - ( APP_BUTTON_SIZE - APP_BUTTON_BETWEEN ) * 2

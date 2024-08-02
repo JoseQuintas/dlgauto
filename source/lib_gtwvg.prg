@@ -38,13 +38,13 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    RETURN Nil
 
-FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
+FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    xControl := wvgPushButton():New()
    WITH OBJECT xControl
       :PointerFocus := .F.
       :Style += BS_TOP
-      :Create( xDlg,,{nCol,nRow},{nHeight,nWidth})
+      :Create( xParent,,{nCol,nRow},{nHeight,nWidth})
       :SetCaption( {, WVG_IMAGE_ICONRESOURCE, cResName } )
       :SetCaption( cCaption )
       :Activate := bAction
@@ -54,14 +54,14 @@ FUNCTION gui_ButtonCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, cCaption
 
    RETURN Nil
 
-FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
    xControl := wvgCheckBox():New()
    WITH OBJECT xControl
       :PointerFocus := .F.
       :Caption := "."
       :Selection := .F.
-      :Create( xDlg,,{nCol,nRow},{ nWidth, nHeight } )
+      :Create( xParent,,{nCol,nRow},{ nWidth, nHeight } )
       :setColorFG( "W+" )
       :setColorBG( "B*" )
    ENDWITH
@@ -70,7 +70,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
+FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    LOCAL cItem
 
@@ -80,7 +80,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
       FOR EACH cItem IN aList
          :AddItem( cItem )
       NEXT
-      :Create( xDlg,,{nCol,nRow},{nWidth,nHeight}, , .T. )
+      :Create( xParent,, { nCol, nRow }, { nWidth, nHeight }, , .T. )
       :SetColorFG("W+")
       :SetColorBG("B*")
       FOR EACH cItem IN aList
@@ -91,10 +91,10 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
 
    RETURN Nil
 
-FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
+FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
-   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, dValue )
+   gui_TextCreate( xDlg, xParent, @xControl, nRow, nCol, nWidth, nHeight, dValue )
 
    RETURN Nil
 
@@ -177,7 +177,7 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
    RETURN .F.
 
-FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    xControl := wvgStatic():New()
    WITH OBJECT xControl
@@ -188,7 +188,7 @@ FUNCTION gui_LabelCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue, l
       :SetColorBG( "W/B" )
       :Caption := xValue
       :SetFont( "Arial" )
-      :Create(xDlg,,{nCol,nRow},{nWidth,nHeight})
+      :Create( xParent,, { nCol, nRow }, { nWidth, nHeight } )
    ENDWITH
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
@@ -199,7 +199,7 @@ FUNCTION gui_LibName()
 
    RETURN "GTWVG"
 
-FUNCTION gui_MLTextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, xValue )
+FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(Self)
 
@@ -215,16 +215,16 @@ FUNCTION gui_MsgYesNo( cText )
 
    RETURN .F.
 
-FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList )
+FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList, Self )
 
-   gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, ;
+   gui_TextCreate( xParent, @xControl, nRow, nCol, nWidth, nHeight, ;
             0, "999", Nil, Nil, Nil, Nil )
 
    (nValue);(aRangeList)
 
    RETURN Nil
 
-FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
+FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -240,7 +240,7 @@ FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    RETURN Nil
 
-FUNCTION gui_TabPageBegin( xDlg, xControl, xPage, nPageCount, cText )
+FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
 
    (xDlg);(xControl);(cText);(xPage);(nPageCount)
 
@@ -258,7 +258,7 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 
    RETURN ""
 
-FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
+FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
             aItem, Self, lPassword )
    /*
@@ -276,7 +276,7 @@ FUNCTION gui_TextCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, ;
    xControl := wvgSle():New()
    WITH OBJECT xControl
       :BufferLength := nMaxLength
-      :Create( xDlg,,{nCol,nRow},{nWidth,nHeight})
+      :Create( xParent,, { nCol, nRow }, { nWidth, nHeight } )
       :SetData( Transform( xValue, "" ) )
    ENDWITH
 
