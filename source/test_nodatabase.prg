@@ -20,7 +20,6 @@ FUNCTION test_noDatabase( nLayout )
       :cTitle      := "simple test"
       :cOptions    := ""
       :lNavigate   := .F.
-      :lModal      := .T.
       :nLayout     := nLayout
       FOR EACH aItem IN aList
          oTemp := EmptyFrmClassItem()

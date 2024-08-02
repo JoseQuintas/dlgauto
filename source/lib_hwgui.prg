@@ -146,8 +146,6 @@ FUNCTION gui_DatePickerCreate( xDlg, xControl, ;
       SIZE nWidth / 3, nHeight FONT oFont ;
       INIT dValue
 
-   (Self)
-
    RETURN Nil
 
 FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, nValue, aList )
@@ -158,7 +156,7 @@ FUNCTION gui_SpinnerCreate( Self, xDlg, xControl, nRow, nCol, nWidth, nHeight, n
       RANGE aList[1], aList[2] OF xDlg  SIZE nWidth, nHeight WIDTH 15 FONT oFont
    //gui_TextCreate( xDlg, @xControl, nRow, nCol, nWidth, nHeight, @nValue )
 
-   (aList)
+   (aList);(Self)
 
    RETURN Nil
 

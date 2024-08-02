@@ -57,7 +57,7 @@ FUNCTION frm_Dialog( Self )
       ENDIF
    NEXT
 
-   gui_DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle,, ::lModal, { || ::DlgInit() } )
+   gui_DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle,, { || ::DlgInit() }, ::lModal )
    ::CreateControls()
    gui_DialogActivate( ::xDlg, { || ::DlgInit() } )
 

@@ -11,7 +11,7 @@ Basic screen only
 #include "calendar.ch"
 #include "dtpicker.ch"
 
-#define DIALOG_NOT_WINDOW .T. // workaround
+#define WORK_DIALOG .T. // workaround
 
 //STATIC oFont
 
@@ -26,7 +26,7 @@ FUNCTION gui_Init()
 FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
-   IF DIALOG_NOT_WINDOW // xDlg:ClassName() == "TDIALOG"
+   IF WORK_DIALOG // xDlg:ClassName() == "TDIALOG"
       gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) } )
    ELSE
       gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
@@ -186,7 +186,7 @@ FUNCTION gui_ComboCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight, aList )
    //oCbx:oGet:bKeyChar = { | nKey | If( nKey == VK_RETURN,;
    //                                  ( cDia := oCbx:oGet:GetText(), Eval( oCbx:bChange() ) ),),;
    //                                    oCbx:GetKeyChar( nKey ) }
-   gui_MsgBox( hb_ValToExp( xControl:nAt ) )
+
    (nHeight);(xDlg);(xControl);(nRow);(nCol);(nWidth);(aList)
 
    RETURN Nil
@@ -205,9 +205,9 @@ FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
 
    hb_Default( @lModal, .T. )
 
-   lModal := iif( DIALOG_NOT_WINDOW, .T., .T. )
+   lModal := WORK_DIALOG
 
-   IF DIALOG_NOT_WINDOW
+   IF WORK_DIALOG
       IF lModal
          IF ! Empty( bCode )
             ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
@@ -246,9 +246,8 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
    // truepixel causes irregular metric
    hb_Default( @lModal, .F. )
-   IF DIALOG_NOT_WINDOW
-      lModal := .T.
-   ENDIF
+   lModal := WORK_DIALOG
+
    IF lModal // only DIALOG is modal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
          PIXEL /* TRUEPIXEL */ TITLE cTitle ICON "ICOWINDOW" ;
@@ -342,7 +341,7 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 FUNCTION gui_TabCreate( xDlg, xControl, nRow, nCol, nWidth, nHeight )
 
    // on dialog need create with all tabpages
-   IF DIALOG_NOT_WINDOW
+   IF WORK_DIALOG
       @ DlgSize( nRow ), DlgSize( nCol ) FOLDEREX xControl PIXEL ;
          PAGES ".", ".", ".", ".", ".", ".", ".", ".", ".", "."  ;
          ; //BITMAPS "bmpfolder" ; // folderex
@@ -362,7 +361,7 @@ FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
    LOCAL aItem
 
-   IF DIALOG_NOT_WINDOW
+   IF WORK_DIALOG
       FOR EACH aItem IN xTab:aDialogs
          IF aItem:__EnumIndex > nPageCount
             aItem:Hide()

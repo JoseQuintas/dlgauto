@@ -21,7 +21,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   gui_DialogCreate( @xDlg, 0, 0, 1024, 768, cTitle )
+   gui_DialogCreate( @xDlg, 0, 0, 1024, 768, cTitle, , .T. )
 
    DEFINE MAIN MENU OF ( xDlg )
       FOR EACH aGroupList IN aMenuList
