@@ -124,11 +124,11 @@ FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList )
+FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList, xValue )
 
-   @ nCol, nRow COMBOBOX xControl ITEMS aList OF xParent STYLE WS_TABSTOP SIZE nWidth, nHeight
+   @ nCol, nRow GET COMBOBOX xControl VAR xValue ITEMS aList OF xParent STYLE WS_TABSTOP SIZE nWidth, nHeight
 
-   (xDlg)
+   (xDlg); (xValue)
 
    RETURN Nil
 

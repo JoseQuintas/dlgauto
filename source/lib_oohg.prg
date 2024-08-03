@@ -195,7 +195,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeigh
 
    RETURN Nil
 
-FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList )
+FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList, xValue )
 
    IF Empty( xControl )
       xControl := gui_NewName( "CBO" )
@@ -205,7 +205,7 @@ FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, 
       PARENT ( xParent )
       ROW nRow
       COL nCol
-      VALUE 1
+      VALUE xValue
       WIDTH nWidth
       //HEIGHT nHeight // do not define height, it limits can list size to zero
       ITEMS aList

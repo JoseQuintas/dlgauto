@@ -32,6 +32,7 @@ CREATE CLASS frm_Class
    VAR aControlList   INIT {}
    VAR aAllSetup      INIT {}
    VAR aDlgKeyDown    INIT {}
+   VAR xCargo
 
    METHOD First()
    METHOD Last()
@@ -104,6 +105,7 @@ METHOD DlgInit() CLASS frm_Class
    //         aControl[ CFG_FCONTROL ]:Refresh()
    //      ENDIF
       NEXT
+
    ENDIF
    IF ! Empty( ::bActivate )
       Eval( ::bActivate )
@@ -363,7 +365,11 @@ METHOD DataLoad() CLASS frm_Class
 
       CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
-         xValueControl := hb_AScan( aItem[ CFG_COMBOLIST ], { | e | e == xValue } )
+         IF gui_LibName() == "FIVEWIN"
+            xValueControl := xValue
+         ELSE
+            xValueControl := hb_AScan( aItem[ CFG_COMBOLIST ], { | e | e == xValue } )
+         ENDIF
          gui_ControlSetValue( ::xDLg, aItem[ CFG_FCONTROL ], xValueControl )
 
       ENDCASE
@@ -384,10 +390,12 @@ METHOD DataSave() CLASS frm_Class
          CASE Empty( aItem[ CFG_FNAME ] ) // not a field
          CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
             xValue := gui_ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
-            IF xValue == 0 .OR. xValue > Len( aItem[ CFG_COMBOLIST ] )
-               xValue := Space( aItem[ CFG_FLEN ] )
-            ELSE
-               xValue := aItem[ CFG_COMBOLIST ][ xValue ]
+            IF ValType( xValue ) == "N"
+               IF xValue == 0 .OR. xValue > Len( aItem[ CFG_COMBOLIST ] )
+                  xValue := Space( aItem[ CFG_FLEN ] )
+               ELSE
+                  xValue := aItem[ CFG_COMBOLIST ][ xValue ]
+               ENDIF
             ENDIF
             fieldput( FieldNum( aItem[ CFG_FNAME ] ), xValue )
          CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
