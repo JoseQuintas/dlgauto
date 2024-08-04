@@ -20,7 +20,7 @@ FUNCTION frm_BrowseClick( oFrmOld, aItemOld, nKey )
    oFrm := frm_Class():New()
    WITH OBJECT oFrm
       :cFileDbf    := aItemOld[ CFG_BRWTABLE ]
-      :cTitle      := gui_LibName() + " - BROWSE " + :cFileDbf
+      :cTitle      := "BROWSE " + :cFileDbf
       :cOptions    := "S"
       :lNavigate   := .F.
       :lModal      := .T.

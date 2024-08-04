@@ -289,7 +289,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
          AT     nCol, nRow ;
          WIDTH  nWidth ;
          HEIGHT nHeight ;
-         TITLE  cTitle ;
+         TITLE  cTitle + " (" + gui_LibName() + ")"  ;
          ICON "ICOWINDOW" ;
          MODAL ;
          ON INIT Eval( bInit )

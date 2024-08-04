@@ -192,7 +192,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
       CLIPPER ;
       FONT oFont ;
       NOEXIT ;
-      TITLE     cTitle ;
+      TITLE     cTitle + " (" + gui_LibName() + ")"  ;
       AT        nRow, nCol ;
       SIZE      nWidth, nHeight ;
       BACKCOLOR COLOR_WHITE ;

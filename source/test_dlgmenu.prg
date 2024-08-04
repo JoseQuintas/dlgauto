@@ -22,6 +22,6 @@ FUNCTION test_DlgMenu( aAllSetup )
       ENDIF
    NEXT
 
-   gui_DlgMenu( xDlg, aMenuList, aAllSetup, gui_LibName() + " - MENU" )
+   gui_DlgMenu( xDlg, aMenuList, aAllSetup, "MENU" )
 
    RETURN Nil

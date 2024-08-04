@@ -242,7 +242,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
    //IF lModal // only DIALOG is modal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL TITLE cTitle + " (DIALOG)" ICON "ICOWINDOW"
+         PIXEL TITLE cTitle + " (" + gui_LibName() + ")" ICON "ICOWINDOW"
    //ELSE
    //   DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
    //      PIXEL TITLE cTitle + " (WINDOW)" ICON "ICOWINDOW"

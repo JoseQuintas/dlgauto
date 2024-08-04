@@ -23,7 +23,7 @@ FUNCTION frm_main( cDBF, aAllSetup, lModal )
 #ifdef HBMK_HAS_GTWVG
    oFrm:xDlg := wvgSetAppWindow()
 #endif
-   oFrm:cTitle     := gui_LibName() + " - " + cDBF
+   oFrm:cTitle     := cDBF
    oFrm:cOptions   := "IEDP"
    oFrm:aAllSetup  := aAllSetup
    oFrm:lModal     := lModal

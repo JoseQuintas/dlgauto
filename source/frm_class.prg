@@ -32,7 +32,6 @@ CREATE CLASS frm_Class
    VAR aControlList   INIT {}
    VAR aAllSetup      INIT {}
    VAR aDlgKeyDown    INIT {}
-   VAR xCargo
 
    METHOD First()
    METHOD Last()

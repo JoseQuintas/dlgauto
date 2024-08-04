@@ -314,6 +314,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
    ENDIF
 
    hb_Default( @lModal, .T. )
+   cTitle := cTitle + " (" + gui_LibName() + ")"
 
    IF nWindow == 1
       DEFINE WINDOW ( xDlg ) ;
