@@ -2,12 +2,13 @@
 test - main program
 */
 REQUEST DBFCDX
-REQUEST HB_CODEPAGE_PT850
+REQUEST HB_CODEPAGE_PTISO
 
 #include "hbclass.ch"
 #include "directry.ch"
 #include "dbstruct.ch"
 #include "frm_class.ch"
+#include "hbgtinfo.ch"
 
 MEMVAR lLogin, cUser, cPass
 
@@ -30,9 +31,11 @@ MEMVAR lLogin, cUser, cPass
    SET EXCLUSIVE OFF
    SET FILECASE LOWER
    SET DIRCASE  LOWER
-   Set( _SET_CODEPAGE, "PT850" )
+   Set( _SET_CODEPAGE, "PTISO" )
    gui_Init()
    RddSetDefault( "DBFCDX" )
+
+   gui_MsgBox( hb_gtInfo( HB_GTI_VERSION ) )
 
    /* create dbfs */
    test_DBF()

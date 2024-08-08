@@ -7,11 +7,12 @@ frm_main - dialog for each data and main use of class
 #include "frm_class.ch"
 #include "inkey.ch"
 
-FUNCTION frm_main( cDBF, aAllSetup, lModal )
+FUNCTION frm_main( cDBF, aAllSetup, lModal, xParent )
 
    LOCAL oFrm, nPos
 
    hb_Default( @lModal, .F. )
+
 #ifdef HBMK_HAS_GTWVG
    SetMode(30,100)
    SetColor("W/B")
@@ -20,6 +21,7 @@ FUNCTION frm_main( cDBF, aAllSetup, lModal )
 
    oFrm := frm_Class():New()
    oFrm:cFileDBF   := cDBF
+   oFrm:xParent    := xParent
 #ifdef HBMK_HAS_GTWVG
    oFrm:xDlg := wvgSetAppWindow()
 #endif

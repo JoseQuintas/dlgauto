@@ -32,6 +32,7 @@ CREATE CLASS frm_Class
    VAR aControlList   INIT {}
    VAR aAllSetup      INIT {}
    VAR aDlgKeyDown    INIT {}
+   VAR xParent
 
    METHOD First()
    METHOD Last()
@@ -451,6 +452,9 @@ FUNCTION EmptyFrmClassItem()
    //aItem[ CFG_BRWVALUE ]   := Nil
    //aItem[ CFG_BRWEDIT ]    := Nil
    //aItem[ CFG_BRWTITLE ]   := Nil
+   //aItem[ CFG_COMBOLIST ]  := Nil
+   //aItem[ CFG_VALUE ]      := Nil
+   //aItem[ CFG_SPINNER ]    := Nil
 
    RETURN aItem
 

@@ -1,8 +1,5 @@
 /*
 lib_fivewin- fivewin source selected by lib.prg
-
-Can't be used on current simulator.
-Basic screen only
 */
 
 #pragma -w1
@@ -11,6 +8,8 @@ Basic screen only
 #include "calendar.ch"
 #include "dtpicker.ch"
 
+THREAD STATIC MyWindowList := {}
+
 FUNCTION gui_Init()
 
    //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, - APP_FONTSIZE_NORMAL
@@ -18,6 +17,10 @@ FUNCTION gui_Init()
    fw_SetTruePixel( .T. )
 
    RETURN Nil
+
+//FUNCTION GetAllWin()
+//
+//   RETURN MyWindowList
 
 FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
@@ -236,13 +239,13 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
+FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, xParent )
 
    hb_Default( @lModal, .F. )
 
    //IF lModal // only DIALOG is modal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL TITLE cTitle + " (" + gui_LibName() + ")" ICON "ICOWINDOW"
+         PIXEL OF xParent TITLE cTitle + " (" + gui_LibName() + ")" ICON "ICOWINDOW"
    //ELSE
    //   DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
    //      PIXEL TITLE cTitle + " (WINDOW)" ICON "ICOWINDOW"
@@ -254,9 +257,13 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
 FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
-      (xDlg);(xControl)
+   IF PCount() < 2
+      RETURN xDlg:hWnd == GetFocus()
+   ENDIF
 
-      RETURN .T.
+   (xDlg);(xControl)
+
+   RETURN xControl:hWnd == GetFocus()
 
 FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
@@ -491,3 +498,6 @@ FUNCTION gui_DlgSetKey( Self )
 FUNCTION DoNothing(...)
 
    RETURN Nil
+
+
+// Notes: lWRunning(), GetWndApp(), SetWndApp(), nWindows(), nDlgCount
