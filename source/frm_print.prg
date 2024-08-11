@@ -19,7 +19,7 @@ FUNCTION frm_Print( Self )
    DO WHILE ! Eof()
       IF nLin > PAGE_ROWS - 2
          nPag += 1
-         @ 0, 0 SAY gui_LibName()
+         @ 0, 0 SAY GUI():LibName()
          @ 0, 66 - Int( Len( ::cFileDbf ) / 2 ) SAY ::cFileDBF
          @ 0, PAGE_COLS - 9 SAY "Page " + StrZero( nPag, 3 )
          @ 1, 0 SAY Replicate( "-", PAGE_COLS )

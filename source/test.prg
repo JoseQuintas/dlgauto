@@ -32,10 +32,8 @@ MEMVAR lLogin, cUser, cPass
    SET FILECASE LOWER
    SET DIRCASE  LOWER
    Set( _SET_CODEPAGE, "PTISO" )
-   gui_Init()
+   GUI():Init()
    RddSetDefault( "DBFCDX" )
-
-   gui_MsgBox( hb_gtInfo( HB_GTI_VERSION ) )
 
    /* create dbfs */
    test_DBF()
@@ -64,7 +62,7 @@ MEMVAR lLogin, cUser, cPass
 
    /* another setup with codeblock, can't be on json */
    aAddOptionList := { ;
-      { "DBCLIENT", "History",  { || gui_MsgBox( "History of changes, not available" ) } } }
+      { "DBCLIENT", "History",  { || GUI():MsgBox( "History of changes, not available" ) } } }
 
    IF lMakeLogin
       Test_DlgLogin()
@@ -208,7 +206,7 @@ FUNCTION gui_MsgDebug( ... )
       cText += hb_ValToExp( xValue ) + iif( xValue:__EnumIsLast(), "", hb_Eol() )
    NEXT
 
-   RETURN gui_Msgbox( cText )
+   RETURN GUI():Msgbox( cText )
 
 #ifdef HBMK_HAS_GTWVG
 

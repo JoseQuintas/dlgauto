@@ -57,16 +57,16 @@ FUNCTION frm_Dialog( Self )
       ENDIF
    NEXT
 
-   gui_DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::DlgInit() }, ::lModal, ::xParent )
+   GUI():DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::DlgInit() }, ::lModal, ::xParent )
    ::CreateControls()
-   gui_DialogActivate( ::xDlg, { || ::DlgInit() }, ::lModal )
+   GUI():DialogActivate( ::xDlg, { || ::DlgInit() }, ::lModal )
 
 #ifdef HBMK_HAS_GTWVG
    DO WHILE Inkey(1) != K_ESC
    ENDDO
 #endif
    // nested calls can't close databases
-   // IF gui_LibName() != "FIVEWIN"
+   // IF GUI():LibName() != "FIVEWIN"
    //    CLOSE DATABASES
    // ENDIF
 

@@ -60,7 +60,7 @@ FUNCTION frm_BrowseClick( oFrmOld, aItemOld, nKey )
    OrdScope( 1, aOrdScope[2] )
    // return old alias
    SELECT ( Select( cAliasAnt ) )
-   gui_SetFocus( oFrmOld:xDlg )
+   GUI():SetFocus( oFrmOld:xDlg )
 
    RETURN Nil
 

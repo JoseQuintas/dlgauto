@@ -4,17 +4,78 @@ lib_gtwvg - gtwvg source selected by lib.prg
 Note: Only to show on screen
 */
 
+#include "hbclass.ch"
 #include "inkey.ch"
 #include "frm_class.ch"
 
-FUNCTION gui_Init()
+THREAD STATIC oGUI
+
+FUNCTION GUI( xValue )
+
+   IF xValue != Nil
+      oGUI := xValue
+   ENDIF
+   IF oGUI == Nil
+      oGUI := GTWVGClass():New()
+   ENDIF
+
+   RETURN oGUI
+
+CREATE CLASS GTWVGClass
+
+   /*--- init ---*/
+   METHOD LibName()             INLINE gui_LibName()
+   METHOD Init()                INLINE gui_Init()
+
+   /*--- dialog ---*/
+   METHOD DialogActivate(...)   INLINE gui_DialogActivate(...)
+   METHOD DialogClose(...)      INLINE gui_DialogClose(...)
+   METHOD DialogCreate(...)     INLINE gui_DialogCreate(...)
+   METHOD DlgSetKey(...)        INLINE gui_DlgSetKey(...)
+   METHOD DlgMenu(...)          INLINE gui_DlgMenu(...)
+
+   /*--- controls ---*/
+   METHOD ButtonCreate(...)     INLINE gui_ButtonCreate(...)
+   METHOD ComboCreate(...)      INLINE gui_ComboCreate(...)
+   METHOD CheckboxCreate(...)   INLINE gui_CheckboxCreate(...)
+   METHOD DatePickerCreate(...) INLINE gui_DatePickerCreate(...)
+   METHOD SpinnerCreate(...)    INLINE gui_SpinnerCreate(...)
+   METHOD LabelCreate(...)      INLINE gui_LabelCreate(...)
+   METHOD MLTextCreate(...)     INLINE gui_MLTextCreate(...)
+   METHOD TextCreate(...)       INLINE gui_TextCreate(...)
+
+   /* browse */
+   METHOD Browse(...)           INLINE gui_Browse(...)
+   METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
+
+   /* tab */
+   METHOD TabCreate(...)        INLINE gui_TabCreate(...)
+   METHOD TabEnd(...)           INLINE gui_TabEnd(...)
+   METHOD TabPageBegin(...)     INLINE gui_TabPageBegin(...)
+   METHOD TabPageEnd(...)       INLINE gui_TabPageEnd(...)
+   METHOD TabNavigate(...)      INLINE gui_TabNavigate(...)
+
+   /* msg */
+   METHOD Msgbox(...)           INLINE gui_Msgbox(...)
+   METHOD MsgYesNo(...)         INLINE gui_MsgYesNo(...)
+
+   /* aux */
+   METHOD IsCurrentFocus(...)   INLINE gui_IsCurrentFocus(...)
+   METHOD SetFocus(...)         INLINE gui_SetFocus(...)
+   METHOD ControlEnable(...)    INLINE gui_ControlEnable(...)
+   METHOD ControlGetValue(...)  INLINE gui_ControlGetValue(...)
+   METHOD ControlSetValue(...)  INLINE gui_ControlSetValue(...)
+
+   ENDCLASS
+
+STATIC FUNCTION gui_Init()
 
    SetMode(30,100)
    CLS
 
    RETURN Nil
 
-FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
+STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL oMainMenu, aGroupList, cDBF, oMenuGroup
 
@@ -38,7 +99,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    RETURN Nil
 
-FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
+STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    xControl := wvgPushButton():New()
    WITH OBJECT xControl
@@ -54,7 +115,7 @@ FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight,
 
    RETURN Nil
 
-FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
+STATIC FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
    xControl := wvgCheckBox():New()
    WITH OBJECT xControl
@@ -66,11 +127,11 @@ FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeigh
       :setColorBG( "B*" )
    ENDWITH
 
-   (nHeight)
+   (nHeight);(xDlg)
 
    RETURN Nil
 
-FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList, xValue )
+STATIC FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList, xValue )
 
    LOCAL cItem
 
@@ -89,16 +150,18 @@ FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, 
 
    ENDWITH
 
+   (xValue);(xDlg)
+
    RETURN Nil
 
-FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
+STATIC FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
    gui_TextCreate( xDlg, xParent, @xControl, nRow, nCol, nWidth, nHeight, dValue )
 
    RETURN Nil
 
-FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
+STATIC FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    IF lEnable
       xControl:Enable()
@@ -110,19 +173,19 @@ FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
+STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(OTbrowse);(cFIeld);(xValue);(workarea);(xParent)
 
    RETURN Nil
 
-FUNCTION gui_BrowseRefresh( xDlg, xControl )
+STATIC FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    (xDlg); (xControl)
 
    RETURN Nil
 
-FUNCTION gui_DialogActivate( xDlg, bCode )
+STATIC FUNCTION gui_DialogActivate( xDlg, bCode )
 
    IF ! Empty( bCode )
       Eval( bCode )
@@ -132,7 +195,7 @@ FUNCTION gui_DialogActivate( xDlg, bCode )
 
    RETURN Nil
 
-FUNCTION gui_DialogClose( xDlg )
+STATIC FUNCTION gui_DialogClose( xDlg )
 
    xDlg:Destroy()
 
@@ -142,7 +205,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
+STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    LOCAL oSBar, oPanel, oPanel1, oPanel2
 
@@ -171,13 +234,13 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    RETURN Nil
 
-FUNCTION gui_IsCurrentFocus( xDlg, xControl )
+STATIC FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
    (xDlg);(xControl)
 
    RETURN .F.
 
-FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    xControl := wvgStatic():New()
    WITH OBJECT xControl
@@ -195,72 +258,72 @@ FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, 
 
    RETURN Nil
 
-FUNCTION gui_LibName()
+STATIC FUNCTION gui_LibName()
 
    RETURN "GTWVG"
 
-FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
+STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
-   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(Self)
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(xParent)
 
    RETURN Nil
 
-FUNCTION gui_Msgbox( cText )
+STATIC FUNCTION gui_Msgbox( cText )
 
    RETURN Alert( cText )
 
-FUNCTION gui_MsgYesNo( cText )
+STATIC FUNCTION gui_MsgYesNo( cText )
 
    Alert( cText )
 
    RETURN .F.
 
-FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList, Self )
+STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList, oFrmClass )
 
    gui_TextCreate( xParent, @xControl, nRow, nCol, nWidth, nHeight, ;
             0, "999", Nil, Nil, Nil, Nil )
 
-   (nValue);(aRangeList)
+   (nValue);(aRangeList);(oFrmClass);(xDlg)
 
    RETURN Nil
 
-FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
+STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
-   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
-
-   RETURN Nil
-
-FUNCTION gui_TabEnd()
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xParent)
 
    RETURN Nil
 
-FUNCTION gui_TabNavigate( xDlg, xTab, aList )
+STATIC FUNCTION gui_TabEnd()
+
+   RETURN Nil
+
+STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    (xDlg);(xTab);(aList)
 
    RETURN Nil
 
-FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
+STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
 
-   (xDlg);(xControl);(cText);(xPage);(nPageCount)
+   (xDlg);(xControl);(cText);(xPage);(nPageCount);(xParent)
 
    RETURN Nil
 
-FUNCTION gui_TabPageEnd( xDlg, xControl )
+STATIC FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    (xDlg); (xControl)
 
    RETURN Nil
 
-FUNCTION gui_ControlGetValue( xDlg, xControl )
+STATIC FUNCTION gui_ControlGetValue( xDlg, xControl )
 
    (xDlg);(xControl)
 
    RETURN ""
 
-FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
+STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
-            aItem, Self, lPassword )
+            aItem, oFrmClass, lPassword )
    /*
    xControl := wvgStatic():New()
    WITH OBJECT xControl
@@ -280,29 +343,18 @@ FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
       :SetData( Transform( xValue, "" ) )
    ENDWITH
 
-   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bValid)
+   (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength)
+   (bValid);(lPassword);(oFrmClass);(aItem);(cImage);(bAction)
 
    RETURN Nil
 
-FUNCTION gui_SetFocus( xDlg, xControl )
+STATIC FUNCTION gui_SetFocus( xDlg, xControl )
 
    (xDlg);(xControl)
 
    RETURN Nil
 
-FUNCTION gui_TextEnable( xDlg, xControl, lEnable )
-
-   IF lEnable
-      xControl:Enable()
-   ELSE
-      xControl:Disable()
-   ENDIF
-
-   (xDlg);(xControl);(lEnable)
-
-   RETURN Nil
-
-FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
+STATIC FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    IF xControl:ClassName == "LABEL"
       xControl:SetCaption( AllTrim( Transform( xValue, "" ) ) )
@@ -311,5 +363,9 @@ FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
    ENDIF
 
    (xDlg);(xControl);(xValue)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_DlgSetKey(...)
 
    RETURN Nil

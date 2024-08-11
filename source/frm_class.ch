@@ -50,7 +50,7 @@
 #endif
 
 #ifndef WIN_RGB
-   #define WIN_RGB( r, g, b ) ( r * 256 ) + ( b * 16 ) + c
+   #define WIN_RGB( r, g, b ) ( r * 256 ) + ( g * 16 ) + b
 #endif
 
 #define COLOR_BLACK         WIN_RGB( 0, 0, 0 )

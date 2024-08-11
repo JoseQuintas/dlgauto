@@ -22,6 +22,6 @@ FUNCTION test_DlgMenu( aAllSetup )
       ENDIF
    NEXT
 
-   gui_DlgMenu( xDlg, aMenuList, aAllSetup, "MENU" )
+   GUI():DlgMenu( xDlg, aMenuList, aAllSetup, "MENU" )
 
    RETURN Nil

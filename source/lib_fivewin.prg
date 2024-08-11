@@ -3,14 +3,75 @@ lib_fivewin- fivewin source selected by lib.prg
 */
 
 #pragma -w1
+#include "hbclass.ch"
 #include "frm_class.ch"
 #include "fivewin.ch"
 #include "calendar.ch"
 #include "dtpicker.ch"
 
-THREAD STATIC MyWindowList := {}
+THREAD STATIC oGUI
 
-FUNCTION gui_Init()
+FUNCTION GUI( xValue )
+
+   IF xValue != Nil
+      oGUI := xValue
+   ENDIF
+   IF oGUI == Nil
+      oGUI := FIVEWINClass():New()
+   ENDIF
+
+   RETURN oGUI
+
+CREATE CLASS FIVEWINClass
+
+   /*--- init ---*/
+   METHOD LibName()             INLINE gui_LibName()
+   METHOD Init()                INLINE gui_Init()
+
+   /*--- dialog ---*/
+   METHOD DialogActivate(...)   INLINE gui_DialogActivate(...)
+   METHOD DialogClose(...)      INLINE gui_DialogClose(...)
+   METHOD DialogCreate(...)     INLINE gui_DialogCreate(...)
+   METHOD DlgSetKey(...)        INLINE gui_DlgSetKey(...)
+   METHOD DlgMenu(...)          INLINE gui_DlgMenu(...)
+
+   /*--- controls ---*/
+   METHOD ButtonCreate(...)     INLINE gui_ButtonCreate(...)
+   METHOD ComboCreate(...)      INLINE gui_ComboCreate(...)
+   METHOD CheckboxCreate(...)   INLINE gui_CheckboxCreate(...)
+   METHOD DatePickerCreate(...) INLINE gui_DatePickerCreate(...)
+   METHOD SpinnerCreate(...)    INLINE gui_SpinnerCreate(...)
+   METHOD LabelCreate(...)      INLINE gui_LabelCreate(...)
+   METHOD MLTextCreate(...)     INLINE gui_MLTextCreate(...)
+   METHOD Statusbar(...)        INLINE gui_Statusbar(...)
+   METHOD TextCreate(...)       INLINE gui_TextCreate(...)
+
+   /* browse */
+   METHOD Browse(...)           INLINE gui_Browse(...)
+   METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
+   METHOD browsekeydown(...)    INLINE gui_browsekeydown(...)
+
+   /* tab */
+   METHOD TabCreate(...)        INLINE gui_TabCreate(...)
+   METHOD TabEnd(...)           INLINE gui_TabEnd(...)
+   METHOD TabPageBegin(...)     INLINE gui_TabPageBegin(...)
+   METHOD TabPageEnd(...)       INLINE gui_TabPageEnd(...)
+   METHOD TabNavigate(...)      INLINE gui_TabNavigate(...)
+
+   /* msg */
+   METHOD Msgbox(...)           INLINE gui_Msgbox(...)
+   METHOD MsgYesNo(...)         INLINE gui_MsgYesNo(...)
+
+   /* aux */
+   METHOD IsCurrentFocus(...)   INLINE gui_IsCurrentFocus(...)
+   METHOD SetFocus(...)         INLINE gui_SetFocus(...)
+   METHOD ControlEnable(...)    INLINE gui_ControlEnable(...)
+   METHOD ControlGetValue(...)  INLINE gui_ControlGetValue(...)
+   METHOD ControlSetValue(...)  INLINE gui_ControlSetValue(...)
+
+   ENDCLASS
+
+STATIC FUNCTION gui_Init()
 
    //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, - APP_FONTSIZE_NORMAL
    SetGetColorFocus( RGB( 255,255,0 ) )
@@ -18,11 +79,7 @@ FUNCTION gui_Init()
 
    RETURN Nil
 
-//FUNCTION GetAllWin()
-//
-//   RETURN MyWindowList
-
-FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
+STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
    IF xDlg:ClassName() == "TDIALOG"
@@ -34,7 +91,7 @@ FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    RETURN Nil
 
-FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
+STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL oMenu, aGroupList, cDBF, dDate := Date(), oCalendar
 
@@ -60,7 +117,7 @@ FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
 
    RETURN Nil
 
-FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
+STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, cCaption, cResName, bAction )
 
    IF cCaption == "Cancel" .OR. cCaption == "Exit"
       @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xParent ;
@@ -74,8 +131,8 @@ FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight,
 
    RETURN Nil
 
-FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
-   cField, xValue, workarea, aKeyDownList, Self )
+STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
+   cField, xValue, workarea, aKeyDownList, oFrmClass )
 
    LOCAL aItem, oCol, aThisKey, nPos
 
@@ -91,7 +148,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
          SIZE nWidth, nHeight PIXEL ;
          DATASOURCE workarea ;
          OF xParent ;
-         ON DBLCLICK BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
+         ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
          //LINES CELL
    ENDIF
 
@@ -107,16 +164,16 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
    /* create buttons on browse for defined keys */
    IF Len( aKeyDownList ) != 0
       FOR EACH aThisKey IN aKeyDownList
-         AAdd( ::aControlList, EmptyFrmClassItem() )
-         Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
-         gui_ButtonCreate( xDlg, xParent, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
+         AAdd( oFrmClass:aControlList, EmptyFrmClassItem() )
+         Atail( oFrmClass:aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
+         gui_ButtonCreate( xDlg, xParent, @Atail( oFrmClass:aControlList )[ CFG_FCONTROL ], ;
             nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
             APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
             iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
             iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
             iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
       NEXT
-      xControl:bKeyDown := { | nKey | BrowseKeyDown( nKey, aKeyDownList ) }
+      xControl:bKeyDown := { | nKey | GUI():BrowseKeyDown( nKey, aKeyDownList ) }
    ENDIF
 
    (xDlg);(cField);(xValue);(workarea);(aKeyDownList);(xControl);(nRow);(nCol);(nWidth)
@@ -125,7 +182,7 @@ FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbro
 
    RETURN Nil
 
-FUNCTION BrowseKeyDown( nKey, aKeyDownList, workarea )
+STATIC FUNCTION gui_BrowseKeyDown( nKey, aKeyDownList, workarea )
 
    LOCAL nPos, nSelect
 
@@ -138,13 +195,13 @@ FUNCTION BrowseKeyDown( nKey, aKeyDownList, workarea )
 
    RETURN Nil
 
-FUNCTION gui_DlgKeyDown( xControl, nKey, Self )
+STATIC FUNCTION gui_DlgKeyDown( xControl, nKey, oFrmClass )
 
-   (xControl);(nKey);(Self)
+   (xControl);(nKey);(oFrmClass)
 
    RETURN Nil
 
-FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
+STATIC FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
    IF ! Empty( cField )
       xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
@@ -154,7 +211,7 @@ FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
    RETURN Nil
 
-FUNCTION gui_BrowseRefresh( xDlg, xControl )
+STATIC FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    xControl:Refresh()
 
@@ -162,7 +219,7 @@ FUNCTION gui_BrowseRefresh( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
+STATIC FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
    LOCAL xValue := .F.
 
@@ -173,7 +230,7 @@ FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeigh
 
    RETURN Nil
 
-FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList, xValue )
+STATIC FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, aList, xValue )
 
    @ nRow, nCol COMBOBOX xControl VAR xValue OF xParent PIXEL ;
       SIZE nWidth, nHeight ;
@@ -188,7 +245,7 @@ FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, 
 
    RETURN Nil
 
-FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
+STATIC FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
    LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
@@ -200,7 +257,7 @@ FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
 
    RETURN Nil
 
-FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
+STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
 
    hb_Default( @lModal, .T. )
 
@@ -231,7 +288,7 @@ FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
 
    RETURN Nil
 
-FUNCTION gui_DialogClose( xDlg )
+STATIC FUNCTION gui_DialogClose( xDlg )
 
    xDlg:End()
 
@@ -239,7 +296,7 @@ FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, xParent )
+STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, xParent )
 
    hb_Default( @lModal, .F. )
 
@@ -255,7 +312,7 @@ FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lMo
 
    RETURN Nil
 
-FUNCTION gui_IsCurrentFocus( xDlg, xControl )
+STATIC FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
    IF PCount() < 2
       RETURN xDlg:hWnd == GetFocus()
@@ -265,7 +322,7 @@ FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
    RETURN xControl:hWnd == GetFocus()
 
-FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
+STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
 
    LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
@@ -284,11 +341,11 @@ FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, 
 
    RETURN Nil
 
-FUNCTION gui_LibName()
+STATIC FUNCTION gui_LibName()
 
    RETURN "FIVEWIN"
 
-FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
+STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
@@ -299,15 +356,15 @@ FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight,
 
    RETURN Nil
 
-FUNCTION gui_Msgbox( cText )
+STATIC FUNCTION gui_Msgbox( cText )
 
    RETURN MsgInfo( cText )
 
-FUNCTION gui_MsgYesNo( cText )
+STATIC FUNCTION gui_MsgYesNo( cText )
 
    RETURN MsgYesNo( cText )
 
-FUNCTION gui_SetFocus( xDlg, xControl )
+STATIC FUNCTION gui_SetFocus( xDlg, xControl )
 
    IF PCount() < 2
       xDlg:SetFocus()
@@ -319,7 +376,7 @@ FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList, Self )
+STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList, oFrmClass )
 
    LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
@@ -328,11 +385,11 @@ FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
       PICTURE "999999" ; // cPicture ;
       SPINNER MIN aRangeList[1] MAX aRangeList[2]
       // VALID iif( Empty( bValid ), .T., Eval( bValid ) )
-   //AAdd( ::aInitFix, { || xControl:nHeight := nHeight } )
+   //AAdd( oFrmClass:aInitFix, { || xControl:nHeight := nHeight } )
 
    RETURN Nil
 
-FUNCTION gui_Statusbar( xDlg, xControl )
+STATIC FUNCTION gui_Statusbar( xDlg, xControl )
 
    DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;
       SIZES 150, 200, 240
@@ -341,7 +398,7 @@ FUNCTION gui_Statusbar( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
+STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
    LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
@@ -362,7 +419,7 @@ FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
    RETURN Nil
 
-FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
+STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
    LOCAL aItem
 
@@ -379,7 +436,7 @@ FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
    RETURN Nil
 
 
-FUNCTION gui_TabNavigate( xDlg, xTab, aList )
+STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    xTab:aDialogs[1]:SetFocus()
 
@@ -387,7 +444,7 @@ FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    RETURN Nil
 
-FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
+STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
 
    IF nPageCount <= Len( xControl:aDialogs )
       xControl:aPrompts[ nPageCount ] := cText
@@ -401,7 +458,7 @@ FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
 
    RETURN Nil
 
-FUNCTION gui_TabPageEnd( xDlg, xControl )
+STATIC FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    /*
    END PAGE
@@ -411,9 +468,9 @@ FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    RETURN Nil
 
-FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
+STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
-            aItem, Self, lPassword )
+            aItem, oFrmClass, lPassword )
 
    LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
@@ -433,7 +490,7 @@ FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
 
    RETURN Nil
 
-FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
+STATIC FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    IF lEnable
       xControl:Enable()
@@ -445,7 +502,7 @@ FUNCTION gui_ControlEnable( xDlg, xControl, lEnable )
 
    RETURN Nil
 
-FUNCTION gui_ControlGetValue( xDlg, xControl )
+STATIC FUNCTION gui_ControlGetValue( xDlg, xControl )
 
    LOCAL xValue
 
@@ -466,7 +523,7 @@ FUNCTION gui_ControlGetValue( xDlg, xControl )
 
    RETURN xValue
 
-FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
+STATIC FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    Eval( xControl:bSetGet, xValue )
    //DO CASE
@@ -486,16 +543,16 @@ FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    RETURN Nil
 
-FUNCTION gui_DlgSetKey( Self )
+STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
    LOCAL aItem
 
-   FOR EACH aItem IN ::aDlgKeyDown
+   FOR EACH aItem IN oFrmClass:aDlgKeyDown
    NEXT
 
    RETURN Nil
 
-FUNCTION DoNothing(...)
+STATIC FUNCTION DoNothing(...)
 
    RETURN Nil
 

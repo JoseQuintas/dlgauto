@@ -31,12 +31,12 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    DialogBrowse( oTBrowse, cTable, cField, @xValue )
 
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
-      gui_ControlSetValue( xDlg, xControl, xValue )
+      GUI():ControlSetValue( xDlg, xControl, xValue )
    ENDIF
    SET ORDER TO ( nIndexOrd )
 
    SELECT ( nSelect )
-   gui_SetFocus( ::xDlg )
+   GUI():SetFocus( ::xDlg )
 
    RETURN Nil
 
@@ -47,19 +47,19 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    oThisForm := frm_Class():New()
    oThisForm:cOptions := ""
    oThisForm:lNavigate := .F.
-   gui_DialogCreate( @oThisForm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTable,, .T. )
+   GUI():DialogCreate( @oThisForm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTable,, .T. )
    frm_Buttons( oThisForm, .F. )
    AAdd( oThisForm:aControlList, EmptyFrmClassItem() )
    aItem := Atail( oThisForm:aControlList )
    aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
-   gui_Browse( oThisForm:xDlg, oThisForm:xDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
+   GUI():Browse( oThisForm:xDlg, oThisForm:xDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
       APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
       oTbrowse, cField, @xValue, cTable, {}, oThisForm )
-   IF gui_LibName() == "HWGUI"
+   IF GUI():LibName() == "HWGUI"
       aItem[ CFG_FCONTROL ]:lInFocus := .T.
    ENDIF
    // works for hmge from button
-   gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] )
-   gui_DialogActivate( oThisForm:xDlg, { || gui_SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] ) } )
+   GUI():SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] )
+   GUI():DialogActivate( oThisForm:xDlg, { || GUI():SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] ) } )
 
    RETURN Nil
