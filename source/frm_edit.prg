@@ -285,9 +285,7 @@ FUNCTION frm_Edit( Self )
    IF ::lWithTab
 
       GUI():TabPageEnd( ::xDlg, xTab )
-
       GUI():TabNavigate( ::xDlg, xTab, aList )
-
       GUI():TabEnd( ::xDlg, xTab, nPageCount )
 
    ENDIF

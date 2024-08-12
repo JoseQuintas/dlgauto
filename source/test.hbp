@@ -16,7 +16,6 @@ frm_preview.prg
 frm_print.prg
 frm_valid.prg
 lib.prg
-
 -otest
 -w3
 -es2
@@ -27,7 +26,14 @@ hbct.hbc
 {win}hbwin.hbc
 
 # only if you see console screen with any library
-#{win}-gtgui
+{win}-gtgui
+#-L.
+#-llib_hwgui
+#-llib_hmg3
+#-llib_hmge
+#-llib_oohg
+#-llib_fivewin
+#-llib_gtwvg
 
 #hmg3.hbc
 #hmge.hbc
