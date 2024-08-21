@@ -13,7 +13,7 @@ REQUEST HB_CODEPAGE_PTISO
 MEMVAR lLogin, cUser, cPass
 
 #ifdef DLGAUTO_AS_LIB
-   PROCEDURE DlgAuto()
+   PROCEDURE DlgAuto
 #else
    PROCEDURE Main
 #endif
@@ -32,6 +32,9 @@ MEMVAR lLogin, cUser, cPass
    SET FILECASE LOWER
    SET DIRCASE  LOWER
    Set( _SET_CODEPAGE, "PTISO" )
+
+   //GUI():MsgBox( hb_gtInfo( HB_GTI_VERSION ) )
+
    GUI():Init()
    RddSetDefault( "DBFCDX" )
 

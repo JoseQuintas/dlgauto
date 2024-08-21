@@ -63,7 +63,10 @@ CREATE CLASS frm_Class
 
 METHOD DlgInit() CLASS frm_Class
 
-   LOCAL nPos, aControl
+   LOCAL nPos
+#ifdef HBMK_HAS_FIVEWIN
+   LOCAL aControl
+#endif
 
    IF ! Empty( ::aInitFix )
       Eval( hb_ArrayToParams( ::aInitFix ) )
@@ -91,22 +94,23 @@ METHOD DlgInit() CLASS frm_Class
       ENDIF
    ENDIF
    // no success
+#ifdef HBMK_HAS_FIVEWIN
    IF GUI():LibName() == "FIVEWIN"
+      //IF ::xDlg:cTitle == "MENU"
+         //::xDlg:bValid := { || gui():MsgBox( aWindowsInfo() ), .T. }
+      //ENDIF
       FOR EACH aControl IN ::aControlList
-         IF aControl[ CFG_FCONTROL ]:ClassName() == "TGET"
-            aControl[ CFG_FCONTROL ]:nHeight := APP_LINE_HEIGHT
-         ENDIF
-   //      IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
-   //         FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
-   //            IF cText == "."
-   //               aControl[ CFG_FCONTROL ]:aDialogs[ cText:__EnumIndex() ]:Hide()
-   //            ENDIF
-   //         NEXT
-   //         aControl[ CFG_FCONTROL ]:Refresh()
-   //      ENDIF
+         // IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
+         //    FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
+         //       IF cText == "."
+         //          aControl[ CFG_FCONTROL ]:aDialogs[ cText:__EnumIndex() ]:Hide()
+         //       ENDIF
+         //    NEXT
+         //    aControl[ CFG_FCONTROL ]:Refresh()
+         // ENDIF
       NEXT
-
    ENDIF
+#endif
    IF ! Empty( ::bActivate )
       Eval( ::bActivate )
    ENDIF

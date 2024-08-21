@@ -35,4 +35,4 @@ FUNCTION frm_main( cDBF, aAllSetup, lModal, xParent )
    oFrm:aEditList := aAllSetup[ nPos, 2 ]
    oFrm:Execute()
 
-   RETURN Nil
+   RETURN oFrm

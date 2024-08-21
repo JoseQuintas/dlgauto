@@ -3,6 +3,7 @@ lib_fivewin- fivewin source selected by lib.prg
 */
 
 #pragma -w1
+#include "hbgtinfo.ch"
 #include "hbclass.ch"
 #include "frm_class.ch"
 #include "fivewin.ch"
@@ -10,6 +11,7 @@ lib_fivewin- fivewin source selected by lib.prg
 #include "dtpicker.ch"
 
 THREAD STATIC oGUI
+STATIC oFont
 
 FUNCTION GUI( xValue )
 
@@ -73,7 +75,7 @@ CREATE CLASS FIVEWINClass
 
 STATIC FUNCTION gui_Init()
 
-   //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, - APP_FONTSIZE_NORMAL
+   //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, -APP_FONTSIZE_NORMAL
    SetGetColorFocus( RGB( 255,255,0 ) )
    fw_SetTruePixel( .T. )
 
@@ -81,7 +83,7 @@ STATIC FUNCTION gui_Init()
 
 STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
-   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
+   gui_DialogCreate( @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
    IF xDlg:ClassName() == "TDIALOG"
       gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) } )
    ELSE
@@ -106,6 +108,7 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
       NEXT
       MENUITEM "Exit"
          MENU
+         MENUITEM "aWindowsInfo" ACTION gui_MsgBox( aWindowsInfo() )
          MENUITEM "Exit" ACTION gui_DialogClose( xDlg )
          ENDMENU
       ENDMENU
@@ -114,6 +117,16 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
       @ 400, 400 CALENDAR oCalendar VAR dDate OF xDlg PIXEL SIZE 220, 157 /* WEEKNUMBER */ DAYSTATE
 
    (xDlg);(aMenuList);(aAllSetup);(cTitle);(oMenu);(oCalendar)
+
+   RETURN Nil
+
+// ok to run, but pending proccess, and can't call modal dialog
+FUNCTION ExecuteMT( bCode )
+
+   LOCAL oFrm, oAny
+
+   oFrm := Eval( bCode )
+   WinRun( oFrm:xDlg )
 
    RETURN Nil
 
@@ -154,7 +167,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 
    FOR EACH aItem IN oTbrowse
       ADD oCol TO xControl ;
-         DATA FieldBlock( aItem[2] ) ;
+         DATA { || (workarea)->(FieldGet(FieldNum( aItem[2] ) ) ) } ;
          HEADER aItem[1] ;
          PICTURE aItem[3]
    NEXT
@@ -248,8 +261,6 @@ STATIC FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
 STATIC FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
-   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
-
    @ nRow, nCol DTPICKER xControl VAR dValue ;
       OF xParent SIZE nWidth, nHeight PIXEL
 
@@ -298,15 +309,20 @@ STATIC FUNCTION gui_DialogClose( xDlg )
 
 STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, xParent )
 
+   LOCAL nType := 2
+
    hb_Default( @lModal, .F. )
 
-   //IF lModal // only DIALOG is modal
+   DO CASE
+   CASE nType == 1 .OR. lModal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL OF xParent TITLE cTitle + " (" + gui_LibName() + ")" ICON "ICOWINDOW"
-   //ELSE
-   //   DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-   //      PIXEL TITLE cTitle + " (WINDOW)" ICON "ICOWINDOW"
-   //ENDIF
+         PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + gui_LibName() + ")" ICON "ICOWINDOW"
+   CASE nType == 2
+      DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+         PIXEL TITLE cTitle + " (WINDOW)" ICON "ICOWINDOW"
+   CASE nType == 3 // MDI
+   CASE nType == 4 // MDIChild
+   ENDCASE
 
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
 
@@ -323,8 +339,6 @@ STATIC FUNCTION gui_IsCurrentFocus( xDlg, xControl )
    RETURN xControl:hWnd == GetFocus()
 
 STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue, lBorder )
-
-   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
    hb_Default( @lBorder, .F. )
    IF lBorder
@@ -346,8 +360,6 @@ STATIC FUNCTION gui_LibName()
    RETURN "FIVEWIN"
 
 STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
-
-   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
    @ nRow, nCol GET xControl VAR xValue MEMO OF xParent PIXEL ;
       SIZE nWidth, nHeight
@@ -378,8 +390,6 @@ STATIC FUNCTION gui_SetFocus( xDlg, xControl )
 
 STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aRangeList, oFrmClass )
 
-   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
-
    @ nRow, nCol GET xControl VAR nValue OF xParent ;
       SIZE nWidth, nHeight PIXEL ;
       PICTURE "999999" ; // cPicture ;
@@ -399,8 +409,6 @@ STATIC FUNCTION gui_Statusbar( xDlg, xControl )
    RETURN Nil
 
 STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
-
-   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
    // on dialog need create with all tabpages
    IF xDlg:ClassName() == "TDIALOG"
@@ -471,8 +479,6 @@ STATIC FUNCTION gui_TabPageEnd( xDlg, xControl )
 STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, ;
             xValue, cPicture, nMaxLength, bValid, bAction, cImage, ;
             aItem, oFrmClass, lPassword )
-
-   LOCAL nMult := iif( xDlg:ClassName() == "TDIALOG", 1, 1 )
 
 // EDIT for dialog
    IF Empty( bAction )
@@ -556,5 +562,36 @@ STATIC FUNCTION DoNothing(...)
 
    RETURN Nil
 
+FUNCTION aWindowsInfo()
+
+   LOCAL cInfo := "", nCont, oDlg
+   LOCAL aHide := { ;
+      "TBTNBMP", ;
+      "TBUTTONBMP", ;
+      "TCALENDAR", ;
+      "TCHECKBOX", ;
+      "TCOMBOBOX", ;
+      "TDATEPICK", ;
+      "TFOLDEREX", ;
+      "TGET", ;
+      "TMULTIGET", ;
+      "TSAY", ;
+      "TSTATUSBAR", ;
+      "TXBROWSE" }
+
+   FOR nCont = 1 TO nWindows()
+      IF ValType( GetAllWin()[ nCont ] ) != "N"
+         oDlg = GetAllWin()[ nCont ]
+         IF hb_AScan( aHide, { | e | e == oDlg:ClassName() } ) == 0
+            cInfo += Str( nCont ) + "--> " + ;
+                     oDlg:ClassName() + " *** " + ;
+                     If( oDlg:Cargo != nil, oDlg:Cargo, "" ) + " ### " + ;
+                     If( oDlg:oWnd != nil, oDlg:oWnd:ClassName, "" ) + ;
+                     hb_Eol()
+         ENDIF
+      ENDIF
+   NEXT
+
+   RETURN cInfo
 
 // Notes: lWRunning(), GetWndApp(), SetWndApp(), nWindows(), nDlgCount

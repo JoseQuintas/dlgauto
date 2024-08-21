@@ -84,6 +84,9 @@ STATIC FUNCTION IsDrawBoard( lValue )
 
 STATIC FUNCTION gui_Init()
 
+#ifdef DLGAUTO_AS_LIB
+   hwg_InitProc()
+#endif
    hwg_SetColorInFocus( .T., COLOR_BLACK,COLOR_YELLOW )
 
    RETURN Nil
