@@ -29,7 +29,7 @@ FUNCTION test_DlgLogin()
       GUI():ButtonCreate( :xDlg, :xDlg, @:aControlList[6][ CFG_FCONTROL ], 4 * APP_LINE_SPACING, 155, 50, APP_LINE_SPACING, "Cancel",, { || Cancel_Click( :xDlg ) } )
       GUI():SetFocus( :xDlg, :aControlList[ 2 ][ CFG_FCONTROL ] )
 
-      GUI():DialogActivate( :xDlg )
+      GUI():DialogActivate( :xDlg,,.T. )
 
    ENDWITH
 

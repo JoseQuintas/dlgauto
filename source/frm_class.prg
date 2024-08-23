@@ -65,7 +65,7 @@ METHOD DlgInit() CLASS frm_Class
 
    LOCAL nPos
 #ifdef HBMK_HAS_FIVEWIN
-   LOCAL aControl
+   //LOCAL aControl, cText
 #endif
 
    IF ! Empty( ::aInitFix )
@@ -97,18 +97,18 @@ METHOD DlgInit() CLASS frm_Class
 #ifdef HBMK_HAS_FIVEWIN
    IF GUI():LibName() == "FIVEWIN"
       //IF ::xDlg:cTitle == "MENU"
-         //::xDlg:bValid := { || gui():MsgBox( aWindowsInfo() ), .T. }
+      //   ::xDlg:bValid := { || gui():MsgBox( aWindowsInfo() ), .T. }
       //ENDIF
-      FOR EACH aControl IN ::aControlList
-         // IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
-         //    FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
-         //       IF cText == "."
-         //          aControl[ CFG_FCONTROL ]:aDialogs[ cText:__EnumIndex() ]:Hide()
-         //       ENDIF
-         //    NEXT
-         //    aControl[ CFG_FCONTROL ]:Refresh()
-         // ENDIF
-      NEXT
+      //FOR EACH aControl IN ::aControlList
+      //   IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
+      //      FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
+      //         IF cText == "." .OR. cText == "Two" .OR. cText == "Three"
+      //            aControl[ CFG_FCONTROL ]:aDialogs[ cText:__EnumIndex() ]:Hide()
+      //         ENDIF
+      //      NEXT
+      //      aControl[ CFG_FCONTROL ]:Refresh()
+      //   ENDIF
+      //NEXT
    ENDIF
 #endif
    IF ! Empty( ::bActivate )
@@ -370,7 +370,7 @@ METHOD DataLoad() CLASS frm_Class
       CASE ! Empty( aItem[ CFG_FNAME ] ) .AND. aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          xValue := FieldGet( FieldNum( aItem[ CFG_FNAME ] ) )
          IF GUI():LibName() == "FIVEWIN"
-            xValueControl := xValue
+            xValueControl := hb_Ascan( aItem[ CFG_COMBOLIST ], { |e | e == xValue } )
          ELSE
             xValueControl := hb_AScan( aItem[ CFG_COMBOLIST ], { | e | e == xValue } )
          ENDIF

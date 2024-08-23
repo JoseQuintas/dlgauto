@@ -85,10 +85,10 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    gui_DialogCreate( @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
    IF xDlg:ClassName() == "TDIALOG"
-      gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) } )
+      gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) }, .T. )
    ELSE
       gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
-      gui_DialogActivate( xDlg )
+      gui_DialogActivate( xDlg,, .T. )
    ENDIF
 
    RETURN Nil
@@ -270,7 +270,7 @@ STATIC FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
 
 STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
 
-   hb_Default( @lModal, .T. )
+   hb_Default( @lModal, .F. )
 
    IF xDlg:ClassName() == "TDIALOG"
       IF lModal
@@ -314,7 +314,7 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
    hb_Default( @lModal, .F. )
 
    DO CASE
-   CASE nType == 1 .OR. lModal
+   CASE nType == 1
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
          PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW"
    CASE nType == 2
@@ -410,18 +410,13 @@ STATIC FUNCTION gui_Statusbar( xDlg, xControl )
 
 STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight )
 
-   // on dialog need create with all tabpages
-   IF xDlg:ClassName() == "TDIALOG"
-      @ nRow, nCol FOLDEREX xControl PIXEL ;
-         PAGES ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ;
-         ; //BITMAPS "bmpfolder" ; // folderex
-         OF xParent SIZE nWidth, nHeight
-   ELSE
-      @ nRow, nCol FOLDEREX xControl PIXEL ;
-         PAGES "." ;
-         ; //BITMAPS "bmpfolder" ; // folderex
-         OF xParent SIZE nWidth, nHeight
-   ENDIF
+   // dialog/window hell - need create with all pages
+   // tab/folder/folderex hell
+
+   @ nRow, nCol FOLDEREX xControl PIXEL ;
+      PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;
+      ; //BITMAPS "bmpfolder" ; // folderex
+      OF xParent SIZE nWidth, nHeight
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -429,14 +424,11 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
 
 STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
-   LOCAL nCont
+   LOCAL xPage
 
+   // dialog/window hell - works for dialog
    IF xDlg:ClassName() == "TDIALOG"
       ASize( xTab:aPrompts, nPageCount )
-   ELSE
-      //FOR nCont = nPageCount + 1 TO Len( xTab:aPrompts )
-      //   xTab:aDialogs[ nCont ]:Hide()
-      //NEXT
    ENDIF
    (xDlg);(xTab);(nPageCount)
 
@@ -452,6 +444,7 @@ STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
 STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
 
+   // dialog/window hell
    IF nPageCount <= Len( xControl:aPrompts )
       xControl:aPrompts[ nPageCount ] := cText
    ELSE

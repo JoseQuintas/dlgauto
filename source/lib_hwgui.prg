@@ -250,8 +250,6 @@ STATIC FUNCTION gui_DialogClose( xDlg )
 
 STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
 
-   LOCAL oFont
-
    IF Empty( bInit )
       bInit := { || Nil }
    ENDIF
