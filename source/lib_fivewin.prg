@@ -11,7 +11,6 @@ lib_fivewin- fivewin source selected by lib.prg
 #include "dtpicker.ch"
 
 THREAD STATIC oGUI
-STATIC oFont
 
 FUNCTION GUI( xValue )
 
@@ -102,10 +101,11 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
          MENU
             FOR EACH cDBF IN aGroupList
-               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup,,xDlg )
             NEXT
          ENDMENU
       NEXT
+      oMenu:AddMDI()
       MENUITEM "Exit"
          MENU
          MENUITEM "aWindowsInfo" ACTION gui_MsgBox( aWindowsInfo() )
@@ -314,12 +314,22 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
    hb_Default( @lModal, .F. )
 
    DO CASE
+   CASE cTitle == "MENU"
+      DEFINE WINDOW xDlg MDI FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+         PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
+         COLOR "W/B"
+   CASE nType == nType
+      DEFINE WINDOW xDlg MDICHILD OF xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+         PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
+         COLOR "W/B"
    CASE nType == 1
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW"
+         PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
+         COLOR "W/B"
    CASE nType == 2
       DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW"
+         PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
+         COLOR "W/B"
    CASE nType == 3 // MDI
    CASE nType == 4 // MDIChild
    ENDCASE
@@ -416,7 +426,9 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
    @ nRow, nCol FOLDEREX xControl PIXEL ;
       PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;
       ; //BITMAPS "bmpfolder" ; // folderex
-      OF xParent SIZE nWidth, nHeight
+      OF xParent SIZE nWidth, nHeight ;
+      COLOR { CLR_LIGHTGRAY, CLR_LIGHTGRAY }
+   //oFld:SetColor( ::nTextColorR, ::nBackColorR )
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -451,6 +463,7 @@ STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cT
       xControl:AddItem( cText )
    ENDIF
    xPage := xControl:aDialogs[ nPageCount ]
+
    xControl:Refresh()
 
    (xDlg); (xControl); (cText); (xPage); (nPageCount)
