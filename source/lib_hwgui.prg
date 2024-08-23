@@ -7,6 +7,7 @@ lib_hwgui - hwgui source selected by lib.prg
 #include "hwgui.ch"
 
 THREAD STATIC oGUI
+THREAD STATIC oFont
 
 FUNCTION GUI( xValue )
 
@@ -88,6 +89,7 @@ STATIC FUNCTION gui_Init()
    hwg_InitProc()
 #endif
    hwg_SetColorInFocus( .T., COLOR_BLACK,COLOR_YELLOW )
+   oFont := HFont():Add( APP_FONTNAME, 0, -11 )
 
    RETURN Nil
 
@@ -95,7 +97,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
+   gui_DialogCreate( @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
    MENU OF xDlg
       FOR EACH aGroupList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
@@ -213,8 +215,6 @@ STATIC FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth,
 STATIC FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
             nRow, nCol, nWidth, nHeight, dValue )
 
-   LOCAL oFont := HFont():Add( "MS Sans Serif", 0, 10 )
-
    @ nCol, nRow DATESELECT xControl ;
       OF xParent ;
       SIZE nWidth, nHeight FONT oFont ;
@@ -225,8 +225,6 @@ STATIC FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
    RETURN Nil
 
 STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aList, oFrmClass )
-
-   LOCAL oFont := HFont():Add( "MS Sans Serif", 0, 10 )
 
    @ nCol, nRow GET UPDOWN xControl VAR nValue ;
       RANGE aList[1], aList[2] OF xParent SIZE nWidth, nHeight WIDTH 15 FONT oFont
@@ -257,12 +255,11 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
    IF Empty( bInit )
       bInit := { || Nil }
    ENDIF
-   oFont := HFont():Add( APP_FONTNAME, 0, -11 )
    INIT DIALOG xDlg ;
       CLIPPER ;
       FONT oFont ;
       NOEXIT ;
-      TITLE     cTitle + " (" + gui_LibName() + ")"  ;
+      TITLE     cTitle + " (" + GUI():LibName() + ")"  ;
       AT        nRow, nCol ;
       SIZE      nWidth, nHeight ;
       BACKCOLOR COLOR_WHITE ;

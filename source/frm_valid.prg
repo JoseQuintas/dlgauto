@@ -20,7 +20,7 @@ FUNCTION frm_Valid( Self, aItem )
    // if btn cancel abort validate (current on hwgui only)
    nPos := hb_AScan( ::aControlList, { | e | e[ CFG_CTLTYPE ] == TYPE_BUTTON .AND. ;
       e[ CFG_CAPTION ] == "Cancel" } )
-   IF nPos != 0 // .AND. ! GUI():LibName() == "FIVEWIN"
+   IF nPos != 0
       IF GUI():IsCurrentFocus( ::xDlg, ::aControlList[ nPos, CFG_FCONTROL ] )
          RETURN .T.
       ENDIF

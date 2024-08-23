@@ -355,7 +355,7 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
          AT nCol, nRow ;
          WIDTH nWidth ;
          HEIGHT nHeight ;
-         TITLE cTitle ;
+         TITLE cTitle + " (" + gui():LibName() + ")" ;
          ICON "ICOWINDOW" ;
          ON INIT Eval( bInit )
          GUI():Statusbar( xDlg, "" )

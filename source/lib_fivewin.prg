@@ -309,17 +309,17 @@ STATIC FUNCTION gui_DialogClose( xDlg )
 
 STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, xParent )
 
-   LOCAL nType := 2
+   LOCAL nType := 1
 
    hb_Default( @lModal, .F. )
 
    DO CASE
    CASE nType == 1 .OR. lModal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + gui_LibName() + ")" ICON "ICOWINDOW"
+         PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW"
    CASE nType == 2
       DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL TITLE cTitle + " (WINDOW)" ICON "ICOWINDOW"
+         PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW"
    CASE nType == 3 // MDI
    CASE nType == 4 // MDIChild
    ENDCASE
@@ -413,7 +413,7 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
    // on dialog need create with all tabpages
    IF xDlg:ClassName() == "TDIALOG"
       @ nRow, nCol FOLDEREX xControl PIXEL ;
-         PAGES ".", ".", ".", ".", ".", ".", ".", ".", ".", "."  ;
+         PAGES ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ;
          ; //BITMAPS "bmpfolder" ; // folderex
          OF xParent SIZE nWidth, nHeight
    ELSE
@@ -429,20 +429,18 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
 
 STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
-   LOCAL aItem
+   LOCAL nCont
 
    IF xDlg:ClassName() == "TDIALOG"
-      FOR EACH aItem IN xTab:aDialogs
-         IF aItem:__EnumIndex > nPageCount
-            aItem:Hide()
-         ENDIF
-      NEXT
-      xDlg:Refresh()
+      ASize( xTab:aPrompts, nPageCount )
+   ELSE
+      //FOR nCont = nPageCount + 1 TO Len( xTab:aPrompts )
+      //   xTab:aDialogs[ nCont ]:Hide()
+      //NEXT
    ENDIF
+   (xDlg);(xTab);(nPageCount)
 
-   (xTab);(nPageCount)
    RETURN Nil
-
 
 STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
@@ -454,7 +452,7 @@ STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
 STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
 
-   IF nPageCount <= Len( xControl:aDialogs )
+   IF nPageCount <= Len( xControl:aPrompts )
       xControl:aPrompts[ nPageCount ] := cText
    ELSE
       xControl:AddItem( cText )
@@ -467,10 +465,6 @@ STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cT
    RETURN Nil
 
 STATIC FUNCTION gui_TabPageEnd( xDlg, xControl )
-
-   /*
-   END PAGE
-   */
 
    (xDlg); (xControl)
 

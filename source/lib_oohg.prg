@@ -81,7 +81,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   gui_DialogCreate( @xDlg, 0, 0,1024, 768, cTitle )
+   gui_DialogCreate( @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
 
    DEFINE MAIN MENU OF ( xDlg )
       FOR EACH aGroupList IN aMenuList
@@ -351,7 +351,7 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
          AT     nCol, nRow ;
          WIDTH  nWidth ;
          HEIGHT nHeight ;
-         TITLE  cTitle + " (" + gui_LibName() + ")"  ;
+         TITLE  cTitle + " (" + GUI():LibName() + ")"  ;
          ICON "ICOWINDOW" ;
          MODAL ;
          ON INIT Eval( bInit )
@@ -362,7 +362,7 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
          AT     nCol, nRow ;
          WIDTH  nWidth ;
          HEIGHT nHeight ;
-         TITLE  cTitle ;
+         TITLE  cTitle + " )" + GUI():LibName() + ")" ;
          ICON "ICOWINDOW" ;
          ON INIT Eval( bInit )
          gui_Statusbar( xDlg, "" )

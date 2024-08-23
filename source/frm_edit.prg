@@ -25,14 +25,14 @@ FUNCTION frm_Edit( Self )
    /* create tab, if use tab */
    IF ::lWithTab
 
-      GUI():TabCreate( ::xDlg, ::xDlg, @xTab, 70, 5, APP_DLG_WIDTH - 19, APP_DLG_HEIGHT - 75 )
+      GUI():TabCreate( ::xDlg, ::xDlg, @xTab, 70, 5, APP_TAB_WIDTH, APP_TAB_HEIGHT )
 
       AAdd( ::aControlList, EmptyFrmClassItem() )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
       Atail( ::aControlList )[ CFG_FCONTROL ] := xTab
       nRow := 999999
    ELSE
-      nRow := 40
+      nRow := 10
    ENDIF
    nCol := 10
 
@@ -99,11 +99,10 @@ FUNCTION frm_Edit( Self )
       ENDIF
 
       /* check if create a new tabpage */
-      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  ) > APP_DLG_HEIGHT - 100
+      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  ) > APP_TAB_HEIGHT
+
          IF nPageCount > 0
-
             GUI():TabPageEnd( ::xDlg, xTab, xTabPage )
-
          ENDIF
          nPageCount += 1
 
@@ -112,7 +111,7 @@ FUNCTION frm_Edit( Self )
          AAdd( ::aControlList, EmptyFrmClassItem() )
          Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TABPAGE
          Atail( ::aControlList )[ CFG_FCONTROL ] := xTabPage
-         nRow := 40
+         nRow := 10
          AAdd( aList, {} )
          lFirst := .T.
          (lFirst)
@@ -148,7 +147,7 @@ FUNCTION frm_Edit( Self )
             nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_BRWTITLE ], .F., APP_FONTSIZE_SMALL )
 
          GUI():Browse( ::xDlg, xTabPage, @aItem[ CFG_FCONTROL ], nRow2, 5, ;
-            APP_DLG_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
+            APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
             oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
 
          SELECT ( Select( ::cFileDBF ) )
@@ -230,7 +229,7 @@ FUNCTION frm_Edit( Self )
             nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
 
          GUI():MLTextCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, 5, APP_DLG_WIDTH - 30, nHeight * APP_LINE_HEIGHT, @aItem[ CFG_VALUE ] )
+            nRow2, 5, APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, @aItem[ CFG_VALUE ] )
 
          nRow += ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  )
 
