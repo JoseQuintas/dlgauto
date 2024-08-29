@@ -6,8 +6,10 @@ lib_hwgui - hwgui source selected by lib.prg
 #include "frm_class.ch"
 #include "hwgui.ch"
 
-THREAD STATIC oGUI
 THREAD STATIC oFont
+
+#ifndef DLGAUTO_AS_LIB
+THREAD STATIC oGUI
 
 FUNCTION GUI( xValue )
 
@@ -19,7 +21,7 @@ FUNCTION GUI( xValue )
    ENDIF
 
    RETURN oGUI
-
+#endif
 CREATE CLASS HWGUIClass
 
    /*--- init ---*/

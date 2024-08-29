@@ -50,12 +50,13 @@
 #endif
 
 #ifndef WIN_RGB
-   #define WIN_RGB( r, g, b ) ( r * 256 ) + ( g * 16 ) + b
+   #define WIN_RGB( r, g, b ) r + ( g * 256 ) + ( b * 256 * 256 )
 #endif
 
 #define COLOR_BLACK         WIN_RGB( 0, 0, 0 )
 #define COLOR_WHITE         WIN_RGB( 255, 255, 255 )
 #define COLOR_YELLOW        WIN_RGB( 255, 255, 0 )
+#define COLOR_LIGHTGRAY     WIN_RGB( 250, 250, 250 )
 #define COLOR_GREEN         12507070
 #define APP_FONTNAME        "verdana"
 #define APP_FONTSIZE_NORMAL 12

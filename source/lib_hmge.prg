@@ -8,6 +8,8 @@ lib_hmge - HMG Extended source selected by lib.prg
 #include "i_winuser.ch"
 
 THREAD STATIC nWindow := 0
+
+#ifndef DLGAUTO_AS_LIB
 THREAD STATIC oGUI
 
 FUNCTION GUI( xValue )
@@ -20,6 +22,7 @@ FUNCTION GUI( xValue )
    ENDIF
 
    RETURN oGUI
+#endif
 
 CREATE CLASS HMGEClass
 

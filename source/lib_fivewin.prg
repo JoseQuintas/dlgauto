@@ -10,6 +10,9 @@ lib_fivewin- fivewin source selected by lib.prg
 #include "calendar.ch"
 #include "dtpicker.ch"
 
+MEMVAR cTxtPrg
+
+#ifndef DLGAUTO_AS_LIB
 THREAD STATIC oGUI
 
 FUNCTION GUI( xValue )
@@ -22,6 +25,7 @@ FUNCTION GUI( xValue )
    ENDIF
 
    RETURN oGUI
+#endif
 
 CREATE CLASS FIVEWINClass
 
@@ -75,8 +79,11 @@ CREATE CLASS FIVEWINClass
 STATIC FUNCTION gui_Init()
 
    //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, -APP_FONTSIZE_NORMAL
-   SetGetColorFocus( RGB( 255,255,0 ) )
+   SetGetColorFocus( COLOR_YELLOW )
    fw_SetTruePixel( .T. )
+
+   cTxtPrg += [   SetGetColorFocus( .T. )] + hb_Eol()
+   //cTxtPrg += [   fw_SetTruePixel( .T. )] + hb_Eol()
 
    RETURN Nil
 
@@ -105,7 +112,9 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
             NEXT
          ENDMENU
       NEXT
-      oMenu:AddMDI()
+      IF xDlg:ClassName() == "TMDIFRAME"
+         oMenu:AddMDI()
+      ENDIF
       MENUITEM "Exit"
          MENU
          MENUITEM "aWindowsInfo" ACTION gui_MsgBox( aWindowsInfo() )
@@ -135,9 +144,27 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
    IF cCaption == "Cancel" .OR. cCaption == "Exit"
       @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xParent ;
          SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction ) CANCEL
+
+      cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ BUTTONBMP xControl PROMPT ] + hb_ValToExp( cCaption ) + ;
+         [ OF xParent ;] + hb_Eol()
+      cTxtPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+      [ PIXEL RESOURCE ] + hb_ValToExp( cResName ) + [ TOP ACTION Eval( ] + ;
+      hb_ValToExp( bAction ) + [ CANCEL] + hb_Eol()
+      cTxtPrg += hb_Eol()
+
    ELSE
       @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xParent ;
          SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
+
+      cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ BUTTONBMP xControl PROMPT ] + hb_ValToExp( cCaption ) + ;
+         [ OF xParent ;] + hb_Eol()
+      cTxtPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+      [ PIXEL RESOURCE ] + hb_ValToExp( cResName ) + [ TOP ACTION Eval( ] + ;
+      hb_ValToExp( bAction ) + hb_Eol()
+      cTxtPrg += hb_Eol()
+
    ENDIF
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(cCaption);(cResName);(bAction)
@@ -313,26 +340,32 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
 
    hb_Default( @lModal, .F. )
 
-   DO CASE
-   CASE cTitle == "MENU"
-      DEFINE WINDOW xDlg MDI FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
-         COLOR "W/B"
-   CASE nType == nType
-      DEFINE WINDOW xDlg MDICHILD OF xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
-         COLOR "W/B"
-   CASE nType == 1
+   //DO CASE
+   //CASE cTitle == "MENU"
+   //   DEFINE WINDOW xDlg MDI FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+   //      PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
+   //      COLOR "W/B"
+   //CASE lModal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
          PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
-         COLOR "W/B"
-   CASE nType == 2
-      DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
-         COLOR "W/B"
-   CASE nType == 3 // MDI
-   CASE nType == 4 // MDIChild
-   ENDCASE
+         COLOR COLOR_LIGHTGRAY
+
+      cTxtPrg += [   DEFINE DIALOG xDlg FROM ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ TO ] + hb_ValToExp( nRow + nHeight ) + [, ] + hb_ValToExp( nCol + nWidth ) +  [ ;] + hb_Eol()
+      cTxtPrg += [      PIXEL OF xParent /* FONT oFont */ TITLE ] + hb_ValToExp( cTitle + " (" + GUI():LibName() ) + ;
+         [ ")" ICON "ICOWINDOW" ;] + hb_Eol()
+      cTxtPrg += [      COLOR COLOR_LIGHTGRAY] + hb_Eol()
+      cTxtPrg += hb_Eol()
+
+   //CASE nType == nType
+   //   DEFINE WINDOW xDlg MDICHILD OF xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+   //      PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
+   //      VSCROLL HSCROLL COLOR COLOR_LIGHTGRAY
+   //CASE nType == 2
+   //   DEFINE WINDOW xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
+   //      PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
+   //      COLOR LIGHT_GRAY
+   //ENDCASE
 
    (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
 
@@ -352,13 +385,25 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
 
    hb_Default( @lBorder, .F. )
    IF lBorder
-      //@ nRow, nCol GET xControl VAR xValue OF xParent PIXEL ;
-      //   SIZE nWidth, nHeight READONLY
       @ nRow, nCol SAY xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT BORDER
+
+      cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ SAY xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
+      cTxtPrg += [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
+         [ COLOR CLR_BLUE TRANSPARENT BORDER] + hb_Eol()
+      cTxtPrg += hb_Eol()
+
    ELSE
       @ nRow, nCol SAY xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT
+
+      cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ SAY xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
+      cTxtPrg += [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
+         [ COLOR CLR_BLUE TRANSPARENT] + hb_Eol()
+      cTxtPrg += hb_Eol()
+
    ENDIF
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
@@ -427,8 +472,15 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
       PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;
       ; //BITMAPS "bmpfolder" ; // folderex
       OF xParent SIZE nWidth, nHeight ;
-      COLOR { CLR_LIGHTGRAY, CLR_LIGHTGRAY }
+      COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }
    //oFld:SetColor( ::nTextColorR, ::nBackColorR )
+
+   cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      [ FOLDEREX xControl PIXEL ;] + hb_Eol()
+   cTxtPrg += [   PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;] + hb_Eol()
+   cTxtPrg += [   OF xParent SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol()
+   cTxtPrg += [   COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }] + hb_Eol()
+   cTxtPrg += hb_Eol()
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -442,6 +494,10 @@ STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
    IF xDlg:ClassName() == "TDIALOG"
       ASize( xTab:aPrompts, nPageCount )
    ENDIF
+
+   cTxtPrg += [   ASize( xTab:aPrompts, ] + hb_ValToExp( nPageCount ) + [ )] + hb_Eol()
+   cTxtPrg += hb_Eol()
+
    (xDlg);(xTab);(nPageCount)
 
    RETURN Nil
@@ -459,12 +515,23 @@ STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cT
    // dialog/window hell
    IF nPageCount <= Len( xControl:aPrompts )
       xControl:aPrompts[ nPageCount ] := cText
+
+      cTxtPrg += [   xControl:aPrompts] + "[" + hb_ValToExp( nPageCount ) + "]" + [ := ] + hb_ValToExp( cText ) + hb_Eol()
+
    ELSE
       xControl:AddItem( cText )
+
+      cTxtPrg += [   xControl:AddItem( ] + hb_ValToExp( cText ) + [ )] + hb_Eol()
+      cTxtPrg += hb_Eol()
+
    ENDIF
    xPage := xControl:aDialogs[ nPageCount ]
-
    xControl:Refresh()
+
+   cTxtPrg += [   xPage := xControl:aDialogs] + "[ " + hb_ValToExp( nPageCount ) + " ]" + hb_Eol()
+   cTxtPrg += [   xControl:Refresh()] + hb_Eol()
+   cTxtPrg += hb_Eol()
+
 
    (xDlg); (xControl); (cText); (xPage); (nPageCount)
 

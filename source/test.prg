@@ -10,7 +10,7 @@ REQUEST HB_CODEPAGE_PTISO
 #include "frm_class.ch"
 #include "hbgtinfo.ch"
 
-MEMVAR lLogin, cUser, cPass
+MEMVAR lLogin, cUser, cPass, cTxtPrg
 
 #ifdef DLGAUTO_AS_LIB
    PROCEDURE DlgAuto
@@ -21,9 +21,9 @@ MEMVAR lLogin, cUser, cPass
    LOCAL aKeyList := {}, aSeekList := {}, aBrowseList := {}, aTypeList := {}
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL cFieldName, aBrowse, nPos, aSetup, lMakeLogin, aAddOptionList, aButton
-   PRIVATE lLogin := .F., cUser := "", cPass := ""
+   PRIVATE lLogin := .F., cUser := "", cPass := "", cTxtPrg := ""
 
-   SET CONFIRM OFF
+   SET CONFIRM ON
    SET CENTURY ON
    SET DATE    BRITISH
    SET DELETED ON
@@ -174,6 +174,10 @@ MEMVAR lLogin, cUser, cPass
    NEXT
 
    test_DlgMenu( @aAllSetup )
+
+#ifndef DLGAUTO_AS_LIB
+   hb_MemoWrit( "code.txt", cTxtPrg )
+#endif
 
    RETURN
 
