@@ -273,7 +273,7 @@ STATIC FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
    LOCAL xFocus, lOk
 
-   xFocus := hwg_SetFocus()
+   xFocus := hwg_GetFocus()
    IF PCount() == 1
       lOk := xFocus == xDlg:Handle
    ELSE

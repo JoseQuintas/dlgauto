@@ -57,9 +57,9 @@ FUNCTION frm_Dialog( Self )
       ENDIF
    NEXT
 
-   GUI():DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::DlgInit() }, ::lModal, ::xParent )
+   GUI():DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::OnFrmInit() }, ::lModal, ::xParent )
    ::CreateControls()
-   GUI():DialogActivate( ::xDlg, { || ::DlgInit() }, ::lModal )
+   GUI():DialogActivate( ::xDlg, { || ::OnFrmInit() }, ::lModal )
 
 #ifdef HBMK_HAS_GTWVG
    DO WHILE Inkey(1) != K_ESC

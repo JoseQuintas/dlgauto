@@ -10,7 +10,8 @@ lib_fivewin- fivewin source selected by lib.prg
 #include "calendar.ch"
 #include "dtpicker.ch"
 
-MEMVAR cTxtPrg
+MEMVAR pGenPrg
+MEMVAR pGenName
 
 #ifndef DLGAUTO_AS_LIB
 THREAD STATIC oGUI
@@ -82,8 +83,8 @@ STATIC FUNCTION gui_Init()
    SetGetColorFocus( COLOR_YELLOW )
    fw_SetTruePixel( .T. )
 
-   cTxtPrg += [   SetGetColorFocus( .T. )] + hb_Eol()
-   //cTxtPrg += [   fw_SetTruePixel( .T. )] + hb_Eol()
+   pGenPrg += [   SetGetColorFocus( .T. )] + hb_Eol()
+   //pGenPrg += [   fw_SetTruePixel( .T. )] + hb_Eol()
 
    RETURN Nil
 
@@ -117,7 +118,9 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
       ENDIF
       MENUITEM "Exit"
          MENU
-         MENUITEM "aWindowsInfo" ACTION gui_MsgBox( aWindowsInfo() )
+         MENUITEM "aWindowsInfo" ACTION gui_MsgBox( aWindowsInfo() ) ;
+            MESSAGE "Show used controls"
+         SEPARATOR
          MENUITEM "Exit" ACTION gui_DialogClose( xDlg )
          ENDMENU
       ENDMENU
@@ -145,25 +148,25 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
       @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xParent ;
          SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction ) CANCEL
 
-      cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ BUTTONBMP xControl PROMPT ] + hb_ValToExp( cCaption ) + ;
          [ OF xParent ;] + hb_Eol()
-      cTxtPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
       [ PIXEL RESOURCE ] + hb_ValToExp( cResName ) + [ TOP ACTION Eval( ] + ;
       hb_ValToExp( bAction ) + [ CANCEL] + hb_Eol()
-      cTxtPrg += hb_Eol()
+      pGenPrg += hb_Eol()
 
    ELSE
       @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xParent ;
          SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
 
-      cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ BUTTONBMP xControl PROMPT ] + hb_ValToExp( cCaption ) + ;
          [ OF xParent ;] + hb_Eol()
-      cTxtPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
       [ PIXEL RESOURCE ] + hb_ValToExp( cResName ) + [ TOP ACTION Eval( ] + ;
       hb_ValToExp( bAction ) + hb_Eol()
-      cTxtPrg += hb_Eol()
+      pGenPrg += hb_Eol()
 
    ENDIF
 
@@ -266,6 +269,12 @@ STATIC FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth,
    @ nRow, nCol CHECKBOX xControl VAR xValue PROMPT "" PIXEL ;
       SIZE nWidth, nHeight OF xParent
 
+   pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      [ CHECKBOX xControl VAR xValue PROMPT "" PIXEL ;] + hb_Eol()
+   pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+      [ OF xParent] + hb_Eol()
+   pGenPrg += hb_Eol()
+
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
    RETURN Nil
@@ -274,9 +283,16 @@ STATIC FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
 
    @ nRow, nCol COMBOBOX xControl VAR xValue OF xParent PIXEL ;
       SIZE nWidth, nHeight ;
-      ITEMS aList ;
-      //STYLE CBS_DROPDOWN
-      //UPDATE
+      ITEMS aList
+
+   pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      [ COMBOBOX xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
+   pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol()
+   pGenPrg += [      ITEMS ] + hb_ValToExp( aList ) + hb_Eol()
+   pGenPrg += hb_Eol()
+
+   //STYLE CBS_DROPDOWN
+   //UPDATE
    //oCbx:oGet:bKeyChar = { | nKey | If( nKey == VK_RETURN,;
    //                                  ( cDia := oCbx:oGet:GetText(), Eval( oCbx:bChange() ) ),),;
    //                                    oCbx:GetKeyChar( nKey ) }
@@ -320,6 +336,7 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
       ELSE
          ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
       ENDIF
+      // VALID MsgYesNo( "Exit?" )
    ENDIF
 
    (bCode)
@@ -345,17 +362,18 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
    //   DEFINE WINDOW xDlg MDI FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
    //      PIXEL TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
    //      COLOR "W/B"
+   //   SET MESSAGE OF xDlg TO "This is a message" NOINSET CLOCK DATE KEYBOARD
    //CASE lModal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
          PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
          COLOR COLOR_LIGHTGRAY
 
-      cTxtPrg += [   DEFINE DIALOG xDlg FROM ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      pGenPrg += [   DEFINE DIALOG xDlg FROM ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ TO ] + hb_ValToExp( nRow + nHeight ) + [, ] + hb_ValToExp( nCol + nWidth ) +  [ ;] + hb_Eol()
-      cTxtPrg += [      PIXEL OF xParent /* FONT oFont */ TITLE ] + hb_ValToExp( cTitle + " (" + GUI():LibName() ) + ;
+      pGenPrg += [      PIXEL OF xParent /* FONT oFont */ TITLE ] + hb_ValToExp( cTitle + " (" + GUI():LibName() ) + ;
          [ ")" ICON "ICOWINDOW" ;] + hb_Eol()
-      cTxtPrg += [      COLOR COLOR_LIGHTGRAY] + hb_Eol()
-      cTxtPrg += hb_Eol()
+      pGenPrg += [      COLOR COLOR_LIGHTGRAY] + hb_Eol()
+      pGenPrg += hb_Eol()
 
    //CASE nType == nType
    //   DEFINE WINDOW xDlg MDICHILD OF xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
@@ -388,21 +406,21 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       @ nRow, nCol SAY xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT BORDER
 
-      cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ SAY xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
-      cTxtPrg += [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
+      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
          [ COLOR CLR_BLUE TRANSPARENT BORDER] + hb_Eol()
-      cTxtPrg += hb_Eol()
+      pGenPrg += hb_Eol()
 
    ELSE
       @ nRow, nCol SAY xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT
 
-      cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ SAY xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
-      cTxtPrg += [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
+      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
          [ COLOR CLR_BLUE TRANSPARENT] + hb_Eol()
-      cTxtPrg += hb_Eol()
+      pGenPrg += hb_Eol()
 
    ENDIF
 
@@ -450,7 +468,6 @@ STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, 
       PICTURE "999999" ; // cPicture ;
       SPINNER MIN aRangeList[1] MAX aRangeList[2]
       // VALID iif( Empty( bValid ), .T., Eval( bValid ) )
-   //AAdd( oFrmClass:aInitFix, { || xControl:nHeight := nHeight } )
 
    RETURN Nil
 
@@ -475,12 +492,12 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
       COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }
    //oFld:SetColor( ::nTextColorR, ::nBackColorR )
 
-   cTxtPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+   pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
       [ FOLDEREX xControl PIXEL ;] + hb_Eol()
-   cTxtPrg += [   PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;] + hb_Eol()
-   cTxtPrg += [   OF xParent SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol()
-   cTxtPrg += [   COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }] + hb_Eol()
-   cTxtPrg += hb_Eol()
+   pGenPrg += [   PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;] + hb_Eol()
+   pGenPrg += [   OF xParent SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol()
+   pGenPrg += [   COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }] + hb_Eol()
+   pGenPrg += hb_Eol()
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -495,8 +512,8 @@ STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
       ASize( xTab:aPrompts, nPageCount )
    ENDIF
 
-   cTxtPrg += [   ASize( xTab:aPrompts, ] + hb_ValToExp( nPageCount ) + [ )] + hb_Eol()
-   cTxtPrg += hb_Eol()
+   pGenPrg += [   ASize( xTab:aPrompts, ] + hb_ValToExp( nPageCount ) + [ )] + hb_Eol()
+   pGenPrg += hb_Eol()
 
    (xDlg);(xTab);(nPageCount)
 
@@ -516,21 +533,21 @@ STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cT
    IF nPageCount <= Len( xControl:aPrompts )
       xControl:aPrompts[ nPageCount ] := cText
 
-      cTxtPrg += [   xControl:aPrompts] + "[" + hb_ValToExp( nPageCount ) + "]" + [ := ] + hb_ValToExp( cText ) + hb_Eol()
+      pGenPrg += [   xControl:aPrompts] + "[" + hb_ValToExp( nPageCount ) + "]" + [ := ] + hb_ValToExp( cText ) + hb_Eol()
 
    ELSE
       xControl:AddItem( cText )
 
-      cTxtPrg += [   xControl:AddItem( ] + hb_ValToExp( cText ) + [ )] + hb_Eol()
-      cTxtPrg += hb_Eol()
+      pGenPrg += [   xControl:AddItem( ] + hb_ValToExp( cText ) + [ )] + hb_Eol()
+      pGenPrg += hb_Eol()
 
    ENDIF
    xPage := xControl:aDialogs[ nPageCount ]
    xControl:Refresh()
 
-   cTxtPrg += [   xPage := xControl:aDialogs] + "[ " + hb_ValToExp( nPageCount ) + " ]" + hb_Eol()
-   cTxtPrg += [   xControl:Refresh()] + hb_Eol()
-   cTxtPrg += hb_Eol()
+   pGenPrg += [   xPage := xControl:aDialogs] + "[ " + hb_ValToExp( nPageCount ) + " ]" + hb_Eol()
+   pGenPrg += [   xControl:Refresh()] + hb_Eol()
+   pGenPrg += hb_Eol()
 
 
    (xDlg); (xControl); (cText); (xPage); (nPageCount)

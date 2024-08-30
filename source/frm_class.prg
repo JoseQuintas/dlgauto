@@ -22,8 +22,7 @@ CREATE CLASS frm_Class
    VAR nInitRecno
    VAR aInitValue1
    VAR aInitValue2
-   VAR bActivate
-   VAR aInitFix        INIT {}
+   VAR bOnFrmActivate
 
    VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
@@ -57,20 +56,17 @@ CREATE CLASS frm_Class
    METHOD Validate( aItem )    INLINE frm_Valid( Self, aItem )
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
    METHOD BrowseClick( aItem, nKey ) INLINE frm_BrowseClick( Self, aItem, nKey )
-   METHOD DlgInit()
+   METHOD OnFrmInit()
 
    ENDCLASS
 
-METHOD DlgInit() CLASS frm_Class
+METHOD OnFrmInit() CLASS frm_Class
 
    LOCAL nPos
 #ifdef HBMK_HAS_FIVEWIN
    //LOCAL aControl, cText
 #endif
 
-   IF ! Empty( ::aInitFix )
-      Eval( hb_ArrayToParams( ::aInitFix ) )
-   ENDIF
    IF ::nInitRecno != Nil
       GOTO ::nInitRecno
    ENDIF
@@ -111,8 +107,8 @@ METHOD DlgInit() CLASS frm_Class
       //NEXT
    ENDIF
 #endif
-   IF ! Empty( ::bActivate )
-      Eval( ::bActivate )
+   IF ! Empty( ::bOnFrmActivate )
+      Eval( ::bOnFrmActivate )
    ENDIF
 
    RETURN Nil

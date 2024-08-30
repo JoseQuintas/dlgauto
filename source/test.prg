@@ -10,7 +10,8 @@ REQUEST HB_CODEPAGE_PTISO
 #include "frm_class.ch"
 #include "hbgtinfo.ch"
 
-MEMVAR lLogin, cUser, cPass, cTxtPrg
+MEMVAR lLogin, cUser, cPass
+MEMVAR pGenPrg, pGenName
 
 #ifdef DLGAUTO_AS_LIB
    PROCEDURE DlgAuto
@@ -21,7 +22,7 @@ MEMVAR lLogin, cUser, cPass, cTxtPrg
    LOCAL aKeyList := {}, aSeekList := {}, aBrowseList := {}, aTypeList := {}
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL cFieldName, aBrowse, nPos, aSetup, lMakeLogin, aAddOptionList, aButton
-   PRIVATE lLogin := .F., cUser := "", cPass := "", cTxtPrg := ""
+   PRIVATE lLogin := .F., cUser := "", cPass := "", pGenPrg := "", pGenName := "code"
 
    SET CONFIRM ON
    SET CENTURY ON
@@ -176,7 +177,7 @@ MEMVAR lLogin, cUser, cPass, cTxtPrg
    test_DlgMenu( @aAllSetup )
 
 #ifndef DLGAUTO_AS_LIB
-   hb_MemoWrit( "code.txt", cTxtPrg )
+   hb_MemoWrit( pGenName + ".txt", pGenPrg )
 #endif
 
    RETURN
