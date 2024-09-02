@@ -119,7 +119,6 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "NoData Layout 2" ACTION test_noDatabase(2)
          MENUITEM "NoData Layout 3" ACTION test_noDatabase(3)
          ENDMENU
-      ENDMENU
       IF xDlg:ClassName() == "TMDIFRAME"
          oMenu:AddMDI()
       ENDIF
@@ -326,22 +325,47 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
       IF lModal
          IF ! Empty( bCode )
             ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+
+            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
+            pGenPrg += hb_Eol()
+
          ELSE
             ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+
+            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" ) ] + hb_Eol()
+            pGenPrg += hb_Eol()
+
          ENDIF
       ELSE
          IF ! Empty( bCode )
             ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
                ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+
+            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;] + hb_Eol()
+            pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
+            pGenPrg += hb_Eol()
+
          ELSE
             ACTIVATE DIALOG xDlg CENTERED NOMODAL ON INIT gui_StatusBar( xDlg, "" )
+
+            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ON INIT gui_StatusBar( xDlg, "" )] + hb_Eol()
+            pGenPrg += hb_Eol()
+
          ENDIF
       ENDIF
    ELSE
       IF ! Empty( bCode )
          ACTIVATE WINDOW xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+
+         pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
+         pGenPrg += hb_Eol()
+
       ELSE
          ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+
+         pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )] + hb_Eol()
+         pGenPrg += hb_Eol()
+
       ENDIF
       // VALID MsgYesNo( "Exit?" )
    ENDIF
@@ -576,11 +600,28 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       @ nRow, nCol GET xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight PICTURE cPicture ;
          VALID iif( Empty( bValid ), .T., Eval( bValid ) )
+
+      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ GET xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
+      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [ , ] + hb_ValToExp( nHeight ) + ;
+         [ PICTURE ] + hb_ValToExp( cPicture ) + [ ;] + hb_Eol()
+      pGenPrg += [      VALID ] + iif( Empty( bValid ), [ .T.], [ Eval( bValid ) ] ) + hb_Eol()
+      pGenPrg += hb_Eol()
+
    ELSE
       @ nRow, nCol GET xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight PICTURE cPicture ;
          VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
          ACTION Eval( bAction ) BITMAP cImage
+
+      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ GET xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
+      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+         [ PICTURE ] + hb_ValToExp( cPicture ) + [ ;] + hb_Eol()
+      pGenPrg += [      VALID ] + iif( Empty( bValid ), [ .T.], [ Eval( bValid ) ] ) + [ ;] + hb_Eol()
+      pGenPrg += [      ACTION Eval( bAction ) BITMAP ] + hb_ValToExp( cImage ) + hb_Eol()
+      pGenPrg += hb_Eol()
+
    ENDIF
 
    (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bAction);(cImage)
