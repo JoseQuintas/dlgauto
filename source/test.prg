@@ -225,3 +225,23 @@ PROCEDURE HB_GTSYS
 
    RETURN
 #endif
+
+FUNCTION RGB2N( r, g, b )
+
+   IF ValType( r ) == "A"
+      g := r[ 2 ]
+      b := r[ 3 ]
+      r := r[ 1 ]
+   ENDIF
+
+   RETURN r + ( g * 256 ) + ( b * 256 * 256 )
+
+FUNCTION N2RGB( n )
+
+   LOCAL r, g, b
+
+   r := n % 256
+   g := int( n / 256 ) % 256
+   b := int( n / 256 / 256 )
+
+   RETURN { r, g, b }

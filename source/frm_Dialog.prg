@@ -10,13 +10,13 @@ FUNCTION frm_Dialog( Self )
 
    LOCAL aItem, aFile
 
-   SELECT ( Select( ::cFileDbf ) )
+   SELECT ( Select( ::cDataTable ) )
    USE
-   IF ! Empty( ::cFileDbf )
-      USE ( ::cFileDBF )
+   IF ! Empty( ::cDataTable )
+      USE ( ::cDataTable )
    ENDIF
    IF hb_ASCan( ::aEditList, { | e | e[ CFG_ISKEY ] } ) != 0
-      SET INDEX TO ( ::cFileDBF )
+      SET INDEX TO ( ::cDataTable )
    ENDIF
    FOR EACH aItem IN ::aEditList
       IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. Select( aItem[ CFG_VTABLE ] ) == 0
@@ -39,7 +39,7 @@ FUNCTION frm_Dialog( Self )
    // dbfs for code in use validation
    FOR EACH aFile IN ::aAllSetup
       FOR EACH aItem IN aFile[ 2 ]
-         IF aItem[ CFG_VTABLE ] == ::cFileDBF .AND. Select( aFile[ 1 ] ) == 0
+         IF aItem[ CFG_VTABLE ] == ::cDataTable .AND. Select( aFile[ 1 ] ) == 0
             SELECT ( Select( aFile[ 1 ] ) )
             USE
             USE ( aFile[ 1 ] )
@@ -48,8 +48,8 @@ FUNCTION frm_Dialog( Self )
          ENDIF
       NEXT
    NEXT
-   IF ! Empty( ::cFileDbf )
-      SELECT ( Select( ::cFileDbf ) )
+   IF ! Empty( ::cDataTable )
+      SELECT ( Select( ::cDataTable ) )
    ENDIF
    FOR EACH aItem IN ::aEditList
       IF aItem[ CFG_CTLTYPE ] == TYPE_ADDBUTTON

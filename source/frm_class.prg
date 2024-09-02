@@ -12,7 +12,6 @@ CREATE CLASS frm_Class
    VAR cDataTable      INIT ""
    VAR cDataField      INIT ""
    VAR cTitle
-   VAR cFileDBF
    VAR aEditList       INIT {}
    VAR cOptions        INIT "IED"
    VAR aOptionList     INIT {}
@@ -46,7 +45,7 @@ CREATE CLASS frm_Class
    METHOD EditOff()
    METHOD Print()              INLINE frm_Print( Self )
    METHOD Execute()            INLINE frm_Dialog( Self )
-   METHOD View()               INLINE ::Browse( "", "", ::cFileDbf, Nil ), ::DataLoad()
+   METHOD View()               INLINE ::Browse( "", "", ::cDataTable, Nil ), ::DataLoad()
    METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditKeyOn()
    METHOD Delete()
    METHOD Insert()             INLINE ::cSelected := "INSERT", ::EditKeyOn()
@@ -71,7 +70,7 @@ METHOD OnFrmInit() CLASS frm_Class
       GOTO ::nInitRecno
    ENDIF
    ::DataLoad()
-   IF Empty( ::cFileDbf )
+   IF Empty( ::cDataTable )
       AEval( ::aControlList, { | e | ;
          iif( e[ CFG_CTLTYPE ] == TYPE_TEXT, GUI():ControlEnable( ::xDlg, e[ CFG_FCONTROL ], .T. ), Nil ) } )
    ELSE
@@ -288,9 +287,9 @@ METHOD Delete() CLASS frm_Class
    // do not use hb_Scan(), because can exists more than one field to same dbf
    FOR EACH aFile IN ::aAllSetup
       FOR EACH aItem IN aFile[ 2 ]
-         IF aItem[ CFG_VTABLE ] == ::cFileDbf
+         IF aItem[ CFG_VTABLE ] == ::cDataTable
             SELECT Select( aFile[ 1 ] )
-            cSearch := aItem[ CFG_FNAME ] + [=("] + ::cFileDbf + [")->] + aItem[ CFG_VFIELD ]
+            cSearch := aItem[ CFG_FNAME ] + [=("] + ::cDataTable + [")->] + aItem[ CFG_VFIELD ]
             LOCATE FOR &cSearch
             IF ! Eof()
                GUI():MsgBox( "Code in use on " + aFile[ 1 ] )
@@ -326,8 +325,8 @@ METHOD DataLoad() CLASS frm_Class
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
          SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
-         xScope := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM ] ) ) )
-         nLenScope := ( ::cFileDbf )->( FieldLen( aItem[ CFG_BRWKEYFROM ] ) )
+         xScope := ( ::cDataTable )->( FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM ] ) ) )
+         nLenScope := ( ::cDataTable )->( FieldLen( aItem[ CFG_BRWKEYFROM ] ) )
          IF ValType( xScope ) == "C"
             SET SCOPE TO xScope
          ELSE
@@ -335,12 +334,12 @@ METHOD DataLoad() CLASS frm_Class
          ENDIF
          GOTO TOP
          GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
-         SELECT ( Select( ::cFileDbf ) ) // not all libraries need this
+         SELECT ( Select( ::cDataTable ) ) // not all libraries need this
       CASE Empty( aItem[ CFG_FNAME ] ) // not a field
       CASE aItem[ CFG_SAVEONLY ]
       CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
          IF ! aItem[ CFG_SAVEONLY ]
-            xValue := ( ::cFileDbf )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
+            xValue := ( ::cDataTable )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
          ENDIF
          GUI():ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )

@@ -20,7 +20,7 @@ FUNCTION frm_Print( Self )
       IF nLin > PAGE_ROWS - 2
          nPag += 1
          @ 0, 0 SAY GUI():LibName()
-         @ 0, 66 - Int( Len( ::cFileDbf ) / 2 ) SAY ::cFileDBF
+         @ 0, 66 - Int( Len( ::cDataTable ) / 2 ) SAY ::cDataTable
          @ 0, PAGE_COLS - 9 SAY "Page " + StrZero( nPag, 3 )
          @ 1, 0 SAY Replicate( "-", PAGE_COLS )
          nLin := 2

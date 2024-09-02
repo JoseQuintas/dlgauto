@@ -108,6 +108,11 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
             NEXT
          ENDMENU
       NEXT
+      MENU TITLE "NoData"
+         MENUITEM "NoData Layout 1" ACTION test_noDatabase(1)
+         MENUITEM "NoData Layout 2" ACTION test_noDatabase(2)
+         MENUITEM "NoData Layout 3" ACTION test_noDatabase(3)
+      ENDMENU
       MENU TITLE "Exit"
          MENUITEM "&Exit" ACTION gui_DialogClose( xDlg )
       ENDMENU

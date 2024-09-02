@@ -457,7 +457,7 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       FONTSIZE nFontSize
       IF lBorder
          BORDER lBorder
-         BACKCOLOR HMG_n2RGB( COLOR_GREEN )
+         BACKCOLOR N2RGB( COLOR_GREEN )
       ENDIF
    END LABEL
 
@@ -620,7 +620,7 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
    /* F9 on key fields will make a browse but click on button does the same */
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
       AAdd( oFrmClass:aDlgKeyDown, { xControl, VK_F9, ;
-         { || oFrmClass:Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], oFrmClass:cFileDbf, aItem[ CFG_VTABLE ] ) ) } } )
+         { || oFrmClass:Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], oFrmClass:cDataTable, aItem[ CFG_VTABLE ] ) ) } } )
    ENDIF
    (bValid)
 

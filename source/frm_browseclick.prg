@@ -19,8 +19,8 @@ FUNCTION frm_BrowseClick( oFrmOld, aItemOld, nKey )
    aOrdScope := { OrdScope( 0 ), OrdScope( 1 ) }
    oFrm := frm_Class():New()
    WITH OBJECT oFrm
-      :cFileDbf    := aItemOld[ CFG_BRWTABLE ]
-      :cTitle      := "BROWSE " + :cFileDbf
+      :cDataTable    := aItemOld[ CFG_BRWTABLE ]
+      :cTitle      := "BROWSE " + :cDataTable
       :cOptions    := "S"
       :lNavigate   := .F.
       :lModal      := .T.
@@ -30,7 +30,7 @@ FUNCTION frm_BrowseClick( oFrmOld, aItemOld, nKey )
       nPos := hb_ASCan( :aAllSetup, { | e | e[ 1 ] == aItemOld[ CFG_BRWTABLE ] } )
       :aEditList   := :aAllSetup[ nPos, 2 ]
       :nInitRecno  := ( aItemOld[ CFG_BRWTABLE ] )->( RecNo() )
-      :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cFileDbf )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
+      :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cDataTable )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
       IF nKey == VK_INSERT
          SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
          aOrdScope := { OrdScope( 0 ), OrdScope( 1 ) }

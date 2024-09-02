@@ -113,6 +113,13 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
             NEXT
          ENDMENU
       NEXT
+      MENUITEM "NoData"
+         MENU
+         MENUITEM "NoData Layout 1" ACTION test_noDatabase(1)
+         MENUITEM "NoData Layout 2" ACTION test_noDatabase(2)
+         MENUITEM "NoData Layout 3" ACTION test_noDatabase(3)
+         ENDMENU
+      ENDMENU
       IF xDlg:ClassName() == "TMDIFRAME"
          oMenu:AddMDI()
       ENDIF

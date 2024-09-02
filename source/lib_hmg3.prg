@@ -96,6 +96,11 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
             NEXT
          END POPUP
       NEXT
+      DEFINE POPUP "NoData"
+         MENUITEM "NoData Layout 1" ACTION test_noDatabase(1)
+         MENUITEM "NoData Layout 2" ACTION test_noDatabase(2)
+         MENUITEM "NoData Layout 3" ACTION test_noDatabase(3)
+      END POPUP
       DEFINE POPUP "Exit"
          MENUITEM "Exit" ACTION GUI():DialogClose( xDlg )
       END POPUP
@@ -534,7 +539,7 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
    END TEXTBOX
    IF aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] )
       AAdd( oFrmClass:aDlgKeyDown, { xControl, VK_F9, ;
-         { || oFrmClass:Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], oFrmClass:cFileDbf, aItem[ CFG_VTABLE ] ) ) } } )
+         { || oFrmClass:Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], oFrmClass:cDataTable, aItem[ CFG_VTABLE ] ) ) } } )
    ENDIF
 
    (bValid); (xDlg); (cImage); (bAction)

@@ -20,7 +20,7 @@ FUNCTION frm_main( cDBF, aAllSetup, lModal, xParent )
 #endif
 
    oFrm := frm_Class():New()
-   oFrm:cFileDBF   := cDBF
+   oFrm:cDataTable := cDBF
    oFrm:xParent    := xParent
 #ifdef HBMK_HAS_GTWVG
    oFrm:xDlg := wvgSetAppWindow()
