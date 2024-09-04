@@ -7,6 +7,8 @@ lib_hmge - HMG Extended source selected by lib.prg
 #include "hmg.ch"
 #include "i_winuser.ch"
 
+MEMVAR pGenPrg, pGenName
+
 THREAD STATIC nWindow := 0
 
 #ifndef DLGAUTO_AS_LIB
@@ -77,13 +79,20 @@ STATIC FUNCTION gui_Init()
 #ifdef DLGAUTO_AS_LIB
    Init()
 #endif
-   SET GETBOX FOCUS BACKCOLOR TO {255,255,0}
+   SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
    //SET WINDOW MODAL PARENT HANDLE ON
 
    SET WINDOW MAIN OFF
    Set( _SET_DEBUG, .F. )
+
+   pGenPrg += [   SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )] + hb_Eol()
+   pGenPrg += [   SET MENUSTYLE EXTENDED] + hb_Eol()
+   pGenPrg += [   SET NAVIGATION EXTENDED] + hb_Eol()
+   pGenPrg += [   SET WINDOW MAIN OFF] + hb_Eol()
+   pGenPrg += [   Set( _SET_DEBUG, .F. )] + hb_Eol()
+   pGenPrg += hb_Eol()
 
    RETURN Nil
 
@@ -461,6 +470,22 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       ENDIF
    END LABEL
 
+   pGenPrg += [   DEFINE LABEL ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol()
+   pGenPrg += [      PARENT ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol()
+   pGenPrg += [      COL ] + hb_ValToExp( nCol ) + hb_Eol()
+   pGenPrg += [      ROW ] + hb_ValToExp( nRow ) + hb_Eol()
+   pGenPrg += [      WIDTH ] + hb_ValToExp( nWidth ) + hb_Eol()
+   pGenPrg += [      HEIGHT ] + hb_ValToExp( nHeight ) + hb_Eol()
+   pGenPrg += [      VALUE ] + hb_ValToExp( xValue ) + hb_Eol()
+   pGenPrg += [      FONTNAME "Arial"] + hb_Eol()
+   pGenPrg += [      FONTSIZE ] + hb_ValToExp( nFontSize ) + hb_Eol()
+   IF lBorder
+      pGenPrg += [      BORDER ] + hb_ValToExp( lBorder ) + hb_Eol()
+      pGenPrg += [      BACKCOLOR N2RGB( COLOR_GREEN )] + hb_Eol()
+   ENDIF
+   pGenPrg += [   END LABEL] + hb_Eol()
+   pGenPrg += hb_Eol()
+
    (xDlg)
 
    RETURN Nil
@@ -655,7 +680,7 @@ STATIC FUNCTION gui_NewName( cPrefix )
    nCount += 1
    hb_Default( @cPrefix, "ANY" )
 
-   RETURN cPrefix + StrZero( nCount, 10 )
+   RETURN cPrefix + hb_ValToExp( nCount )
 
 STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
