@@ -15,11 +15,18 @@ FUNCTION frm_Edit( Self )
 
    LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aList := {}
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
-   LOCAL aKeyDownList, xTabPage, nHeight
+   LOCAL aKeyDownList, xTabPage, nHeight, nInitRow := APP_BUTTON_SIZE + APP_LINE_SPACING
+
+   IF ::lWithTab
+      nInitRow := iif( GUI():LibName() == "FIVEWIN", 10, APP_LINE_HEIGHT * 2 )
+   ENDIF
 
    /* began control list with fields */
    FOR EACH aItem IN ::aEditList
       AAdd( ::aControlList, AClone( aItem ) )
+      IF aItem[ CFG_ISKEY ]
+         ::cDataField := aItem[ CFG_FNAME ]
+      ENDIF
    NEXT
 
    /* create tab, if use tab */
@@ -32,7 +39,7 @@ FUNCTION frm_Edit( Self )
       Atail( ::aControlList )[ CFG_FCONTROL ] := xTab
       nRow := 999999
    ELSE
-      nRow := 10
+      nRow := nInitRow
    ENDIF
    nCol := 10
 
@@ -111,7 +118,7 @@ FUNCTION frm_Edit( Self )
          AAdd( ::aControlList, EmptyFrmClassItem() )
          Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TABPAGE
          Atail( ::aControlList )[ CFG_FCONTROL ] := xTabPage
-         nRow := 10
+         nRow := nInitRow
          AAdd( aList, {} )
          lFirst := .T.
          (lFirst)
@@ -146,7 +153,7 @@ FUNCTION frm_Edit( Self )
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
             nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_BRWTITLE ], .F., APP_FONTSIZE_SMALL )
 
-         GUI():Browse( ::xDlg, xTabPage, @aItem[ CFG_FCONTROL ], nRow2, 5, ;
+         GUI():Browse( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], nRow2, 5, ;
             APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
             oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
 
@@ -272,15 +279,15 @@ FUNCTION frm_Edit( Self )
       ENDIF
       lFirst := .F.
    NEXT
-   IF GUI():LibName() $ "FIVEWIN,HWGUI"
+   //IF GUI():LibName() $ "FIVEWIN,HWGUI"
       /* dummy textbox to works last valid */
       AAdd( ::aControlList, EmptyFrmClassItem() )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUG_GET
 
       GUI():TextCreate( ::xDlg, ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-         nRow, nCol, 0, 0, " ", "", 0, { || .T. },,,@Atail( ::aControlList )[ CFG_FCONTROL ], Self )
+         nRow, nCol, 0, 0, " ", "", 0, { || .T. },,,Atail( ::aControlList ), Self )
 
-   ENDIF
+   //ENDIF
    IF ::lWithTab
 
       GUI():TabPageEnd( ::xDlg, xTab )

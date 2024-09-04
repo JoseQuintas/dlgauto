@@ -85,6 +85,7 @@ STATIC FUNCTION gui_Init()
 
    pGenPrg += [   SetGetColorFocus( .T. )] + hb_Eol()
    //pGenPrg += [   fw_SetTruePixel( .T. )] + hb_Eol()
+   pGenPrg += hb_Eol()
 
    RETURN Nil
 
@@ -468,6 +469,11 @@ STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
    @ nRow, nCol GET xControl VAR xValue MEMO OF xParent PIXEL ;
       SIZE nWidth, nHeight
 
+   pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      [ GET xControl VAR xValue MEMO OF xParent PIXEL ;] + hb_Eol()
+   pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + hb_Eol()
+   pGenPrg += hb_Eol()
+
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue)
 
    RETURN Nil
@@ -507,6 +513,10 @@ STATIC FUNCTION gui_Statusbar( xDlg, xControl )
    DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;
       SIZES 150, 200, 240
 
+   pGenPrg += [   DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;] + hb_Eol()
+   pGenPrg += [      SIZES 150, 200, 240] + hb_Eol()
+   pGenPrg += hb_Eol()
+
    (xDlg); (xControl)
 
    RETURN Nil
@@ -525,9 +535,9 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
 
    pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
       [ FOLDEREX xControl PIXEL ;] + hb_Eol()
-   pGenPrg += [   PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;] + hb_Eol()
-   pGenPrg += [   OF xParent SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol()
-   pGenPrg += [   COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }] + hb_Eol()
+   pGenPrg += [      PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;] + hb_Eol()
+   pGenPrg += [      OF xParent SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol()
+   pGenPrg += [      COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }] + hb_Eol()
    pGenPrg += hb_Eol()
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
