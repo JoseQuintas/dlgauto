@@ -9,6 +9,13 @@ Note: Or use name or object, but can't mix on this source code
 #include "oohg.ch"
 #include "i_altsyntax.ch"
 
+#ifdef DLGAUTO_AS_LIB
+   STATIC pGenPrg := ""
+#else
+   MEMVAR pGenPrg, pGenName
+#endif
+
+#ifndef DLGAUTO_AS_LIB
 THREAD STATIC oGUI
 
 FUNCTION GUI( xValue )
@@ -21,6 +28,7 @@ FUNCTION GUI( xValue )
    ENDIF
 
    RETURN oGUI
+#endif
 
 CREATE CLASS OOHGClass
 
@@ -603,15 +611,6 @@ STATIC FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    RETURN Nil
 
-STATIC FUNCTION gui_NewName( cPrefix )
-
-   STATIC nCount := 0
-
-   hb_Default( @cPrefix, "ANY" )
-   nCount += 1
-
-   RETURN cPrefix  + StrZero( nCount, 10 )
-
 STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
    LOCAL aItem
@@ -622,3 +621,13 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
    NEXT
 
    RETURN Nil
+
+FUNCTION gui_NewName( cPrefix )
+
+   STATIC nCount := 0
+
+   hb_Default( @cPrefix, "ANY" )
+   nCount += 1
+
+   RETURN cPrefix  + StrZero( nCount, 10 )
+

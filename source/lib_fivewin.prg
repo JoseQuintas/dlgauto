@@ -10,7 +10,11 @@ lib_fivewin- fivewin source selected by lib.prg
 #include "calendar.ch"
 #include "dtpicker.ch"
 
-MEMVAR pGenPrg, pGenName
+#ifdef DLGAUTO_AS_LIB
+   STATIC pGenPrg := ""
+#else
+   MEMVAR pGenPrg, pGenName
+#endif
 
 #ifndef DLGAUTO_AS_LIB
 THREAD STATIC oGUI

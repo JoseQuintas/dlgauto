@@ -10,6 +10,13 @@ lib_hmg3 - HMG3 source selected by lib.prg
 MEMVAR _HMG_SYSDATA
 MEMVAR _HMG_MainWindowFirst
 
+#ifdef DLGAUTO_AS_LIB
+   STATIC pGenPrg := ""
+#else
+   MEMVAR pGenPrg, pGenName
+#endif
+
+#ifndef DLGAUTO_AS_LIB
 THREAD STATIC oGUI
 
 FUNCTION GUI( xValue )
@@ -22,6 +29,7 @@ FUNCTION GUI( xValue )
    ENDIF
 
    RETURN oGUI
+#endif
 
 CREATE CLASS HMG3Class
 
@@ -76,6 +84,9 @@ CREATE CLASS HMG3Class
 
 STATIC FUNCTION gui_Init()
 
+#ifdef DLGAUTO_AS_LIB
+   Init()
+#endif
    SET WINDOW MAIN OFF
    SET NAVIGATION EXTENDED
    SET BROWSESYNC ON
@@ -565,15 +576,6 @@ STATIC FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    RETURN Nil
 
-STATIC FUNCTION gui_NewName( cPrefix )
-
-   STATIC nCount := 0
-
-   nCount += 1
-   hb_Default( @cPrefix, "ANY" )
-
-   RETURN cPrefix + StrZero( nCount, 10 )
-
 STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
    LOCAL aItem
@@ -587,3 +589,13 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
 STATIC FUNCTION gui_BrowseKeyDown()
    RETURN Nil
+
+FUNCTION gui_NewName( cPrefix )
+
+   STATIC nCount := 0
+
+   nCount += 1
+   hb_Default( @cPrefix, "ANY" )
+
+   RETURN cPrefix + StrZero( nCount, 10 )
+

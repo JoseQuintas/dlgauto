@@ -7,7 +7,11 @@ lib_hmge - HMG Extended source selected by lib.prg
 #include "hmg.ch"
 #include "i_winuser.ch"
 
-MEMVAR pGenPrg, pGenName
+#ifndef DLGAUTO_AS_LIB
+   MEMVAR pGenPrg, pGenName
+#else
+   STATIC pGenPrg := ""
+#endif
 
 THREAD STATIC nWindow := 0
 
@@ -82,7 +86,7 @@ STATIC FUNCTION gui_Init()
    SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
-   //SET WINDOW MODAL PARENT HANDLE ON
+   SET WINDOW MODAL PARENT HANDLE ON
 
    SET WINDOW MAIN OFF
    Set( _SET_DEBUG, .F. )
@@ -453,7 +457,7 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
    ENDIF
 
    hb_Default( @lBorder, .F. )
-   hb_Default( @nFontSize, APP_FONTSIZE_NORMAL )
+   hb_Default( @nFontSize, APP_FONTSIZE_SMALL )
 
    DEFINE LABEL ( xControl )
       PARENT ( xParent )
@@ -462,7 +466,7 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       WIDTH nWidth
       HEIGHT nHeight
       VALUE xValue
-      FONTNAME "Arial"
+      FONTNAME APP_FONTNAME
       FONTSIZE nFontSize
       IF lBorder
          BORDER lBorder
@@ -477,7 +481,7 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
    pGenPrg += [      WIDTH ] + hb_ValToExp( nWidth ) + hb_Eol()
    pGenPrg += [      HEIGHT ] + hb_ValToExp( nHeight ) + hb_Eol()
    pGenPrg += [      VALUE ] + hb_ValToExp( xValue ) + hb_Eol()
-   pGenPrg += [      FONTNAME "Arial"] + hb_Eol()
+   pGenPrg += [      FONTNAME APP_FONT_NAME ] + hb_Eol()
    pGenPrg += [      FONTSIZE ] + hb_ValToExp( nFontSize ) + hb_Eol()
    IF lBorder
       pGenPrg += [      BORDER ] + hb_ValToExp( lBorder ) + hb_Eol()
@@ -508,6 +512,7 @@ STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
       HEIGHT nHeight
       VALUE xValue
       FONTNAME PREVIEW_FONTNAME
+      FONTSIZE APP_FONTSIZE_SMALL
       TOOLTIP 'EditBox'
    END EDITBOX
 
@@ -613,7 +618,7 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       HEIGHT nHeight
       WIDTH nWidth
       FONTNAME APP_FONTNAME
-      FONTSIZE APP_FONTSIZE_NORMAL
+      FONTSIZE APP_FONTSIZE_NORMAL - 3
       IF ValType( xValue ) == "N"
          NUMERIC .T.
          INPUTMASK cPicture
@@ -673,15 +678,6 @@ STATIC FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    RETURN Nil
 
-STATIC FUNCTION gui_NewName( cPrefix )
-
-   STATIC nCount := 0
-
-   nCount += 1
-   hb_Default( @cPrefix, "ANY" )
-
-   RETURN cPrefix + hb_ValToExp( nCount )
-
 STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
    LOCAL aItem
@@ -692,3 +688,15 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
    NEXT
 
    RETURN Nil
+
+/* unique names on multithread too */
+
+FUNCTION gui_NewName( cPrefix )
+
+   STATIC nCount := 0
+
+   nCount += 1
+   hb_Default( @cPrefix, "ANY" )
+
+   RETURN cPrefix + hb_ValToExp( nCount )
+

@@ -8,6 +8,12 @@ lib_hwgui - hwgui source selected by lib.prg
 
 THREAD STATIC oFont
 
+#ifdef DLGAUTO_AS_LIB
+   STATIC pGenPrg := ""
+#else
+   MEMVAR pGenName, pGenPrg
+#endif
+
 #ifndef DLGAUTO_AS_LIB
 THREAD STATIC oGUI
 
