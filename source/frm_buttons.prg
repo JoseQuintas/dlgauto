@@ -68,7 +68,7 @@ STATIC FUNCTION IconFromCaption( cCaption )
    LOCAL aList := { ;
       { "Insert",   "icoPlus" }, ;
       { "Edit",     "icoEdit" }, ;
-      { "View",     "AppIcon" }, ;
+      { "View",     "icoGrid" }, ;
       { "Delete",   "icoTrash" }, ;
       { "First",    "icoGoFirst" }, ;
       { "Previous", "icoGoLeft" }, ;

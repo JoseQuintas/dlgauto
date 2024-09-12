@@ -476,7 +476,11 @@ STATIC FUNCTION gui_MsgYesNo( cText )
 
 STATIC FUNCTION gui_SetFocus( xDlg, xControl )
 
-   DoMethod( xDlg, xControl, "SETFOCUS" )
+   IF PCount() == 1
+      DoMethod( xDlg, "SETFOCUS" )
+   ELSE
+      DoMethod( xDlg, xControl, "SETFOCUS" )
+   ENDIF
 
    RETURN Nil
 

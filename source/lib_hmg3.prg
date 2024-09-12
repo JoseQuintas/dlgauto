@@ -142,7 +142,7 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
       CAPTION       cCaption
       // do not show ico ??
       PICTURE       cResName
-      PICTALIGNMENT TOP
+      // default // PICTALIGNMENT TOP
       ACTION         Eval( bAction )
    END BUTTON
 

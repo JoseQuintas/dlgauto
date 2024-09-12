@@ -8,7 +8,35 @@ called from frm_class
 
 FUNCTION frm_Dialog( Self )
 
-   LOCAL aItem, aFile
+   LOCAL aItem
+
+   IF ! ::lIsSQL()
+      frm_DialogOpenDbf( Self )
+   ENDIF
+   FOR EACH aItem IN ::aEditList
+      IF aItem[ CFG_CTLTYPE ] == TYPE_ADDBUTTON
+         AAdd( ::aOptionList, { aItem[ CFG_CAPTION ], aItem[ CFG_ACTION ] } )
+      ENDIF
+   NEXT
+
+   GUI():DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::OnFrmInit() }, ::lModal, ::xParent )
+   ::CreateControls()
+   GUI():DialogActivate( ::xDlg, { || ::OnFrmInit() }, ::lModal )
+
+#ifndef DLGAUTO_AS_LIB
+#ifdef HBMK_HAS_GTWVG
+   DO WHILE Inkey(1) != K_ESC
+   ENDDO
+#endif
+#endif
+   // nested dialogs can't close databases
+   // CLOSE DATABASES
+
+   RETURN Nil
+
+FUNCTION frm_DialogOpenDbf( Self )
+
+   LOCAL aFile, aItem
 
    SELECT ( Select( ::cDataTable ) )
    USE
@@ -51,23 +79,5 @@ FUNCTION frm_Dialog( Self )
    IF ! Empty( ::cDataTable )
       SELECT ( Select( ::cDataTable ) )
    ENDIF
-   FOR EACH aItem IN ::aEditList
-      IF aItem[ CFG_CTLTYPE ] == TYPE_ADDBUTTON
-         AAdd( ::aOptionList, { aItem[ CFG_CAPTION ], aItem[ CFG_ACTION ] } )
-      ENDIF
-   NEXT
-
-   GUI():DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::OnFrmInit() }, ::lModal, ::xParent )
-   ::CreateControls()
-   GUI():DialogActivate( ::xDlg, { || ::OnFrmInit() }, ::lModal )
-
-#ifdef HBMK_HAS_GTWVG
-   DO WHILE Inkey(1) != K_ESC
-   ENDDO
-#endif
-   // nested calls can't close databases
-   // IF GUI():LibName() != "FIVEWIN"
-   //    CLOSE DATABASES
-   // ENDIF
 
    RETURN Nil

@@ -1,10 +1,10 @@
 test.prg
 test_dbf.prg
+test_loadsetup.prg
 test_dlglogin.prg
 test_dlgmenu.prg
 test_setup.prg
 test_nodatabase.prg
-test.rc
 frm_browse.prg
 frm_BrowseClick.prg
 frm_class.prg
@@ -16,7 +16,11 @@ frm_preview.prg
 frm_print.prg
 frm_valid.prg
 lib.prg
+
+test.rc
+
 -otest
+
 -w3
 -es2
 -mt

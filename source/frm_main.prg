@@ -13,17 +13,21 @@ FUNCTION frm_main( cDBF, aAllSetup, lModal, xParent )
 
    hb_Default( @lModal, .F. )
 
+#ifndef DLGAUTO_AS_LIB
 #ifdef HBMK_HAS_GTWVG
    SetMode(30,100)
    SetColor("W/B")
    CLS
 #endif
+#endif
 
    oFrm := frm_Class():New()
    oFrm:cDataTable := cDBF
    oFrm:xParent    := xParent
+#ifndef DLGAUTO_AS_LIB
 #ifdef HBMK_HAS_GTWVG
    oFrm:xDlg := wvgSetAppWindow()
+#endif
 #endif
    oFrm:cTitle     := cDBF
    oFrm:cOptions   := "IEDP"

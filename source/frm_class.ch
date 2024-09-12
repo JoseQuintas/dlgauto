@@ -45,8 +45,10 @@
 #define TYPE_ADDBUTTON  13
 #define TYPE_BUG_GET    14
 
+#ifndef DLGAUTO_AS_LIB
 #ifdef HBMK_HAS_GTWVG
    #include "gtwvg.ch"
+#endif
 #endif
 
 #define COLOR_BLACK         RGB2N( 0, 0, 0 )
