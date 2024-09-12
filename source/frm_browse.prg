@@ -8,15 +8,18 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
 
    LOCAL oTBrowse := {}, aItem, xValue, cField, nSelect, nPos, nIndexOrd
 
-   nSelect := Select()
-
-   SELECT ( cTable )
-   nIndexOrd := IndexOrd()
+   IF ! ::lIsSQL
+      nSelect := Select()
+      SELECT ( cTable )
+      nIndexOrd := IndexOrd()
+   ENDIF
 
    // check begin if is defined a order to browse
    nPos := hb_Ascan( ::aAllSetup, { | e | e[1] == cTable } )
    IF nPos != 0 .AND. ::aAllSetup[ nPos, 3 ] != Nil
-      SET ORDER TO ( ::aAllSetup[ nPos, 3 ] )
+      IF ! ::lIsSQL
+         SET ORDER TO ( ::aAllSetup[ nPos, 3 ] )
+      ENDIF
    ENDIF
    // check end
    FOR EACH aItem IN ::aAllSetup[ nPos, 2 ]
@@ -33,9 +36,10 @@ FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
       GUI():ControlSetValue( xDlg, xControl, xValue )
    ENDIF
-   SET ORDER TO ( nIndexOrd )
-
-   SELECT ( nSelect )
+   IF ! ::lIsSQL
+      SET ORDER TO ( nIndexOrd )
+      SELECT ( nSelect )
+   ENDIF
    GUI():SetFocus( ::xDlg )
 
    RETURN Nil

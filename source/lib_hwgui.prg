@@ -152,18 +152,21 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
       aKeyDownList := { { VK_RETURN, { || GUI():BrowseEnter( cField, @xValue, xDlg, xControl ) } } }
    ENDIF
 
-   @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
-   ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
-   // may be not current alias
-   xControl:Alias := workarea
+   IF oFrmClass::lIsSQL
+   ELSE
+      @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
+      ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
+      // may be not current alias
+      xControl:Alias := workarea
 
-   FOR EACH aItem IN oTBrowse
-      ADD COLUMN { || Transform( (workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) } TO xControl ;
-         HEADER aItem[1] ;
-         LENGTH Int( 1.4 * ( 1 + Max( Len( aItem[1] ), ;
-            Len( Transform( (workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) ) ) ) );
-         JUSTIFY LINE DT_LEFT
-   NEXT
+      FOR EACH aItem IN oTBrowse
+         ADD COLUMN { || Transform( (workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) } TO xControl ;
+            HEADER aItem[1] ;
+            LENGTH Int( 1.4 * ( 1 + Max( Len( aItem[1] ), ;
+               Len( Transform( (workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) ) ) ) );
+            JUSTIFY LINE DT_LEFT
+      NEXT
+   ENDIF
    // xControl:lInFocus := .T. // only if called from frm_browse
 
    //xControl:bEnter := { || hwg_MsgInfo( "teste"), GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }

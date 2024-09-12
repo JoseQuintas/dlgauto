@@ -73,11 +73,14 @@ FUNCTION Test_LoadSetup( lMakeLogin )
 #endif
 
    /* load setup */
-
+#ifdef DLGAUTO_AS_LIB
+   aSetup := hb_JsonDecode( test_Setup() )
+#else
    IF ! File( "dlgauto.json" )
       hb_MemoWrit( "dlgauto.json", test_Setup() )
    ENDIF
    aSetup := hb_JsonDecode( MemoRead( "dlgauto.json" ) )
+#endif
    IF ValType( aSetup ) == "A" // test if valid setup
       FOR EACH aItem IN aSetup
          DO CASE
