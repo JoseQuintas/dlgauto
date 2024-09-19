@@ -161,6 +161,28 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
       NOXPSTYLE  .T.
    END BUTTONEX
 
+   pGenPrg += [   DEFINE BUTTONEX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol()
+   pGenPrg += [      PARENT      ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol()
+   pGenPrg += [      ROW         ] + hb_ValToExp( nRow ) + hb_Eol()
+   pGenPrg += [      COL         ] + hb_ValToExp( nCol ) + hb_Eol()
+   pGenPrg += [      WIDTH       ] + hb_ValToExp( nWidth ) + hb_Eol()
+   pGenPrg += [      HEIGHT      ] + hb_ValToExp( nHeight ) + hb_Eol()
+   pGenPrg += [      ICON        ] + hb_ValToExp( cResName ) + hb_Eol()
+   pGenPrg += [      IMAGEWIDTH  -1] + hb_Eol()
+   pGenPrg += [      IMAGEHEIGHT -1] + hb_Eol()
+   pGenPrg += [      CAPTION      ] + hb_ValToExp( cCaption ) + hb_Eol()
+   pGenPrg += [      ACTION      Eval( ] + hb_ValToExp( bAction ) + hb_Eol()
+   pGenPrg += [      FONTNAME     ] + hb_ValToExp( APP_FONTNAME ) + hb_Eol()
+   pGenPrg += [      FONTSIZE     7] + hb_Eol()
+   pGenPrg += [      FONTBOLD     .T.] + hb_Eol()
+   pGenPrg += [      FONTCOLOR    ] + hb_ValToExp( COLOR_BLACK ) + hb_Eol()
+   pGenPrg += [      VERTICAL     .T.] + hb_Eol()
+   pGenPrg += [      BACKCOLOR    ] + hb_ValToExp( COLOR_WHITE ) + hb_Eol()
+   pGenPrg += [      FLAT         .T.] + hb_Eol()
+   pGenPrg += [      NOXPSTYLE] + hb_Eol()
+   pGenPrg += [   END BUTTONEX] + hb_Eol()
+   pGenPrg += hb_Eol()
+
    (xDlg)
 
    RETURN Nil
@@ -286,6 +308,16 @@ STATIC FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth,
       HEIGHT nHeight
       CAPTION ""
    END CHECKBOX
+
+   pGenPrg += [   DEFINE CHECKBOX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol()
+   pGenPrg += [      PARENT     ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol()
+   pGenPrg += [      ROW        ] + hb_ValToExp( nRow ) + hb_Eol()
+   pGenPrg += [      COL        ] + hb_ValToExp( nCol ) + hb_Eol()
+   pGenPrg += [      WIDTH      ] + hb_ValToExp( nWidth ) + hb_Eol()
+   pGenPrg += [      HEIGHT     ] + hb_ValToExp( nHeight ) + hb_Eol()
+   pGenPrg += [      CAPTION    ""] + hb_Eol()
+   pGenPrg += [   END CHECKBOX] + hb_Eol()
+   pGenPrg += hb_Eol()
 
    (xDlg)
 
@@ -639,9 +671,9 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       ENDIF
       IF ! Empty( bValid )
          ON LOSTFOCUS Eval( bValid )
+         /* when call a dialog from bvalid, valid on next dialog does not works */
+         // VALID bValid
       ENDIF
-      /* when call a dialog from bvalid, valid on next dialog does not works */
-      // VALID bValid
       IF lPassword
          PASSWORD .T.
          UPPERCASE .T.
@@ -652,6 +684,45 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       AAdd( oFrmClass:aDlgKeyDown, { xControl, VK_F9, ;
          { || oFrmClass:Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], oFrmClass:cDataTable, aItem[ CFG_VTABLE ] ) ) } } )
    ENDIF
+
+   pGenPrg += [   DEFINE GETBOX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol()
+   pGenPrg += [      PARENT    ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol()
+   pGenPrg += [      ROW       ] + hb_ValToExp( nRow ) + hb_Eol()
+   pGenPrg += [      COL       ] + hb_ValToExp( nCol ) + hb_Eol()
+   pGenPrg += [      HEIGHT    ] + hb_ValToExp( nHeight ) + hb_Eol()
+   pGenPrg += [      WIDTH     ] + hb_ValToExp( nWidth ) + hb_Eol()
+   pGenPrg += [      FONTNAME  ] + hb_ValToExp( APP_FONTNAME ) + hb_Eol()
+   pGenPrg += [      FONTSIZE  ] + hb_ValToExp( APP_FONTSIZE_NORMAL - 3 ) + hb_Eol()
+   IF ValType( xValue ) == "N"
+      pGenPrg += [      NUMERIC   .T.] + hb_Eol()
+      pGenPrg += [      INPUTMASK ] + hb_ValToExp( cPicture ) + hb_Eol()
+   ELSEIF ValType( xValue ) == "D"
+      pGenPrg += [      DATE      .T.] + hb_Eol()
+      pGenPrg += [      DATEFORMAT ] + hb_ValToExp( cPicture ) + hb_Eol()
+   ELSEIF ValType( xValue ) == "L" // workaround to do not get error
+      xValue := " "
+   ELSEIF ValType( xValue ) == "C"
+      pGenPrg += [      MAXLENGTH ] + hb_ValToExp( nMaxLength ) + hb_Eol()
+   ENDIF
+   pGenPrg += [      VALUE ] + hb_ValToExp( xValue ) + hb_Eol()
+   IF ! Empty( bAction )
+      pGenPrg += [      ACTION Eval( ] + hb_ValToExp( bAction ) + [ )] + hb_Eol()
+   ENDIF
+   IF ! Empty( cImage )
+     pGenPrg += [      IMAGE    ] + hb_ValToExp( cImage ) + hb_Eol()
+   ENDIF
+   IF ! Empty( bValid )
+      pGenPrg += [      ON LOSTFOCUS Eval( ] + hb_ValToExp( bValid ) + [ )] + hb_Eol()
+      /* when call a dialog from bvalid, valid on next dialog does not works */
+      // VALID bValid
+   ENDIF
+   IF lPassword
+      pGenPrg += [      PASSWORD .T.] + hb_Eol()
+      pGenPrg += [      UPPERCASE .T.] + hb_Eol()
+   ENDIF
+   pGenPrg += [   END GETBOX] + hb_Eol()
+   pGenPrg += hb_Eol()
+
    (bValid)
 
    RETURN Nil

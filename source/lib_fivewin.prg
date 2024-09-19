@@ -188,31 +188,76 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
    cField, xValue, workarea, aKeyDownList, oFrmClass )
 
    LOCAL aItem, oCol, aThisKey, nPos
+#ifdef DLGAUTO_AS_LIB
+   LOCAL cnSQL := ADOLocal(), aDummy, aCol
 
-   IF Len( aKeyDownList ) == 0
-      @ nRow, nCol XBROWSE xControl ;
-         SIZE nWidth, nHeight PIXEL ;
-         DATASOURCE workarea ;
-         OF xParent ;
-         ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
-         //LINES CELL
-   ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
-      @ nRow, nCol XBROWSE xControl ;
-         SIZE nWidth, nHeight PIXEL ;
-         DATASOURCE workarea ;
-         OF xParent ;
-         ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
-         //LINES CELL
+   cnSQL:Execute( "SELECT * FROM " + workarea + " ORDER BY " + oTbrowse[ 1, 1 ] )
+   aDummy := Array( cnSQL:RecordCount(), Len( oTBrowse ) )
+   FOR EACH aCol IN aDummy
+      Afill( aCol, "" )
+   NEXT
+   // workarea := cnSQL
+#endif
+
+   IF oFrmClass:lIsSQL
+#ifdef DLGAUTO_AS_LIB
+      IF Len( aKeyDownList ) == 0
+         @ nRow, nCol XBROWSE xControl ;
+            SIZE nWidth, nHeight PIXEL ;
+            ; // LINES AUTOCOL, AUTOSORT ;
+            ARRAY aDummy ;
+            OF xParent ;
+            ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+            //LINES CELL
+      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+         @ nRow, nCol XBROWSE xControl ;
+            ; // LINES AUTOCOL, AUTOSORT ;
+            SIZE nWidth, nHeight PIXEL ;
+            ARRAY aDummy ;
+            OF xParent ;
+            ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
+            //LINES CELL
+      ENDIF
+      //xBrowse:aArray := aDummy
+      ADD oCol TO xControl ;
+         DATA { || xControl:nArrayAt } ;
+         HEADER "nAT" ;
+         PICTURE "999999"
+      FOR EACH aItem IN oTbrowse
+         ADD oCol TO xControl ;
+            DATA { || cnSQL:Value( aItem[2] ) } ;
+            HEADER aItem[1] ;
+            // PICTURE aItem[3]
+      NEXT
+      xControl:bOnSkip := { | x | (x), cnSQL:Move( xControl:nArrayAt - 1, 1 ) }
+      xControl:SetArray( aDummy )
+
+#endif
+   ELSE
+      IF Len( aKeyDownList ) == 0
+         @ nRow, nCol XBROWSE xControl ;
+            SIZE nWidth, nHeight PIXEL ;
+            OBJECT cnSQL ;
+            OF xParent ;
+            ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+            //LINES CELL
+      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+         @ nRow, nCol XBROWSE xControl ;
+            SIZE nWidth, nHeight PIXEL ;
+            OBJECT cnSQL ;
+            OF xParent ;
+            ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
+            //LINES CELL
+      ENDIF
+      FOR EACH aItem IN oTbrowse
+         ADD oCol TO xControl ;
+            DATA { || (workarea)->(FieldGet(FieldNum( aItem[2] ) ) ) } ;
+            HEADER aItem[1] ;
+            PICTURE aItem[3]
+      NEXT
    ENDIF
 
-   FOR EACH aItem IN oTbrowse
-      ADD oCol TO xControl ;
-         DATA { || (workarea)->(FieldGet(FieldNum( aItem[2] ) ) ) } ;
-         HEADER aItem[1] ;
-         PICTURE aItem[3]
-   NEXT
-
-   xControl:nMoveType := 0
+   //xControl:nMoveType := 0
    xControl:CreateFromCode()
    /* create buttons on browse for defined keys */
    IF Len( aKeyDownList ) != 0
@@ -234,6 +279,27 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
    (xValue)
 
    RETURN Nil
+
+#ifdef DLGAUTO_AS_LIB
+FUNCTION ADOSkipper( cnSQL, nSkip, nOld )
+
+   nOld := cnSQL:AbsolutePosition()
+
+   IF ! cnSQL:Eof()
+      cnSQL:Move( nSkip )
+      IF cnSQL:Eof()
+         cnSQL:MoveLast()
+      ENDIF
+      IF cnSQL:Bof()
+         cnSQL:MoveFirst()
+      ENDIF
+   ENDIF
+
+   ( nOld )
+
+   RETURN cnSQL:AbsolutePosition() - nOld
+#endif
+
 
 STATIC FUNCTION gui_BrowseKeyDown( nKey, aKeyDownList, workarea )
 

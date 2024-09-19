@@ -94,7 +94,8 @@ METHOD OnFrmInit() CLASS frm_Class
       ENDIF
    ENDIF
    // no success
-//#ifdef HBMK_HAS_FIVEWIN
+#ifdef DLGAUTO_AS_LIB
+#ifdef HBMK_HAS_FIVEWIN
    //IF GUI():LibName() == "FIVEWIN"
       //IF ::xDlg:cTitle == "MENU"
       //   ::xDlg:bValid := { || gui():MsgBox( aWindowsInfo() ), .T. }
@@ -110,7 +111,8 @@ METHOD OnFrmInit() CLASS frm_Class
       //   ENDIF
       //NEXT
    //ENDIF
-//#endif
+#endif
+#endif
    IF ! Empty( ::bOnFrmActivate )
       Eval( ::bOnFrmActivate )
    ENDIF
@@ -407,7 +409,12 @@ METHOD DataLoad() CLASS frm_Class
          ::cnSQL:cSQL += " WHERE " + ::cDataField + " = "
          FOR EACH aItem IN ::aControlList
             IF aItem[ CFG_FNAME ] == ::cDataField
-               ::cnSQL:cSQL += hb_ValToExp( GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
+               xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+               DO CASE
+               CASE aItem[ CFG_FTYPE ] == "N" ; ::cnSQL:cSQL += NumberSQL( xValue )
+               CASE aItem[ CFG_FTYPE ] == "D" ; ::cnSQL:cSQL += DateSQL( xValue )
+               OTHERWISE ;                      ::cnSQL:cSQL += StringSQL( xValue )
+               ENDCASE
             ENDIF
          NEXT
       ENDIF
@@ -422,7 +429,11 @@ METHOD DataLoad() CLASS frm_Class
       CASE aItem[ CFG_SAVEONLY ]
       CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
          IF ::lIsSQL
-            xValue := ::cnSQL:Value( aItem[ CFG_FNAME ] )
+            DO CASE
+            CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( aItem[ CFG_FNAME ] )
+            CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( aItem[ CFG_FNAME ] )
+            OTHERWISE ; xValue := ::cnSQL:String( aItem[ CFG_FNAME ] )
+            ENDCASE
          ELSE
             xValue := ( ::cDataTable )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
          ENDIF
@@ -450,6 +461,9 @@ METHOD DataLoad() CLASS frm_Class
 
       ENDCASE
    NEXT
+   IF ::lIsSQL
+      ::cnSQL:CloseRecordset()
+   ENDIF
    // other data
    FOR EACH aItem IN ::aControlList
       DO CASE
@@ -469,16 +483,18 @@ METHOD DataLoad() CLASS frm_Class
       CASE Empty( aItem[ CFG_FNAME ] ) // not a field
       CASE aItem[ CFG_SAVEONLY ]
       CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
-         IF ::lIsSQL
-            xValue := ::cnSQL:Value( aItem[ CFG_FNAME ] )
-         ELSE
-            xValue := ( ::cDataTable )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
-         ENDIF
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
+            xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
             IF ::lIsSQL
-               ::cnSQL:Execute( "SELECT " + aItem[ CFG_VSHOW ] + ;
-               " FROM " + aItem[ CFG_VTABLE ] + ;
-               " WHERE " + aItem[ CFG_VFIELD ] + "=" + Transform( xValue, "" ) )
+               ::cnSQL:cSQL := "SELECT " + aItem[ CFG_VSHOW ] + ;
+                  " FROM " + aItem[ CFG_VTABLE ] + ;
+                  " WHERE " + aItem[ CFG_VFIELD ] + "="
+               DO CASE
+               CASE aItem[ CFG_FTYPE ] == "N"; ::cnSQL:cSQL += NumberSQL( xValue )
+               CASE aItem[ CFG_FTYPE ] == "D"; ::cnSQL:cSQL += DateSQL( xValue )
+               OTHERWISE;                      ::cnSQL:cSQL += StringSQL( xValue )
+               ENDCASE
+               ::cnSQL:Execute()
                cText := ::cnSQL:Value( aItem[ CFG_VSHOW ] )
                ::cnSQL:CloseRecordset()
             ELSE
@@ -487,15 +503,11 @@ METHOD DataLoad() CLASS frm_Class
                SEEK xValue
                cText := ( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
                SELECT ( nSelect )
-               GUI():ControlSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
             ENDIF
+            GUI():ControlSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
          ENDIF
-
       ENDCASE
    NEXT
-   IF ::lIsSQL
-      ::cnSQL:CloseRecordset()
-   ENDIF
    (cText)
 
    RETURN Nil
@@ -579,3 +591,25 @@ FUNCTION EmptyFrmClassItem()
    //aItem[ CFG_SPINNER ]    := Nil
 
    RETURN aItem
+
+#ifndef DLGAUTO_AS_LIB
+
+FUNCTION ADOLocal()
+
+   RETURN Nil
+
+FUNCTION NumberSQL( x )
+
+   RETURN hb_ValToExp( x )
+
+FUNCTION DateSQL( x )
+
+   RETURN StringSQL( Dtos( x ) )
+
+FUNCTION StringSQL( x )
+
+   x := StrTran( x, ['], [\'] )
+
+   RETURN ['] + x + [']
+
+#endif

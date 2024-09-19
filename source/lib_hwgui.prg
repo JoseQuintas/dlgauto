@@ -152,7 +152,30 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
       aKeyDownList := { { VK_RETURN, { || GUI():BrowseEnter( cField, @xValue, xDlg, xControl ) } } }
    ENDIF
 
-   IF oFrmClass::lIsSQL
+   IF oFrmClass:lIsSQL
+      @ nCol, nRow BROWSE ARRAY xControl SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
+      ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
+
+#ifdef DLGAUTO_AS_LIB
+      xControl:AArray := ADOLocal()
+      xControl:bSkip  := { | o, nSkip | ADOSkipper( o:aArray, nSkip ) }
+      xControl:bGotop := { | o | o:aArray:MoveFirst() }
+      xControl:bGobot := { | o | o:aArray:MoveLast() }
+      xControl:bEof   := { | o | o:nCurrent > o:aArray:RecordCount() }
+      xControl:bBof   := { | o | o:nCurrent == 0 }
+      xControl:bRcou  := { | o | o:aArray:RecordCount() }
+      xControl:bRecno := { | o | o:aArray:AbsolutePosition() }
+      xControl:bRecnoLog := xControl:bRecno
+      xControl:bGOTO  := { | o, n | (o), o:aArray:Move( n - 1, 1 ) }
+      xControl:AArray:Execute( "SELECT * FROM " + workarea )
+      FOR EACH aItem IN oTBrowse
+         ADD COLUMN { || Transform( xControl:AArray:Value( aItem[2] ), aItem[3] ) } TO xControl ;
+            HEADER aItem[1] ;
+            LENGTH Int( 1.4 * ( 1 + Max( Len( aItem[1] ), ;
+               Len( Transform( xControl:AArray:Value( aItem[2] ), aItem[3] ) ) ) ) );
+            JUSTIFY LINE DT_LEFT
+      NEXT
+#endif
    ELSE
       @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
       ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
@@ -512,3 +535,21 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
    NEXT
 
    RETURN Nil
+
+#ifdef DLGAUTO_AS_LIB
+FUNCTION ADOSkipper( cnSQL, nSkip )
+
+   LOCAL nRec := cnSQL:AbsolutePosition()
+
+   IF ! cnSQL:Eof()
+      cnSQL:Move( nSkip )
+      IF cnSQL:Eof()
+         cnSQL:MoveLast()
+      ENDIF
+      IF cnSQL:Bof()
+         cnSQL:MoveFirst()
+      ENDIF
+   ENDIF
+
+   RETURN cnSQL:AbsolutePosition() - nRec
+#endif

@@ -13,7 +13,7 @@ FUNCTION Test_LoadSetup( lMakeLogin )
    LOCAL cFieldName, aBrowse, nPos, aSetup, aAddOptionList, aButton
 
 #ifdef DLGAUTO_AS_LIB
-   LOCAL cTable, cnSQL := ADOLocal(), aFieldList, cField
+   LOCAL cTable, cnSQL := ADOLocal(), aFieldList, cField, xValue
 #endif
 
 #ifndef DLGAUTO_AS_LIB
@@ -62,7 +62,14 @@ FUNCTION Test_LoadSetup( lMakeLogin )
             aItem[ CFG_FTYPE ]    := aStru[ 2 ]
             aItem[ CFG_FLEN ]     := aStru[ 3 ]
             aItem[ CFG_FDEC ]     := aStru[ 4 ]
-            aItem[ CFG_VALUE ]    := :Value( aStru[ 1 ] )
+            xValue := ""
+            DO CASE
+            CASE aItem[ CFG_FTYPE ] == "M"; xValue := Space(150)
+            CASE aItem[ CFG_FTYPE ] == "N"; xValue := Val( "0" + iif( aItem[ CFG_FDEC ] == 0, "", "." + Replicate( "0", aItem[ CFG_FDEC ] ) ) )
+            CASE aItem[ CFG_FTYPE ] == "C"; xValue := Space( aItem[ CFG_FLEN ] )
+            CASE aItem[ CFG_FTYPE ] == "D"; xValue := Ctod("")
+            ENDCASE
+            aItem[ CFG_VALUE ] := xValue
             aItem[ CFG_CAPTION ]  := aStru[ 1 ]
             aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
             AAdd( Atail( aAllSetup )[ 2 ], aItem )
@@ -184,6 +191,9 @@ FUNCTION Test_LoadSetup( lMakeLogin )
          ENDIF
       NEXT
    NEXT
+#ifdef DLGAUTO_AS_LIB
+   //hb_MemoWrit( "test.json", hb_JsonEncode( aAllSetup, .T. ) )
+#endif
 
    RETURN aAllSetup
 

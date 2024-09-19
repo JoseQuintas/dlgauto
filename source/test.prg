@@ -66,18 +66,6 @@ FUNCTION gui_MsgDebug( ... )
 
    RETURN GUI():Msgbox( cText )
 
-#ifndef DLGAUTO_AS_LIB
-#ifdef HBMK_HAS_GTWVG
-
-PROCEDURE HB_GTSYS
-
-   REQUEST HB_GT_WVG_DEFAULT
-   REQUEST HB_GT_WVG
-
-   RETURN
-#endif
-#endif
-
 FUNCTION RGB2N( r, g, b )
 
    IF ValType( r ) == "A"
@@ -97,3 +85,15 @@ FUNCTION N2RGB( n )
    b := int( n / 256 / 256 )
 
    RETURN { r, g, b }
+
+#ifndef DLGAUTO_AS_LIB
+#ifdef HBMK_HAS_GTWVG
+
+PROCEDURE HB_GTSYS
+
+   REQUEST HB_GT_WVG_DEFAULT
+   REQUEST HB_GT_WVG
+
+   RETURN
+#endif
+#endif

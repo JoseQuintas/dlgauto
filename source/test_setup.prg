@@ -43,6 +43,9 @@ FUNCTION test_Setup()
    cTxt += ']],' + hb_Eol()
    cTxt += '[ "SEEKLIST",[' + hb_Eol()
    cTxt += '[ "cDbfOrigin", "cFieldName", "cDbfTarget", "cFieldTarget", "cFieldShow" ],' + hb_Eol()
+#ifdef DLGAUTO_AS_LIB
+   cTxt += '[ "JPTABCIDADE", "CIUF", "JPTABUF", "IDUF", "UFNOME" ],' + hb_Eol()
+#endif
    cTxt += '[ "DBCLIENT",   "CLSELLER",   "DBSELLER",   "IDSELLER",     "SENAME" ],' + hb_Eol()
    cTxt += '[ "DBCLIENT",   "CLBANK",     "DBBANK",     "IDBANK",       "BANAME" ],' + hb_Eol()
    cTxt += '[ "DBTICKET",   "TICLIENT",   "DBCLIENT",   "IDCLIENT",     "CLNAME" ],' + hb_Eol()
