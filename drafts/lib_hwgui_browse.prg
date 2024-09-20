@@ -182,6 +182,3 @@ STATIC FUNCTION CreateButtons( Self, xDlg, oBrowse, oBtnList )
 
    RETURN Nil
 
-FUNCTION ADOLocal()
-
-   RETURN Nil

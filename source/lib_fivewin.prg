@@ -237,14 +237,14 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
       IF Len( aKeyDownList ) == 0
          @ nRow, nCol XBROWSE xControl ;
             SIZE nWidth, nHeight PIXEL ;
-            OBJECT cnSQL ;
+            DATASOURCE workarea ;
             OF xParent ;
             ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
             //LINES CELL
       ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
          @ nRow, nCol XBROWSE xControl ;
             SIZE nWidth, nHeight PIXEL ;
-            OBJECT cnSQL ;
+            DATASOURCE workarea ;
             OF xParent ;
             ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
             //LINES CELL
