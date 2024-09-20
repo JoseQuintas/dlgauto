@@ -10,32 +10,32 @@ FUNCTION frm_Buttons( Self )
    LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
 
    IF "I" $ ::cOptions
-      AAdd( aList, { "Insert",   { || ::Insert() } } )
+      AAdd( aList, { "Insert",   { || ::Insert_Click() } } )
    ENDIF
    IF "E" $ ::cOptions
-      AAdd( aList, { "Edit", { || ::Edit() } } )
+      AAdd( aList, { "Edit", { || ::Edit_Click() } } )
    ENDIF
    IF "D" $ ::cOptions
-      AAdd( aList, { "Delete",   { || ::Delete() } } )
+      AAdd( aList, { "Delete",   { || ::Delete_Click() } } )
    ENDIF
    IF ::lNavigate
-      AAdd( aList, { "View",     { || ::View() } } )
-      AAdd( aList, { "First",    { || ::First() } } )
-      AAdd( aList, { "Previous", { || ::Previous() } } )
-      AAdd( aList, { "Next",     { || ::Next() } } )
-      AAdd( aList, { "Last",     { || ::Last() } } )
+      AAdd( aList, { "View",     { || ::View_Click() } } )
+      AAdd( aList, { "First",    { || ::First_Click() } } )
+      AAdd( aList, { "Previous", { || ::Previous_Click() } } )
+      AAdd( aList, { "Next",     { || ::Next_Click() } } )
+      AAdd( aList, { "Last",     { || ::Last_Click() } } )
    ENDIF
    IF "P" $ ::cOptions
-      AAdd( aList, { "Print",    { || ::Print() } } )
+      AAdd( aList, { "Print",    { || ::Print_Click() } } )
    ENDIF
    FOR EACH aItem IN ::aOptionList
       AAdd( aList, { aItem[1], aItem[2] } )
    NEXT
    IF "E" $ ::cOptions .OR. "S" $ ::cOptions
-      AAdd( aList, { "Save",     { || ::DataSave() } } )
-      AAdd( aList, { "Cancel",   { || ::Cancel() } } )
+      AAdd( aList, { "Save",     { || ::Save_Click() } } )
+      AAdd( aList, { "Cancel",   { || ::Cancel_Click() } } )
    ENDIF
-   AAdd( aList, { "Exit",     { || ::Exit() } } )
+   AAdd( aList, { "Exit",     { || ::Exit_Click() } } )
 
    nCol := 10
    nRow := 10

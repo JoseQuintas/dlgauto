@@ -142,9 +142,9 @@ FUNCTION frm_Edit( Self )
          /* if editable browse, keys to do that */
          IF aItem[ CFG_BRWEDIT ]
             aKeyDownList := { ;
-               { VK_INSERT, { || ::BrowseClick( aItem, VK_INSERT ) } }, ;
-               { VK_DELETE, { || ::BrowseClick( aItem, VK_DELETE ) } }, ;
-               { VK_RETURN, { || ::BrowseClick( aItem, VK_RETURN ) } } }
+               { VK_INSERT, { || ::Browse_Click( aItem, VK_INSERT ) } }, ;
+               { VK_DELETE, { || ::Browse_Click( aItem, VK_DELETE ) } }, ;
+               { VK_RETURN, { || ::Browse_Click( aItem, VK_RETURN ) } } }
          ELSE
             aKeyDownList := {}
          ENDIF

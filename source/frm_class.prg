@@ -16,7 +16,7 @@ CREATE CLASS frm_Class
 #endif
    VAR cDataTable      INIT ""
    VAR cDataField      INIT ""
-   VAR cTitle
+   VAR cTitle          INIT ""
    VAR aEditList       INIT {}
    VAR cOptions        INIT "IED"
    VAR aOptionList     INIT {}
@@ -31,16 +31,25 @@ CREATE CLASS frm_Class
    VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
 
-   VAR xDlg           INIT "" // try to solve bug
+   VAR xDlg           INIT ""
    VAR aControlList   INIT {}
    VAR aAllSetup      INIT {}
    VAR aDlgKeyDown    INIT {}
    VAR xParent
 
-   METHOD First()
-   METHOD Last()
-   METHOD Next()
-   METHOD Previous()
+   METHOD First_Click()
+   METHOD Last_Click()
+   METHOD Next_Click()
+   METHOD Previous_Click()
+   METHOD Insert_Click()       INLINE ::cSelected := "INSERT", ::EditKeyOn()
+   METHOD Edit_Click()         INLINE ::cSelected := "EDIT", ::EditKeyOn()
+   METHOD Print_Click()        INLINE frm_Print( Self )
+   METHOD Delete_Click()
+   METHOD Cancel_Click()       INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
+   METHOD Save_Click()
+   METHOD View_Click()         INLINE ::Browse( "", "", ::cDataTable, Nil ), ::DataLoad()
+   METHOD Exit_Click()         INLINE iif( ::lIsSQL, ::cnSQL:Close(), Nil ), GUI():DialogClose( ::xDlg )
+
    METHOD CreateControls()     INLINE frm_Buttons( Self ), frm_Edit( Self )
    METHOD ButtonSaveOn( lSave )
    METHOD ButtonSaveOff()
@@ -48,18 +57,10 @@ CREATE CLASS frm_Class
    METHOD EditKeyOn()
    METHOD EditOn()
    METHOD EditOff()
-   METHOD Print()              INLINE frm_Print( Self )
    METHOD Execute()            INLINE frm_Dialog( Self )
-   METHOD View()               INLINE ::Browse( "", "", ::cDataTable, Nil ), ::DataLoad()
-   METHOD Edit()               INLINE ::cSelected := "EDIT", ::EditKeyOn()
-   METHOD Delete()
-   METHOD Insert()             INLINE ::cSelected := "INSERT", ::EditKeyOn()
-   METHOD Exit()               INLINE GUI():DialogClose( ::xDlg )
-   METHOD DataSave()
-   METHOD Cancel()             INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
    METHOD Validate( aItem )    INLINE frm_Valid( Self, aItem )
    METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
-   METHOD BrowseClick( aItem, nKey ) INLINE frm_BrowseClick( Self, aItem, nKey )
+   METHOD Browse_Click( aItem, nKey ) INLINE frm_BrowseClick( Self, aItem, nKey )
    METHOD OnFrmInit()
 
    ENDCLASS
@@ -119,7 +120,7 @@ METHOD OnFrmInit() CLASS frm_Class
 
    RETURN Nil
 
-METHOD First() CLASS frm_Class
+METHOD First_Click() CLASS frm_Class
 
    LOCAL aItem, xValue
 
@@ -148,7 +149,7 @@ METHOD First() CLASS frm_Class
 
    RETURN Nil
 
-METHOD Last() CLASS frm_Class
+METHOD Last_Click() CLASS frm_Class
 
    LOCAL aItem, xValue
 
@@ -177,7 +178,7 @@ METHOD Last() CLASS frm_Class
 
    RETURN Nil
 
-METHOD Next() CLASS frm_Class
+METHOD Next_Click() CLASS frm_Class
 
    LOCAL aItem, xValue
 
@@ -216,7 +217,7 @@ METHOD Next() CLASS frm_Class
 
    RETURN Nil
 
-METHOD Previous() CLASS frm_Class
+METHOD Previous_Click() CLASS frm_Class
 
    LOCAL aItem, xValue
 
@@ -361,7 +362,7 @@ METHOD EditOff() CLASS frm_Class
 
    RETURN Nil
 
-METHOD Delete() CLASS frm_Class
+METHOD Delete_Click() CLASS frm_Class
 
    LOCAL aFile, cSearch, nSelect, aItem
 
@@ -386,6 +387,7 @@ METHOD Delete() CLASS frm_Class
 
    IF GUI():MsgYesNo( "Delete" )
       IF ::lIsSQL
+         // Disabled
          ::cnSQL:ExecuteNoReturn( "DELETE FROM " + ::cDataTable + " WHERE " + ::cDataField + "=" + "NONE" )
       ELSE
          IF rLock()
@@ -512,7 +514,7 @@ METHOD DataLoad() CLASS frm_Class
 
    RETURN Nil
 
-METHOD DataSave() CLASS frm_Class
+METHOD Save_Click() CLASS frm_Class
 
    LOCAL aItem, xValue
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
@@ -604,7 +606,7 @@ FUNCTION NumberSQL( x )
 
 FUNCTION DateSQL( x )
 
-   RETURN StringSQL( Dtos( x ) )
+   RETURN StringSQL( hb_Dtoc( x, "YYYY-MM-DD" ) )
 
 FUNCTION StringSQL( x )
 
