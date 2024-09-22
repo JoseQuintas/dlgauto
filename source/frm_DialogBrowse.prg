@@ -1,10 +1,10 @@
 /*
-frm_browse - browse
+frm_DialogBrowse - browse
 */
 
 #include "frm_class.ch"
 
-FUNCTION frm_Browse( Self, xDlg, xControl, cTable )
+FUNCTION frm_DialogBrowse( Self, xDlg, xControl, cTable )
 
    LOCAL oTBrowse := {}, aItem, xValue, cField, nSelect, nPos, nIndexOrd
 
@@ -52,7 +52,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    oThisForm:cOptions := ""
    oThisForm:lNavigate := .F.
    GUI():DialogCreate( @oThisForm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTable,, .T. )
-   frm_Buttons( oThisForm, .F. )
+   frm_Button( oThisForm, .F. )
    AAdd( oThisForm:aControlList, EmptyFrmClassItem() )
    aItem := Atail( oThisForm:aControlList )
    aItem[ CFG_CTLTYPE ] := TYPE_BROWSE

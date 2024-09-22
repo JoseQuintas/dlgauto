@@ -23,7 +23,7 @@ FUNCTION frm_Preview( cFileMask )
       { "Last",     { || Button_Click( "Last",     aFileList, @nIndex, oFrm:xDlg, oEdit ) } } }
 
    GUI():DialogCreate( @oFrm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, "Preview", { || frm_SetText( oEdit, aFileList, nIndex, oFrm:xDlg ) } )
-   frm_Buttons( oFrm )
+   frm_Button( oFrm )
    GUI():MLTextCreate( oFrm:xDlg, oFrm:xDlg, @oEdit, 65, 10, APP_DLG_WIDTH - 40, APP_DLG_HEIGHT - 120, "" )
    GUI():DialogActivate( oFrm:xDlg )
 

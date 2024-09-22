@@ -86,7 +86,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       oMenuGroup := wvgMenu():New( oMainMenu,,.T. ):Create()
       FOR EACH cDBF IN aGroupList
          oMenuGroup:AddItem( cDBF, { || hb_ThreadStart( { | nGt | nGt := hb_gtSelect(), ;
-            frm_Main( cDBF, aAllSetup ), ;
+            frm_funcMain( cDBF, aAllSetup ), ;
             hb_gtSelect( nGt ) } ) } )
       NEXT
       oMainMenu:AddItem( oMenuGroup, "Data" + Ltrim( Str( aGroupList:__EnumIndex ) ) )

@@ -113,15 +113,15 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
          MENU
             FOR EACH cDBF IN aGroupList
-               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup,,xDlg )
+               MENUITEM cDBF ACTION frm_funcMain( cDBF, aAllSetup,,xDlg )
             NEXT
          ENDMENU
       NEXT
       MENUITEM "NoData"
          MENU
-         MENUITEM "NoData Layout 1" ACTION test_noDatabase(1)
-         MENUITEM "NoData Layout 2" ACTION test_noDatabase(2)
-         MENUITEM "NoData Layout 3" ACTION test_noDatabase(3)
+         MENUITEM "NoData Layout 1" ACTION frm_DialogFree(1)
+         MENUITEM "NoData Layout 2" ACTION frm_DialogFree(2)
+         MENUITEM "NoData Layout 3" ACTION frm_DialogFree(3)
          ENDMENU
       IF xDlg:ClassName() == "TMDIFRAME"
          oMenu:AddMDI()
@@ -192,10 +192,11 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
    LOCAL cnSQL := ADOLocal(), aDummy, aCol
 
    cnSQL:Execute( "SELECT * FROM " + workarea + " ORDER BY " + oTbrowse[ 1, 1 ] )
-   aDummy := Array( cnSQL:RecordCount(), Len( oTBrowse ) )
-   FOR EACH aCol IN aDummy
-      Afill( aCol, "" )
-   NEXT
+   IF cnSQL:RecordCount() == 0
+      aDummy := {}
+   ELSE
+      aDummy := Array( cnSQL:RecordCount(), Len( oTBrowse ) )
+   ENDIF
    // workarea := cnSQL
 #endif
 
@@ -218,7 +219,6 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
             ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
             //LINES CELL
       ENDIF
-      //xBrowse:aArray := aDummy
       ADD oCol TO xControl ;
          DATA { || xControl:nArrayAt } ;
          HEADER "nAT" ;

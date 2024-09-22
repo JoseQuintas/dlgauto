@@ -1,12 +1,12 @@
 /*
-frm_Dialog - create the dialog for data
+frm_DialogData - create the dialog for data
 called from frm_class
 */
 
 #include "frm_class.ch"
 #include "inkey.ch"
 
-FUNCTION frm_Dialog( Self )
+FUNCTION frm_DialogData( Self )
 
    LOCAL aItem
 

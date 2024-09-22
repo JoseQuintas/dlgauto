@@ -1,5 +1,5 @@
 /*
-frm_main - dialog for each data and main use of class
+frm_funcMain - dialog for each data and main use of class
 */
 
 #include "hbclass.ch"
@@ -7,7 +7,7 @@ frm_main - dialog for each data and main use of class
 #include "frm_class.ch"
 #include "inkey.ch"
 
-FUNCTION frm_main( cDBF, aAllSetup, lModal, xParent )
+FUNCTION frm_funcMain( cDBF, aAllSetup, lModal, xParent )
 
    LOCAL oFrm, nPos
 

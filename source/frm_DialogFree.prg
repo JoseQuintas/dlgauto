@@ -1,10 +1,10 @@
 /*
-test_nodatabase - test with no database
+frm_DialogFree - test with no database
 */
 
 #include "frm_class.ch"
 
-FUNCTION test_noDatabase( nLayout )
+FUNCTION frm_DialogFree( nLayout )
 
    LOCAL oFrm, aItem, oTemp
    LOCAL aList := { ;

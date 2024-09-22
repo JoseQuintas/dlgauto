@@ -1,12 +1,12 @@
 /*
-test_DlgLogin - login
+frm_DialogLogin - login
 */
 
 #include "frm_class.ch"
 
 MEMVAR lLogin, cUser, cPass
 
-FUNCTION test_DlgLogin()
+FUNCTION frm_DialogLogin()
 
    LOCAL oFrm, aItem
 

@@ -43,24 +43,24 @@ CREATE CLASS frm_Class
    METHOD Previous_Click()
    METHOD Insert_Click()       INLINE ::cSelected := "INSERT", ::EditKeyOn()
    METHOD Edit_Click()         INLINE ::cSelected := "EDIT", ::EditKeyOn()
-   METHOD Print_Click()        INLINE frm_Print( Self )
+   METHOD Print_Click()        INLINE frm_EventPrint( Self )
    METHOD Delete_Click()
    METHOD Cancel_Click()       INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
    METHOD Save_Click()
    METHOD View_Click()         INLINE ::Browse( "", "", ::cDataTable, Nil ), ::DataLoad()
    METHOD Exit_Click()         INLINE iif( ::lIsSQL, ::cnSQL:Close(), Nil ), GUI():DialogClose( ::xDlg )
 
-   METHOD CreateControls()     INLINE frm_Buttons( Self ), frm_Edit( Self )
+   METHOD CreateControls()     INLINE frm_Button( Self ), frm_Edit( Self )
    METHOD ButtonSaveOn( lSave )
    METHOD ButtonSaveOff()
    METHOD DataLoad()
    METHOD EditKeyOn()
    METHOD EditOn()
    METHOD EditOff()
-   METHOD Execute()            INLINE frm_Dialog( Self )
-   METHOD Validate( aItem )    INLINE frm_Valid( Self, aItem )
-   METHOD Browse( ... )        INLINE frm_Browse( Self, ... )
-   METHOD Browse_Click( aItem, nKey ) INLINE frm_BrowseClick( Self, aItem, nKey )
+   METHOD Execute()            INLINE frm_DialogData( Self )
+   METHOD Validate( aItem )    INLINE frm_EventValid( Self, aItem )
+   METHOD Browse( ... )        INLINE frm_DialogBrowse( Self, ... )
+   METHOD Browse_Click( aItem, nKey ) INLINE frm_EventBrowseClick( Self, aItem, nKey )
    METHOD OnFrmInit()
 
    ENDCLASS
@@ -405,6 +405,9 @@ METHOD DataLoad() CLASS frm_Class
    LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
 
+   IF Empty( ::cDataTable ) // no data source
+      RETURN Nil
+   ENDIF
    IF ::lIsSQL
       ::cnSQL:cSQL := "SELECT * FROM " + ::cDataTable
       IF ! Empty( ::cDataField )
@@ -519,6 +522,9 @@ METHOD Save_Click() CLASS frm_Class
    LOCAL aItem, xValue
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
 
+   IF Empty( ::cDataTable ) // no data source
+      RETURN Nil
+   ENDIF
    ::EditOff()
    IF RLock()
       FOR EACH aItem IN ::aControlList

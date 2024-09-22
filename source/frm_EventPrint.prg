@@ -1,5 +1,5 @@
 /*
-frm_print - single report
+frm_EventPrint - single report
 called from frm_class
 */
 
@@ -7,7 +7,7 @@ called from frm_class
 #define PAGE_ROWS     66
 #define PAGE_COLS     132
 
-FUNCTION frm_Print( Self )
+FUNCTION frm_EventPrint( Self )
 
    LOCAL aItem, nPag, nLin, nCol, nLen, nLinAnt
 

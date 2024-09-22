@@ -1,5 +1,5 @@
 /*
-test_Dlgmenu - menu of DBF files
+frm_DialogMenu - menu of DBF files
 */
 
 #include "hbgtinfo.ch"
@@ -7,7 +7,7 @@ test_Dlgmenu - menu of DBF files
 #include "frm_class.ch"
 #include "inkey.ch"
 
-FUNCTION test_DlgMenu( aAllSetup )
+FUNCTION frm_DialogMenu( aAllSetup )
 
    LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, xDlg := "Main", cDBF
 

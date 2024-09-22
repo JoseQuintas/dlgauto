@@ -110,14 +110,14 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       FOR EACH aGroupList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
             FOR EACH cDBF IN aGroupList
-               MENUITEM cDBF ACTION frm_Main( cDBF, aAllSetup )
+               MENUITEM cDBF ACTION frm_funcMain( cDBF, aAllSetup )
             NEXT
          ENDMENU
       NEXT
       MENU TITLE "NoData"
-         MENUITEM "NoData Layout 1" ACTION test_noDatabase(1)
-         MENUITEM "NoData Layout 2" ACTION test_noDatabase(2)
-         MENUITEM "NoData Layout 3" ACTION test_noDatabase(3)
+         MENUITEM "NoData Layout 1" ACTION frm_DialogFree(1)
+         MENUITEM "NoData Layout 2" ACTION frm_DialogFree(2)
+         MENUITEM "NoData Layout 3" ACTION frm_DialogFree(3)
       ENDMENU
       MENU TITLE "Exit"
          MENUITEM "&Exit" ACTION gui_DialogClose( xDlg )

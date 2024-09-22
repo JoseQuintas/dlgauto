@@ -1,11 +1,11 @@
 /*
-frm_Valid - valid used on getbox, edit, textbox
+frm_EventValid - valid used on getbox, edit, textbox
 called from frm_class
 */
 
 #include "frm_class.ch"
 
-FUNCTION frm_Valid( Self, aItem )
+FUNCTION frm_EventValid( Self, aItem )
 
    LOCAL nSelect, lFound := .T., xValue, nPos
 
@@ -88,12 +88,13 @@ FUNCTION frm_Valid( Self, aItem )
          IF ! Empty( aItem[ CFG_VSHOW ] )
             ::cnSQL:cSQL += ", " + aItem[ CFG_VSHOW ]
          ENDIF
+         ::cnSQL:cSQL += " FROM " + aItem[ CFG_VTABLE ]
          ::cnSQL:cSQL += " WHERE " + aItem[ CFG_VFIELD ] + " = " + hb_ValToExp( xValue )
          ::cnSQL:Execute()
          lFound := ! ::cnSQL:Eof()
          IF ! lFound
             IF GUI():MsgYesNo( "Code does not exists. Create new one?" )
-               frm_Main( aItem[ CFG_VTABLE ], AClone( ::aAllSetup ), .T. )
+               frm_funcMain( aItem[ CFG_VTABLE ], AClone( ::aAllSetup ), .T. )
             ENDIF
             //::Browse( ::xDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
             GUI():SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] ) // minigui need this
@@ -115,7 +116,7 @@ FUNCTION frm_Valid( Self, aItem )
          lFound := ! Eof()
          IF ! lFound
             IF GUI():MsgYesNo( "Code does not exists. Create new one?" )
-               frm_Main( aItem[ CFG_VTABLE ], AClone( ::aAllSetup ), .T. )
+               frm_funcMain( aItem[ CFG_VTABLE ], AClone( ::aAllSetup ), .T. )
             ENDIF
             //::Browse( ::xDlg, @aItem[ CFG_FCONTROL ], aItem[ CFG_VTABLE ] )
             GUI():SetFocus( ::xDlg, aItem[ CFG_FCONTROL ] ) // minigui need this

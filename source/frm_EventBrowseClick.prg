@@ -1,5 +1,5 @@
 /*
-frm_browseClick - action for browse
+frm_EventBrowseClick - action for browse
 called from frm_class
 */
 
@@ -10,7 +10,7 @@ called from frm_class
    #define VK_RETURN  13
 #endif
 
-FUNCTION frm_BrowseClick( oFrmOld, aItemOld, nKey )
+FUNCTION frm_EventBrowseClick( oFrmOld, aItemOld, nKey )
 
    LOCAL oFrm, nPos, cAliasAnt, aOrdScope
 

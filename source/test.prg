@@ -41,13 +41,13 @@ MEMVAR pGenPrg, pGenName
    aAllSetup := test_LoadSetup( @lMakeLogin )
 
    IF lMakeLogin
-      Test_DlgLogin()
+      frm_DialogLogin()
       IF ! lLogin
          RETURN
       ENDIF
    ENDIF
 
-   test_DlgMenu( @aAllSetup )
+   frm_DialogMenu( @aAllSetup )
 
 #ifndef DLGAUTO_AS_LIB
    hb_MemoWrit( pGenName + ".txt", pGenPrg )
