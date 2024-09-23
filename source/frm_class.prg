@@ -437,7 +437,7 @@ METHOD DataLoad() CLASS frm_Class
             DO CASE
             CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( aItem[ CFG_FNAME ] )
             CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( aItem[ CFG_FNAME ] )
-            OTHERWISE ; xValue := ::cnSQL:String( aItem[ CFG_FNAME ] )
+            OTHERWISE ; xValue := ::cnSQL:String( aItem[ CFG_FNAME ], aItem[ CFG_FLEN ] )
             ENDCASE
          ELSE
             xValue := ( ::cDataTable )->( FieldGet( FieldNum( aItem[ CFG_FNAME ] ) ) )
@@ -485,32 +485,29 @@ METHOD DataLoad() CLASS frm_Class
          GOTO TOP
          GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
          SELECT ( Select( ::cDataTable ) ) // not all libraries need this
-      CASE Empty( aItem[ CFG_FNAME ] ) // not a field
       CASE aItem[ CFG_SAVEONLY ]
-      CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
-         IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
-            xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
-            IF ::lIsSQL
-               ::cnSQL:cSQL := "SELECT " + aItem[ CFG_VSHOW ] + ;
-                  " FROM " + aItem[ CFG_VTABLE ] + ;
-                  " WHERE " + aItem[ CFG_VFIELD ] + "="
-               DO CASE
-               CASE aItem[ CFG_FTYPE ] == "N"; ::cnSQL:cSQL += NumberSQL( xValue )
-               CASE aItem[ CFG_FTYPE ] == "D"; ::cnSQL:cSQL += DateSQL( xValue )
-               OTHERWISE;                      ::cnSQL:cSQL += StringSQL( xValue )
-               ENDCASE
-               ::cnSQL:Execute()
-               cText := ::cnSQL:Value( aItem[ CFG_VSHOW ] )
-               ::cnSQL:CloseRecordset()
-            ELSE
-               nSelect := Select()
-               SELECT ( Select( aItem[ CFG_VTABLE ] ) )
-               SEEK xValue
-               cText := ( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
-               SELECT ( nSelect )
-            ENDIF
-            GUI():ControlSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
+      CASE ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
+         xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
+         IF ::lIsSQL
+            ::cnSQL:cSQL := "SELECT " + aItem[ CFG_VSHOW ] + ;
+               " FROM " + aItem[ CFG_VTABLE ] + ;
+               " WHERE " + aItem[ CFG_VFIELD ] + "="
+            DO CASE
+            CASE aItem[ CFG_FTYPE ] == "N"; ::cnSQL:cSQL += NumberSQL( xValue )
+            CASE aItem[ CFG_FTYPE ] == "D"; ::cnSQL:cSQL += DateSQL( xValue )
+            OTHERWISE;                      ::cnSQL:cSQL += StringSQL( xValue )
+            ENDCASE
+            ::cnSQL:Execute()
+            cText := ::cnSQL:Value( aItem[ CFG_VSHOW ] )
+            ::cnSQL:CloseRecordset()
+         ELSE
+            nSelect := Select()
+            SELECT ( Select( aItem[ CFG_VTABLE ] ) )
+            SEEK xValue
+            cText := ( aItem[ CFG_VTABLE ] )->( FieldGet( FieldNum( aItem[ CFG_VSHOW ] ) ) )
+            SELECT ( nSelect )
          ENDIF
+         GUI():ControlSetValue( ::xDlg, aItem[ CFG_VCONTROL ], cText )
       ENDCASE
    NEXT
    (cText)

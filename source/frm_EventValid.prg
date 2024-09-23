@@ -84,7 +84,7 @@ FUNCTION frm_EventValid( Self, aItem )
       ::EditOn()
    ELSEIF ! Empty( aItem[ CFG_VTABLE ] )
       IF ::lisSQL
-         ::cnSQL:cSQL := "SELEC COUNT(*)"
+         ::cnSQL:cSQL := "SELECT 1"
          IF ! Empty( aItem[ CFG_VSHOW ] )
             ::cnSQL:cSQL += ", " + aItem[ CFG_VSHOW ]
          ENDIF

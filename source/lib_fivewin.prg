@@ -742,9 +742,12 @@ STATIC FUNCTION gui_ControlGetValue( xDlg, xControl )
 
 STATIC FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
-   Eval( xControl:bSetGet, xValue )
+   IF xControl:ClassName == "TSAY"
+      xControl:VarPut( xValue )
+   ELSE
+      Eval( xControl:bSetGet, xValue )
+   ENDIF
    //DO CASE
-   //CASE xControl:ClassName == "TSAY";       xControl:VarPut( xValue )
    //CASE xControl:ClassName == "TCOMBOBOX" ; (xValue) // xControl:VarPut( xValue )
    //CASE xControl:ClassName == "TCHECKBOX";  xControl:SetCheck( xValue )
    //CASE xControl:ClassName == "TGET";       xControl:cText( xValue )

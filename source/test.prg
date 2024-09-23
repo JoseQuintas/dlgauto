@@ -57,12 +57,23 @@ MEMVAR pGenPrg, pGenName
 
 FUNCTION gui_MsgDebug( ... )
 
-   LOCAL aList, cText := "", xValue
+   LOCAL aList, cText := "", xValue, nCont, nCont2
 
    aList := hb_AParams()
    FOR EACH xValue IN aList
       cText += hb_ValToExp( xValue ) + iif( xValue:__EnumIsLast(), "", hb_Eol() )
    NEXT
+   cText += hb_Eol()
+   nCont  := 1
+   nCont2 := 0
+   DO WHILE nCont2 < 5
+      IF Empty( ProcName( nCont ) )
+         nCont2++
+      ELSE
+         cText += "Called from " + Trim( ProcName( nCont ) ) + "(" + Ltrim( Str( ProcLine( nCont ) ) ) + ")" + hb_Eol()
+      ENDIF
+      nCont++
+   ENDDO
 
    RETURN GUI():Msgbox( cText )
 
