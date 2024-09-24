@@ -114,16 +114,19 @@ FUNCTION Test_LoadSetup( lMakeLogin )
       cFile := aFile[ 1 ]
       FOR EACH aItem IN aFile[ 2 ]
          cFieldName := aItem[ CFG_FNAME ]
+
          /* is key */
          IF hb_ASCan( aKeyList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) != 0
             aItem[ CFG_ISKEY ] := .T.
          ENDIF
+
          /* to search */
          IF ( nPos := hb_ASCan( aSeekList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) ) != 0
             aItem[ CFG_VTABLE ] := aSeekList[ nPos, 3 ]
             aItem[ CFG_VFIELD ] := aSeekList[ nPos, 4 ]
             aItem[ CFG_VSHOW ]  := aSeekList[ nPos, 5 ]
          ENDIF
+
          /* TypeList */
          IF ( nPos := hb_Ascan( aTypeList, { | e | e[1] == cFile .AND. e[2] == cFieldName } ) ) != 0
             DO CASE
@@ -140,6 +143,7 @@ FUNCTION Test_LoadSetup( lMakeLogin )
             ENDCASE
          ENDIF
       NEXT
+
       /* in browse */
       FOR EACH aBrowse IN aBrowseList
          IF aBrowse[ 1 ] == cFile
@@ -157,7 +161,8 @@ FUNCTION Test_LoadSetup( lMakeLogin )
             ELSE
                aItem[ CFG_BRWTITLE ] := aItem[ CFG_BRWTABLE ] + " LIST"
             ENDIF
-            AAdd( Atail( aAllSetup )[ 2 ], aItem )
+            // AAdd( Atail( aAllSetup )[ 2 ], aItem )
+            AAdd( aFile[ 2 ], aItem )
          ENDIF
       NEXT
       USE
@@ -168,14 +173,16 @@ FUNCTION Test_LoadSetup( lMakeLogin )
             aItem[ CFG_CTLTYPE ] := TYPE_ADDBUTTON
             aItem[ CFG_CAPTION ] := aButton[2]
             aItem[ CFG_ACTION ]  := aButton[3]
-            AAdd( Atail( aAllSetup )[ 2 ], aItem )
+            //AAdd( Atail( aAllSetup )[ 2 ], aItem )
+            AAdd( aFile[ 2 ], aItem )
          ENDIF
       NEXT
       /* browse order for key */
       nPos := hb_AScan( aKeyList, { | e | e[1] == cFile } )
       IF nPos != 0
          IF Len( aKeyList[ nPos ] ) > 2
-            Atail( aAllSetup )[ 3 ] := aKeyList[ nPos, 3 ]
+            //Atail( aAllSetup )[ 3 ] := aKeyList[ nPos, 3 ]
+            aFile[ 3 ] := aKeyList[ nPos, 3 ]
          ENDIF
       ENDIF
    NEXT
