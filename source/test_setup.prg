@@ -77,8 +77,8 @@ FUNCTION test_Setup()
    cTxt += '[ "JPIMPOSTO", "IMORIGEM", "JPTABORIGEM", "IDORIGEM", "ORIGEMNOME" ],' + hb_Eol()
    cTxt += '[ "JPIMPOSTO", "IMIPICST", "JPTABIPICST", "IDIPICST", "IPICSTNOME" ],' + hb_Eol()
    cTxt += '[ "JPIMPOSTO", "IMICMCST", "JPTABICMCST", "IDICMCST", "ICMCSTNOME" ],' + hb_Eol()
-   cTxt += '[ "JPIMPOSTO", "IMCOFCST", "JPTABCOFCST", "IDCOFCST", "COFCSTNOME" ],' + hb_Eol()
-   cTxt += '[ "JPIMPOSTO", "IMPISCST", "JPTABCOFCST", "IDCOFCST", "COFCSTNOME" ],' + hb_Eol()
+   cTxt += '[ "JPIMPOSTO", "IMCOFCST", "JPTABPISCST", "IDPISCST", "PISCSTNOME" ],' + hb_Eol()
+   cTxt += '[ "JPIMPOSTO", "IMPISCST", "JPTABPISCST", "IDPISCST", "PISCSTNOME" ],' + hb_Eol()
 #endif
    cTxt += '[ "DBCLIENT",   "CLSELLER",   "DBSELLER",   "IDSELLER",     "SENAME" ],' + hb_Eol()
    cTxt += '[ "DBCLIENT",   "CLBANK",     "DBBANK",     "IDBANK",       "BANAME" ],' + hb_Eol()
@@ -94,6 +94,12 @@ FUNCTION test_Setup()
 
    cTxt += '[ "BROWSELIST",[' + hb_Eol()
    cTxt += '[ "cDbfOrigin",  "cFieldName", "cDbfTarget", "nOrder", "cFieldTarget", "cTargetKey", "lEdit", "cTitle" ],' + hb_Eol()
+#ifdef DLGAUTO_AS_LIB
+   cTxt += '[ "JPCADASTRO", "IDCADASTRO", "JPFINAN", 2, "FICADASTRO", "IDFINAN", false, "FINANCEIRO" ],' + hb_Eol()
+   cTxt += '[ "JPCADASTRO", "IDCADASTRO", "JPFINAN", 2, "FICADASTRO", "IDFINAN", false, "FINANCEIRO" ],' + hb_Eol()
+   cTxt += '[ "JPCADASTRO", "IDCADASTRO", "JPFINAN", 2, "FICADASTRO", "IDFINAN", false, "FINANCEIRO" ],' + hb_Eol()
+   cTxt += '[ "JPCADASTRO", "IDCADASTRO", "JPFINAN", 2, "FICADASTRO", "IDFINAN", false, "FINANCEIRO" ],' + hb_Eol()
+#endif
    cTxt += '[ "DBTICKET",    "IDTICKET",   "DBTICKETPRO",2,        "TPTICKET",     "IDTICKEDPRO",false,   "PROD LIST" ],' + hb_Eol()
    cTxt += '[ "DBDBF",       "NAME",       "DBFIELDS",   2,        "DBF",          "IDFIELD",    false,   "DBF LIST" ],' + hb_Eol()
    cTxt += '[ "DBCLIENT",    "IDCLIENT",   "DBFINANC",   2,        "FICLIENT",     "IDFINANC",   true,    "FINANC LIST" ],' + hb_Eol()

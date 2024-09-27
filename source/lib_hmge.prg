@@ -193,6 +193,9 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
    LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}, nPos
 
+   IF ::lIsSQL
+      LOCAL cnSQL := ADOLocal()
+   ENDIF
    IF Empty( xControl )
       xControl := gui_NewName( "BRW" )
    ENDIF
@@ -201,34 +204,37 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       aKeyDownList := {}
    ENDIF
 
-   FOR EACH aItem IN oTbrowse
-      AAdd( aHeaderList, aItem[1] )
-      AAdd( aFieldList, aItem[2] )
-      AAdd( aWidthList, ( 1 + Max( Len( aItem[3] ), ;
-         Len( Transform( ( workarea )->( FieldGet( FieldNum( aItem[ 1 ] ) ) ), "" ) ) ) ) * 13 )
-      AAdd( aBrowseBackColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 222,222,222 }, { 250,250,250 } ) } )
-      AAdd( aBrowseForeColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 0,0,0 }, { 0,0,0 } ) } )
-   NEXT
-
-   DEFINE BROWSE ( xControl )
-      PARENT ( xParent )
-      ROW nRow
-      COL nCol
-      WIDTH nWidth - 20
-      HEIGHT nHeight - 20
-      IF Len( aKeyDownList ) == 0
-         ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
-      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
-         ONDBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
-      ENDIF
-      HEADERS aHeaderList
-      WIDTHS aWidthList
-      WORKAREA ( workarea )
-      FIELDS aFieldList
-      DYNAMICBACKCOLOR aBrowseBackColor
-      DYNAMICFORECOLOR aBrowseForeColor
-      SET BROWSESYNC ON // if remove, browse action and DLG keydown on wrong record
-   END BROWSE
+   IF ::lIsSQL
+      // TODO: SQL
+   ELSE
+      FOR EACH aItem IN oTbrowse
+         AAdd( aHeaderList, aItem[1] )
+         AAdd( aFieldList, aItem[2] )
+         AAdd( aWidthList, ( 1 + Max( Len( aItem[3] ), ;
+            Len( Transform( ( workarea )->( FieldGet( FieldNum( aItem[ 1 ] ) ) ), "" ) ) ) ) * 13 )
+         AAdd( aBrowseBackColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 222,222,222 }, { 250,250,250 } ) } )
+         AAdd( aBrowseForeColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 0,0,0 }, { 0,0,0 } ) } )
+      NEXT
+      DEFINE BROWSE ( xControl )
+         PARENT ( xParent )
+         ROW nRow
+         COL nCol
+         WIDTH nWidth - 20
+         HEIGHT nHeight - 20
+         IF Len( aKeyDownList ) == 0
+            ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+         ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+            ONDBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
+         ENDIF
+         HEADERS aHeaderList
+         WIDTHS aWidthList
+         WORKAREA ( workarea )
+         FIELDS aFieldList
+         DYNAMICBACKCOLOR aBrowseBackColor
+         DYNAMICFORECOLOR aBrowseForeColor
+         SET BROWSESYNC ON // if remove, browse action and DLG keydown on wrong record
+      END BROWSE
+   ENDIF
    /* create buttons on browse for defined keys */
    IF Len( aKeyDownList ) != 0
       FOR EACH aThisKey IN aKeyDownList

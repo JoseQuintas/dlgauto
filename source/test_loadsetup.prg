@@ -51,6 +51,9 @@ FUNCTION Test_LoadSetup( lMakeLogin )
    WITH OBJECT cnSQL
       FOR EACH cTable IN :TableList()
          cTable := Upper( cTable )
+         IF "XML" $ Upper( cTable )
+            LOOP
+         ENDIF
          AAdd( aAllSetup, { cTable, {}, Nil } )
          aFieldList := :FieldList( cTable )
          :Execute( "SELECT * FROM " + cTable + " LIMIT 1" )

@@ -23,8 +23,9 @@ FUNCTION frm_DialogBrowse( Self, xDlg, xControl, cTable )
    ENDIF
    // check end
    FOR EACH aItem IN ::aAllSetup[ nPos, 2 ]
-      IF aItem[ CFG_CTLTYPE ] == TYPE_TEXT
-         AAdd( oTBrowse, { aItem[ CFG_CAPTION ], aItem[ CFG_FNAME ], aItem[ CFG_FPICTURE ] } )
+      IF ! Empty( aItem[ CFG_FNAME ] ) // aItem[ CFG_CTLTYPE ] == TYPE_TEXT
+         AAdd( oTBrowse, { aItem[ CFG_CAPTION ], aItem[ CFG_FNAME ], aItem[ CFG_FPICTURE ], ;
+               aItem[ CFG_FTYPE ] } )
          IF aItem[ CFG_ISKEY ]
             cField := aItem[ CFG_FNAME ]
          ENDIF

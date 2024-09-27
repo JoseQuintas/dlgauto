@@ -166,7 +166,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
       xControl:bRcou  := { | o | o:aArray:RecordCount() }
       xControl:bRecno := { | o | o:aArray:AbsolutePosition() }
       xControl:bRecnoLog := xControl:bRecno
-      xControl:bGOTO  := { | o, n | (o), o:aArray:Move( n - 1, 1 ) }
+      xControl:bGoTo  := { | o, n | (o), o:aArray:Move( n - 1, 1 ) }
       xControl:AArray:Execute( "SELECT * FROM " + workarea )
       FOR EACH aItem IN oTBrowse
          ADD COLUMN { || Transform( xControl:AArray:Value( aItem[2] ), aItem[3] ) } TO xControl ;
