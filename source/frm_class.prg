@@ -402,8 +402,11 @@ METHOD Delete_Click() CLASS frm_Class
 
 METHOD DataLoad() CLASS frm_Class
 
-   LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl, aControl
+   LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
+#ifdef DLGAUTO_AS_LIB
+   LOCAL aControl
+#endif
 
    IF Empty( ::cDataTable ) // no data source
       RETURN Nil
@@ -476,6 +479,7 @@ METHOD DataLoad() CLASS frm_Class
          IF ::lIsSQL
 #ifdef DLGAUTO_AS_LIB
             WITH OBJECT aItem[ CFG_FCONTROL ]
+#ifdef HBMK_HAS_FIVEWIN
                :oRs:CloseRecordset()
                :oRs:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
                   " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
@@ -489,8 +493,23 @@ METHOD DataLoad() CLASS frm_Class
                :oRs:Execute()
                :aArrayData := Array( :oRs:RecordCount() )
                GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
-            ENDWITH
 #endif
+#ifdef HBMK_HAS_HWGUI
+               :aArray:CloseRecordset()
+               :aArray:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
+                  " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
+                  " = "
+               FOR EACH aControl IN ::aControlList
+                  IF aControl[ CFG_FNAME ] == aItem[ CFG_BRWKEYFROM ]
+                     :aArray:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
+                     EXIT
+                  ENDIF
+               NEXT
+               :aArray:Execute()
+               GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+#endif
+#endif
+            ENDWITH
          ELSE
             SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
             SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
@@ -586,7 +605,12 @@ METHOD Exit_Click() CLASS frm_Class
    IF ::lIsSQL
       FOR EACH aItem IN ::aControlList
          IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
+#ifdef HBMK_HAS_FIVEWIN
             aItem[ CFG_FCONTROL ]:oRs:CloseRecordset()
+#endif
+#ifdef HBMK_HAS_HWGUI
+            aItem[ CFG_FCONTROL ]:aArray:CloseRecordset()
+#endif
          ENDIF
       NEXT
       ::cnSQL:CloseRecordset()
