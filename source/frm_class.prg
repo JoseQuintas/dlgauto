@@ -48,7 +48,7 @@ CREATE CLASS frm_Class
    METHOD Cancel_Click()       INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
    METHOD Save_Click()
    METHOD View_Click()         INLINE ::Browse( "", "", ::cDataTable, Nil ), ::DataLoad()
-   METHOD Exit_Click()         INLINE iif( ::lIsSQL, ::cnSQL:Close(), Nil ), GUI():DialogClose( ::xDlg )
+   METHOD Exit_Click()
 
    METHOD CreateControls()     INLINE frm_Button( Self ), frm_Edit( Self )
    METHOD ButtonSaveOn( lSave )
@@ -402,7 +402,7 @@ METHOD Delete_Click() CLASS frm_Class
 
 METHOD DataLoad() CLASS frm_Class
 
-   LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl
+   LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl, aControl
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
 
    IF Empty( ::cDataTable ) // no data source
@@ -473,18 +473,38 @@ METHOD DataLoad() CLASS frm_Class
    FOR EACH aItem IN ::aControlList
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
-         SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
-         SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
-         xScope := ( ::cDataTable )->( FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM ] ) ) )
-         nLenScope := ( ::cDataTable )->( FieldLen( aItem[ CFG_BRWKEYFROM ] ) )
-         IF ValType( xScope ) == "C"
-            SET SCOPE TO xScope
+         IF ::lIsSQL
+#ifdef DLGAUTO_AS_LIB
+            WITH OBJECT aItem[ CFG_FCONTROL ]
+               :oRs:CloseRecordset()
+               :oRs:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
+                  " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
+                  " = "
+               FOR EACH aControl IN ::aControlList
+                  IF aControl[ CFG_FNAME ] == aItem[ CFG_BRWKEYFROM ]
+                     :oRs:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
+                     EXIT
+                  ENDIF
+               NEXT
+               :oRs:Execute()
+               :aArrayData := Array( :oRs:RecordCount() )
+               GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+            ENDWITH
+#endif
          ELSE
-            SET SCOPE TO Str( xScope, nLenScope )
+            SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
+            SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
+            xScope := ( ::cDataTable )->( FieldGet( FieldNum( aItem[ CFG_BRWKEYFROM ] ) ) )
+            nLenScope := ( ::cDataTable )->( FieldLen( aItem[ CFG_BRWKEYFROM ] ) )
+            IF ValType( xScope ) == "C"
+               SET SCOPE TO xScope
+            ELSE
+               SET SCOPE TO Str( xScope, nLenScope )
+            ENDIF
+            GOTO TOP
+            GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+            SELECT ( Select( ::cDataTable ) ) // not all libraries need this
          ENDIF
-         GOTO TOP
-         GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
-         SELECT ( Select( ::cDataTable ) ) // not all libraries need this
       CASE aItem[ CFG_SAVEONLY ]
       CASE ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
          xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
@@ -556,6 +576,22 @@ METHOD Save_Click() CLASS frm_Class
       UNLOCK
    ENDIF
    ::cSelected := "NONE"
+
+   RETURN Nil
+
+METHOD Exit_Click() CLASS frm_Class
+
+   LOCAL aItem
+
+   IF ::lIsSQL
+      FOR EACH aItem IN ::aControlList
+         IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
+            aItem[ CFG_FCONTROL ]:oRs:CloseRecordset()
+         ENDIF
+      NEXT
+      ::cnSQL:CloseRecordset()
+   ENDIF
+   GUI():DialogClose( ::xDlg )
 
    RETURN Nil
 

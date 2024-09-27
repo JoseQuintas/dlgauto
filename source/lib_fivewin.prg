@@ -189,15 +189,8 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 
    LOCAL aItem, oCol, aThisKey, nPos
 #ifdef DLGAUTO_AS_LIB
-   LOCAL cnSQL := ADOLocal(), aDummy, aCol
+   LOCAL aCol
 
-   cnSQL:Execute( "SELECT * FROM " + workarea + " ORDER BY " + oTbrowse[ 1, 1 ] )
-   IF cnSQL:RecordCount() == 0
-      aDummy := {}
-   ELSE
-      aDummy := Array( cnSQL:RecordCount(), Len( oTBrowse ) )
-   ENDIF
-   // workarea := cnSQL
 #endif
 
    IF oFrmClass:lIsSQL
@@ -206,7 +199,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
          @ nRow, nCol XBROWSE xControl ;
             SIZE nWidth, nHeight PIXEL ;
             ; // LINES AUTOCOL, AUTOSORT ;
-            ARRAY aDummy ;
+            ARRAY {} ;
             OF xParent ;
             ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
             //LINES CELL
@@ -214,24 +207,49 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
          @ nRow, nCol XBROWSE xControl ;
             ; // LINES AUTOCOL, AUTOSORT ;
             SIZE nWidth, nHeight PIXEL ;
-            ARRAY aDummy ;
+            ARRAY {} ;
             OF xParent ;
             ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
             //LINES CELL
       ENDIF
-      ADD oCol TO xControl ;
-         DATA { || xControl:nArrayAt } ;
-         HEADER "nAT" ;
-         PICTURE "999999"
-      FOR EACH aItem IN oTbrowse
-         ADD oCol TO xControl ;
-            DATA { || cnSQL:Value( aItem[2] ) } ;
-            HEADER aItem[1] ;
-            // PICTURE aItem[3]
-      NEXT
-      xControl:bOnSkip := { | x | (x), cnSQL:Move( xControl:nArrayAt - 1, 1 ) }
-      xControl:SetArray( aDummy )
-
+      WITH OBJECT xControl
+         xControl:oRs := ADOLocal()
+         xControl:oRs:Execute( "SELECT * FROM " + workarea + " ORDER BY " + oTbrowse[ 1, 1 ] )
+         IF xControl:oRs:RecordCount() == 0
+            xControl:aArrayData := {}
+         ELSE
+            xControl:aArrayData := Array( xControl:oRs:RecordCount() )
+         ENDIF
+         //ADD oCol TO xControl ;
+         //   DATA { || xControl:nArrayAt } ;
+         //   HEADER "TestCol" ;
+         //   PICTURE "999999"
+         FOR EACH aItem IN oTbrowse
+            DO CASE
+            CASE Len( aItem ) < 4
+               ADD oCol TO xControl ;
+                  DATA { || xControl:oRs:Value( aItem[2] ) } ;
+                  HEADER aItem[1] ;
+                  PICTURE aItem[3]
+            CASE aItem[ 4 ] == "D"
+               ADD oCol TO xControl ;
+                  DATA { || xControl:oRs:Date( aItem[2] ) } ;
+                  HEADER aItem[1] ;
+                  PICTURE aItem[3]
+            CASE aItem[ 4 ] == "N"
+               ADD oCol TO xControl ;
+                  DATA { || xControl:oRs:Number( aItem[2] ) } ;
+                  HEADER aItem[1] ;
+                  PICTURE aItem[3]
+            OTHERWISE
+               ADD oCol TO xControl ;
+                  DATA { || xControl:oRs:String( aItem[2] ) } ;
+                  HEADER aItem[1] ;
+                  PICTURE aItem[3]
+            ENDCASE
+         NEXT
+         xControl:bOnSkip := { | x | (x), xControl:oRs:Move( xControl:nArrayAt - 1, 1 ) }
+      ENDWITH
 #endif
    ELSE
       IF Len( aKeyDownList ) == 0
@@ -256,9 +274,9 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
             PICTURE aItem[3]
       NEXT
    ENDIF
-
-   //xControl:nMoveType := 0
    xControl:CreateFromCode()
+   xControl:Refresh() // test for bug
+
    /* create buttons on browse for defined keys */
    IF Len( aKeyDownList ) != 0
       FOR EACH aThisKey IN aKeyDownList
