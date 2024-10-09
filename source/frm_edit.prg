@@ -279,7 +279,7 @@ FUNCTION frm_Edit( Self )
       ENDIF
       lFirst := .F.
    NEXT
-   //IF GUI():LibName() $ "FIVEWIN,HWGUI"
+   IF GUI():LibName() $ "FIVEWIN,HWGUI"
       /* dummy textbox to works last valid */
       AAdd( ::aControlList, EmptyFrmClassItem() )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUG_GET
@@ -287,7 +287,7 @@ FUNCTION frm_Edit( Self )
       GUI():TextCreate( ::xDlg, ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
          nRow, nCol, 0, 0, " ", "", 0, { || .T. },,,Atail( ::aControlList ), Self )
 
-   //ENDIF
+   ENDIF
    IF ::lWithTab
 
       GUI():TabPageEnd( ::xDlg, xTab )

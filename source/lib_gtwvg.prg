@@ -303,9 +303,9 @@ STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    RETURN Nil
 
-STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
+STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xTab, xPage, nPageCount, cText )
 
-   (xDlg);(xControl);(cText);(xPage);(nPageCount);(xParent)
+   (xDlg);(xTab);(cText);(xPage);(nPageCount);(xParent)
 
    RETURN Nil
 

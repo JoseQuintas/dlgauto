@@ -66,6 +66,7 @@ CREATE CLASS FIVEWINClass
    METHOD TabPageBegin(...)     INLINE gui_TabPageBegin(...)
    METHOD TabPageEnd(...)       INLINE gui_TabPageEnd(...)
    METHOD TabNavigate(...)      INLINE gui_TabNavigate(...)
+   METHOD TabSetLostFocus(...)  INLINE gui_TabSetLostFocus(...)
 
    /* msg */
    METHOD Msgbox(...)           INLINE gui_Msgbox(...)
@@ -87,7 +88,7 @@ STATIC FUNCTION gui_Init()
    fw_SetTruePixel( .T. )
 
    pGenPrg += [   SetGetColorFocus( .T. )] + hb_Eol()
-   //pGenPrg += [   fw_SetTruePixel( .T. )] + hb_Eol()
+   pGenPrg += [   fw_SetTruePixel( .T. )] + hb_Eol()
    pGenPrg += hb_Eol()
 
    RETURN Nil
@@ -189,66 +190,76 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 
    LOCAL aItem, oCol, aThisKey, nPos
 #ifdef DLGAUTO_AS_LIB
-   LOCAL aCol
-
+   LOCAL aCol, nValue
 #endif
 
    IF oFrmClass:lIsSQL
 #ifdef DLGAUTO_AS_LIB
       IF Len( aKeyDownList ) == 0
          @ nRow, nCol XBROWSE xControl ;
+            ARRAY Array(10) ;
             SIZE nWidth, nHeight PIXEL ;
             ; // LINES AUTOCOL, AUTOSORT ;
-            ARRAY {} ;
             OF xParent ;
             ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
             //LINES CELL
       ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
          @ nRow, nCol XBROWSE xControl ;
+            ARRAY Array(10) ;
             ; // LINES AUTOCOL, AUTOSORT ;
             SIZE nWidth, nHeight PIXEL ;
-            ARRAY {} ;
             OF xParent ;
             ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
             //LINES CELL
       ENDIF
       WITH OBJECT xControl
-         xControl:oRs := ADOLocal()
-         xControl:oRs:Execute( "SELECT * FROM " + workarea + " ORDER BY " + oTbrowse[ 1, 1 ] )
-         IF xControl:oRs:RecordCount() == 0
-            xControl:aArrayData := {}
-         ELSE
-            xControl:aArrayData := Array( xControl:oRs:RecordCount() )
-         ENDIF
-         //ADD oCol TO xControl ;
-         //   DATA { || xControl:nArrayAt } ;
-         //   HEADER "TestCol" ;
-         //   PICTURE "999999"
+         //:nDataType := DATATYPE_USER
+         xControl:xUserData := ADOLocal()
+         xControl:xUserData:Execute( "SELECT * FROM " + workarea + ;
+            " ORDER BY " + oTbrowse[ 1, 1 ] + ;
+            iif( ! "BROWSE" $ oFrmClass:cTitle, " LIMIT 5", "" ) )
+         xControl:xUserValue := xControl:xUserData:RecordCount()
+         :nArrayAt   := 1
+         ADD oCol TO xControl ;
+            DATA { || xControl:nArrayAt } ;
+            HEADER "#ArrayAt" ;
+            PICTURE "999999"
          FOR EACH aItem IN oTbrowse
             DO CASE
             CASE Len( aItem ) < 4
                ADD oCol TO xControl ;
-                  DATA { || xControl:oRs:Value( aItem[2] ) } ;
+                  DATA { || xControl:xUserData:Value( aItem[2] ) } ;
                   HEADER aItem[1] ;
-                  PICTURE aItem[3]
+                  //PICTURE aItem[3]
             CASE aItem[ 4 ] == "D"
                ADD oCol TO xControl ;
-                  DATA { || xControl:oRs:Date( aItem[2] ) } ;
+                  DATA { || xControl:xUserData:Date( aItem[2] ) } ;
                   HEADER aItem[1] ;
-                  PICTURE aItem[3]
+                  //PICTURE aItem[3]
             CASE aItem[ 4 ] == "N"
                ADD oCol TO xControl ;
-                  DATA { || xControl:oRs:Number( aItem[2] ) } ;
+                  DATA { || xControl:xUserData:Number( aItem[2] ) } ;
                   HEADER aItem[1] ;
-                  PICTURE aItem[3]
+                  //PICTURE aItem[3]
             OTHERWISE
                ADD oCol TO xControl ;
-                  DATA { || xControl:oRs:String( aItem[2] ) } ;
+                  DATA { || xControl:xUserData:String( aItem[2] ) } ;
                   HEADER aItem[1] ;
-                  PICTURE aItem[3]
+                  //PICTURE aItem[3]
             ENDCASE
          NEXT
-         xControl:bOnSkip := { | x | (x), xControl:oRs:Move( xControl:nArrayAt - 1, 1 ) }
+         //:bGoTop     := { || xControl:xUserValue :=  1 }
+         //:bGoBottom  := { || xControl:xUserValue := 10 } // :oRs:RecordCount() }
+         //:bKeyCount  := { || xControl:xUserValue := 10 } // :oRs:RecordCount() }  // Use this instead of bLogicLen
+         //:bBof       := { || xControl:xUserValue < 1 }
+         //:bEof       := { || xControl:xUserValue > 10 }
+         //:bSkip      := { |n,nSave| nSave := xControl:xUserValue, ;
+         //               xControl:xUserValue := Max( 1, Min( 10, xControl:xUserValue + IfNil(n,0) ) ), ;
+         //               xControl:xUserValue - nSave } // return number of rows actually skipped
+         //:bBookMark  := ;
+         //:bKeyNo     := { |n| If( n == nil, xControl:xUserValue, xControl:xUserValue := n ) }
+         :bOnSkip    := { || xControl:xUserData:Move( xControl:nArrayAt - 1, 1 ) }
+         xControl:SetArray( Array( xControl:xUserData:RecordCount() ) )
       ENDWITH
 #endif
    ELSE
@@ -412,15 +423,19 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
    IF xDlg:ClassName() == "TDIALOG"
       IF lModal
          IF ! Empty( bCode )
-            ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+            ACTIVATE DIALOG xDlg CENTERED ;
+               ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
 
-            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
+            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol()
+            pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
             pGenPrg += hb_Eol()
 
          ELSE
-            ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+            ACTIVATE DIALOG xDlg CENTERED ;
+               ON INIT gui_StatusBar( xDlg, "" )
 
-            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" ) ] + hb_Eol()
+            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol()
+            pGenPrg += [       ON INIT gui_StatusBar( xDlg, "" ) ] + hb_Eol()
             pGenPrg += hb_Eol()
 
          ENDIF
@@ -434,9 +449,11 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
             pGenPrg += hb_Eol()
 
          ELSE
-            ACTIVATE DIALOG xDlg CENTERED NOMODAL ON INIT gui_StatusBar( xDlg, "" )
+            ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
+               ON INIT gui_StatusBar( xDlg, "" )
 
-            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ON INIT gui_StatusBar( xDlg, "" )] + hb_Eol()
+            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;]
+            pGenPrg += [      ON INIT gui_StatusBar( xDlg, "" )] + hb_Eol()
             pGenPrg += hb_Eol()
 
          ENDIF
@@ -649,42 +666,64 @@ STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
 STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
-   xTab:aDialogs[1]:SetFocus()
+   LOCAL nTab, nPageNext
+
+   IF Len( aList ) == 0
+      RETURN Nil
+   ENDIF
+   FOR nTab = 1 TO Len( aList ) - 1
+      nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
+      GUI():TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, nPageNext, aList[ nPageNext, 1 ] )
+   NEXT
+
+   //xTab:aDialogs[1]:SetFocus()
+   xTab:SetOption( 1 )
 
    (xDlg);(xTab);(aList)
 
    RETURN Nil
 
-STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
+STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xTab, xPage, nPageCount, cText )
 
    // dialog/window hell
-   IF nPageCount <= Len( xControl:aPrompts )
-      xControl:aPrompts[ nPageCount ] := cText
+   IF nPageCount <= Len( xTab:aPrompts )
+      xTab:aPrompts[ nPageCount ] := cText
 
-      pGenPrg += [   xControl:aPrompts] + "[" + hb_ValToExp( nPageCount ) + "]" + [ := ] + hb_ValToExp( cText ) + hb_Eol()
+      pGenPrg += [   xTab:aPrompts] + "[" + hb_ValToExp( nPageCount ) + "]" + [ := ] + hb_ValToExp( cText ) + hb_Eol()
 
    ELSE
-      xControl:AddItem( cText )
+      xTab:AddItem( cText )
 
-      pGenPrg += [   xControl:AddItem( ] + hb_ValToExp( cText ) + [ )] + hb_Eol()
+      pGenPrg += [   xTab:AddItem( ] + hb_ValToExp( cText ) + [ )] + hb_Eol()
       pGenPrg += hb_Eol()
 
    ENDIF
-   xPage := xControl:aDialogs[ nPageCount ]
-   xControl:Refresh()
+   xPage := xTab:aDialogs[ nPageCount ]
+   xTab:Refresh()
 
-   pGenPrg += [   xPage := xControl:aDialogs] + "[ " + hb_ValToExp( nPageCount ) + " ]" + hb_Eol()
-   pGenPrg += [   xControl:Refresh()] + hb_Eol()
+   pGenPrg += [   xPage := xTab:aDialogs] + "[ " + hb_ValToExp( nPageCount ) + " ]" + hb_Eol()
+   pGenPrg += [   xTab:Refresh()] + hb_Eol()
    pGenPrg += hb_Eol()
 
 
-   (xDlg); (xControl); (cText); (xPage); (nPageCount)
+   (xDlg); (xTab); (cText); (xPage); (nPageCount)
 
    RETURN Nil
 
 STATIC FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    (xDlg); (xControl)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_TabSetLostFocus( xTextbox, xTab, nPageNext, xTextboxNext )
+
+   xTextbox:bLostFocus( { || ;
+      xTab:SetOption( nPageNext ), ;
+      /* xTab:aDialogs[nPageNext ]:SetFocus() */ ;
+      xTextboxNext:SetFocus() } )
+
+   (xTextbox);(xTab);(nPageNext);(xTextboxNext)
 
    RETURN Nil
 
@@ -815,10 +854,13 @@ FUNCTION aWindowsInfo()
       IF ValType( GetAllWin()[ nCont ] ) != "N"
          oDlg = GetAllWin()[ nCont ]
          IF hb_AScan( aHide, { | e | e == oDlg:ClassName() } ) == 0
-            cInfo += Str( nCont ) + "--> " + ;
-                     oDlg:ClassName() + " *** " + ;
-                     If( oDlg:Cargo != nil, oDlg:Cargo, "" ) + " ### " + ;
-                     If( oDlg:oWnd != nil, oDlg:oWnd:ClassName, "" ) + ;
+            cInfo += Str( nCont ) + ;
+                     " class: " + ;
+                     hb_ValToExp( oDlg:ClassName() ) + ;
+                     " cargo: " + ;
+                     hb_ValToExp( oDlg:Cargo ) + ;
+                     " oWnd class: : " + ;
+                     hb_ValToExp( If( oDlg:oWnd != nil, oDlg:oWnd:ClassName, "" ) ) + ;
                      hb_Eol()
          ENDIF
       ENDIF

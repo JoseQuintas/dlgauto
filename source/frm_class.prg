@@ -16,6 +16,7 @@ CREATE CLASS frm_Class
 #endif
    VAR cDataTable      INIT ""
    VAR cDataField      INIT ""
+   VAR cDataFilter     INIT ""
    VAR cTitle          INIT ""
    VAR aEditList       INIT {}
    VAR cOptions        INIT "IED"
@@ -68,12 +69,18 @@ CREATE CLASS frm_Class
 METHOD OnFrmInit() CLASS frm_Class
 
    LOCAL nPos
-//#ifdef HBMK_HAS_FIVEWIN
-   //LOCAL aControl, cText
-//#endif
+#ifdef DLGAUTO_AS_LIB
+#ifdef HBMK_HAS_FIVEWIN
+   //LOCAL aControl
+#endif
+#endif
 
    IF ::nInitRecno != Nil
-      GOTO ::nInitRecno
+      IF ::lIsSQL
+         // key
+      ELSE
+         GOTO ::nInitRecno
+      ENDIF
    ENDIF
    ::DataLoad()
    IF Empty( ::cDataTable )
@@ -102,6 +109,21 @@ METHOD OnFrmInit() CLASS frm_Class
       //   ::xDlg:bValid := { || gui():MsgBox( aWindowsInfo() ), .T. }
       //ENDIF
       //FOR EACH aControl IN ::aControlList
+      //   IF aControl[ CFG_CTLTYPE ] == TYPE_BROWSE
+      //      WITH OBJECT aControl[ CFG_FCONTROL ]
+      //         :bGoTop     := { || :nArrayAt :=  1 }
+      //         :bGoBottom  := { || :nArrayAt := :xUserData:RecordCount() }
+      //         :bKeyCount  := { || :xUserData:RecordCount() }  // Use this instead of bLogicLen
+      //         :bBof       := { || :xUserData:Bof() }
+      //         :bEof       := { || :xUserData:Eof() }
+      //         :bBookMark  := ;
+      //         :bKeyNo     := { | n | iif( n == Nil, ;
+      //                        :xUserData:AbsolutePosition(), ;
+      //                        :xUserData:Move( n, 1 ) ) }
+      //         :bSkip      := { | n, nOld | ADOSkipper( :xUserData, n ), n - nOld }
+      //         //:bSkip      := { |n,nSave| nSave := xControl:xUserValue, ;
+      //      ENDWITH
+      //   ENDIF
       //   IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
       //      FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
       //         IF cText == "." .OR. cText == "Two" .OR. cText == "Three"
@@ -300,7 +322,7 @@ METHOD EditKeyOn() CLASS frm_Class
    // search key field
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUG_GET
-            GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+         GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
       ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_TEXT .AND. aItem[ CFG_ISKEY ] .AND. ! aItem[ CFG_SAVEONLY ]
          GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound .AND. aItem[ CFG_ISKEY ]
@@ -326,9 +348,9 @@ METHOD EditOn() CLASS frm_Class
 
    FOR EACH aItem IN ::aControlList
       IF aItem[ CFG_CTLTYPE ] == TYPE_BUG_GET
-            GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+         GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
       ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_BUTTON_BRW
-            GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
+         GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
       ELSEIF hb_AScan( aEnableList, { | e | e == aItem[ CFG_CTLTYPE ] } ) != 0
          IF aItem[ CFG_ISKEY ] .OR. aItem[ CFG_SAVEONLY ]
             GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
@@ -480,18 +502,18 @@ METHOD DataLoad() CLASS frm_Class
 #ifdef DLGAUTO_AS_LIB
             WITH OBJECT aItem[ CFG_FCONTROL ]
 #ifdef HBMK_HAS_FIVEWIN
-               :oRs:CloseRecordset()
-               :oRs:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
+               :xUserData:CloseRecordset()
+               :xUserData:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
                   " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
                   " = "
                FOR EACH aControl IN ::aControlList
                   IF aControl[ CFG_FNAME ] == aItem[ CFG_BRWKEYFROM ]
-                     :oRs:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
+                     :xUserData:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
                      EXIT
                   ENDIF
                NEXT
-               :oRs:Execute()
-               :aArrayData := Array( :oRs:RecordCount() )
+               :xUserData:Execute()
+               :SetArray( Array( :xUserData:RecordCount() ) )
                GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
 #endif
 #ifdef HBMK_HAS_HWGUI
@@ -508,8 +530,8 @@ METHOD DataLoad() CLASS frm_Class
                :aArray:Execute()
                GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
 #endif
-#endif
             ENDWITH
+#endif
          ELSE
             SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
             SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
@@ -606,7 +628,7 @@ METHOD Exit_Click() CLASS frm_Class
       FOR EACH aItem IN ::aControlList
          IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
 #ifdef HBMK_HAS_FIVEWIN
-            aItem[ CFG_FCONTROL ]:oRs:CloseRecordset()
+            aItem[ CFG_FCONTROL ]:xUserData:CloseRecordset()
 #endif
 #ifdef HBMK_HAS_HWGUI
             aItem[ CFG_FCONTROL ]:aArray:CloseRecordset()

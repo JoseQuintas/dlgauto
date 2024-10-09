@@ -442,10 +442,10 @@ STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
 
    RETURN Nil
 
-STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xControl, xPage, nPageCount, cText )
+STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xTab, xPage, nPageCount, cText )
 
-   BEGIN PAGE cText OF xControl
-   xPage := xControl
+   BEGIN PAGE cText OF xTab
+   xPage := xTab
 
    (xDlg);(nPageCount);(xDlg);(xParent)
 
@@ -459,9 +459,9 @@ STATIC FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    RETURN Nil
 
-STATIC FUNCTION gui_TabSetLostFocus( oEdit, oTab, nPageNext, oEditNext )
+STATIC FUNCTION gui_TabSetLostFocus( oTextbox, oTab, nPageNext, oTextboxNext )
 
-   oEdit:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), gui_SetFocus( Nil, oEditNext ), .T. }
+   oTextbox:bLostFocus := { || oTab:ChangePage( nPageNext ), oTab:SetTab( nPageNext ), gui_SetFocus( Nil, oTextboxNext ), .T. }
 
    RETURN Nil
 

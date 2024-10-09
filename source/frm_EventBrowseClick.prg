@@ -14,35 +14,42 @@ FUNCTION frm_EventBrowseClick( oFrmOld, aItemOld, nKey )
 
    LOCAL oFrm, nPos, cAliasAnt, aOrdScope
 
-   cAliasAnt := Alias()
-   SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
-   aOrdScope := { OrdScope( 0 ), OrdScope( 1 ) }
    oFrm := frm_Class():New()
    WITH OBJECT oFrm
-      :cDataTable    := aItemOld[ CFG_BRWTABLE ]
+      :cDataTable  := aItemOld[ CFG_BRWTABLE ]
       :cTitle      := "BROWSE " + :cDataTable
       :cOptions    := "S"
       :lNavigate   := .F.
       :lModal      := .T.
       :nLayout     := oFrmOld:nLayout
       :aAllSetup   := AClone( oFrmOld:aAllSetup )
+      :lIsSQL      := oFrmOld:lIsSQL
+      IF ! :lIsSQL
+         cAliasAnt := Alias()
+         SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
+         aOrdScope := { OrdScope( 0 ), OrdScope( 1 ) }
+      ENDIF
 
       nPos := hb_ASCan( :aAllSetup, { | e | e[ 1 ] == aItemOld[ CFG_BRWTABLE ] } )
       :aEditList   := :aAllSetup[ nPos, 2 ]
-      :nInitRecno  := ( aItemOld[ CFG_BRWTABLE ] )->( RecNo() )
-      :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cDataTable )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
+      IF ! :lIsSQL
+         :nInitRecno  := ( aItemOld[ CFG_BRWTABLE ] )->( RecNo() )
+         :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cDataTable )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
+      ENDIF
       IF nKey == VK_INSERT
-         SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
-         aOrdScope := { OrdScope( 0 ), OrdScope( 1 ) }
-         SET SCOPE TO
-         SET ORDER TO 1
-         GOTO BOTTOM // fail, SET SCOPE is activated
-         :aInitValue2 := { aItemOld[ CFG_BRWKEYTO2 ], ( aItemOld[ CFG_BRWTABLE ] )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYTO2 ] ) ) ) + 1 }
-         SET ORDER TO ( aItemOld[ CFG_BRWIDXORD ] )
-         OrdScope( 0, aOrdScope[1] )
-         OrdScope( 1, aOrdScope[2] )
-         GOTO ( LastRec() + 1 )
-         SELECT ( Select( cAliasAnt ) )
+         IF ! :lIsSQL
+            SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
+            aOrdScope := { OrdScope( 0 ), OrdScope( 1 ) }
+            SET SCOPE TO
+            SET ORDER TO 1
+            GOTO BOTTOM // fail, SET SCOPE is activated
+            :aInitValue2 := { aItemOld[ CFG_BRWKEYTO2 ], ( aItemOld[ CFG_BRWTABLE ] )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYTO2 ] ) ) ) + 1 }
+            SET ORDER TO ( aItemOld[ CFG_BRWIDXORD ] )
+            OrdScope( 0, aOrdScope[1] )
+            OrdScope( 1, aOrdScope[2] )
+            GOTO ( LastRec() + 1 )
+            SELECT ( Select( cAliasAnt ) )
+         ENDIF
       ELSE
          :aInitValue2 := { aItemOld[ CFG_BRWKEYTO2 ], ( aItemOld[ CFG_BRWTABLE ] )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYTO2 ] ) ) ) }
       ENDIF
@@ -53,13 +60,15 @@ FUNCTION frm_EventBrowseClick( oFrmOld, aItemOld, nKey )
       ENDCASE
       :Execute()
    ENDWITH
-   // return old position
-   SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
-   SET ORDER TO ( aItemOld[ CFG_BRWIDXORD ] )
-   OrdScope( 0, aOrdScope[1] )
-   OrdScope( 1, aOrdScope[2] )
-   // return old alias
-   SELECT ( Select( cAliasAnt ) )
+   IF ! oFrm:lIsSQL
+      // return old position
+      SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
+      SET ORDER TO ( aItemOld[ CFG_BRWIDXORD ] )
+      OrdScope( 0, aOrdScope[1] )
+      OrdScope( 1, aOrdScope[2] )
+      // return old alias
+      SELECT ( Select( cAliasAnt ) )
+   ENDIF
    GUI():SetFocus( oFrmOld:xDlg )
 
    RETURN Nil

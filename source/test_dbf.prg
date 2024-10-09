@@ -21,6 +21,26 @@ FUNCTION Test_DBF()
          { "CLBANK",   "N", 6, 0 }, ;
          { "CLPAYTERM","N", 3, 0 }, ;
          { "CLSTATUS", "N", 1, 0 }, ;
+         { "CLDUMMY01", "C", 50, 0 }, ;
+         { "CLDUMMY02", "C", 50, 0 }, ;
+         { "CLDUMMY03", "C", 50, 0 }, ;
+         { "CLDUMMY04", "C", 50, 0 }, ;
+         { "CLDUMMY05", "C", 50, 0 }, ;
+         { "CLDUMMY06", "C", 50, 0 }, ;
+         { "CLDUMMY07", "C", 50, 0 }, ;
+         { "CLDUMMY08", "C", 50, 0 }, ;
+         { "CLDUMMY09", "C", 50, 0 }, ;
+         { "CLDUMMY10", "C", 50, 0 }, ;
+         { "CLDUMMY11", "C", 50, 0 }, ;
+         { "CLDUMMY12", "C", 50, 0 }, ;
+         { "CLDUMMY13", "C", 50, 0 }, ;
+         { "CLDUMMY14", "C", 50, 0 }, ;
+         { "CLDUMMY15", "C", 50, 0 }, ;
+         { "CLDUMMY16", "C", 50, 0 }, ;
+         { "CLDUMMY17", "C", 50, 0 }, ;
+         { "CLDUMMY18", "C", 50, 0 }, ;
+         { "CLDUMMY19", "C", 50, 0 }, ;
+         { "CLDUMMY20", "C", 50, 0 }, ;
          { "CLCOMMENT", "C", 255, 0 } } )
    ENDIF
    IF ! File( "DBPRODUCT.DBF" )
