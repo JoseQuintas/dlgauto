@@ -69,11 +69,6 @@ CREATE CLASS frm_Class
 METHOD OnFrmInit() CLASS frm_Class
 
    LOCAL nPos
-#ifdef DLGAUTO_AS_LIB
-#ifdef HBMK_HAS_FIVEWIN
-   //LOCAL aControl
-#endif
-#endif
 
    IF ::nInitRecno != Nil
       IF ::lIsSQL
@@ -102,8 +97,6 @@ METHOD OnFrmInit() CLASS frm_Class
       ENDIF
    ENDIF
    // no success
-#ifdef DLGAUTO_AS_LIB
-#ifdef HBMK_HAS_FIVEWIN
    //IF GUI():LibName() == "FIVEWIN"
       //IF ::xDlg:cTitle == "MENU"
       //   ::xDlg:bValid := { || gui():MsgBox( aWindowsInfo() ), .T. }
@@ -134,8 +127,6 @@ METHOD OnFrmInit() CLASS frm_Class
       //   ENDIF
       //NEXT
    //ENDIF
-#endif
-#endif
    IF ! Empty( ::bOnFrmActivate )
       Eval( ::bOnFrmActivate )
    ENDIF
@@ -500,37 +491,39 @@ METHOD DataLoad() CLASS frm_Class
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          IF ::lIsSQL
 #ifdef DLGAUTO_AS_LIB
-            WITH OBJECT aItem[ CFG_FCONTROL ]
-#ifdef HBMK_HAS_FIVEWIN
-               :xUserData:CloseRecordset()
-               :xUserData:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
-                  " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
-                  " = "
-               FOR EACH aControl IN ::aControlList
-                  IF aControl[ CFG_FNAME ] == aItem[ CFG_BRWKEYFROM ]
-                     :xUserData:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
-                     EXIT
-                  ENDIF
-               NEXT
-               :xUserData:Execute()
-               :SetArray( Array( :xUserData:RecordCount() ) )
-               GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
-#endif
-#ifdef HBMK_HAS_HWGUI
-               :aArray:CloseRecordset()
-               :aArray:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
-                  " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
-                  " = "
-               FOR EACH aControl IN ::aControlList
-                  IF aControl[ CFG_FNAME ] == aItem[ CFG_BRWKEYFROM ]
-                     :aArray:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
-                     EXIT
-                  ENDIF
-               NEXT
-               :aArray:Execute()
-               GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
-#endif
-            ENDWITH
+            IF GUI():LibName() == "FIVEWIN"
+               WITH OBJECT aItem[ CFG_FCONTROL ]
+                  :xUserData:CloseRecordset()
+                  :xUserData:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
+                     " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
+                     " = "
+                  FOR EACH aControl IN ::aControlList
+                     IF aControl[ CFG_FNAME ] == aItem[ CFG_BRWKEYFROM ]
+                        :xUserData:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
+                        EXIT
+                     ENDIF
+                  NEXT
+                  :xUserData:Execute()
+                  :SetArray( Array( :xUserData:RecordCount() ) )
+                  GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+               ENDWITH
+            ENDIF
+            IF GUI():LibName() == "HWGUI"
+               WITH OBJECT aItem[ CFG_FCONTROL ]
+                  :aArray:CloseRecordset()
+                  :aArray:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
+                     " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
+                     " = "
+                  FOR EACH aControl IN ::aControlList
+                     IF aControl[ CFG_FNAME ] == aItem[ CFG_BRWKEYFROM ]
+                        :aArray:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
+                        EXIT
+                     ENDIF
+                  NEXT
+                  :aArray:Execute()
+                  GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+               ENDWITH
+            ENDIF
 #endif
          ELSE
             SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
@@ -627,12 +620,11 @@ METHOD Exit_Click() CLASS frm_Class
    IF ::lIsSQL
       FOR EACH aItem IN ::aControlList
          IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
-#ifdef HBMK_HAS_FIVEWIN
-            aItem[ CFG_FCONTROL ]:xUserData:CloseRecordset()
-#endif
-#ifdef HBMK_HAS_HWGUI
-            aItem[ CFG_FCONTROL ]:aArray:CloseRecordset()
-#endif
+            IF GUI():LibName() == "FIVEWIN"
+               aItem[ CFG_FCONTROL ]:xUserData:CloseRecordset()
+            ELSE
+               aItem[ CFG_FCONTROL ]:aArray:CloseRecordset()
+            ENDIF
          ENDIF
       NEXT
       ::cnSQL:CloseRecordset()

@@ -41,7 +41,28 @@ FUNCTION Test_DBF()
          { "CLDUMMY18", "C", 50, 0 }, ;
          { "CLDUMMY19", "C", 50, 0 }, ;
          { "CLDUMMY20", "C", 50, 0 }, ;
-         { "CLCOMMENT", "C", 255, 0 } } )
+         { "CLDUMMY21", "C", 50, 0 }, ;
+         { "CLDUMMY22", "C", 50, 0 }, ;
+         { "CLDUMMY23", "C", 50, 0 }, ;
+         { "CLDUMMY24", "C", 50, 0 }, ;
+         { "CLDUMMY25", "C", 50, 0 }, ;
+         { "CLDUMMY26", "C", 50, 0 }, ;
+         { "CLDUMMY27", "C", 50, 0 }, ;
+         { "CLDUMMY28", "C", 50, 0 }, ;
+         { "CLDUMMY29", "C", 50, 0 }, ;
+         { "CLDUMMY30", "C", 50, 0 }, ;
+         { "CLDUMMY31", "C", 50, 0 }, ;
+         { "CLDUMMY32", "C", 50, 0 }, ;
+         { "CLDUMMY33", "C", 50, 0 }, ;
+         { "CLDUMMY34", "C", 50, 0 }, ;
+         { "CLDUMMY35", "C", 50, 0 }, ;
+         { "CLDUMMY36", "C", 50, 0 }, ;
+         { "CLDUMMY37", "C", 50, 0 }, ;
+         { "CLDUMMY38", "C", 50, 0 }, ;
+         { "CLDUMMY39", "C", 50, 0 }, ;
+         { "CLDUMMY40", "C", 50, 0 }, ;
+         { "CLCOMMENT", "C", 255, 0 }, ;
+         { "DLDUMMY41", "C", 50, 0  } } )
    ENDIF
    IF ! File( "DBPRODUCT.DBF" )
       dbCreate( "DBPRODUCT", { ;

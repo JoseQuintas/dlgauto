@@ -36,13 +36,12 @@ hbct.hbc
 
 # only if you see console screen with any library
 {win}-gtgui
-#-L.
-#-llib_hwgui
-#-llib_hmg3
-#-llib_hmge
-#-llib_oohg
-#-llib_fivewin
-#-llib_gtwvg
+#lib_fivewin.prg
+#lib_hwgui.prg
+#lib_hmg3.prg
+#lib_hmge.prg
+#lig_oohg.prg
+#lib_gtwvg.prg
 
 #hmg3.hbc
 #hmge.hbc

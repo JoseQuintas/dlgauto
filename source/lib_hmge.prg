@@ -191,10 +191,10 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
-   LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}, nPos
+   LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}, nPos, cnSQL
 
-   IF ::lIsSQL
-      LOCAL cnSQL := ADOLocal()
+   IF ofrmClass:lIsSQL
+      cnSQL := ADOLocal()
    ENDIF
    IF Empty( xControl )
       xControl := gui_NewName( "BRW" )
@@ -204,7 +204,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       aKeyDownList := {}
    ENDIF
 
-   IF ::lIsSQL
+   IF oFrmClass:lIsSQL
       // TODO: SQL
    ELSE
       FOR EACH aItem IN oTbrowse
@@ -253,7 +253,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       AAdd( oFrmClass:aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
    NEXT
 
-   (xDlg);(cField);(xValue);(workarea);(aKeyDownList)
+   (xDlg);(cField);(xValue);(workarea);(aKeyDownList);(cnSQL)
 
    RETURN Nil
 

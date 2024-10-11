@@ -24,10 +24,10 @@ FUNCTION frm_DialogData( Self )
    GUI():DialogActivate( ::xDlg, { || ::OnFrmInit() }, ::lModal )
 
 #ifndef DLGAUTO_AS_LIB
-#ifdef HBMK_HAS_GTWVG
-   DO WHILE Inkey(1) != K_ESC
-   ENDDO
-#endif
+   IF GUI():Libname() == "GTWVG"
+      DO WHILE Inkey(1) != K_ESC
+      ENDDO
+   ENDIF
 #endif
    // nested dialogs can't close databases
    // CLOSE DATABASES

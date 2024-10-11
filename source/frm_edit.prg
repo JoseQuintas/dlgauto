@@ -272,10 +272,8 @@ FUNCTION frm_Edit( Self )
       OTHERWISE
          GUI():MsgBox( "This control is not available " + hb_ValToExp( aItem[ CFG_CTLTYPE ] ) )
       ENDCASE
-      IF ::lWithTab
-         IF ! aItem[ CFG_ISKEY ]
-            AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
-         ENDIF
+      IF ::lWithTab .AND. ! aItem[ CFG_ISKEY ]
+         AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
       ENDIF
       lFirst := .F.
    NEXT
@@ -285,9 +283,10 @@ FUNCTION frm_Edit( Self )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUG_GET
 
       GUI():TextCreate( ::xDlg, ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-         nRow, nCol, 0, 0, " ", "", 0, { || .T. },,,Atail( ::aControlList ), Self )
+         APP_DLG_HEIGHT - 40, 20, 0, 0, " ", "", 0, { || .T. },,,Atail( ::aControlList ), Self )
 
    ENDIF
+
    IF ::lWithTab
 
       GUI():TabPageEnd( ::xDlg, xTab )

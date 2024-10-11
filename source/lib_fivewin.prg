@@ -664,25 +664,6 @@ STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
    RETURN Nil
 
-STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
-
-   LOCAL nTab, nPageNext
-
-   IF Len( aList ) == 0
-      RETURN Nil
-   ENDIF
-   FOR nTab = 1 TO Len( aList ) - 1
-      nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
-      GUI():TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, nPageNext, aList[ nPageNext, 1 ] )
-   NEXT
-
-   //xTab:aDialogs[1]:SetFocus()
-   xTab:SetOption( 1 )
-
-   (xDlg);(xTab);(aList)
-
-   RETURN Nil
-
 STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xTab, xPage, nPageCount, cText )
 
    // dialog/window hell
@@ -716,12 +697,35 @@ STATIC FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    RETURN Nil
 
+STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
+
+   LOCAL nTab, nPageNext
+
+   IF Len( aList ) == 0
+      RETURN Nil
+   ENDIF
+   FOR nTab = 1 TO Len( aList )
+      nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
+      GUI():TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, ;
+         nPageNext, aList[ nPageNext, 1 ] )
+   NEXT
+
+   //xTab:aDialogs[1]:SetFocus()
+   xTab:SetOption( 1 )
+
+   (xDlg);(xTab);(aList)
+
+   RETURN Nil
+
 STATIC FUNCTION gui_TabSetLostFocus( xTextbox, xTab, nPageNext, xTextboxNext )
 
-   xTextbox:bLostFocus( { || ;
+   LOCAL bCode
+
+   bCode := { || ;
       xTab:SetOption( nPageNext ), ;
-      /* xTab:aDialogs[nPageNext ]:SetFocus() */ ;
-      xTextboxNext:SetFocus() } )
+      xTextboxNext:SetFocus() }
+
+   xTextbox:bLostFocus := bCode
 
    (xTextbox);(xTab);(nPageNext);(xTextboxNext)
 
