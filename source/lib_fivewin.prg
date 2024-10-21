@@ -2,7 +2,7 @@
 lib_fivewin- fivewin source selected by lib.prg
 */
 
-#pragma -w1
+//#pragma -w1
 #include "hbgtinfo.ch"
 #include "hbclass.ch"
 #include "frm_class.ch"
@@ -10,10 +10,10 @@ lib_fivewin- fivewin source selected by lib.prg
 #include "calendar.ch"
 #include "dtpicker.ch"
 
-#ifdef DLGAUTO_AS_LIB
    STATIC pGenPrg := ""
+   //MEMVAR pGenPrg, pGenName
+#ifdef DLGAUTO_AS_LIB
 #else
-   MEMVAR pGenPrg, pGenName
 #endif
 
 #ifndef DLGAUTO_AS_LIB
@@ -43,6 +43,7 @@ CREATE CLASS FIVEWINClass
    METHOD DialogCreate(...)     INLINE gui_DialogCreate(...)
    METHOD DlgSetKey(...)        INLINE gui_DlgSetKey(...)
    METHOD DlgMenu(...)          INLINE gui_DlgMenu(...)
+   METHOD DlgKeyDown(...)       INLINE gui_DlgKeyDown(...)
 
    /*--- controls ---*/
    METHOD ButtonCreate(...)     INLINE gui_ButtonCreate(...)
@@ -95,7 +96,7 @@ STATIC FUNCTION gui_Init()
 
 STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
-   gui_DialogCreate( @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
+   gui_DialogCreate( Nil, @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
    IF xDlg:ClassName() == "TDIALOG"
       gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) }, .T. )
    ELSE
@@ -114,25 +115,25 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
          MENU
             FOR EACH cDBF IN aGroupList
-               MENUITEM cDBF ACTION frm_funcMain( cDBF, aAllSetup,,xDlg )
+               MENUITEM cDBF ACTION ( (oMenuItem), hb_ThreadStart( { || frm_funcMain( cDBF, aAllSetup,.T. ) } ) )
             NEXT
          ENDMENU
       NEXT
       MENUITEM "NoData"
          MENU
-         MENUITEM "NoData Layout 1" ACTION frm_DialogFree(1)
-         MENUITEM "NoData Layout 2" ACTION frm_DialogFree(2)
-         MENUITEM "NoData Layout 3" ACTION frm_DialogFree(3)
+         MENUITEM "NoData Layout 1" ACTION ( ( oMenuItem), frm_DialogFree(1) )
+         MENUITEM "NoData Layout 2" ACTION ( ( oMenuItem ), frm_DialogFree(2) )
+         MENUITEM "NoData Layout 3" ACTION ( ( oMenuItem ), frm_DialogFree(3) )
          ENDMENU
       IF xDlg:ClassName() == "TMDIFRAME"
          oMenu:AddMDI()
       ENDIF
       MENUITEM "Exit"
          MENU
-         MENUITEM "aWindowsInfo" ACTION gui_MsgBox( aWindowsInfo() ) ;
+         MENUITEM "aWindowsInfo" ACTION ( (oMenuItem), gui_MsgBox( aWindowsInfo() ) ) ;
             MESSAGE "Show used controls"
          SEPARATOR
-         MENUITEM "Exit" ACTION gui_DialogClose( xDlg )
+         MENUITEM "Exit" ACTION ( (oMenuItem), gui_DialogClose( xDlg ) )
          ENDMENU
       ENDMENU
       xDlg:SetMenu( oMenu )
@@ -146,7 +147,7 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
 // ok to run, but pending proccess, and can't call modal dialog
 FUNCTION ExecuteMT( bCode )
 
-   LOCAL oFrm, oAny
+   LOCAL oFrm
 
    oFrm := Eval( bCode )
    WinRun( oFrm:xDlg )
@@ -188,7 +189,7 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
 STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, ;
    cField, xValue, workarea, aKeyDownList, oFrmClass )
 
-   LOCAL aItem, oCol, aThisKey, nPos
+   LOCAL aItem, oCol, aThisKey
 #ifdef DLGAUTO_AS_LIB
    LOCAL aCol, nValue
 #endif
@@ -203,7 +204,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
             OF xParent ;
             ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
             //LINES CELL
-      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+      ELSEIF hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) != 0
          @ nRow, nCol XBROWSE xControl ;
             ARRAY Array(10) ;
             ; // LINES AUTOCOL, AUTOSORT ;
@@ -268,14 +269,14 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
             SIZE nWidth, nHeight PIXEL ;
             DATASOURCE workarea ;
             OF xParent ;
-            ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+            ON DBLCLICK ( (nRow),(nCol),(nFlags),gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) )
             //LINES CELL
-      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+      ELSEIF hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) != 0
          @ nRow, nCol XBROWSE xControl ;
             SIZE nWidth, nHeight PIXEL ;
             DATASOURCE workarea ;
             OF xParent ;
-            ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
+            ON DBLCLICK ( (nRow),(nCol),(nFlags), GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea ) )
             //LINES CELL
       ENDIF
       FOR EACH aItem IN oTbrowse
@@ -339,6 +340,7 @@ STATIC FUNCTION gui_BrowseKeyDown( nKey, aKeyDownList, workarea )
       nSelect := Select()
       SELECT ( Select( workarea ) )
       Eval( aKeyDownList[ nPos, 2 ] )
+      SELECT ( nSelect )
    ENDIF
 
    RETURN Nil
@@ -424,7 +426,7 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
       IF lModal
          IF ! Empty( bCode )
             ACTIVATE DIALOG xDlg CENTERED ;
-               ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+               ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) ) )
 
             pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol()
             pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
@@ -432,7 +434,7 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
 
          ELSE
             ACTIVATE DIALOG xDlg CENTERED ;
-               ON INIT gui_StatusBar( xDlg, "" )
+               ON INIT ( (Self), gui_StatusBar( xDlg, "" ) )
 
             pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol()
             pGenPrg += [       ON INIT gui_StatusBar( xDlg, "" ) ] + hb_Eol()
@@ -442,7 +444,7 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
       ELSE
          IF ! Empty( bCode )
             ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
-               ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+               ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) ) )
 
             pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;] + hb_Eol()
             pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
@@ -450,7 +452,7 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
 
          ELSE
             ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
-               ON INIT gui_StatusBar( xDlg, "" )
+               ON INIT ( (Self), gui_StatusBar( xDlg, "" ) )
 
             pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;]
             pGenPrg += [      ON INIT gui_StatusBar( xDlg, "" )] + hb_Eol()
@@ -460,13 +462,13 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
       ENDIF
    ELSE
       IF ! Empty( bCode )
-         ACTIVATE WINDOW xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )
+         ACTIVATE WINDOW xDlg CENTERED ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) ) )
 
          pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
          pGenPrg += hb_Eol()
 
       ELSE
-         ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )
+         ACTIVATE WINDOW xDlg CENTERED ON INIT ( (Self), gui_StatusBar( xDlg, "" ) )
 
          pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )] + hb_Eol()
          pGenPrg += hb_Eol()
@@ -487,9 +489,9 @@ STATIC FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, xParent )
+STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal, xParent )
 
-   LOCAL nType := 1
+   //LOCAL nType := 1
 
    hb_Default( @lModal, .F. )
 
@@ -504,6 +506,9 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
          PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
          COLOR COLOR_LIGHTGRAY
 
+   IF ! Empty( oFrm )
+      xDlg:bValid := { || ! gui_DlgTextEnabled( oFrm ) }
+   ENDIF
       pGenPrg += [   DEFINE DIALOG xDlg FROM ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ TO ] + hb_ValToExp( nRow + nHeight ) + [, ] + hb_ValToExp( nCol + nWidth ) +  [ ;] + hb_Eol()
       pGenPrg += [      PIXEL OF xParent /* FONT oFont */ TITLE ] + hb_ValToExp( cTitle + " (" + GUI():LibName() ) + ;
@@ -521,9 +526,24 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
    //      COLOR LIGHT_GRAY
    //ENDCASE
 
-   (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
+   (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit);(oFrm)
 
    RETURN Nil
+
+STATIC FUNCTION gui_DlgTextEnabled( oFrm )
+
+   LOCAL xControl, lDlgTextEnabled := .F.
+
+   FOR EACH xControl IN oFrm:aControlList
+      IF hb_ASCan( { TYPE_TEXT, TYPE_MLTEXT }, xControl[ CFG_CTLTYPE ] ) != 0
+         IF xControl[ CFG_FCONTROL ]:lActive
+            lDlgTextEnabled := .T.
+            EXIT
+         ENDIF
+      ENDIF
+   NEXT
+
+   RETURN lDlgTextEnabled
 
 STATIC FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
@@ -610,6 +630,8 @@ STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, 
       SPINNER MIN aRangeList[1] MAX aRangeList[2]
       // VALID iif( Empty( bValid ), .T., Eval( bValid ) )
 
+   (oFrmClass); (xDlg)
+
    RETURN Nil
 
 STATIC FUNCTION gui_Statusbar( xDlg, xControl )
@@ -650,7 +672,7 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
 
 STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
 
-   LOCAL xPage
+   //LOCAL xPage
 
    // dialog/window hell - works for dialog
    IF xDlg:ClassName() == "TDIALOG"
@@ -687,7 +709,7 @@ STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xTab, xPage, nPageCount, cText 
    pGenPrg += hb_Eol()
 
 
-   (xDlg); (xTab); (cText); (xPage); (nPageCount)
+   (xDlg); (xTab); (cText); (xPage); (nPageCount); (xParent)
 
    RETURN Nil
 
@@ -752,7 +774,7 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       @ nRow, nCol GET xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight PICTURE cPicture ;
          VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
-         ACTION Eval( bAction ) BITMAP cImage
+         ACTION ( (Self), Eval( bAction ) ) BITMAP cImage
 
       pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ GET xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
@@ -764,7 +786,8 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
 
    ENDIF
 
-   (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture);(nMaxLength);(bAction);(cImage)
+   (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture)
+   (nMaxLength);(bAction);(cImage);(lPassword);(oFrmClass);(aItem)
 
    RETURN Nil
 

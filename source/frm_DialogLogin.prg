@@ -19,7 +19,7 @@ FUNCTION frm_DialogLogin()
          aItem := EmptyFrmClassItem()
       NEXT
 
-      GUI():DialogCreate( @:xDlg, 0, 0, 300, 200, "Login",, .T. )
+      GUI():DialogCreate( Nil, @:xDlg, 0, 0, 300, 200, "Login",, .T. )
 
       GUI():LabelCreate(  :xDlg, :xDlg, @:aControlList[1][ CFG_FCONTROL ], APP_LINE_SPACING, 20, 80, APP_LINE_HEIGHT, "User" )
       GUI():TextCreate(   :xDlg, :xDlg, @:aControlList[2][ CFG_FCONTROL ], APP_LINE_SPACING, 90, 170, APP_LINE_HEIGHT, cUser,,,,,, :aControlList[2] )

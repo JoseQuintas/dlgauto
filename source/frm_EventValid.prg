@@ -1,6 +1,6 @@
 /*
 frm_EventValid - valid used on getbox, edit, textbox
-called from frm_class
+part of frm_class
 */
 
 #include "frm_class.ch"

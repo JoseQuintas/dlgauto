@@ -1,6 +1,6 @@
 /*
 frm_EventBrowseClick - action for browse
-called from frm_class
+part of frm_class
 */
 
 #include "frm_class.ch"

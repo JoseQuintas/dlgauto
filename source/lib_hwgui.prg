@@ -105,7 +105,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   gui_DialogCreate( @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
+   GUI():DialogCreate( Nil, @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
    MENU OF xDlg
       FOR EACH aGroupList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
@@ -287,7 +287,7 @@ STATIC FUNCTION gui_DialogClose( xDlg )
 
    RETURN xDlg:Close()
 
-STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
+STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
 
    IF Empty( bInit )
       bInit := { || Nil }
@@ -302,7 +302,7 @@ STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bIn
       BACKCOLOR COLOR_WHITE ;
       ON INIT bInit
 
-   (xDlg);(lModal)
+   (xDlg);(lModal);(oFrm)
 
    RETURN Nil
 
@@ -426,22 +426,6 @@ STATIC FUNCTION gui_TabEnd()
 
    RETURN Nil
 
-STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
-
-   LOCAL nTab, nPageNext
-
-   IF Len( aList ) == 0
-      RETURN Nil
-   ENDIF
-   FOR nTab = 1 TO Len( aList ) - 1
-      nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
-      GUI():TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, nPageNext, aList[ nPageNext, 1 ] )
-   NEXT
-
-   (xDlg)
-
-   RETURN Nil
-
 STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xTab, xPage, nPageCount, cText )
 
    BEGIN PAGE cText OF xTab
@@ -454,6 +438,22 @@ STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xTab, xPage, nPageCount, cText 
 STATIC FUNCTION gui_TabPageEnd( xDlg, xControl )
 
    END PAGE OF xControl
+
+   (xDlg)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
+
+   LOCAL nTab, nPageNext
+
+   IF Len( aList ) == 0
+      RETURN Nil
+   ENDIF
+   FOR nTab = 1 TO Len( aList )
+      nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
+      GUI():TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, nPageNext, aList[ nPageNext, 1 ] )
+   NEXT
 
    (xDlg)
 

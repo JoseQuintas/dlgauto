@@ -372,6 +372,7 @@ METHOD EditOff() CLASS frm_Class
       ENDIF
    NEXT
    ::ButtonSaveOff()
+   GUI():SetFocus( ::xDlg )
 
    RETURN Nil
 

@@ -1,6 +1,6 @@
 /*
 frm_DialogData - create the dialog for data
-called from frm_class
+part of frm_class
 */
 
 #include "frm_class.ch"
@@ -19,7 +19,7 @@ FUNCTION frm_DialogData( Self )
       ENDIF
    NEXT
 
-   GUI():DialogCreate( @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::OnFrmInit() }, ::lModal, ::xParent )
+   GUI():DialogCreate( Self, @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::OnFrmInit() }, ::lModal, ::xParent )
    ::CreateControls()
    GUI():DialogActivate( ::xDlg, { || ::OnFrmInit() }, ::lModal )
 

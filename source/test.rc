@@ -19,4 +19,5 @@ icoOk         ICON   "..\\resource\\icoOk.ico"
 icoPlus       ICON   "..\\resource\\icoPlus.ico"
 icoPrint      ICON   "..\\resource\\icoPrint.ico"
 icoTrash      ICON   "..\\resource\\icoTrash.ico"
-icoWindow     ICON   "..\\resource\\icowindow.ico"
+icoWindow     ICON   "..\\resource\\icowindowlb.ico"
+

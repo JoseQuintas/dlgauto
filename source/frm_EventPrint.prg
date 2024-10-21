@@ -1,6 +1,6 @@
 /*
 frm_EventPrint - single report
-called from frm_class
+part of frm_class
 */
 
 #include "frm_class.ch"

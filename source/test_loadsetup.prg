@@ -229,4 +229,3 @@ STATIC FUNCTION PictureFromValue( oValue )
    ENDCASE
 
    RETURN cPicture
-

@@ -1,5 +1,5 @@
 /*
-lib - select apropriate source code
+lib - select gui library source code
 */
 
 #ifdef HBMK_HAS_HWGUI

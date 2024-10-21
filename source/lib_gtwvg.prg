@@ -205,7 +205,7 @@ STATIC FUNCTION gui_DialogClose( xDlg )
 
    RETURN Nil
 
-STATIC FUNCTION gui_DialogCreate( xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
+STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit )
 
    LOCAL oSBar, oPanel, oPanel1, oPanel2
 

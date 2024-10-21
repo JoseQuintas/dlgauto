@@ -1,6 +1,6 @@
 /*
 frm_Edit - Create textbox/label on dialog
-called from frmclass
+part of frmclass
 */
 
 #include "hbclass.ch"
