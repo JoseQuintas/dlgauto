@@ -27,7 +27,7 @@ CREATE CLASS frm_Class
    VAR nInitRecno
    VAR aInitValue1
    VAR aInitValue2
-   VAR OnFrmInitList INIT {}
+   VAR OnFrmInitList   INIT {}
 
    VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
@@ -311,7 +311,7 @@ METHOD ButtonSaveOff() CLASS frm_Class
 
 METHOD EditKeyOn() CLASS frm_Class
 
-   LOCAL aItem, oKeyEdit, lFound := .F.
+   LOCAL aItem, oKeyEdit, lFoundEdit := .F.
 
    // search key field
    FOR EACH aItem IN ::aControlList
@@ -320,12 +320,12 @@ METHOD EditKeyOn() CLASS frm_Class
       ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_TEXT .AND. aItem[ CFG_ISKEY ] .AND. ! aItem[ CFG_SAVEONLY ]
          GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
          IF ! lFound .AND. aItem[ CFG_ISKEY ]
-            lFound := .T.
+            lFoundEdit := .T.
             oKeyEdit := aItem[ CFG_FCONTROL ]
          ENDIF
       ENDIF
    NEXT
-   IF lFound // have key field
+   IF lFoundEdit // have key field
       ::ButtonSaveOn(.F.)
       GUI():SetFocus( ::xDlg, oKeyEdit )
    ELSE // do not have key field
@@ -336,7 +336,7 @@ METHOD EditKeyOn() CLASS frm_Class
 
 METHOD EditOn() CLASS frm_Class
 
-   LOCAL aItem, oFirstEdit, lFound := .F.
+   LOCAL aItem, oFirstEdit, lFoundEdit := .F.
    LOCAL aEnableList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_COMBOBOX, TYPE_CHECKBOX, ;
       TYPE_DATEPICKER, TYPE_SPINNER, TYPE_BROWSE }
 
@@ -350,15 +350,17 @@ METHOD EditOn() CLASS frm_Class
             GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .F. )
          ELSE
             GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-            IF ! lFound
-               lFound := .T.
+            IF ! lFoundEdit
+               lFoundEdit := .T.
                oFirstEdit := aItem[ CFG_FCONTROL ]
             ENDIF
          ENDIF
       ENDIF
    NEXT
    ::ButtonSaveOn()
-   GUI():SetFocus( ::xDlg, oFirstEdit )
+   IF ! Empty( oFirstEdit )
+      GUI():SetFocus( ::xDlg, oFirstEdit )
+   ENDIF
 
    RETURN Nil
 
