@@ -49,7 +49,7 @@ CREATE CLASS HWGUIClass
    METHOD SpinnerCreate(...)    INLINE gui_SpinnerCreate(...)
    METHOD LabelCreate(...)      INLINE gui_LabelCreate(...)
    METHOD MLTextCreate(...)     INLINE gui_MLTextCreate(...)
-   METHOD Statusbar(...)        INLINE gui_Statusbar(...)
+   METHOD StatusCreate(...)     INLINE gui_StatusCreate(...)
    METHOD TextCreate(...)       INLINE gui_TextCreate(...)
 
    /* browse */
@@ -403,7 +403,7 @@ STATIC FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
-STATIC FUNCTION gui_Statusbar( xDlg, xControl )
+STATIC FUNCTION gui_StatusCreate( xDlg, xControl )
 
    (xDlg); (xControl)
 

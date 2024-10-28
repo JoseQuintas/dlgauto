@@ -53,7 +53,7 @@ CREATE CLASS FIVEWINClass
    METHOD SpinnerCreate(...)    INLINE gui_SpinnerCreate(...)
    METHOD LabelCreate(...)      INLINE gui_LabelCreate(...)
    METHOD MLTextCreate(...)     INLINE gui_MLTextCreate(...)
-   METHOD Statusbar(...)        INLINE gui_Statusbar(...)
+   METHOD StatusCreate(...)     INLINE gui_StatusCreate(...)
    METHOD TextCreate(...)       INLINE gui_TextCreate(...)
 
    /* browse */
@@ -426,51 +426,51 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
       IF lModal
          IF ! Empty( bCode )
             ACTIVATE DIALOG xDlg CENTERED ;
-               ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) ) )
+               ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) ) )
 
             pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol()
-            pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
+            pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol()
             pGenPrg += hb_Eol()
 
          ELSE
             ACTIVATE DIALOG xDlg CENTERED ;
-               ON INIT ( (Self), gui_StatusBar( xDlg, "" ) )
+               ON INIT ( (Self), gui_StatusCreate( xDlg, "" ) )
 
             pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol()
-            pGenPrg += [       ON INIT gui_StatusBar( xDlg, "" ) ] + hb_Eol()
+            pGenPrg += [       ON INIT gui_StatusCreate( xDlg, "" ) ] + hb_Eol()
             pGenPrg += hb_Eol()
 
          ENDIF
       ELSE
          IF ! Empty( bCode )
             ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
-               ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) ) )
+               ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) ) )
 
             pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;] + hb_Eol()
-            pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
+            pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol()
             pGenPrg += hb_Eol()
 
          ELSE
             ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
-               ON INIT ( (Self), gui_StatusBar( xDlg, "" ) )
+               ON INIT ( (Self), gui_StatusCreate( xDlg, "" ) )
 
             pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;]
-            pGenPrg += [      ON INIT gui_StatusBar( xDlg, "" )] + hb_Eol()
+            pGenPrg += [      ON INIT gui_StatusCreate( xDlg, "" )] + hb_Eol()
             pGenPrg += hb_Eol()
 
          ENDIF
       ENDIF
    ELSE
       IF ! Empty( bCode )
-         ACTIVATE WINDOW xDlg CENTERED ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) ) )
+         ACTIVATE WINDOW xDlg CENTERED ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) ) )
 
-         pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusBar( xDlg, "" ) )] + hb_Eol()
+         pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol()
          pGenPrg += hb_Eol()
 
       ELSE
-         ACTIVATE WINDOW xDlg CENTERED ON INIT ( (Self), gui_StatusBar( xDlg, "" ) )
+         ACTIVATE WINDOW xDlg CENTERED ON INIT ( (Self), gui_StatusCreate( xDlg, "" ) )
 
-         pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusBar( xDlg, "" )] + hb_Eol()
+         pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusCreate( xDlg, "" )] + hb_Eol()
          pGenPrg += hb_Eol()
 
       ENDIF
@@ -507,10 +507,10 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          COLOR COLOR_LIGHTGRAY
 
    //IF ! Empty( bInit )
-   //   AAdd( oFrm:OnFrmInitList, bInit )
+   //   AAdd( oFrm:EventInitList, bInit )
    //ENDIF
    IF ! Empty( oFrm )
-      xDlg:bValid := { || ! gui_DlgTextEnabled( oFrm ) }
+      xDlg:bValid := { || ! gui_DlgIsEditEnabled( oFrm ) }
    ENDIF
       pGenPrg += [   DEFINE DIALOG xDlg FROM ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ TO ] + hb_ValToExp( nRow + nHeight ) + [, ] + hb_ValToExp( nCol + nWidth ) +  [ ;] + hb_Eol()
@@ -533,20 +533,20 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
 
    RETURN Nil
 
-STATIC FUNCTION gui_DlgTextEnabled( oFrm )
+STATIC FUNCTION gui_DlgIsEditEnabled( oFrm )
 
-   LOCAL xControl, lDlgTextEnabled := .F.
+   LOCAL xControl, lDlgIsEditEnabled := .F.
 
    FOR EACH xControl IN oFrm:aControlList
       IF hb_ASCan( { TYPE_TEXT, TYPE_MLTEXT }, xControl[ CFG_CTLTYPE ] ) != 0
          IF xControl[ CFG_FCONTROL ]:lActive
-            lDlgTextEnabled := .T.
+            lDlgIsEditEnabled := .T.
             EXIT
          ENDIF
       ENDIF
    NEXT
 
-   RETURN lDlgTextEnabled
+   RETURN lDlgIsEditEnabled
 
 STATIC FUNCTION gui_IsCurrentFocus( xDlg, xControl )
 
@@ -637,7 +637,7 @@ STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, 
 
    RETURN Nil
 
-STATIC FUNCTION gui_Statusbar( xDlg, xControl )
+STATIC FUNCTION gui_StatusCreate( xDlg, xControl )
 
    DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;
       SIZES 150, 200, 240

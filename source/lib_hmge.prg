@@ -51,7 +51,7 @@ CREATE CLASS HMGEClass
    METHOD SpinnerCreate(...)    INLINE gui_SpinnerCreate(...)
    METHOD LabelCreate(...)      INLINE gui_LabelCreate(...)
    METHOD MLTextCreate(...)     INLINE gui_MLTextCreate(...)
-   METHOD Statusbar(...)        INLINE gui_Statusbar(...)
+   METHOD StatusCreate(...)     INLINE gui_StatusCreate(...)
    METHOD TextCreate(...)       INLINE gui_TextCreate(...)
 
    /* browse */
@@ -441,7 +441,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
          MAIN ;
          ON INIT Eval( bInit )
-         gui_Statusbar( xDlg, "" )
+         gui_StatusCreate( xDlg, "" )
       END WINDOW
    ELSEIF lModal
       DEFINE WINDOW ( xDlg ) ;
@@ -453,7 +453,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
          MODAL ;
          ON INIT Eval( bInit )
-         gui_Statusbar( xDlg, "" )
+         gui_StatusCreate( xDlg, "" )
       END WINDOW
    ELSE
       DEFINE WINDOW ( xDlg ) ;
@@ -470,7 +470,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          // IF ! Empty( xOldDlg )
          //    ON KEY ALT+F4 ACTION doMethod( xOldDlg, "SETFOCUS" )
          // ENDIF
-         gui_Statusbar( xDlg, "" )
+         gui_StatusCreate( xDlg, "" )
       END WINDOW
    ENDIF
 
@@ -578,7 +578,7 @@ STATIC FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
-STATIC FUNCTION gui_Statusbar( xDlg, xControl )
+STATIC FUNCTION gui_StatusCreate( xDlg, xControl )
 
    IF Empty( xControl )
       xControl := gui_NewName( "STA" )

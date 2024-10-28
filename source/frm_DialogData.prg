@@ -19,9 +19,9 @@ FUNCTION frm_DialogData( Self )
       ENDIF
    NEXT
 
-   GUI():DialogCreate( Self, @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::OnFrmInit() }, ::lModal, ::xParent )
+   GUI():DialogCreate( Self, @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::EventInit() }, ::lModal, ::xParent )
    ::CreateControls()
-   GUI():DialogActivate( ::xDlg, { || ::OnFrmInit() }, ::lModal )
+   GUI():DialogActivate( ::xDlg, { || ::EventInit() }, ::lModal )
 
 #ifndef DLGAUTO_AS_LIB
    IF GUI():Libname() == "GTWVG"

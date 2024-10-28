@@ -55,7 +55,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    oThisForm:lNavigate := .F.
    oThisForm:cTitle := "BROWSE " + cTable
    GUI():DialogCreate( oThisForm, @oThisForm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, oThisForm:cTitle,, .T. )
-   frm_Button( oThisForm, .F. )
+   frm_ButtonCreate( oThisForm, .F. )
    AAdd( oThisForm:aControlList, EmptyFrmClassItem() )
    aItem := Atail( oThisForm:aControlList )
    aItem[ CFG_CTLTYPE ] := TYPE_BROWSE

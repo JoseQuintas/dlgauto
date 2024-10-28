@@ -1,11 +1,11 @@
 /*
-frm_EventValid - valid used on getbox, edit, textbox
+frm_EditValidate - valid used on getbox, edit, textbox
 part of frm_class
 */
 
 #include "frm_class.ch"
 
-FUNCTION frm_EventValid( Self, aItem )
+FUNCTION frm_EditValidate( Self, aItem )
 
    LOCAL nSelect, lFound := .T., xValue, nPos
 

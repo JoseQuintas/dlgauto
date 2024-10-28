@@ -51,7 +51,7 @@ CREATE CLASS OOHGClass
    METHOD SpinnerCreate(...)    INLINE gui_SpinnerCreate(...)
    METHOD LabelCreate(...)      INLINE gui_LabelCreate(...)
    METHOD MLTextCreate(...)     INLINE gui_MLTextCreate(...)
-   METHOD Statusbar(...)        INLINE gui_Statusbar(...)
+   METHOD StatusCreate(...)     INLINE gui_StatusCreate(...)
    METHOD TextCreate(...)       INLINE gui_TextCreate(...)
 
    /* browse */
@@ -368,7 +368,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          ICON "ICOWINDOW" ;
          MODAL ;
          ON INIT Eval( bInit )
-         gui_Statusbar( xDlg, "" )
+         gui_StatusCreate( xDlg, "" )
       END WINDOW
    ELSE
       DEFINE WINDOW ( xDlg ) ;
@@ -378,7 +378,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          TITLE  cTitle + " )" + GUI():LibName() + ")" ;
          ICON "ICOWINDOW" ;
          ON INIT Eval( bInit )
-         gui_Statusbar( xDlg, "" )
+         gui_StatusCreate( xDlg, "" )
       END WINDOW
    ENDIF
 
@@ -486,7 +486,7 @@ STATIC FUNCTION gui_SetFocus( xDlg, xControl )
 
    RETURN Nil
 
-STATIC FUNCTION gui_Statusbar( xDlg, xControl )
+STATIC FUNCTION gui_StatusCreate( xDlg, xControl )
 
    IF Empty( xControl )
       xControl := gui_NewName( "STA" )

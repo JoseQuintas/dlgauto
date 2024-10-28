@@ -11,11 +11,11 @@ frm_DialogMenu.prg
 frm_DialogPreview.prg
 frm_DialogFree.prg
 
-frm_Button.prg
-frm_Edit.prg
+frm_ButtonCreate.prg
+frm_EditCreate.prg
 
 frm_EventBrowseClick.prg
-frm_EventValid.prg
+frm_EditValidate.prg
 frm_EventPrint.prg
 
 frm_funcMain.prg
@@ -31,11 +31,13 @@ test.rc
 -mt
 -gui
 
+-q
+
 hbct.hbc
 {win}hbwin.hbc
 
 # only if you see console screen with any library
-{win}-gtgui
+#{win}-gtgui
 #lib_fivewin.prg
 #lib_hwgui.prg
 #lib_hmg3.prg

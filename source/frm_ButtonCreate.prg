@@ -1,11 +1,11 @@
 /*
-frm_Button - create the buttons
+frm_ButtonCreate - create the buttons
 part of frmclass
 */
 
 #include "frm_class.ch"
 
-FUNCTION frm_Button( Self )
+FUNCTION frm_ButtonCreate( Self )
 
    LOCAL nRow, nCol, nRowLine := 1, aItem, aList := {}
 

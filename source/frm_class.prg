@@ -27,50 +27,53 @@ CREATE CLASS frm_Class
    VAR nInitRecno
    VAR aInitValue1
    VAR aInitValue2
-   VAR OnFrmInitList   INIT {}
+   VAR EventInitList   INIT {}
 
    VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
 
-   VAR xDlg           INIT ""
-   VAR aControlList   INIT {}
-   VAR aAllSetup      INIT {}
-   VAR aDlgKeyDown    INIT {}
+   VAR xDlg            INIT ""
+   VAR aControlList    INIT {}
+   VAR aAllSetup       INIT {}
+   VAR aDlgKeyDown     INIT {}
    VAR xParent
+
+   METHOD CreateControls()     INLINE frm_ButtonCreate( Self ), frm_EditCreate( Self )
 
    METHOD First_Click()
    METHOD Last_Click()
    METHOD Next_Click()
    METHOD Previous_Click()
-   METHOD Insert_Click()       INLINE ::cSelected := "INSERT", ::EditKeyOn()
-   METHOD Edit_Click()         INLINE ::cSelected := "EDIT",   ::EditKeyOn()
-   METHOD Print_Click()        INLINE frm_EventPrint( Self )
-   METHOD Delete_Click()
-   METHOD Cancel_Click()       INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
-   METHOD Save_Click()
    METHOD View_Click()         INLINE ::Browse( "", "", ::cDataTable, Nil ), ::DataLoad()
+   METHOD Print_Click()        INLINE frm_EventPrint( Self )
    METHOD Exit_Click()
 
-   METHOD CreateControls()     INLINE frm_Button( Self ), frm_Edit( Self )
+   METHOD Delete_Click()
+   METHOD Edit_Click()         INLINE ::cSelected := "EDIT",   ::EditKeyOn()
+   METHOD Insert_Click()       INLINE ::cSelected := "INSERT", ::EditKeyOn()
+   METHOD Cancel_Click()       INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
+   METHOD Save_Click()
+   METHOD Browse( ... )               INLINE frm_DialogBrowse( Self, ... )
+   METHOD Browse_Click( aItem, nKey ) INLINE frm_EventBrowseClick( Self, aItem, nKey )
+
    METHOD ButtonSaveOn( lSave )
    METHOD ButtonSaveOff()
    METHOD DataLoad()
    METHOD EditKeyOn()
    METHOD EditOn()
    METHOD EditOff()
-   METHOD Execute()            INLINE frm_DialogData( Self )
-   METHOD Validate( aItem )    INLINE frm_EventValid( Self, aItem )
-   METHOD Browse( ... )        INLINE frm_DialogBrowse( Self, ... )
-   METHOD Browse_Click( aItem, nKey ) INLINE frm_EventBrowseClick( Self, aItem, nKey )
-   METHOD OnFrmInit()
-   METHOD AddOnFrmInit( bCode ) INLINE AAdd( ::bOnFrmInitList, bCode )
+   METHOD EditValidate( aItem )       INLINE frm_EditValidate( Self, aItem )
+
+   METHOD Execute()                   INLINE frm_DialogData( Self )
+   METHOD EventInit() // may be lib have oninit and onactivate
 
    ENDCLASS
 
-METHOD OnFrmInit() CLASS frm_Class
+METHOD EventInit() CLASS frm_Class
 
    LOCAL nPos, aItem
 
+   // if subroutine part 1
    IF ::nInitRecno != Nil
       IF ::lIsSQL
          // key
@@ -78,7 +81,10 @@ METHOD OnFrmInit() CLASS frm_Class
          GOTO ::nInitRecno
       ENDIF
    ENDIF
+
    ::DataLoad()
+
+   // if subroutine part2
    IF Empty( ::cDataTable )
       AEval( ::aControlList, { | e | ;
          iif( e[ CFG_CTLTYPE ] == TYPE_TEXT, GUI():ControlEnable( ::xDlg, e[ CFG_FCONTROL ], .T. ), Nil ) } )
@@ -128,8 +134,8 @@ METHOD OnFrmInit() CLASS frm_Class
       //   ENDIF
       //NEXT
    //ENDIF
-   IF ! Empty( ::OnFrmInitList )
-      FOR EACH aItem IN ::OnFrmInitList
+   IF ! Empty( ::EventInitList )
+      FOR EACH aItem IN ::EventInitList
          Eval( aItem )
       NEXT
    ENDIF
@@ -319,7 +325,7 @@ METHOD EditKeyOn() CLASS frm_Class
          GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
       ELSEIF aItem[ CFG_CTLTYPE ] == TYPE_TEXT .AND. aItem[ CFG_ISKEY ] .AND. ! aItem[ CFG_SAVEONLY ]
          GUI():ControlEnable( ::xDlg, aItem[ CFG_FCONTROL ], .T. )
-         IF ! lFound .AND. aItem[ CFG_ISKEY ]
+         IF ! lFoundEdit .AND. aItem[ CFG_ISKEY ]
             lFoundEdit := .T.
             oKeyEdit := aItem[ CFG_FCONTROL ]
          ENDIF

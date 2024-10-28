@@ -1,5 +1,5 @@
 /*
-frm_Edit - Create textbox/label on dialog
+frm_EditCreate - Create textbox/label on dialog
 part of frmclass
 */
 
@@ -11,7 +11,7 @@ part of frmclass
    #define VK_RETURN  13
 #endif
 
-FUNCTION frm_Edit( Self )
+FUNCTION frm_EditCreate( Self )
 
    LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aList := {}
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
@@ -256,7 +256,7 @@ FUNCTION frm_Edit( Self )
          GUI():TextCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
             nRow2, nCol2, Max( aItem[ CFG_FLEN ], 5 ) * 12 + 12, APP_LINE_HEIGHT, ;
             @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
-            { || ::Validate( aItem ) }, ;
+            { || ::EditValidate( aItem ) }, ;
             iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), aItem[ CFG_ACTION ], Nil ), ;
             iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), "bmpsearch", Nil ), @aItem, ;
             Self )
