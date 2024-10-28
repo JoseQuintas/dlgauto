@@ -27,7 +27,7 @@ CREATE CLASS frm_Class
    VAR nInitRecno
    VAR aInitValue1
    VAR aInitValue2
-   VAR bOnFrmActivate
+   VAR OnFrmInitList INIT {}
 
    VAR nLayout         INIT 2
    VAR lWithTab        INIT .T.
@@ -43,7 +43,7 @@ CREATE CLASS frm_Class
    METHOD Next_Click()
    METHOD Previous_Click()
    METHOD Insert_Click()       INLINE ::cSelected := "INSERT", ::EditKeyOn()
-   METHOD Edit_Click()         INLINE ::cSelected := "EDIT", ::EditKeyOn()
+   METHOD Edit_Click()         INLINE ::cSelected := "EDIT",   ::EditKeyOn()
    METHOD Print_Click()        INLINE frm_EventPrint( Self )
    METHOD Delete_Click()
    METHOD Cancel_Click()       INLINE ::cSelected := "NONE", ::EditOff(), ::DataLoad()
@@ -63,12 +63,13 @@ CREATE CLASS frm_Class
    METHOD Browse( ... )        INLINE frm_DialogBrowse( Self, ... )
    METHOD Browse_Click( aItem, nKey ) INLINE frm_EventBrowseClick( Self, aItem, nKey )
    METHOD OnFrmInit()
+   METHOD AddOnFrmInit( bCode ) INLINE AAdd( ::bOnFrmInitList, bCode )
 
    ENDCLASS
 
 METHOD OnFrmInit() CLASS frm_Class
 
-   LOCAL nPos
+   LOCAL nPos, aItem
 
    IF ::nInitRecno != Nil
       IF ::lIsSQL
@@ -127,8 +128,10 @@ METHOD OnFrmInit() CLASS frm_Class
       //   ENDIF
       //NEXT
    //ENDIF
-   IF ! Empty( ::bOnFrmActivate )
-      Eval( ::bOnFrmActivate )
+   IF ! Empty( ::OnFrmInitList )
+      FOR EACH aItem IN ::OnFrmInitList
+         Eval( aItem )
+      NEXT
    ENDIF
 
    RETURN Nil

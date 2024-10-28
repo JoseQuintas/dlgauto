@@ -230,7 +230,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
    //SetColor( "W/B" )
    //CLS
 
-   (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit)
+   (xDlg);(nRow);(nCol);(nWidth);(nHeight);(cTitle);(bInit);(oFrm)
 
    RETURN Nil
 

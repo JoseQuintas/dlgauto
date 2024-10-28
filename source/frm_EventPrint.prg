@@ -59,7 +59,7 @@ FUNCTION frm_EventPrint( Self )
    SET PRINTER TO
 
    frm_Preview( "rel.lst", Self )
-   fErase( "rel.lst" )
+   //fErase( "rel.lst" )
 
    RETURN Nil
 

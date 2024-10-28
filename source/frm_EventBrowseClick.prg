@@ -54,9 +54,9 @@ FUNCTION frm_EventBrowseClick( oFrmOld, aItemOld, nKey )
          :aInitValue2 := { aItemOld[ CFG_BRWKEYTO2 ], ( aItemOld[ CFG_BRWTABLE ] )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYTO2 ] ) ) ) }
       ENDIF
       DO CASE
-      CASE nKey == VK_INSERT; :cOptions := "IS" ; :bOnFrmActivate := { || :Insert_Click() }
-      CASE nKey == VK_DELETE; :cOptions := "D" // :bOnFrmActivate := { || :Delete_Click() }
-      CASE nKey == VK_RETURN; :cOptions := "ES"; :bOnFrmActivate := { || :Edit_Click() }
+      CASE nKey == VK_INSERT; :cOptions := "IS" ; AAdd( :OnFrmInitList, { || :Insert_Click() } )
+      CASE nKey == VK_DELETE; :cOptions := "D" // AAdd( :OnFrmInitList, { || :Delete_Click() } )
+      CASE nKey == VK_RETURN; :cOptions := "ES"; AAdd( :OnFrmInitList, { || :Edit_Click() } )
       ENDCASE
       :Execute()
    ENDWITH

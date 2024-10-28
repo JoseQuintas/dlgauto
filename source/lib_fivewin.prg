@@ -506,6 +506,9 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
          COLOR COLOR_LIGHTGRAY
 
+   //IF ! Empty( bInit )
+   //   AAdd( oFrm:OnFrmInitList, bInit )
+   //ENDIF
    IF ! Empty( oFrm )
       xDlg:bValid := { || ! gui_DlgTextEnabled( oFrm ) }
    ENDIF

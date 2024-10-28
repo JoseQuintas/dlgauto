@@ -378,6 +378,8 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
       END WINDOW
    ENDIF
 
+   (oFrm)
+
    RETURN Nil
 
 STATIC FUNCTION gui_IsCurrentFocus( xDlg, xControl )
