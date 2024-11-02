@@ -9,6 +9,7 @@ REQUEST HB_CODEPAGE_PTISO
 #include "dbstruct.ch"
 #include "frm_class.ch"
 #include "hbgtinfo.ch"
+#include "set.ch"
 
 MEMVAR lLogin, cUser, cPass
 MEMVAR pGenPrg, pGenName
@@ -49,9 +50,9 @@ MEMVAR pGenPrg, pGenName
 
    frm_DialogMenu( @aAllSetup )
 
-#ifndef DLGAUTO_AS_LIB
+IF .F.
    hb_MemoWrit( pGenName + ".txt", pGenPrg )
-#endif
+ENDIF
 
    RETURN
 
@@ -108,3 +109,16 @@ PROCEDURE HB_GTSYS
    RETURN
 #endif
 #endif
+
+FUNCTION DlgAuto_ShowDefault()
+
+   LOCAL cText := ""
+
+   cText += "date:" + hb_ValToExp( Set( _SET_DATEFORMAT ) ) + hb_Eol()
+   cText += "cpd:" + hb_ValToExp( Set( _SET_CODEPAGE ) ) + hb_Eol()
+   cText += "decimals: " + hb_ValToExp( Set( _SET_DECIMALS ) ) + hb_Eol()
+   GUI():MsgBox( cText )
+
+   RETURN Nil
+
+

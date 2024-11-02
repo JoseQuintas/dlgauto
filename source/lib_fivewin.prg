@@ -9,6 +9,7 @@ lib_fivewin- fivewin source selected by lib.prg
 #include "fivewin.ch"
 #include "calendar.ch"
 #include "dtpicker.ch"
+#include "colors.ch"
 
    STATIC pGenPrg := ""
    //MEMVAR pGenPrg, pGenName
@@ -60,6 +61,7 @@ CREATE CLASS FIVEWINClass
    METHOD Browse(...)           INLINE gui_Browse(...)
    METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
    METHOD browsekeydown(...)    INLINE gui_browsekeydown(...)
+   METHOD SetBrowseKeyDown( xControl ) INLINE gui_SetBrowseKeyDown( xControl )
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -115,7 +117,11 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
          MENU
             FOR EACH cDBF IN aGroupList
+#ifdef DLGAUTO_AS_LIB
+               MENUITEM cDBF ACTION ( (oMenuItem), frm_funcMain( cDBF, aAllSetup,.T. ) )
+#else
                MENUITEM cDBF ACTION ( (oMenuItem), hb_ThreadStart( { || frm_funcMain( cDBF, aAllSetup,.T. ) } ) )
+#endif
             NEXT
          ENDMENU
       NEXT
@@ -130,6 +136,7 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
       ENDIF
       MENUITEM "Exit"
          MENU
+         MENUITEM "Test Default" ACTION ( (oMenuItem), DlgAuto_ShowDefault() )
          MENUITEM "aWindowsInfo" ACTION ( (oMenuItem), gui_MsgBox( aWindowsInfo() ) ) ;
             MESSAGE "Show used controls"
          SEPARATOR
@@ -190,9 +197,6 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
    cField, xValue, workarea, aKeyDownList, oFrmClass )
 
    LOCAL aItem, oCol, aThisKey
-#ifdef DLGAUTO_AS_LIB
-   LOCAL aCol, nValue
-#endif
 
    IF oFrmClass:lIsSQL
 #ifdef DLGAUTO_AS_LIB
@@ -202,7 +206,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
             SIZE nWidth, nHeight PIXEL ;
             ; // LINES AUTOCOL, AUTOSORT ;
             OF xParent ;
-            ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+            ON DBLCLICK ( (nRow), (nCol), (nFlags), gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue ) )
             //LINES CELL
       ELSEIF hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) != 0
          @ nRow, nCol XBROWSE xControl ;
@@ -210,7 +214,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
             ; // LINES AUTOCOL, AUTOSORT ;
             SIZE nWidth, nHeight PIXEL ;
             OF xParent ;
-            ON DBLCLICK GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea )
+            ON DBLCLICK ( (nRow), (nCol), (nFlags), GUI():BrowseKeyDown( VK_RETURN, aKeyDownList, workarea ) )
             //LINES CELL
       ENDIF
       WITH OBJECT xControl
@@ -221,10 +225,10 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
             iif( ! "BROWSE" $ oFrmClass:cTitle, " LIMIT 5", "" ) )
          xControl:xUserValue := xControl:xUserData:RecordCount()
          :nArrayAt   := 1
-         ADD oCol TO xControl ;
-            DATA { || xControl:nArrayAt } ;
-            HEADER "#ArrayAt" ;
-            PICTURE "999999"
+         //ADD oCol TO xControl ;
+         //   DATA { || xControl:nArrayAt } ;
+         //   HEADER "#ArrayAt" ;
+         //   PICTURE "999999"
          FOR EACH aItem IN oTbrowse
             DO CASE
             CASE Len( aItem ) < 4
@@ -236,17 +240,24 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
                ADD oCol TO xControl ;
                   DATA { || xControl:xUserData:Date( aItem[2] ) } ;
                   HEADER aItem[1] ;
-                  //PICTURE aItem[3]
+                  PICTURE aItem[3]
             CASE aItem[ 4 ] == "N"
                ADD oCol TO xControl ;
                   DATA { || xControl:xUserData:Number( aItem[2] ) } ;
                   HEADER aItem[1] ;
-                  //PICTURE aItem[3]
+                  PICTURE aItem[3]
+            CASE aItem[ 4 ] == "C"
+               ADD oCol TO xControl ;
+                  DATA { | cText | ;
+                     cText := xControl:xUserData:String( aItem[2] ), ;
+                     Pad( cText, Min( 60, aItem[5] ) ) } ;
+                  HEADER aItem[1] ;
+                  PICTURE aItem[3]
             OTHERWISE
                ADD oCol TO xControl ;
                   DATA { || xControl:xUserData:String( aItem[2] ) } ;
                   HEADER aItem[1] ;
-                  //PICTURE aItem[3]
+                  PICTURE aItem[3]
             ENDCASE
          NEXT
          //:bGoTop     := { || xControl:xUserValue :=  1 }
@@ -261,6 +272,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
          //:bKeyNo     := { |n| If( n == nil, xControl:xUserValue, xControl:xUserValue := n ) }
          :bOnSkip    := { || xControl:xUserData:Move( xControl:nArrayAt - 1, 1 ) }
          xControl:SetArray( Array( xControl:xUserData:RecordCount() ) )
+         :bClrStd := { || { CLR_BLACK, iif( Mod( xControl:xUserData:AbsolutePosition, 2 ) == 0, CLR_WHITE, RGB(179,207,231) ) } }
       ENDWITH
 #endif
    ELSE
@@ -285,6 +297,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
             HEADER aItem[1] ;
             PICTURE aItem[3]
       NEXT
+      xControl:bClrStd := { || { CLR_BLACK, iif( Mod( OrdKeyNo(), 2 ) == 0, CLR_WHITE, RGB(179,207,231) ) } }
    ENDIF
    xControl:CreateFromCode()
    xControl:Refresh() // test for bug
@@ -856,6 +869,16 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
    FOR EACH aItem IN oFrmClass:aDlgKeyDown
    NEXT
+
+   RETURN Nil
+
+STATIC FUNCTION gui_SetBrowseKeyDown( xControl )
+
+/*
+   xControl:bKeyDown := { | nKey | gui_EventBrowseKeyDown( nKey, xControl, xControl:xUserData ) }
+*/
+
+   (xControl)
 
    RETURN Nil
 

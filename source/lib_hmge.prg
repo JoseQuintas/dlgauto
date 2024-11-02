@@ -120,6 +120,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
          MENUITEM "NoData Layout 3" ACTION frm_DialogFree(3)
       END POPUP
       DEFINE POPUP "Exit"
+         MENUITEM "Test Default" ACTION DlgAuto_ShowDefault()
          MENUITEM "Exit" ACTION gui_DialogClose( xDlg ) ICON "ICODOOR"
       END POPUP
       DEFINE MONTHCALENDAR ( gui_NewName( "MON" ) )

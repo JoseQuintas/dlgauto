@@ -91,6 +91,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
       NEXT
       oMainMenu:AddItem( oMenuGroup, "Data" + Ltrim( Str( aGroupList:__EnumIndex ) ) )
    NEXT
+   oMainMenu:AddItem( "TestDefault", { || DlgAuto_ShowDefault() } )
    oMainMenu:AddItem( "Exit", { || __Quit() } )
    DO WHILE Inkey(1) != K_ESC
    ENDDO

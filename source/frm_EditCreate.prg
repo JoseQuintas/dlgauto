@@ -133,7 +133,7 @@ FUNCTION frm_EditCreate( Self )
             IF aBrowDBF[ 1 ] == aItem[ CFG_BRWTABLE ]
                FOR EACH aBrowField IN aBrowDbf[ 2 ]
                   IF ! aBrowField[ CFG_FNAME ] == aItem[ CFG_BRWKEYTO ] .AND. aBrowField[ CFG_CTLTYPE ] != TYPE_BROWSE
-                     AAdd( oTBrowse, { aBrowField[ CFG_CAPTION ], aBrowField[ CFG_FNAME ], aBrowField[ CFG_FPICTURE ] } )
+                     AAdd( oTBrowse, { aBrowField[ CFG_CAPTION ], aBrowField[ CFG_FNAME ], aBrowField[ CFG_FPICTURE ], aBrowField[ CFG_FTYPE ], aBrowField[ CFG_FLEN ] } )
                   ENDIF
                NEXT
                EXIT
@@ -258,7 +258,7 @@ FUNCTION frm_EditCreate( Self )
             @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
             { || ::EditValidate( aItem ) }, ;
             iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), aItem[ CFG_ACTION ], Nil ), ;
-            iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), "bmpsearch", Nil ), @aItem, ;
+            iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), iif( GUI():LibName() == "FIVEWIN", "icoSearch", "bmpsearch" ), Nil ), @aItem, ;
             Self )
 
          IF ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )

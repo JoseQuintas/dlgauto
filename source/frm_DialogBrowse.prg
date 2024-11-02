@@ -26,7 +26,7 @@ FUNCTION frm_DialogBrowse( Self, xDlg, xControl, cTable )
    FOR EACH aItem IN ::aAllSetup[ nPos, 2 ]
       IF ! Empty( aItem[ CFG_FNAME ] ) // aItem[ CFG_CTLTYPE ] == TYPE_TEXT
          AAdd( oTBrowse, { aItem[ CFG_CAPTION ], aItem[ CFG_FNAME ], aItem[ CFG_FPICTURE ], ;
-               aItem[ CFG_FTYPE ] } )
+               aItem[ CFG_FTYPE ], aItem[ CFG_FLEN ] } )
          IF aItem[ CFG_ISKEY ]
             cField := aItem[ CFG_FNAME ]
          ENDIF
@@ -64,6 +64,8 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       oTbrowse, cField, @xValue, cTable, {}, oThisForm )
    IF GUI():LibName() == "HWGUI"
       aItem[ CFG_FCONTROL ]:lInFocus := .T.
+   ELSEIF GUI():LibName() == "FIVEWIN"
+      GUI():SetBrowseKeyDown( aItem[ CFG_FCONTROL ] )
    ENDIF
    // works for hmge from button
    GUI():SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] )
