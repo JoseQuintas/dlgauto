@@ -7,7 +7,7 @@ frm_Class - Class for data and bypass for functions
 
 CREATE CLASS frm_Class
 
-#ifdef DLGAUTO_AS_LIB
+#ifdef DLGAUTO_AS_ADO
    VAR lIsSQL          INIT .T.
    VAR cnSQL           INIT ADOLocal()
 #else
@@ -429,7 +429,7 @@ METHOD DataLoad() CLASS frm_Class
 
    LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
-#ifdef DLGAUTO_AS_LIB
+#ifdef DLGAUTO_AS_ADO
    LOCAL aControl
 #endif
 
@@ -502,7 +502,7 @@ METHOD DataLoad() CLASS frm_Class
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          IF ::lIsSQL
-#ifdef DLGAUTO_AS_LIB
+#ifdef DLGAUTO_AS_ADO
             IF GUI():LibName() == "FIVEWIN"
                WITH OBJECT aItem[ CFG_FCONTROL ]
                   :xUserData:CloseRecordset()
@@ -683,7 +683,7 @@ FUNCTION EmptyFrmClassItem()
 
    RETURN aItem
 
-#ifndef DLGAUTO_AS_LIB
+#ifndef DLGAUTO_AS_ADO
 
 FUNCTION ADOLocal()
 

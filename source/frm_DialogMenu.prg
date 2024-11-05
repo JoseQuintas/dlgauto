@@ -9,7 +9,7 @@ frm_DialogMenu - menu of DBF files
 
 FUNCTION frm_DialogMenu( aAllSetup )
 
-   LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, xDlg := "Main", cDBF
+   LOCAL aItem, cName := "", nQtd := 0, aMenuList := {}, xDlg, cDBF
 
    FOR EACH aItem IN aAllSetup
       IF ! cName == aItem[1]
@@ -22,6 +22,6 @@ FUNCTION frm_DialogMenu( aAllSetup )
       ENDIF
    NEXT
 
-   GUI():DlgMenu( xDlg, aMenuList, aAllSetup, "MENU" )
+   GUI():DlgMenu( @xDlg, aMenuList, aAllSetup, "MENU" )
 
    RETURN Nil

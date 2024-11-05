@@ -38,16 +38,20 @@ hbct.hbc
 
 # only if you see console screen with any library
 #{win}-gtgui
-#lib_fivewin.prg
+
+# if need to debug, insert lib_xxx here and remove include from lib.prg
+
+#hwgui.hbc
 #lib_hwgui.prg
-#lib_hmg3.prg
+
+#hmge.hbc
 #lib_hmge.prg
-#lig_oohg.prg
-#lib_gtwvg.prg
 
 #hmg3.hbc
-#hmge.hbc
+#lib_hmge3.prg
+
 #oohg.hbc
-#hwgui.hbc
-#gtwvg.hbc
+#lib_oohg.prg
+
 #fivewin.hbc
+#lib_fivewin.prg

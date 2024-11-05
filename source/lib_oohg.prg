@@ -15,21 +15,6 @@ Note: Or use name or object, but can't mix on this source code
    MEMVAR pGenPrg, pGenName
 #endif
 
-#ifndef DLGAUTO_AS_LIB
-THREAD STATIC oGUI
-
-FUNCTION GUI( xValue )
-
-   IF xValue != Nil
-      oGUI := xValue
-   ENDIF
-   IF oGUI == Nil
-      oGUI := OOHGClass():New()
-   ENDIF
-
-   RETURN oGUI
-#endif
-
 CREATE CLASS OOHGClass
 
    /*--- init ---*/

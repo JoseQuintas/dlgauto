@@ -13,24 +13,6 @@ lib_fivewin- fivewin source selected by lib.prg
 
    STATIC pGenPrg := ""
    //MEMVAR pGenPrg, pGenName
-#ifdef DLGAUTO_AS_LIB
-#else
-#endif
-
-#ifndef DLGAUTO_AS_LIB
-THREAD STATIC oGUI
-
-FUNCTION GUI( xValue )
-
-   IF xValue != Nil
-      oGUI := xValue
-   ENDIF
-   IF oGUI == Nil
-      oGUI := FIVEWINClass():New()
-   ENDIF
-
-   RETURN oGUI
-#endif
 
 CREATE CLASS FIVEWINClass
 
@@ -199,7 +181,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
    LOCAL aItem, oCol, aThisKey
 
    IF oFrmClass:lIsSQL
-#ifdef DLGAUTO_AS_LIB
+#ifdef DLGAUTO_AS_ADO
       IF Len( aKeyDownList ) == 0
          @ nRow, nCol XBROWSE xControl ;
             ARRAY Array(10) ;
@@ -323,7 +305,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 
    RETURN Nil
 
-#ifdef DLGAUTO_AS_LIB
+#ifdef DLGAUTO_AS_ADO
 FUNCTION ADOSkipper( cnSQL, nSkip, nOld )
 
    nOld := cnSQL:AbsolutePosition()

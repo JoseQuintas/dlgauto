@@ -16,21 +16,6 @@ MEMVAR _HMG_MainWindowFirst
    MEMVAR pGenPrg, pGenName
 #endif
 
-#ifndef DLGAUTO_AS_LIB
-THREAD STATIC oGUI
-
-FUNCTION GUI( xValue )
-
-   IF xValue != Nil
-      oGUI := xValue
-   ENDIF
-   IF oGUI == Nil
-      oGUI := HMG3Class():New()
-   ENDIF
-
-   RETURN oGUI
-#endif
-
 CREATE CLASS HMG3Class
 
    /*--- init ---*/

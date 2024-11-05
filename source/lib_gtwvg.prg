@@ -8,19 +8,6 @@ Note: Only to show on screen
 #include "inkey.ch"
 #include "frm_class.ch"
 
-THREAD STATIC oGUI
-
-FUNCTION GUI( xValue )
-
-   IF xValue != Nil
-      oGUI := xValue
-   ENDIF
-   IF oGUI == Nil
-      oGUI := GTWVGClass():New()
-   ENDIF
-
-   RETURN oGUI
-
 CREATE CLASS GTWVGClass
 
    /*--- init ---*/

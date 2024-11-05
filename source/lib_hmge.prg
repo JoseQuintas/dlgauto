@@ -15,21 +15,6 @@ lib_hmge - HMG Extended source selected by lib.prg
 
 THREAD STATIC nWindow := 0
 
-#ifndef DLGAUTO_AS_LIB
-THREAD STATIC oGUI
-
-FUNCTION GUI( xValue )
-
-   IF xValue != Nil
-      oGUI := xValue
-   ENDIF
-   IF oGUI == Nil
-      oGUI := HMGEClass():New()
-   ENDIF
-
-   RETURN oGUI
-#endif
-
 CREATE CLASS HMGEClass
 
    /*--- init ---*/
@@ -80,22 +65,22 @@ CREATE CLASS HMGEClass
 
 STATIC FUNCTION gui_Init()
 
-#ifdef DLGAUTO_AS_LIB
+//#ifdef DLGAUTO_AS_LIB
    Init()
-#endif
+//#endif
+   Set( _SET_DEBUG, .F. )
    SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
    SET WINDOW MODAL PARENT HANDLE ON
 
    SET WINDOW MAIN OFF
-   Set( _SET_DEBUG, .F. )
 
+   pGenPrg += [   Set( _SET_DEBUG, .F. )] + hb_Eol()
    pGenPrg += [   SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )] + hb_Eol()
    pGenPrg += [   SET MENUSTYLE EXTENDED] + hb_Eol()
    pGenPrg += [   SET NAVIGATION EXTENDED] + hb_Eol()
    pGenPrg += [   SET WINDOW MAIN OFF] + hb_Eol()
-   pGenPrg += [   Set( _SET_DEBUG, .F. )] + hb_Eol()
    pGenPrg += hb_Eol()
 
    RETURN Nil
@@ -432,7 +417,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
    hb_Default( @lModal, .T. )
    cTitle := cTitle + " (" + GUI():LibName() + ")"
 
-   IF nWindow == 1
+   IF nWindow == -1 // no main
       DEFINE WINDOW ( xDlg ) ;
          AT nCol, nRow ;
          WIDTH nWidth ;

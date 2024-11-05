@@ -29,26 +29,30 @@ test.prg contains configuration for DBFs created by it.
 - aCheckList:      fields to use checkbox
 - aDatePickerList: fields to use datepicker
 - aSpinnerList:    fields to use spinner
+- aAddOptionList:  buttons to add
 
 -------
 Modules
 -------
 
-frm_class.prg       - create a complete dialog for a database table with or without setup
-frm_browse.prg      - create a browse for a database, exclusive or part of a dialog
-frm_browseclick.prg - from a browse on dialog, create a dialog for database table used on browse
-frm_buttons.prg     - create the buttons on "toolbar"
-frm_dialog.prg      - create the dialog for the database table
-frm_edit.prg        - create all controls used on dialog
-frm_main.prg        - main class execute
-frm_preview.prg     - preview of report for database table
-frm_print.prg       - generate report for database table
-frm_valid.prg       - validate "textbox", can show description, can open browse or dialog
-lib_xxxx.prg        - routines of specific library (hmg3, hmg extended, oohg, fivewin, gtwvg)
+frm_class.prg            - create a complete dialog for a database table with or without setup
+frm_ButtonCreate.prg     - buttons on "toolbar"
+frm_DialogBrowse.prg     - dialog with browse
+frm_DialogData.prg       - dialog for the database table
+frm_DialogFree.prg       - dialog without dbf
+frm_DialogLogin.prg      - dialog login
+frm_DialogMenu.prg       - dialog menu of DBFs
+frm_DialogPreview.prg    - dialog to preview single report
+frm_EditCreate.prg       - create all controls used on dialog
+frm_EditValidate.prg     - validate "textbox", can show description, can open browse or dialog
+frm_EventBrowseClick.prg - from a browse on dialog, create a dialog for database table used on browse
+frm_EventPrint.prg       - generate report for database table
+frm_FuncMain.prg         - main class execute
+
+lib.prg                  - select a library class, include lib_xxxx as part of it
+lib_xxxx.prg             - class of specific library (hmg3, hmg extended, oohg, fivewin, gtwvg)
 
 test.prg            - main procedure, load setup
 test_dbf.prg        - create default DBFs
-test_dlglogin.prg   - login dialog
-test_menu.prg       - menu of DBFs
-test_nodatabase.prg - sample without database
+test_LoadSetup.prg  - load saved setup
 test_setup.prg      - create default setup for DBFs created on test_dbf.prg

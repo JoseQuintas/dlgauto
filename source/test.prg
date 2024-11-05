@@ -120,5 +120,3 @@ FUNCTION DlgAuto_ShowDefault()
    GUI():MsgBox( cText )
 
    RETURN Nil
-
-
