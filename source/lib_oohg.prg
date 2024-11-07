@@ -18,7 +18,7 @@ Note: Or use name or object, but can't mix on this source code
 CREATE CLASS OOHGClass
 
    /*--- init ---*/
-   METHOD LibName()             INLINE gui_LibName()
+   METHOD LibName()             INLINE "OOHG"
    METHOD Init()                INLINE gui_Init()
 
    /*--- dialog ---*/
@@ -425,10 +425,6 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
    (xDlg); (lBorder)
 
    RETURN Nil
-
-STATIC FUNCTION gui_LibName()
-
-   RETURN "OOHG"
 
 STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 

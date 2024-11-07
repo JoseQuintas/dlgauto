@@ -18,7 +18,7 @@ THREAD STATIC nWindow := 0
 CREATE CLASS HMGEClass
 
    /*--- init ---*/
-   METHOD LibName()             INLINE gui_LibName()
+   METHOD LibName()             INLINE "HMGE"
    METHOD Init()                INLINE gui_Init()
 
    /*--- dialog ---*/
@@ -76,12 +76,13 @@ STATIC FUNCTION gui_Init()
 
    SET WINDOW MAIN OFF
 
-   pGenPrg += [   Set( _SET_DEBUG, .F. )] + hb_Eol()
-   pGenPrg += [   SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )] + hb_Eol()
-   pGenPrg += [   SET MENUSTYLE EXTENDED] + hb_Eol()
-   pGenPrg += [   SET NAVIGATION EXTENDED] + hb_Eol()
-   pGenPrg += [   SET WINDOW MAIN OFF] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   Set( _SET_DEBUG, .F. )] + hb_Eol() + ;
+      [   SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )] + hb_Eol() + ;
+      [   SET MENUSTYLE EXTENDED] + hb_Eol() + ;
+      [   SET NAVIGATION EXTENDED] + hb_Eol() + ;
+      [   SET WINDOW MAIN OFF] + hb_Eol() + ;
+      hb_Eol()
 
    RETURN Nil
 
@@ -147,27 +148,28 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
       NOXPSTYLE  .T.
    END BUTTONEX
 
-   pGenPrg += [   DEFINE BUTTONEX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol()
-   pGenPrg += [      PARENT      ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol()
-   pGenPrg += [      ROW         ] + hb_ValToExp( nRow ) + hb_Eol()
-   pGenPrg += [      COL         ] + hb_ValToExp( nCol ) + hb_Eol()
-   pGenPrg += [      WIDTH       ] + hb_ValToExp( nWidth ) + hb_Eol()
-   pGenPrg += [      HEIGHT      ] + hb_ValToExp( nHeight ) + hb_Eol()
-   pGenPrg += [      ICON        ] + hb_ValToExp( cResName ) + hb_Eol()
-   pGenPrg += [      IMAGEWIDTH  -1] + hb_Eol()
-   pGenPrg += [      IMAGEHEIGHT -1] + hb_Eol()
-   pGenPrg += [      CAPTION      ] + hb_ValToExp( cCaption ) + hb_Eol()
-   pGenPrg += [      ACTION      Eval( ] + hb_ValToExp( bAction ) + hb_Eol()
-   pGenPrg += [      FONTNAME     ] + hb_ValToExp( APP_FONTNAME ) + hb_Eol()
-   pGenPrg += [      FONTSIZE     7] + hb_Eol()
-   pGenPrg += [      FONTBOLD     .T.] + hb_Eol()
-   pGenPrg += [      FONTCOLOR    ] + hb_ValToExp( COLOR_BLACK ) + hb_Eol()
-   pGenPrg += [      VERTICAL     .T.] + hb_Eol()
-   pGenPrg += [      BACKCOLOR    ] + hb_ValToExp( COLOR_WHITE ) + hb_Eol()
-   pGenPrg += [      FLAT         .T.] + hb_Eol()
-   pGenPrg += [      NOXPSTYLE] + hb_Eol()
-   pGenPrg += [   END BUTTONEX] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   DEFINE BUTTONEX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol() + ;
+      [      PARENT      ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol() + ;
+      [      ROW         ] + hb_ValToExp( nRow ) + hb_Eol() + ;
+      [      COL         ] + hb_ValToExp( nCol ) + hb_Eol() + ;
+      [      WIDTH       ] + hb_ValToExp( nWidth ) + hb_Eol() + ;
+      [      HEIGHT      ] + hb_ValToExp( nHeight ) + hb_Eol() + ;
+      [      ICON        ] + hb_ValToExp( cResName ) + hb_Eol() + ;
+      [      IMAGEWIDTH  -1] + hb_Eol() + ;
+      [      IMAGEHEIGHT -1] + hb_Eol() + ;
+      [      CAPTION      ] + hb_ValToExp( cCaption ) + hb_Eol() + ;
+      [      ACTION      Eval( ] + hb_ValToExp( bAction ) + hb_Eol() + ;
+      [      FONTNAME     ] + hb_ValToExp( APP_FONTNAME ) + hb_Eol() + ;
+      [      FONTSIZE     7] + hb_Eol() + ;
+      [      FONTBOLD     .T.] + hb_Eol() + ;
+      [      FONTCOLOR    ] + hb_ValToExp( COLOR_BLACK ) + hb_Eol() + ;
+      [      VERTICAL     .T.] + hb_Eol() + ;
+      [      BACKCOLOR    ] + hb_ValToExp( COLOR_WHITE ) + hb_Eol() + ;
+      [      FLAT         .T.] + hb_Eol() + ;
+      [      NOXPSTYLE] + hb_Eol() + ;
+      [   END BUTTONEX] + hb_Eol() + ;
+      hb_Eol()
 
    (xDlg)
 
@@ -301,15 +303,16 @@ STATIC FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth,
       CAPTION ""
    END CHECKBOX
 
-   pGenPrg += [   DEFINE CHECKBOX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol()
-   pGenPrg += [      PARENT     ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol()
-   pGenPrg += [      ROW        ] + hb_ValToExp( nRow ) + hb_Eol()
-   pGenPrg += [      COL        ] + hb_ValToExp( nCol ) + hb_Eol()
-   pGenPrg += [      WIDTH      ] + hb_ValToExp( nWidth ) + hb_Eol()
-   pGenPrg += [      HEIGHT     ] + hb_ValToExp( nHeight ) + hb_Eol()
-   pGenPrg += [      CAPTION    ""] + hb_Eol()
-   pGenPrg += [   END CHECKBOX] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   DEFINE CHECKBOX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol() + ;
+      [      PARENT     ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol() + ;
+      [      ROW        ] + hb_ValToExp( nRow ) + hb_Eol() + ;
+      [      COL        ] + hb_ValToExp( nCol ) + hb_Eol() + ;
+      [      WIDTH      ] + hb_ValToExp( nWidth ) + hb_Eol() + ;
+      [      HEIGHT     ] + hb_ValToExp( nHeight ) + hb_Eol() + ;
+      [      CAPTION    ""] + hb_Eol() + ;
+      [   END CHECKBOX] + hb_Eol() + ;
+      hb_Eol()
 
    (xDlg)
 
@@ -500,29 +503,28 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       ENDIF
    END LABEL
 
-   pGenPrg += [   DEFINE LABEL ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol()
-   pGenPrg += [      PARENT ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol()
-   pGenPrg += [      COL ] + hb_ValToExp( nCol ) + hb_Eol()
-   pGenPrg += [      ROW ] + hb_ValToExp( nRow ) + hb_Eol()
-   pGenPrg += [      WIDTH ] + hb_ValToExp( nWidth ) + hb_Eol()
-   pGenPrg += [      HEIGHT ] + hb_ValToExp( nHeight ) + hb_Eol()
-   pGenPrg += [      VALUE ] + hb_ValToExp( xValue ) + hb_Eol()
-   pGenPrg += [      FONTNAME APP_FONT_NAME ] + hb_Eol()
-   pGenPrg += [      FONTSIZE ] + hb_ValToExp( nFontSize ) + hb_Eol()
+   pGenPrg += ;
+      [   DEFINE LABEL ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol() + ;
+      [      PARENT ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol() + ;
+      [      COL ] + hb_ValToExp( nCol ) + hb_Eol() + ;
+      [      ROW ] + hb_ValToExp( nRow ) + hb_Eol() + ;
+      [      WIDTH ] + hb_ValToExp( nWidth ) + hb_Eol() + ;
+      [      HEIGHT ] + hb_ValToExp( nHeight ) + hb_Eol() + ;
+      [      VALUE ] + hb_ValToExp( xValue ) + hb_Eol() + ;
+      [      FONTNAME APP_FONT_NAME ] + hb_Eol() + ;
+      [      FONTSIZE ] + hb_ValToExp( nFontSize ) + hb_Eol()
    IF lBorder
-      pGenPrg += [      BORDER ] + hb_ValToExp( lBorder ) + hb_Eol()
-      pGenPrg += [      BACKCOLOR N2RGB( COLOR_GREEN )] + hb_Eol()
+      pGenPrg += ;
+         [      BORDER ] + hb_ValToExp( lBorder ) + hb_Eol() + ;
+         [      BACKCOLOR N2RGB( COLOR_GREEN )] + hb_Eol()
    ENDIF
-   pGenPrg += [   END LABEL] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   END LABEL] + hb_Eol() + ;
+      hb_Eol()
 
    (xDlg)
 
    RETURN Nil
-
-STATIC FUNCTION gui_LibName()
-
-   RETURN "HMGE"
 
 STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
@@ -679,43 +681,53 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
          { || oFrmClass:Browse( xDlg, xControl, iif( aItem[ CFG_ISKEY ], oFrmClass:cDataTable, aItem[ CFG_VTABLE ] ) ) } } )
    ENDIF
 
-   pGenPrg += [   DEFINE GETBOX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol()
-   pGenPrg += [      PARENT    ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol()
-   pGenPrg += [      ROW       ] + hb_ValToExp( nRow ) + hb_Eol()
-   pGenPrg += [      COL       ] + hb_ValToExp( nCol ) + hb_Eol()
-   pGenPrg += [      HEIGHT    ] + hb_ValToExp( nHeight ) + hb_Eol()
-   pGenPrg += [      WIDTH     ] + hb_ValToExp( nWidth ) + hb_Eol()
-   pGenPrg += [      FONTNAME  ] + hb_ValToExp( APP_FONTNAME ) + hb_Eol()
-   pGenPrg += [      FONTSIZE  ] + hb_ValToExp( APP_FONTSIZE_NORMAL - 3 ) + hb_Eol()
+   pGenPrg += ;
+      [   DEFINE GETBOX ( ] + hb_ValToExp( xControl ) + [ )] + hb_Eol() + ;
+      [      PARENT    ( ] + hb_ValToExp( xParent ) + [ )] + hb_Eol() + ;
+      [      ROW       ] + hb_ValToExp( nRow ) + hb_Eol() + ;
+      [      COL       ] + hb_ValToExp( nCol ) + hb_Eol() + ;
+      [      HEIGHT    ] + hb_ValToExp( nHeight ) + hb_Eol() + ;
+      [      WIDTH     ] + hb_ValToExp( nWidth ) + hb_Eol() + ;
+      [      FONTNAME  ] + hb_ValToExp( APP_FONTNAME ) + hb_Eol() + ;
+      [      FONTSIZE  ] + hb_ValToExp( APP_FONTSIZE_NORMAL - 3 ) + hb_Eol()
    IF ValType( xValue ) == "N"
-      pGenPrg += [      NUMERIC   .T.] + hb_Eol()
-      pGenPrg += [      INPUTMASK ] + hb_ValToExp( cPicture ) + hb_Eol()
+      pGenPrg += ;
+         [      NUMERIC   .T.] + hb_Eol() + ;
+         [      INPUTMASK ] + hb_ValToExp( cPicture ) + hb_Eol()
    ELSEIF ValType( xValue ) == "D"
-      pGenPrg += [      DATE      .T.] + hb_Eol()
-      pGenPrg += [      DATEFORMAT ] + hb_ValToExp( cPicture ) + hb_Eol()
+      pGenPrg += ;
+         [      DATE      .T.] + hb_Eol() + ;
+         [      DATEFORMAT ] + hb_ValToExp( cPicture ) + hb_Eol()
    ELSEIF ValType( xValue ) == "L" // workaround to do not get error
       xValue := " "
    ELSEIF ValType( xValue ) == "C"
-      pGenPrg += [      MAXLENGTH ] + hb_ValToExp( nMaxLength ) + hb_Eol()
+      pGenPrg += ;
+         [      MAXLENGTH ] + hb_ValToExp( nMaxLength ) + hb_Eol()
    ENDIF
-   pGenPrg += [      VALUE ] + hb_ValToExp( xValue ) + hb_Eol()
+   pGenPrg += ;
+      [      VALUE ] + hb_ValToExp( xValue ) + hb_Eol()
    IF ! Empty( bAction )
-      pGenPrg += [      ACTION Eval( ] + hb_ValToExp( bAction ) + [ )] + hb_Eol()
+      pGenPrg += ;
+         [      ACTION Eval( ] + hb_ValToExp( bAction ) + [ )] + hb_Eol()
    ENDIF
    IF ! Empty( cImage )
-     pGenPrg += [      IMAGE    ] + hb_ValToExp( cImage ) + hb_Eol()
+     pGenPrg += ;
+        [      IMAGE    ] + hb_ValToExp( cImage ) + hb_Eol()
    ENDIF
    IF ! Empty( bValid )
-      pGenPrg += [      ON LOSTFOCUS Eval( ] + hb_ValToExp( bValid ) + [ )] + hb_Eol()
+      pGenPrg += ;
+         [      ON LOSTFOCUS Eval( ] + hb_ValToExp( bValid ) + [ )] + hb_Eol()
       /* when call a dialog from bvalid, valid on next dialog does not works */
       // VALID bValid
    ENDIF
    IF lPassword
-      pGenPrg += [      PASSWORD .T.] + hb_Eol()
-      pGenPrg += [      UPPERCASE .T.] + hb_Eol()
+      pGenPrg += ;
+         [      PASSWORD .T.] + hb_Eol() + ;
+         [      UPPERCASE .T.] + hb_Eol()
    ENDIF
-   pGenPrg += [   END GETBOX] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   END GETBOX] + hb_Eol() + ;
+      hb_Eol()
 
    (bValid)
 
@@ -764,4 +776,3 @@ FUNCTION gui_NewName( cPrefix )
    hb_Default( @cPrefix, "ANY" )
 
    RETURN cPrefix + hb_ValToExp( nCount )
-

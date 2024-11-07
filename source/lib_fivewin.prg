@@ -17,7 +17,7 @@ lib_fivewin- fivewin source selected by lib.prg
 CREATE CLASS FIVEWINClass
 
    /*--- init ---*/
-   METHOD LibName()             INLINE gui_LibName()
+   METHOD LibName()             INLINE "FIVEWIN"
    METHOD Init()                INLINE gui_Init()
 
    /*--- dialog ---*/
@@ -149,25 +149,27 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
       @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xParent ;
          SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction ) CANCEL
 
-      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      pGenPrg += ;
+         [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ BUTTONBMP xControl PROMPT ] + hb_ValToExp( cCaption ) + ;
-         [ OF xParent ;] + hb_Eol()
-      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
-      [ PIXEL RESOURCE ] + hb_ValToExp( cResName ) + [ TOP ACTION Eval( ] + ;
-      hb_ValToExp( bAction ) + [ CANCEL] + hb_Eol()
-      pGenPrg += hb_Eol()
+         [ OF xParent ;] + hb_Eol() + ;
+         [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+         [ PIXEL RESOURCE ] + hb_ValToExp( cResName ) + [ TOP ACTION Eval( ] + ;
+         hb_ValToExp( bAction ) + [ CANCEL] + hb_Eol() + ;
+         hb_Eol()
 
    ELSE
       @ nRow, nCol BUTTONBMP xControl PROMPT cCaption OF xParent ;
          SIZE nWidth, nHeight PIXEL RESOURCE cResName TOP ACTION Eval( bAction )
 
-      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      pGenPrg += ;
+         [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
          [ BUTTONBMP xControl PROMPT ] + hb_ValToExp( cCaption ) + ;
-         [ OF xParent ;] + hb_Eol()
-      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
-      [ PIXEL RESOURCE ] + hb_ValToExp( cResName ) + [ TOP ACTION Eval( ] + ;
-      hb_ValToExp( bAction ) + hb_Eol()
-      pGenPrg += hb_Eol()
+         [ OF xParent ;] + hb_Eol() + ;
+         [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+         [ PIXEL RESOURCE ] + hb_ValToExp( cResName ) + [ TOP ACTION Eval( ] + ;
+         hb_ValToExp( bAction ) + hb_Eol() + ;
+         hb_Eol()
 
    ENDIF
 
@@ -371,11 +373,12 @@ STATIC FUNCTION gui_CheckboxCreate( xDlg, xParent, xControl, nRow, nCol, nWidth,
    @ nRow, nCol CHECKBOX xControl VAR xValue PROMPT "" PIXEL ;
       SIZE nWidth, nHeight OF xParent
 
-   pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-      [ CHECKBOX xControl VAR xValue PROMPT "" PIXEL ;] + hb_Eol()
-   pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
-      [ OF xParent] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      [ CHECKBOX xControl VAR xValue PROMPT "" PIXEL ;] + hb_Eol() + ;
+      [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+      [ OF xParent] + hb_Eol() + ;
+      hb_Eol()
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -387,11 +390,12 @@ STATIC FUNCTION gui_ComboCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       SIZE nWidth, nHeight ;
       ITEMS aList
 
-   pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-      [ COMBOBOX xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
-   pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol()
-   pGenPrg += [      ITEMS ] + hb_ValToExp( aList ) + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      [ COMBOBOX xControl VAR xValue OF xParent PIXEL ;] + hb_Eol() + ;
+      [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol() + ;
+      [      ITEMS ] + hb_ValToExp( aList ) + hb_Eol() + ;
+      hb_Eol()
 
    //STYLE CBS_DROPDOWN
    //UPDATE
@@ -423,17 +427,19 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
             ACTIVATE DIALOG xDlg CENTERED ;
                ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) ) )
 
-            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol()
-            pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol()
-            pGenPrg += hb_Eol()
+            pGenPrg += ;
+               [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol() + ;
+               [      ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol() + ;
+               hb_Eol()
 
          ELSE
             ACTIVATE DIALOG xDlg CENTERED ;
                ON INIT ( (Self), gui_StatusCreate( xDlg, "" ) )
 
-            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol()
-            pGenPrg += [       ON INIT gui_StatusCreate( xDlg, "" ) ] + hb_Eol()
-            pGenPrg += hb_Eol()
+            pGenPrg += ;
+               [   ACTIVATE DIALOG xDlg CENTERED ;] + hb_Eol() + ;
+               [       ON INIT gui_StatusCreate( xDlg, "" ) ] + hb_Eol() + ;
+               hb_Eol()
 
          ENDIF
       ELSE
@@ -441,17 +447,19 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
             ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
                ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) ) )
 
-            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;] + hb_Eol()
-            pGenPrg += [      ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol()
-            pGenPrg += hb_Eol()
+            pGenPrg += ;
+               [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;] + hb_Eol() + ;
+               [      ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol() + ;
+               hb_Eol()
 
          ELSE
             ACTIVATE DIALOG xDlg CENTERED NOMODAL ;
                ON INIT ( (Self), gui_StatusCreate( xDlg, "" ) )
 
-            pGenPrg += [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;]
-            pGenPrg += [      ON INIT gui_StatusCreate( xDlg, "" )] + hb_Eol()
-            pGenPrg += hb_Eol()
+            pGenPrg += ;
+               [   ACTIVATE DIALOG xDlg CENTERED NOMODAL ;] + ;
+               [      ON INIT gui_StatusCreate( xDlg, "" )] + hb_Eol() + ;
+               hb_Eol()
 
          ENDIF
       ENDIF
@@ -459,14 +467,17 @@ STATIC FUNCTION gui_DialogActivate( xDlg, bCode, lModal )
       IF ! Empty( bCode )
          ACTIVATE WINDOW xDlg CENTERED ON INIT ( (Self), DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) ) )
 
-         pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol()
-         pGenPrg += hb_Eol()
+         pGenPrg += ;
+            [   ACTIVATE WINDOW xDlg CENTERED] + ;
+            [  ON INIT DoNothing( Eval( bCode ), gui_StatusCreate( xDlg, "" ) )] + hb_Eol() + ;
+            hb_Eol()
 
       ELSE
          ACTIVATE WINDOW xDlg CENTERED ON INIT ( (Self), gui_StatusCreate( xDlg, "" ) )
 
-         pGenPrg += [   ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusCreate( xDlg, "" )] + hb_Eol()
-         pGenPrg += hb_Eol()
+         pGenPrg += ;
+            [   ACTIVATE WINDOW xDlg CENTERED ON INIT gui_StatusCreate( xDlg, "" )] + hb_Eol() + ;
+            hb_Eol()
 
       ENDIF
       // VALID MsgYesNo( "Exit?" )
@@ -507,12 +518,13 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
    IF ! Empty( oFrm )
       xDlg:bValid := { || ! gui_DlgIsEditEnabled( oFrm ) }
    ENDIF
-      pGenPrg += [   DEFINE DIALOG xDlg FROM ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-         [ TO ] + hb_ValToExp( nRow + nHeight ) + [, ] + hb_ValToExp( nCol + nWidth ) +  [ ;] + hb_Eol()
-      pGenPrg += [      PIXEL OF xParent /* FONT oFont */ TITLE ] + hb_ValToExp( cTitle + " (" + GUI():LibName() ) + ;
-         [ ")" ICON "ICOWINDOW" ;] + hb_Eol()
-      pGenPrg += [      COLOR COLOR_LIGHTGRAY] + hb_Eol()
-      pGenPrg += hb_Eol()
+      pGenPrg += ;
+         [   DEFINE DIALOG xDlg FROM ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ TO ] + hb_ValToExp( nRow + nHeight ) + [, ] + hb_ValToExp( nCol + nWidth ) +  [ ;] + hb_Eol() + ;
+         [      PIXEL OF xParent /* FONT oFont */ TITLE ] + hb_ValToExp( cTitle + " (" + GUI():LibName() ) + ;
+         [ ")" ICON "ICOWINDOW" ;] + hb_Eol() + ;
+         [      COLOR COLOR_LIGHTGRAY] + hb_Eol() + ;
+         hb_Eol()
 
    //CASE nType == nType
    //   DEFINE WINDOW xDlg MDICHILD OF xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
@@ -560,21 +572,23 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       @ nRow, nCol SAY xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT BORDER
 
-      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-         [ SAY xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
-      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
-         [ COLOR CLR_BLUE TRANSPARENT BORDER] + hb_Eol()
-      pGenPrg += hb_Eol()
+      pGenPrg += ;
+         [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ SAY xControl VAR xValue OF xParent PIXEL ;] + hb_Eol() + ;
+         [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
+         [ COLOR CLR_BLUE TRANSPARENT BORDER] + hb_Eol() + ;
+         hb_Eol()
 
    ELSE
       @ nRow, nCol SAY xControl VAR xValue OF xParent PIXEL ;
          SIZE nWidth, nHeight COLOR CLR_BLUE TRANSPARENT
 
-      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-         [ SAY xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
-      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
-         [ COLOR CLR_BLUE TRANSPARENT] + hb_Eol()
-      pGenPrg += hb_Eol()
+      pGenPrg += ;
+         [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ SAY xControl VAR xValue OF xParent PIXEL ;] + hb_Eol() + ;
+         [      SIZE ] + hb_ValToExp( nWidth) + [, ] + hb_ValToExp( nHeight ) + ;
+         [ COLOR CLR_BLUE TRANSPARENT] + hb_Eol() + ;
+         hb_Eol()
 
    ENDIF
 
@@ -582,19 +596,16 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
 
    RETURN Nil
 
-STATIC FUNCTION gui_LibName()
-
-   RETURN "FIVEWIN"
-
 STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    @ nRow, nCol GET xControl VAR xValue MEMO OF xParent PIXEL ;
       SIZE nWidth, nHeight
 
-   pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-      [ GET xControl VAR xValue MEMO OF xParent PIXEL ;] + hb_Eol()
-   pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      [ GET xControl VAR xValue MEMO OF xParent PIXEL ;] + hb_Eol() + ;
+      [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + hb_Eol() + ;
+      hb_Eol()
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue)
 
@@ -637,9 +648,10 @@ STATIC FUNCTION gui_StatusCreate( xDlg, xControl )
    DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;
       SIZES 150, 200, 240
 
-   pGenPrg += [   DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;] + hb_Eol()
-   pGenPrg += [      SIZES 150, 200, 240] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   DEFINE STATUSBAR xControl PROMPT "DlgAuto/FiveLibs" OF xDlg ;] + hb_Eol() + ;
+      [      SIZES 150, 200, 240] + hb_Eol() + ;
+      hb_Eol()
 
    (xDlg); (xControl)
 
@@ -657,12 +669,14 @@ STATIC FUNCTION gui_TabCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
       COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }
    //oFld:SetColor( ::nTextColorR, ::nBackColorR )
 
-   pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-      [ FOLDEREX xControl PIXEL ;] + hb_Eol()
-   pGenPrg += [      PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;] + hb_Eol()
-   pGenPrg += [      OF xParent SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol()
-   pGenPrg += [      COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+      [ FOLDEREX xControl PIXEL ;] + hb_Eol() + ;
+      [      PROMPTS "Page 1", "Page 2", "Page 3", "Page 4", "Page 5" ;] + hb_Eol() + ;
+      [      OF xParent SIZE ] + hb_ValToExp( nWidth ) + [, ] + ;
+      hb_ValToExp( nHeight ) + [ ;] + hb_Eol() + ;
+      [      COLOR { COLOR_LIGHTGRAY, COLOR_LIGHTGRAY }] + hb_Eol() + ;
+      hb_Eol()
 
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight)
 
@@ -677,8 +691,9 @@ STATIC FUNCTION gui_TabEnd( xDlg, xTab, nPageCount )
       ASize( xTab:aPrompts, nPageCount )
    ENDIF
 
-   pGenPrg += [   ASize( xTab:aPrompts, ] + hb_ValToExp( nPageCount ) + [ )] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   ASize( xTab:aPrompts, ] + hb_ValToExp( nPageCount ) + [ )] + hb_Eol() + ;
+      hb_Eol()
 
    (xDlg);(xTab);(nPageCount)
 
@@ -690,21 +705,25 @@ STATIC FUNCTION gui_TabPageBegin( xDlg, xParent, xTab, xPage, nPageCount, cText 
    IF nPageCount <= Len( xTab:aPrompts )
       xTab:aPrompts[ nPageCount ] := cText
 
-      pGenPrg += [   xTab:aPrompts] + "[" + hb_ValToExp( nPageCount ) + "]" + [ := ] + hb_ValToExp( cText ) + hb_Eol()
+      pGenPrg += ;
+         [   xTab:aPrompts] + "[" + hb_ValToExp( nPageCount ) + "]" + ;
+         [ := ] + hb_ValToExp( cText ) + hb_Eol()
 
    ELSE
       xTab:AddItem( cText )
 
-      pGenPrg += [   xTab:AddItem( ] + hb_ValToExp( cText ) + [ )] + hb_Eol()
-      pGenPrg += hb_Eol()
+      pGenPrg += ;
+         [   xTab:AddItem( ] + hb_ValToExp( cText ) + [ )] + hb_Eol() + ;
+         hb_Eol()
 
    ENDIF
    xPage := xTab:aDialogs[ nPageCount ]
    xTab:Refresh()
 
-   pGenPrg += [   xPage := xTab:aDialogs] + "[ " + hb_ValToExp( nPageCount ) + " ]" + hb_Eol()
-   pGenPrg += [   xTab:Refresh()] + hb_Eol()
-   pGenPrg += hb_Eol()
+   pGenPrg += ;
+      [   xPage := xTab:aDialogs] + "[ " + hb_ValToExp( nPageCount ) + " ]" + hb_Eol() + ;
+      [   xTab:Refresh()] + hb_Eol() + ;
+      hb_Eol()
 
 
    (xDlg); (xTab); (cText); (xPage); (nPageCount); (xParent)
@@ -761,12 +780,13 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
          SIZE nWidth, nHeight PICTURE cPicture ;
          VALID iif( Empty( bValid ), .T., Eval( bValid ) )
 
-      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-         [ GET xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
-      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [ , ] + hb_ValToExp( nHeight ) + ;
-         [ PICTURE ] + hb_ValToExp( cPicture ) + [ ;] + hb_Eol()
-      pGenPrg += [      VALID ] + iif( Empty( bValid ), [ .T.], [ Eval( bValid ) ] ) + hb_Eol()
-      pGenPrg += hb_Eol()
+      pGenPrg += ;
+         [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ GET xControl VAR xValue OF xParent PIXEL ;] + hb_Eol() + ;
+         [      SIZE ] + hb_ValToExp( nWidth ) + [ , ] + hb_ValToExp( nHeight ) + ;
+         [ PICTURE ] + hb_ValToExp( cPicture ) + [ ;] + hb_Eol() + ;
+         [      VALID ] + iif( Empty( bValid ), [ .T.], [ Eval( bValid ) ] ) + hb_Eol() + ;
+         hb_Eol()
 
    ELSE
       @ nRow, nCol GET xControl VAR xValue OF xParent PIXEL ;
@@ -774,13 +794,14 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
          VALID iif( Empty( bValid ), .T., Eval( bValid ) ) ;
          ACTION ( (Self), Eval( bAction ) ) BITMAP cImage
 
-      pGenPrg += [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
-         [ GET xControl VAR xValue OF xParent PIXEL ;] + hb_Eol()
-      pGenPrg += [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
-         [ PICTURE ] + hb_ValToExp( cPicture ) + [ ;] + hb_Eol()
-      pGenPrg += [      VALID ] + iif( Empty( bValid ), [ .T.], [ Eval( bValid ) ] ) + [ ;] + hb_Eol()
-      pGenPrg += [      ACTION Eval( bAction ) BITMAP ] + hb_ValToExp( cImage ) + hb_Eol()
-      pGenPrg += hb_Eol()
+      pGenPrg += ;
+         [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
+         [ GET xControl VAR xValue OF xParent PIXEL ;] + hb_Eol() + ;
+         [      SIZE ] + hb_ValToExp( nWidth ) + [, ] + hb_ValToExp( nHeight ) + ;
+         [ PICTURE ] + hb_ValToExp( cPicture ) + [ ;] + hb_Eol() + ;
+         [      VALID ] + iif( Empty( bValid ), [ .T.], [ Eval( bValid ) ] ) + [ ;] + hb_Eol() + ;
+         [      ACTION Eval( bAction ) BITMAP ] + hb_ValToExp( cImage ) + hb_Eol() + ;
+         hb_Eol()
 
    ENDIF
 

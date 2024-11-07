@@ -11,7 +11,7 @@ Note: Only to show on screen
 CREATE CLASS GTWVGClass
 
    /*--- init ---*/
-   METHOD LibName()             INLINE gui_LibName()
+   METHOD LibName()             INLINE "GTWVG"
    METHOD Init()                INLINE gui_Init()
 
    /*--- dialog ---*/
@@ -245,10 +245,6 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
    (xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(lBorder)
 
    RETURN Nil
-
-STATIC FUNCTION gui_LibName()
-
-   RETURN "GTWVG"
 
 STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 

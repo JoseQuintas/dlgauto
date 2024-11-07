@@ -19,7 +19,7 @@ MEMVAR _HMG_MainWindowFirst
 CREATE CLASS HMG3Class
 
    /*--- init ---*/
-   METHOD LibName()             INLINE gui_LibName()
+   METHOD LibName()             INLINE "HMG3"
    METHOD Init()                INLINE gui_Init()
 
    /*--- dialog ---*/
@@ -398,10 +398,6 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
    (xDlg)
 
    RETURN Nil
-
-STATIC FUNCTION gui_LibName()
-
-   RETURN "HMG3"
 
 STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 

@@ -17,7 +17,7 @@ THREAD STATIC oFont
 CREATE CLASS HWGUIClass
 
    /*--- init ---*/
-   METHOD LibName()             INLINE gui_LibName()
+   METHOD LibName()             INLINE "HWGUI"
    METHOD Init()                INLINE gui_Init()
 
    /*--- dialog ---*/
@@ -351,10 +351,6 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
 //   hwg_SetTransparentMode( h, .F. )
 
 //   RETURN Nil
-
-STATIC FUNCTION gui_LibName()
-
-   RETURN "HWGUI"
 
 STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
