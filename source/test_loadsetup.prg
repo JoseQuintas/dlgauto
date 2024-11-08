@@ -12,7 +12,7 @@ FUNCTION Test_LoadSetup( lMakeLogin )
    LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL cFieldName, aBrowse, nPos, aSetup, aAddOptionList, aButton
 
-#ifdef DLGAUTO_AS_ADO
+#ifdef DLGAUTO_AS_SQL
    LOCAL cTable, cnSQL := ADOLocal(), aFieldList, cField, xValue
 #endif
 
@@ -46,7 +46,7 @@ FUNCTION Test_LoadSetup( lMakeLogin )
       NEXT
    NEXT
 
-#ifdef DLGAUTO_AS_ADO
+#ifdef DLGAUTO_AS_SQL
 
    WITH OBJECT cnSQL
       FOR EACH cTable IN :TableList()

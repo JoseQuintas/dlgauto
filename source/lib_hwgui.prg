@@ -143,7 +143,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
       @ nCol, nRow BROWSE ARRAY xControl SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
       ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
 
-#ifdef DLGAUTO_AS_ADO
+#ifdef DLGAUTO_AS_SQL
       xControl:AArray := ADOLocal()
       xControl:bSkip  := { | o, nSkip | ADOSkipper( o:aArray, nSkip ) }
       xControl:bGotop := { | o | o:aArray:MoveFirst() }
@@ -519,7 +519,7 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
    RETURN Nil
 
-#ifdef DLGAUTO_AS_ADO
+#ifdef DLGAUTO_AS_SQL
 FUNCTION ADOSkipper( cnSQL, nSkip )
 
    LOCAL nRec := cnSQL:AbsolutePosition()

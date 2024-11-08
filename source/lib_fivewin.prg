@@ -183,7 +183,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
    LOCAL aItem, oCol, aThisKey
 
    IF oFrmClass:lIsSQL
-#ifdef DLGAUTO_AS_ADO
+#ifdef DLGAUTO_AS_SQL
       IF Len( aKeyDownList ) == 0
          @ nRow, nCol XBROWSE xControl ;
             ARRAY Array(10) ;
@@ -283,6 +283,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
       NEXT
       xControl:bClrStd := { || { CLR_BLACK, iif( Mod( OrdKeyNo(), 2 ) == 0, CLR_WHITE, RGB(179,207,231) ) } }
    ENDIF
+   xControl:lFitGridHeight := .T. // adjust extra space to header/footer
    xControl:CreateFromCode()
    xControl:Refresh() // test for bug
 
@@ -307,7 +308,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 
    RETURN Nil
 
-#ifdef DLGAUTO_AS_ADO
+#ifdef DLGAUTO_AS_SQL
 FUNCTION ADOSkipper( cnSQL, nSkip, nOld )
 
    nOld := cnSQL:AbsolutePosition()

@@ -351,7 +351,7 @@ STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, 
       COL nCol
       VALUE nValue
       WIDTH nWidth
-      // Depending Windows version ?, do not accepts to change color
+      // Depending Windows version(*), do not accepts to change color
       // ON GOTFOCUS  SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
       // ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
       RANGEMIN aList[ 1 ]
@@ -374,7 +374,7 @@ STATIC FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
       ROW	nRow
       COL	nCol
       VALUE dValue
-      // Depending Windows version ?, do not accepts to change color
+      // Depending Windows version(*), do not accepts to change color
       // ON GOTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_YELLOW )
       // ON LOSTFOCUS SetProperty( xDlg, xControl, "BACKCOLOR", COLOR_WHITE )
       // DATEFORMAT "99/99/9999"
