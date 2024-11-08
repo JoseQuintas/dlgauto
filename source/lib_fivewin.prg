@@ -805,6 +805,8 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
          hb_Eol()
 
    ENDIF
+   xControl:lDisColors := .F.               // do not change text color disabled
+   xControl:nClrTextDis := RGB2N(20,20,20)  // text color for disabled
 
    (bValid);(xDlg);(xControl);(nRow);(nCol);(nWidth);(nHeight);(xValue);(cPicture)
    (nMaxLength);(bAction);(cImage);(lPassword);(oFrmClass);(aItem)
