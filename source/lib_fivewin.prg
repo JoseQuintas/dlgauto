@@ -3,6 +3,7 @@ lib_fivewin- fivewin source selected by lib.prg
 */
 
 //#pragma -w1
+#include "inkey.ch"
 #include "hbgtinfo.ch"
 #include "hbclass.ch"
 #include "frm_class.ch"
@@ -43,7 +44,7 @@ CREATE CLASS FIVEWINClass
    METHOD Browse(...)           INLINE gui_Browse(...)
    METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
    METHOD browsekeydown(...)    INLINE gui_browsekeydown(...)
-   METHOD SetBrowseKeyDown( xControl ) INLINE gui_SetBrowseKeyDown( xControl )
+   METHOD SetBrowseKeyFilter( xControl ) INLINE gui_SetBrowseKeyFilter( xControl )
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -878,13 +879,23 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
 
    RETURN Nil
 
-STATIC FUNCTION gui_SetBrowseKeyDown( xControl )
+STATIC FUNCTION gui_SetBrowseKeyFilter( xControl )
 
-/*
-   xControl:bKeyDown := { | nKey | gui_EventBrowseKeyDown( nKey, xControl, xControl:xUserData ) }
-*/
+   xControl:bKeyDown := { | nKey | fw_browsekeyAction( nKey, xControl ) }
 
-   (xControl)
+   RETURN Nil
+
+STATIC FUNCTION fw_BrowseKeyAction( nKey, xControl )
+
+   DO CASE
+   CASE nKey >= Asc( "A" ) .AND. nKey <= Asc( "Z" )
+   CASE nKey >= Asc( "a" ) .AND. nKey <= Asc( "z" )
+   CASE nKey == Asc( " " )
+   CASE nKey == K_BS
+   OTHERWISE
+      RETURN Nil
+   ENDCASE
+   (nKey); (xControl)
 
    RETURN Nil
 
