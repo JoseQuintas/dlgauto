@@ -3,6 +3,9 @@ frm_DialogLogin - login
 */
 
 #include "frm_class.ch"
+#ifdef HBMK_HAS_HMGE
+#include "hmg.ch"
+#endif
 
 MEMVAR lLogin, cUser, cPass
 
@@ -10,6 +13,9 @@ FUNCTION frm_DialogLogin()
 
    LOCAL oFrm, aItem
 
+#ifdef HBMK_HAS_HMGE
+   SET WINDOW MAIN OFF
+#endif
    oFrm := Frm_Class():New()
 
    WITH OBJECT oFrm
@@ -33,6 +39,9 @@ FUNCTION frm_DialogLogin()
 
    ENDWITH
 
+#ifdef HBMK_HAS_HMGE
+   SET WINDOW MAIN ON
+#endif
    (cUser);(cPass)
 
    RETURN Nil
