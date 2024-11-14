@@ -13,7 +13,7 @@ MEMVAR _HMG_MainWindowFirst
 #ifdef DLGAUTO_AS_LIB
    STATIC pGenPrg := ""
 #else
-   MEMVAR pGenPrg, pGenName
+   MEMVAR pGenPrg
 #endif
 
 CREATE CLASS HMG3Class
@@ -45,6 +45,7 @@ CREATE CLASS HMG3Class
    METHOD Browse(...)           INLINE gui_Browse(...)
    METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
    METHOD browsekeydown(...)    INLINE gui_browsekeydown(...)
+   METHOD SetBrowseKeyFilter(...) INLINE Nil
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)

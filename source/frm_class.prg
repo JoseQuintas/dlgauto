@@ -19,10 +19,12 @@ CREATE CLASS frm_Class
    VAR cDataFilter     INIT ""
    VAR cTitle          INIT ""
    VAR aEditList       INIT {}
+   // buttons/toolbar
    VAR cOptions        INIT "IED"
    VAR aOptionList     INIT {}
    VAR cSelected       INIT "NONE"
    VAR lNavigate       INIT .T.
+   //
    VAR lModal          INIT .F.
    VAR nInitRecno
    VAR aInitValue1
@@ -103,37 +105,6 @@ METHOD EventInit() CLASS frm_Class
          GUI():ControlSetValue( ::xDlg, ::aControlList[ nPos ][ CFG_FCONTROL ], ::aInitValue2[2] )
       ENDIF
    ENDIF
-   // no success
-   //IF GUI():LibName() == "FIVEWIN"
-      //IF ::xDlg:cTitle == "MENU"
-      //   ::xDlg:bValid := { || gui():MsgBox( aWindowsInfo() ), .T. }
-      //ENDIF
-      //FOR EACH aControl IN ::aControlList
-      //   IF aControl[ CFG_CTLTYPE ] == TYPE_BROWSE
-      //      WITH OBJECT aControl[ CFG_FCONTROL ]
-      //         :bGoTop     := { || :nArrayAt :=  1 }
-      //         :bGoBottom  := { || :nArrayAt := :xUserData:RecordCount() }
-      //         :bKeyCount  := { || :xUserData:RecordCount() }  // Use this instead of bLogicLen
-      //         :bBof       := { || :xUserData:Bof() }
-      //         :bEof       := { || :xUserData:Eof() }
-      //         :bBookMark  := ;
-      //         :bKeyNo     := { | n | iif( n == Nil, ;
-      //                        :xUserData:AbsolutePosition(), ;
-      //                        :xUserData:Move( n, 1 ) ) }
-      //         :bSkip      := { | n, nOld | ADOSkipper( :xUserData, n ), n - nOld }
-      //         //:bSkip      := { |n,nSave| nSave := xControl:xUserValue, ;
-      //      ENDWITH
-      //   ENDIF
-      //   IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
-      //      FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
-      //         IF cText == "." .OR. cText == "Two" .OR. cText == "Three"
-      //            aControl[ CFG_FCONTROL ]:aDialogs[ cText:__EnumIndex() ]:Hide()
-      //         ENDIF
-      //      NEXT
-      //      aControl[ CFG_FCONTROL ]:Refresh()
-      //   ENDIF
-      //NEXT
-   //ENDIF
    IF ! Empty( ::EventInitList )
       FOR EACH aItem IN ::EventInitList
          Eval( aItem )
@@ -637,7 +608,6 @@ METHOD Save_Click() CLASS frm_Class
       NEXT
       cSQL := "UPDATE " + ::cDataTable + " SET " + cSQL
       cSQL += " WHERE " + cWhere
-      MsgExclamation( cSQL )
       cnSQL:Execute( cSQL )
    ENDIF
 #else

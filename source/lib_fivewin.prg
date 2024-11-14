@@ -12,8 +12,7 @@ lib_fivewin- fivewin source selected by lib.prg
 #include "dtpicker.ch"
 #include "colors.ch"
 
-   STATIC pGenPrg := ""
-   //MEMVAR pGenPrg, pGenName
+MEMVAR pGenPrg
 
 CREATE CLASS FIVEWINClass
 
@@ -73,10 +72,6 @@ STATIC FUNCTION gui_Init()
    SetGetColorFocus( COLOR_YELLOW )
    fw_SetTruePixel( .T. )
 
-   pGenPrg += [   SetGetColorFocus( .T. )] + hb_Eol()
-   pGenPrg += [   fw_SetTruePixel( .T. )] + hb_Eol()
-   pGenPrg += hb_Eol()
-
    RETURN Nil
 
 STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
@@ -103,7 +98,7 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
 #ifdef DLGAUTO_AS_LIB
                MENUITEM cDBF ACTION ( (oMenuItem), frm_funcMain( cDBF, aAllSetup,.T. ) )
 #else
-               MENUITEM cDBF ACTION ( (oMenuItem), hb_ThreadStart( { || frm_funcMain( cDBF, aAllSetup,.T. ) } ) )
+               MENUITEM cDBF ACTION ( (oMenuItem), frm_funcMain( cDBF, aAllSetup,.T. ) )
 #endif
             NEXT
          ENDMENU
@@ -939,3 +934,35 @@ FUNCTION aWindowsInfo()
    RETURN cInfo
 
 // Notes: lWRunning(), GetWndApp(), SetWndApp(), nWindows(), nDlgCount
+
+   // no success
+   //IF GUI():LibName() == "FIVEWIN"
+      //IF ::xDlg:cTitle == "MENU"
+      //   ::xDlg:bValid := { || gui():MsgBox( aWindowsInfo() ), .T. }
+      //ENDIF
+      //FOR EACH aControl IN ::aControlList
+      //   IF aControl[ CFG_CTLTYPE ] == TYPE_BROWSE
+      //      WITH OBJECT aControl[ CFG_FCONTROL ]
+      //         :bGoTop     := { || :nArrayAt :=  1 }
+      //         :bGoBottom  := { || :nArrayAt := :xUserData:RecordCount() }
+      //         :bKeyCount  := { || :xUserData:RecordCount() }  // Use this instead of bLogicLen
+      //         :bBof       := { || :xUserData:Bof() }
+      //         :bEof       := { || :xUserData:Eof() }
+      //         :bBookMark  := ;
+      //         :bKeyNo     := { | n | iif( n == Nil, ;
+      //                        :xUserData:AbsolutePosition(), ;
+      //                        :xUserData:Move( n, 1 ) ) }
+      //         :bSkip      := { | n, nOld | ADOSkipper( :xUserData, n ), n - nOld }
+      //         //:bSkip      := { |n,nSave| nSave := xControl:xUserValue, ;
+      //      ENDWITH
+      //   ENDIF
+      //   IF aControl[ CFG_CTLTYPE ] == TYPE_TAB
+      //      FOR EACH cText IN aControl[ CFG_FCONTROL ]:aPrompts
+      //         IF cText == "." .OR. cText == "Two" .OR. cText == "Three"
+      //            aControl[ CFG_FCONTROL ]:aDialogs[ cText:__EnumIndex() ]:Hide()
+      //         ENDIF
+      //      NEXT
+      //      aControl[ CFG_FCONTROL ]:Refresh()
+      //   ENDIF
+      //NEXT
+   //ENDIF

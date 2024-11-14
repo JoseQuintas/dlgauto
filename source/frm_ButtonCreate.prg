@@ -70,6 +70,7 @@ STATIC FUNCTION IconFromCaption( cCaption )
       { "Edit",     "icoEdit" }, ;
       { "View",     "icoGrid" }, ;
       { "Delete",   "icoTrash" }, ;
+      { "Filter",   "icoFilter" }, ;
       { "First",    "icoGoFirst" }, ;
       { "Previous", "icoGoLeft" }, ;
       { "Next",     "icoGoRight" }, ;

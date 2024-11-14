@@ -9,11 +9,7 @@ Note: Or use name or object, but can't mix on this source code
 #include "oohg.ch"
 #include "i_altsyntax.ch"
 
-#ifdef DLGAUTO_AS_LIB
-   STATIC pGenPrg := ""
-#else
-   MEMVAR pGenPrg, pGenName
-#endif
+MEMVAR aGenPrg
 
 CREATE CLASS OOHGClass
 
@@ -42,6 +38,7 @@ CREATE CLASS OOHGClass
    /* browse */
    METHOD Browse(...)           INLINE gui_Browse(...)
    METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
+   METHOD SetBrowseKeyFilter(...) INLINE Nil
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)

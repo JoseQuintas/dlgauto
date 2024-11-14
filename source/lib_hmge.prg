@@ -8,7 +8,7 @@ lib_hmge - HMG Extended source selected by lib.prg
 #include "i_winuser.ch"
 
 #ifndef DLGAUTO_AS_LIB
-   MEMVAR pGenPrg, pGenName
+   MEMVAR pGenPrg
 #else
    STATIC pGenPrg := ""
 #endif
@@ -42,6 +42,7 @@ CREATE CLASS HMGEClass
    /* browse */
    METHOD Browse(...)           INLINE gui_Browse(...)
    METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
+   METHOD SetBrowseKeyFilter(...) INLINE Nil
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -75,16 +76,8 @@ STATIC FUNCTION gui_Init()
    SET WINDOW MODAL PARENT HANDLE ON
 
 #ifdef DLGAUTO_AS_LIB
-   //SET WINDOW MAIN OFF
+   SET WINDOW MAIN OFF
 #endif
-
-   pGenPrg += ;
-      [   Set( _SET_DEBUG, .F. )] + hb_Eol() + ;
-      [   SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )] + hb_Eol() + ;
-      [   SET MENUSTYLE EXTENDED] + hb_Eol() + ;
-      [   SET NAVIGATION EXTENDED] + hb_Eol() + ;
-      [   SET WINDOW MAIN OFF] + hb_Eol() + ;
-      hb_Eol()
 
    RETURN Nil
 
@@ -410,7 +403,7 @@ STATIC FUNCTION gui_DialogClose( xDlg )
 
 STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitle, bInit, lModal )
 
-   nWindow += 1
+   //nWindow += 1
 
    IF Empty( xDlg )
       xDlg := gui_NewName( "DLG" )
@@ -424,9 +417,9 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
    cTitle := cTitle + " (" + GUI():LibName() + ")"
 
 #ifdef DLGAUTO_AS_LIB
-   IF nWindow == -1
+   IF .F.
 #else
-   IF nWindow == 1
+   IF "MENU" $ Upper( cTitle )
 #endif
       DEFINE WINDOW ( xDlg ) ;
          AT nCol, nRow ;
@@ -439,6 +432,21 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          ON INIT Eval( bInit )
          gui_StatusCreate( xDlg, "" )
       END WINDOW
+
+      pGenPrg += ;
+         [   DEFINE WINDOW (] + hb_ValToExp( xDlg ) + [) ;] + hb_Eol() + ;
+         [      AT ] + hb_ValToExp( nCol ) + [, ] + hb_ValToExp( nRow ) + [;] + hb_Eol() + ;
+         [      WIDTH ] + hb_ValToExp( nWidth ) + [ ;] + hb_Eol() + ;
+         [      HEIGHT ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol() + ;
+         [      TITLE ] + hb_ValToExp( cTitle ) + [ ;] + hb_Eol() + ;
+         [      ICON "APPICON" ;] + hb_Eol() + ;
+         [      FONT ] + hb_ValToExp( APP_FONTNAME ) + [ SIZE ] + ;
+         hb_ValToExp( APP_FONTSIZE_NORMAL ) + [ ;] + hb_Eol() + ;
+         [      MAIN ;] + hb_Eol() + ;
+         [      ON INIT Eval( ] + hb_ValToExp( bInit ) + [ )] + hb_Eol() + ;
+         [   END WINDOW]       + hb_Eol() + ;
+         hb_Eol()
+
    ELSEIF lModal
       DEFINE WINDOW ( xDlg ) ;
          AT nCol, nRow ;
@@ -520,10 +528,12 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       [      VALUE ] + hb_ValToExp( xValue ) + hb_Eol() + ;
       [      FONTNAME APP_FONT_NAME ] + hb_Eol() + ;
       [      FONTSIZE ] + hb_ValToExp( nFontSize ) + hb_Eol()
+
    IF lBorder
       pGenPrg += ;
          [      BORDER ] + hb_ValToExp( lBorder ) + hb_Eol() + ;
          [      BACKCOLOR N2RGB( COLOR_GREEN )] + hb_Eol()
+
    ENDIF
    pGenPrg += ;
       [   END LABEL] + hb_Eol() + ;

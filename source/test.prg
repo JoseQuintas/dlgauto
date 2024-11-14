@@ -12,7 +12,7 @@ REQUEST HB_CODEPAGE_PTISO
 #include "set.ch"
 
 MEMVAR lLogin, cUser, cPass
-MEMVAR pGenPrg, pGenName
+MEMVAR pGenPrg
 
 #ifdef DLGAUTO_AS_LIB
    PROCEDURE DlgAuto
@@ -22,7 +22,8 @@ MEMVAR pGenPrg, pGenName
 
    LOCAL aAllSetup, lMakeLogin
 
-   PRIVATE lLogin := .F., cUser := "", cPass := "", pGenPrg := "", pGenName := "code"
+   PRIVATE lLogin := .F., cUser := "", cPass := ""
+   PUBLIC pGenPrg := ""
 
    SET CONFIRM ON
    SET CENTURY ON
@@ -50,9 +51,9 @@ MEMVAR pGenPrg, pGenName
 
    frm_DialogMenu( @aAllSetup )
 
-IF .F.
-   hb_MemoWrit( pGenName + ".txt", pGenPrg )
-ENDIF
+   IF .F.
+      hb_MemoWrit( "code.txt", pGenPrg )
+   ENDIF
 
    RETURN
 

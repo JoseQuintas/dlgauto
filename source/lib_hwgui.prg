@@ -8,11 +8,7 @@ lib_hwgui - hwgui source selected by lib.prg
 
 THREAD STATIC oFont
 
-#ifdef DLGAUTO_AS_LIB
-   STATIC pGenPrg := ""
-#else
-   MEMVAR pGenName, pGenPrg
-#endif
+MEMVAR aGenName
 
 CREATE CLASS HWGUIClass
 
@@ -141,7 +137,8 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 
    IF oFrmClass:lIsSQL
       @ nCol, nRow BROWSE ARRAY xControl SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
-      ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
+      ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
+      ON KEYDOWN { | xControl, nKey | (xControl), (nKey), Nil }
 
 #ifdef DLGAUTO_AS_SQL
       xControl:AArray := ADOLocal()
@@ -165,7 +162,8 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 #endif
    ELSE
       @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
-      ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
+      ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
+      ON KEYDOWN { | xControl, nKey | (xControl), (nKey), Nil }
       // may be not current alias
       xControl:Alias := workarea
 

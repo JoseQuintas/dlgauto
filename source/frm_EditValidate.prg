@@ -9,6 +9,13 @@ FUNCTION frm_EditValidate( Self, aItem )
 
    LOCAL nSelect, lFound := .T., xValue, nPos
 
+   // button on get
+   IF GUI():LibName() == "HMGE"
+      IF GUI():IsCurrentFocus( ::xDlg, aItem[ CFG_FCONTROL ] )
+         RETURN .F.
+      ENDIF
+   ENDIF
+
    // not ok for all libraries
    // IF ! GUI():LibName() $ "HWGUI,FIVEWIN" .AND. ! GUI():IsCurrentFocus( ::xDlg )
       //this affects external programs
@@ -17,7 +24,6 @@ FUNCTION frm_EditValidate( Self, aItem )
       //RETURN .F.
    // ENDIF
 
-   // if btn cancel abort validate (current on hwgui only)
    nPos := hb_AScan( ::aControlList, { | e | e[ CFG_CTLTYPE ] == TYPE_BUTTON .AND. ;
       e[ CFG_CAPTION ] == "Cancel" } )
    IF nPos != 0
@@ -25,7 +31,6 @@ FUNCTION frm_EditValidate( Self, aItem )
          RETURN .T.
       ENDIF
    ENDIF
-
    xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
    IF aItem[ CFG_ISKEY ]
       IF ::lIsSQL
