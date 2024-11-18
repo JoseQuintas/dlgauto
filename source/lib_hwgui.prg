@@ -432,8 +432,11 @@ STATIC FUNCTION gui_TabNavigate( xDlg, xTab, aList )
       RETURN Nil
    ENDIF
    FOR nTab = 1 TO Len( aList )
-      nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
-      GUI():TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, nPageNext, aList[ nPageNext, 1 ] )
+      // at least one library with problem on last get
+      IF nTab != Len( aList )
+         nPageNext  := iif( nTab == Len( aList ), 1, nTab + 1 )
+         GUI():TabSetLostFocus( aList[ nTab, Len( aList[ nTab ] ) ], xTab, nPageNext, aList[ nPageNext, 1 ] )
+      ENDIF
    NEXT
 
    (xDlg)

@@ -555,6 +555,8 @@ METHOD Save_Click() CLASS frm_Class
 
    LOCAL aItem, xValue, aQueryList := {}, aReplace
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
+   //LOCAL cTxt := ""
+
 #ifdef DLGAUTO_AS_SQL
    LOCAL cSQL := "", cWhere := ""
    LOCAL cnSQL := ADOLocal()
@@ -613,7 +615,7 @@ METHOD Save_Click() CLASS frm_Class
 #else
    IF RLock()
       FOR EACH aReplace IN aQueryList
-         FieldPut( FieldNum( aReplace[ 1 ], aReplace[ 2 ] ) )
+         FieldPut( FieldNum( aReplace[ 1 ] ), aReplace[ 2 ] )
       NEXT
       SKIP 0
       UNLOCK

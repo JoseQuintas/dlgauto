@@ -7,7 +7,7 @@ part of frm_class
 
 FUNCTION frm_EditValidate( Self, aItem )
 
-   LOCAL nSelect, lFound := .T., xValue, nPos
+   LOCAL nSelect, lValid := .T., xValue, nPos
 
    // button on get
    IF GUI():LibName() == "HMGE"
@@ -96,8 +96,8 @@ FUNCTION frm_EditValidate( Self, aItem )
          ::cnSQL:cSQL += " FROM " + aItem[ CFG_VTABLE ]
          ::cnSQL:cSQL += " WHERE " + aItem[ CFG_VFIELD ] + " = " + hb_ValToExp( xValue )
          ::cnSQL:Execute()
-         lFound := ! ::cnSQL:Eof()
-         IF ! lFound
+         lValid := ! ::cnSQL:Eof()
+         IF ! lValid
             IF GUI():MsgYesNo( "Code does not exists. Create new one?" )
                frm_funcMain( aItem[ CFG_VTABLE ], AClone( ::aAllSetup ), .T. )
             ENDIF
@@ -118,8 +118,8 @@ FUNCTION frm_EditValidate( Self, aItem )
          ELSE
             SEEK xValue
          ENDIF
-         lFound := ! Eof()
-         IF ! lFound
+         lValid := ! Eof()
+         IF ! lValid
             IF GUI():MsgYesNo( "Code does not exists. Create new one?" )
                frm_funcMain( aItem[ CFG_VTABLE ], AClone( ::aAllSetup ), .T. )
             ENDIF
@@ -134,4 +134,4 @@ FUNCTION frm_EditValidate( Self, aItem )
       ENDIF
    ENDIF
 
-   RETURN lFound
+   RETURN lValid
