@@ -8,7 +8,7 @@ It uses DBF structure to construct dialogs and others.
 It uses an array, that begins with DBF structure, and adds more needed information/elements.
 
 LIB defined by variables created by HBMK when use HBC
-At momment HBMK_HAS_HWGUI, HBMK_HAS_HMGE, HBMK_HAS_OOHG, HBMK_HAS_GTWVG
+At momment HBMK_HAS_HWGUI, HBMK_HAS_HMGE, HBMK_HAS_OOHG, HBMK_HAS_GTWVG, HBMK_HAS_FIVEWIN
 
 -----
 Array

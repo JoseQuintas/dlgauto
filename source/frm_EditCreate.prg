@@ -13,7 +13,7 @@ part of frmclass
 
 FUNCTION frm_EditCreate( Self )
 
-   LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aList := {}
+   LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aPageList := {}
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
    LOCAL aKeyDownList, xTabPage, nHeight, nInitRow := APP_BUTTON_SIZE + APP_LINE_SPACING
 
@@ -119,7 +119,7 @@ FUNCTION frm_EditCreate( Self )
          Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TABPAGE
          Atail( ::aControlList )[ CFG_FCONTROL ] := xTabPage
          nRow := nInitRow
-         AAdd( aList, {} )
+         AAdd( aPageList, {} )
          lFirst := .T.
          (lFirst)
       ENDIF
@@ -273,7 +273,7 @@ FUNCTION frm_EditCreate( Self )
          GUI():MsgBox( "This control is not available " + hb_ValToExp( aItem[ CFG_CTLTYPE ] ) )
       ENDCASE
       IF ::lWithTab .AND. ! aItem[ CFG_ISKEY ]
-         AAdd( Atail( aList ), aItem[ CFG_FCONTROL ] )
+         AAdd( Atail( aPageList ), aItem[ CFG_FCONTROL ] )
       ENDIF
       lFirst := .F.
    NEXT
@@ -290,7 +290,10 @@ FUNCTION frm_EditCreate( Self )
    IF ::lWithTab
 
       GUI():TabPageEnd( ::xDlg, xTab )
-      GUI():TabNavigate( ::xDlg, xTab, aList )
+      //activate later, can see "bug" on lostfocus on table with 2 fields (not all libraries)
+      //IF Len( aPageList ) > 1
+         GUI():TabNavigate( ::xDlg, xTab, aPageList )
+      //ENDIF
       GUI():TabEnd( ::xDlg, xTab, nPageCount )
 
    ENDIF
