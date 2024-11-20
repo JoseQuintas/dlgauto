@@ -42,10 +42,7 @@ CREATE CLASS frm_Class
 
    METHOD CreateControls()     INLINE frm_ButtonCreate( Self ), frm_EditCreate( Self )
 
-   METHOD First_Click()
-   METHOD Last_Click()
-   METHOD Next_Click()
-   METHOD Previous_Click()
+   METHOD Move_Click( cMoveTo )
    METHOD View_Click()         INLINE ::Browse( "", "", ::cDataTable, Nil ), ::DataLoad()
    METHOD Print_Click()        INLINE frm_EventPrint( Self )
    METHOD Exit_Click()
@@ -113,7 +110,7 @@ METHOD EventInit() CLASS frm_Class
 
    RETURN Nil
 
-METHOD First_Click() CLASS frm_Class
+METHOD Move_Click( cMoveTo ) CLASS frm_Class
 
    LOCAL aItem, xValue
 
@@ -121,129 +118,63 @@ METHOD First_Click() CLASS frm_Class
       IF Empty( ::cDataField )
          RETURN Nil
       ENDIF
-      ::cnSQL:Execute( "SELECT " + ::cDataField + " FROM " + ::cDataTable + " ORDER BY " + ::cDataField + " LIMIT 1" )
-      FOR EACH aItem IN ::aControlList
-         IF aItem[ CFG_FNAME ] == ::cDataField
-            DO CASE
-            CASE aItem[ CFG_FTYPE ] == "C"; xValue := ::cnSQL:String( ::cDataField, aItem[ CFG_FLEN ] )
-            CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( ::cDataField )
-            CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( ::cDataField )
-            CASE aItem[ CFG_FTYPE ] == "M"; xValue := ::cnSQL:String( ::cDataField )
-            ENDCASE
-            GUI():ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
-            EXIT
-         ENDIF
-      NEXT
-      ::cnSQL:CloseRecordset()
-   ELSE
-      GOTO TOP
-   ENDIF
-   ::DataLoad()
-
-   RETURN Nil
-
-METHOD Last_Click() CLASS frm_Class
-
-   LOCAL aItem, xValue
-
-   IF ::lIsSQL
-      IF Empty( ::cDataField )
-         RETURN Nil
-      ENDIF
-      ::cnSQL:Execute( "SELECT " + ::cDataField + " FROM " + ::cDataTable + " ORDER BY " + ::cDataField + " DESC LIMIT 1" )
-      FOR EACH aItem IN ::aControlList
-         IF aItem[ CFG_FNAME ] == ::cDataField
-            DO CASE
-            CASE aItem[ CFG_FTYPE ] == "C"; xValue := ::cnSQL:String( ::cDataField, aItem[ CFG_FLEN ] )
-            CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( ::cDataField )
-            CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( ::cDataField )
-            CASE aItem[ CFG_FTYPE ] == "M"; xValue := ::cnSQL:String( ::cDataField )
-            ENDCASE
-            GUI():ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
-            EXIT
-         ENDIF
-      NEXT
-      ::cnSQL:CloseRecordset()
-   ELSE
-      GOTO BOTTOM
-   ENDIF
-   ::DataLoad()
-
-   RETURN Nil
-
-METHOD Next_Click() CLASS frm_Class
-
-   LOCAL aItem, xValue
-
-   IF ::lIsSQL
-      IF Empty( ::cDataField )
-         RETURN Nil
-      ENDIF
-      ::cnSQL:cSQL := "SELECT " + ::cDataField + " FROM " + ::cDataTable + " WHERE " + ::cDataField + " > "
-      FOR EACH aItem IN ::aControlList
-         IF aItem[ CFG_FNAME ] == ::cDataField
-            ::cnSQL:cSQL += hb_ValToExp( GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
-         ENDIF
-      NEXT
-      ::cnSQL:cSQL += " ORDER BY " + ::cDataField + " LIMIT 1"
+      DO CASE
+      CASE cMoveTo == "FIRST"
+         ::cnSQL:cSQL := "SELECT " + ::cDataField + " FROM " + ::cDataTable + " ORDER BY " + ::cDataField + " LIMIT 1"
+      CASE cMoveTo == "LAST"
+         ::cnSQL:cSQL := "SELECT " + ::cDataField + " FROM " + ::cDataTable + " ORDER BY " + ::cDataField + " DESC LIMIT 1"
+      CASE cMoveTo == "NEXT"
+         ::cnSQL:cSQL := "SELECT " + ::cDataField + " FROM " + ::cDataTable + " WHERE " + ::cDataField + " > "
+         FOR EACH aItem IN ::aControlList
+            IF aItem[ CFG_FNAME ] == ::cDataField
+               ::cnSQL:cSQL += hb_ValToExp( GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
+            ENDIF
+         NEXT
+         ::cnSQL:cSQL += " ORDER BY " + ::cDataField + " LIMIT 1"
+      CASE cMoveTo == "PREV"
+         ::cnSQL:cSQL := "SELECT " + ::cDataField + " FROM " + ::cDataTable + " WHERE " + ::cDataField + " < "
+         FOR EACH aItem IN ::aControlList
+            IF aItem[ CFG_FNAME ] == ::cDataField
+               ::cnSQL:cSQL += hb_ValToExp( GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
+            ENDIF
+         NEXT
+         ::cnSQL:cSQL += " ORDER BY " + ::cDataField + " DESC LIMIT 1"
+      ENDCASE
       ::cnSQL:Execute()
-      FOR EACH aItem IN ::aControlList
-         IF aItem[ CFG_FNAME ] == ::cDataField
-            DO CASE
-            CASE aItem[ CFG_FTYPE ] == "C"; xValue := ::cnSQL:String( ::cDataField, aItem[ CFG_FLEN ] )
-            CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( ::cDataField )
-            CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( ::cDataField )
-            CASE aItem[ CFG_FTYPE ] == "M"; xValue := ::cnSQL:String( ::cDataField )
-            ENDCASE
-            GUI():ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
-            EXIT
-         ENDIF
-      NEXT
+      IF ::cnSQL:Eof()
+         GUI():MsgBox( "No record found" )
+      ELSE
+         FOR EACH aItem IN ::aControlList
+            IF aItem[ CFG_FNAME ] == ::cDataField
+               DO CASE
+               CASE aItem[ CFG_FTYPE ] == "C"; xValue := ::cnSQL:String( ::cDataField, aItem[ CFG_FLEN ] )
+               CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( ::cDataField )
+               CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( ::cDataField )
+               CASE aItem[ CFG_FTYPE ] == "M"; xValue := ::cnSQL:String( ::cDataField )
+               ENDCASE
+               GUI():ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
+               EXIT
+            ENDIF
+         NEXT
+      ENDIF
       ::cnSQL:CloseRecordset()
    ELSE
-      SKIP
-      IF Eof()
-         GOTO BOTTOM
-      ENDIF
-   ENDIF
-   ::DataLoad()
-
-   RETURN Nil
-
-METHOD Previous_Click() CLASS frm_Class
-
-   LOCAL aItem, xValue
-
-   IF ::lIsSQL
-      IF Empty( ::cDataField )
-         RETURN Nil
-      ENDIF
-      ::cnSQL:cSQL := "SELECT " + ::cDataField + " FROM " + ::cDataTable + " WHERE " + ::cDataField + " < "
-      FOR EACH aItem IN ::aControlList
-         IF aItem[ CFG_FNAME ] == ::cDataField
-            ::cnSQL:cSQL += hb_ValToExp( GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
-         ENDIF
-      NEXT
-      ::cnSQL:cSQL += " ORDER BY " + ::cDataField + " DESC LIMIT 1"
-      ::cnSQL:Execute()
-      FOR EACH aItem IN ::aControlList
-         IF aItem[ CFG_FNAME ] == ::cDataField
-            DO CASE
-            CASE aItem[ CFG_FTYPE ] == "C"; xValue := ::cnSQL:String( ::cDataField, aItem[ CFG_FLEN ] )
-            CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( ::cDataField )
-            CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( ::cDataField )
-            CASE aItem[ CFG_FTYPE ] == "M"; xValue := ::cnSQL:String( ::cDataField )
-            ENDCASE
-            GUI():ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
-            EXIT
-         ENDIF
-      NEXT
-      ::cnSQL:CloseRecordset()
-   ELSE
-      SKIP -1
-      IF Bof()
+      DO CASE
+      CASE cMoveTo == "FIRST"
          GOTO TOP
-      ENDIF
+      CASE cMoveTo == "LAST"
+         GOTO BOTTOM
+      CASE cMoveTo == "NEXT"
+         SKIP
+         IF Eof()
+            GOTO BOTTOM
+         ENDIF
+     CASE cMoveTo == "PREV"
+         SKIP -1
+         IF Bof()
+            GOTO TOP
+         ENDIF
+     ENDCASE
    ENDIF
    ::DataLoad()
 

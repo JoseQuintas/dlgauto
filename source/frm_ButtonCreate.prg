@@ -20,10 +20,10 @@ FUNCTION frm_ButtonCreate( Self )
    ENDIF
    IF ::lNavigate
       AAdd( aList, { "View",     { || ::View_Click() } } )
-      AAdd( aList, { "First",    { || ::First_Click() } } )
-      AAdd( aList, { "Previous", { || ::Previous_Click() } } )
-      AAdd( aList, { "Next",     { || ::Next_Click() } } )
-      AAdd( aList, { "Last",     { || ::Last_Click() } } )
+      AAdd( aList, { "First",    { || ::Move_Click( "FIRST" ) } } )
+      AAdd( aList, { "Previous", { || ::Move_Click( "PREV" ) } } )
+      AAdd( aList, { "Next",     { || ::Move_Click( "NEXT" ) } } )
+      AAdd( aList, { "Last",     { || ::Move_Click( "LAST" ) } } )
    ENDIF
    IF "P" $ ::cOptions
       AAdd( aList, { "Print",    { || ::Print_Click() } } )
