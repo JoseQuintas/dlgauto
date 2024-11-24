@@ -51,25 +51,26 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
    LOCAL oThisForm, aItem
 
    oThisForm := frm_Class():New()
-   oThisForm:cOptions := ""
-   oThisForm:lNavigate := .F.
-   AAdd( oThisForm:aOptionList, { "Filter", { || GUI():MsgBox( "Filter" ) } } )
-   oThisForm:cTitle := "BROWSE " + cTable
-   GUI():DialogCreate( oThisForm, @oThisForm:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, oThisForm:cTitle,, .T. )
-   frm_ButtonCreate( oThisForm, .F. )
-   AAdd( oThisForm:aControlList, EmptyFrmClassItem() )
-   aItem := Atail( oThisForm:aControlList )
-   aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
-   GUI():Browse( oThisForm:xDlg, oThisForm:xDlg, @aItem[ CFG_FCONTROL ], 70, 5, ;
-      APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
-      oTbrowse, cField, @xValue, cTable, {}, oThisForm )
-   IF GUI():LibName() == "HWGUI"
-      aItem[ CFG_FCONTROL ]:lInFocus := .T.
-   ELSEIF GUI():LibName() == "FIVEWIN"
-      GUI():SetBrowseKeyFilter( aItem[ CFG_FCONTROL ] )
-   ENDIF
-   // works for hmge from button
-   GUI():SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] )
-   GUI():DialogActivate( oThisForm:xDlg, { || GUI():SetFocus( oThisForm:xDlg, aItem[ CFG_FCONTROL ] ) } )
+   WITH OBJECT oThisForm
+      :cOptions := ""
+      :lNavigate := .F.
+      AAdd( :aOptionList, { "Filter", { || GUI():MsgBox( "Filter" ) } } )
+      :cTitle := "BROWSE " + cTable
+      GUI():DialogCreate( oThisForm, @:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, :cTitle,, .T. )
+      frm_ButtonCreate( oThisForm, .F. )
+      AAdd( :aControlList, EmptyFrmClassItem() )
+      aItem := Atail( :aControlList )
+      aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
+      GUI():Browse( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
+         oTbrowse, cField, @xValue, cTable, {}, oThisForm )
+      IF GUI():LibName() == "HWGUI"
+         aItem[ CFG_FCONTROL ]:lInFocus := .T.
+      ELSEIF GUI():LibName() == "FIVEWIN"
+         GUI():SetBrowseKeyFilter( aItem[ CFG_FCONTROL ] )
+      ENDIF
+      // works for hmge from button
+      GUI():SetFocus( :xDlg, aItem[ CFG_FCONTROL ] )
+      GUI():DialogActivate( :xDlg, { || GUI():SetFocus( :xDlg, aItem[ CFG_FCONTROL ] ) } )
+   ENDWITH
 
    RETURN Nil
