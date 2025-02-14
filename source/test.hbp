@@ -37,7 +37,7 @@ hbct.hbc
 {win}hbwin.hbc
 
 # only if you see console screen with any library
-#{win}-gtgui
+{win}-gtgui
 
 #define HMGE as default
 #-DHBMK_HAS_HMGE

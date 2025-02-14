@@ -251,7 +251,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
          //:bBookMark  := ;
          //:bKeyNo     := { |n| If( n == nil, xControl:xUserValue, xControl:xUserValue := n ) }
          :bOnSkip    := { || xControl:xUserData:Move( xControl:nArrayAt - 1, 1 ) }
-         xControl:SetArray( Array( xControl:xUserData:RecordCount() ) )
+         :SetArray( Array( xControl:xUserData:RecordCount() ) )
          :bClrStd := { || { CLR_BLACK, iif( Mod( xControl:xUserData:AbsolutePosition, 2 ) == 0, CLR_WHITE, RGB(179,207,231) ) } }
       ENDWITH
 #endif

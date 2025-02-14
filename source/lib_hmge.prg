@@ -66,9 +66,9 @@ CREATE CLASS HMGEClass
 
 STATIC FUNCTION gui_Init()
 
-#ifdef DLGAUTO_AS_LIB
+   PUBLIC _HMG_SYSDATA
    Init()
-#endif
+
    Set( _SET_DEBUG, .F. )
    SET GETBOX FOCUS BACKCOLOR TO N2RGB( COLOR_YELLOW )
    SET MENUSTYLE EXTENDED
@@ -667,6 +667,7 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       IF ValType( xValue ) == "N"
          NUMERIC .T.
          INPUTMASK cPicture
+         // FORMAT "E" // like "@E 99.99"
       ELSEIF ValType( xValue ) == "D"
          DATE .T.
          DATEFORMAT cPicture

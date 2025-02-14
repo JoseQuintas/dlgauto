@@ -56,6 +56,7 @@
 #define COLOR_YELLOW        RGB2N( 255, 255, 0 )
 #define COLOR_LIGHTGRAY     RGB2N( 250, 250, 250 )
 #define COLOR_GREEN         12507070
+#define COLOR_ICE           RGB2N( 224, 222, 207 )
 #define APP_FONTNAME        "verdana"
 #define APP_FONTSIZE_NORMAL 12
 #define APP_FONTSIZE_SMALL  10

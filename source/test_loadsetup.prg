@@ -16,15 +16,18 @@ FUNCTION Test_LoadSetup( lMakeLogin )
    LOCAL cTable, cnSQL := ADOLocal(), aFieldList, cField, xValue
 #endif
 
-#ifndef DLGAUTO_AS_LIB
+#ifndef DLGAUTO_NO_TEST
    /* create dbfs */
 
    test_DBF()
 #endif
 
+   aAllSetup := {}
+
+
+#ifndef DLGAUTO_NO_TEST
    /* retrieve structure */
 
-   aAllSetup := {}
    aList := Directory( "*.dbf" )
    FOR EACH aFile IN aList
       aFile[ F_NAME ] := Upper( hb_FNameName( aFile[ F_NAME ] ) )
@@ -83,7 +86,7 @@ FUNCTION Test_LoadSetup( lMakeLogin )
 #endif
 
    /* load setup */
-#ifdef DLGAUTO_AS_LIB
+#ifndef DLGAUTO_NO_TEST
    aSetup := hb_JsonDecode( test_Setup() )
 #else
    IF ! File( "dlgauto.json" )
