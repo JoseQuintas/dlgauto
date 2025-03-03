@@ -613,25 +613,3 @@ FUNCTION EmptyFrmClassItem()
    //aItem[ CFG_SPINNER ]    := Nil
 
    RETURN aItem
-
-#ifndef DLGAUTO_AS_SQL
-
-FUNCTION ADOLocal()
-
-   RETURN Nil
-
-FUNCTION NumberSQL( x )
-
-   RETURN hb_ValToExp( x )
-
-FUNCTION DateSQL( x )
-
-   RETURN StringSQL( hb_Dtoc( x, "YYYY-MM-DD" ) )
-
-FUNCTION StringSQL( x )
-
-   x := StrTran( x, ['], [\'] )
-
-   RETURN ['] + x + [']
-
-#endif

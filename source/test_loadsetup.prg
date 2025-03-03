@@ -9,7 +9,7 @@ test_LoadSetup - load all setup
 FUNCTION Test_LoadSetup( lMakeLogin )
 
    LOCAL aKeyList := {}, aSeekList := {}, aBrowseList := {}, aTypeList := {}
-   LOCAL aAllSetup, aList, aFile, aField, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
+   LOCAL aAllSetup, aFile, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL cFieldName, aBrowse, nPos, aSetup, aAddOptionList, aButton
 
 #ifdef DLGAUTO_AS_SQL
@@ -17,8 +17,9 @@ FUNCTION Test_LoadSetup( lMakeLogin )
 #endif
 
 #ifndef DLGAUTO_NO_TEST
-   /* create dbfs */
+   LOCAL aList, aField
 
+   /* create dbfs */
    test_DBF()
 #endif
 
@@ -48,6 +49,7 @@ FUNCTION Test_LoadSetup( lMakeLogin )
          AAdd( Atail( aAllSetup )[ 2 ], aItem )
       NEXT
    NEXT
+#endif
 
 #ifdef DLGAUTO_AS_SQL
 

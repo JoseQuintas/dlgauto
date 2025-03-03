@@ -1,14 +1,16 @@
 testmix.prg
 errorsys.prg
 -DDLGAUTO_AS_LIB
--Id:\github\dlgauto\source
+-I..\source
 
-d:\github\dlgauto\source\frm*.prg
-d:\github\dlgauto\source\test.prg
-d:\github\dlgauto\source\test_loadsetup.prg
-d:\github\dlgauto\source\test_setup.prg
-d:\github\dlgauto\source\test_dbf.prg
-d:\github\dlgauto\source\test.rc
+..\source\frm*.prg
+..\source\test.prg
+..\source\test_loadsetup.prg
+..\source\test_setup.prg
+..\source\test_dbf.prg
+..\source\test.rc
+..\source\ze_adoclass.prg
+..\source\ze_misc.prg
 
 hbct.hbc
 -mt

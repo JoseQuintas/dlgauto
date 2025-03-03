@@ -89,8 +89,11 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL oMenu, aGroupList, cDBF, dDate := Date(), oCalendar
+   LOCAL oFontMenu
 
-   MENU oMenu OF xDlg
+   DEFINE FONT oFontMenu NAME APP_FONTNAME SIZE 0, -APP_FONTSIZE_NORMAL WEIGHT 300
+
+   MENU oMenu OF xDlg FONT oFontMenu
       FOR EACH aGroupList IN aMenuList
          MENUITEM "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
          MENU

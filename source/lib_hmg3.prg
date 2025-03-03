@@ -72,7 +72,8 @@ STATIC FUNCTION gui_Init()
 
    PUBLIC _HMG_SYSDATA
    PUBLIC _HMG_MainWindowFirst
-   Init()
+
+   //Init()
 
    SET WINDOW MAIN OFF
    SET NAVIGATION EXTENDED

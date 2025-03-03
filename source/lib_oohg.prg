@@ -8,6 +8,7 @@ Note: Or use name or object, but can't mix on this source code
 #include "frm_class.ch"
 #include "oohg.ch"
 #include "i_altsyntax.ch"
+#include "i_init.ch"
 
 MEMVAR aGenPrg
 
@@ -62,6 +63,7 @@ CREATE CLASS OOHGClass
 
 STATIC FUNCTION gui_Init()
 
+   //_OOHG_Init()
    SET MENUSTYLE EXTENDED
    SET NAVIGATION EXTENDED
 

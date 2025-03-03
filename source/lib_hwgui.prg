@@ -519,21 +519,3 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
    NEXT
 
    RETURN Nil
-
-#ifdef DLGAUTO_AS_SQL
-FUNCTION ADOSkipper( cnSQL, nSkip )
-
-   LOCAL nRec := cnSQL:AbsolutePosition()
-
-   IF ! cnSQL:Eof()
-      cnSQL:Move( nSkip )
-      IF cnSQL:Eof()
-         cnSQL:MoveLast()
-      ENDIF
-      IF cnSQL:Bof()
-         cnSQL:MoveFirst()
-      ENDIF
-   ENDIF
-
-   RETURN cnSQL:AbsolutePosition() - nRec
-#endif

@@ -22,6 +22,9 @@ frm_funcMain.prg
 
 lib.prg
 
+ze_adoclass.prg
+ze_misc.prg
+
 test.rc
 
 -otest
