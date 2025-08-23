@@ -70,10 +70,10 @@ CREATE CLASS HMG3Class
 
 STATIC FUNCTION gui_Init()
 
-   PUBLIC _HMG_SYSDATA
-   PUBLIC _HMG_MainWindowFirst
+   //PUBLIC _HMG_SYSDATA
+   //PUBLIC _HMG_MainWindowFirst
 
-   //Init()
+   Init()
 
    SET WINDOW MAIN OFF
    SET NAVIGATION EXTENDED
