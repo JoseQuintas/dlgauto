@@ -601,6 +601,7 @@ STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
    @ nRow, nCol GET xControl VAR xValue MEMO OF xParent PIXEL ;
       SIZE nWidth, nHeight
 
+   xControl:lClrFocus := .T.
    pGenPrg += ;
       [   @ ] + hb_ValToExp( nRow ) + [, ] + hb_ValToExp( nCol ) + ;
       [ GET xControl VAR xValue MEMO OF xParent PIXEL ;] + hb_Eol() + ;
