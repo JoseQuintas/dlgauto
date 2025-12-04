@@ -578,7 +578,7 @@ METHOD Exit_Click() CLASS frm_Class
 
 FUNCTION EmptyFrmClassItem()
 
-   LOCAL aItem := Array(29)
+   LOCAL aItem := Array( CFG_CFGSIZE )
 
    aItem[ CFG_FNAME ]       := ""
    aItem[ CFG_FTYPE ]       := "C"

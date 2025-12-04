@@ -19,14 +19,15 @@
 #define CFG_BRWTABLE   19    // browse table
 #define CFG_BRWKEYFROM 20    // browse field source/from
 #define CFG_BRWIDXORD  21    // browse index order
-#define CFG_BRWKEYTO   22    // browse field target/to
-#define CFG_BRWKEYTO2  23    // browse field2 target/to
+#define CFG_BRWKEYTO   22    // browse field target/to (one key)
+#define CFG_BRWKEYTO2  23    // browse field2 target/to (two keys)
 #define CFG_BRWVALUE   24    // browse key value
 #define CFG_BRWEDIT    25    // browse editable
 #define CFG_BRWTITLE   26    // browse title
 #define CFG_COMBOLIST  27    // array for combobox
 #define CFG_SPINNER    28    // min/max for spinner
-#define CFG_SAVEONLY   29    // not load from database
+#define CFG_SAVEONLY   29    // not load from database - frm called from browse
+#define CFG_CFGSIZE    29    // size of cfg array
 // note: EmptyfrmClassItem() creates the empty array
 
 #define TYPE_NONE       0

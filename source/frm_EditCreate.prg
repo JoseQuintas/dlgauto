@@ -66,9 +66,9 @@ FUNCTION frm_EditCreate( Self )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_CHECKBOX
          IF ::nLayout == 1 .OR. ::nLayout == 2
-            nLen := ( Len( aItem[ CFG_CAPTION ] ) + aItem[ CFG_FLEN ] + 3 ) * 12
+            nLen := ( Len( aItem[ CFG_CAPTION ] ) + 5 + 3 ) * 12
          ELSE
-            nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), aItem[ CFG_FLEN ] ) + 3 ) * 12
+            nLen := ( Max( Len( aItem[ CFG_CAPTION ] ), 5 ) + 3 ) * 12
          ENDIF
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_SPINNER .OR. aItem[ CFG_CTLTYPE ] == TYPE_DATEPICKER
@@ -82,7 +82,7 @@ FUNCTION frm_EditCreate( Self )
          IF aItem[ CFG_FLEN ] > 100 .OR. aItem[ CFG_FTYPE ] == "M"
             aItem[ CFG_CTLTYPE ] := TYPE_MLTEXT
             nLen := APP_DLG_WIDTH - 30
-            nHeight := iif( aItem[ CFG_FTYPE ] == "M", 5, Round( aItem[ CFG_FLEN ] / 100, 0 ) )
+            nHeight := iif( aItem[ CFG_FTYPE ] == "M", 3, Round( aItem[ CFG_FLEN ] / 100, 0 ) )
          ELSE
             IF ::nLayout == 1 .OR. ::nLayout == 2
                nLen := ( Len( aItem[ CFG_CAPTION ] ) + 1 + Max( aItem[ CFG_FLEN ], 5 ) + 3 ) * 12

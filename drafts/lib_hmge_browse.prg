@@ -14,12 +14,12 @@ FUNCTION HmgeBrowse( ... )
    STATIC nWindow := 0
    PRIVATE cMe, cBrowseName, cWindowName, cSearchString := "", cWorkArea := Alias()
 
-   _hmge_init()
+   // _hmge_init() // on gui():Init()
    nWindow += 1
    cMe := "Pesquisa" + StrZero( nWindow, 4 )
 
-   SET WINDOW MAIN OFF
-   SET BROWSESYNC  ON
+   // SET WINDOW MAIN OFF // on gui():init()
+   // SET BROWSESYNC  ON  // on gui():init()
 
    IF Len( AppForms() ) > 0
       Atail( AppForms() ):GUIHide()
