@@ -36,10 +36,19 @@ CREATE CLASS OOHGClass
    METHOD StatusCreate(...)     INLINE gui_StatusCreate(...)
    METHOD TextCreate(...)       INLINE gui_TextCreate(...)
 
-   /* browse */
-   METHOD Browse(...)           INLINE gui_Browse(...)
-   METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
-   METHOD SetBrowseKeyFilter(...) INLINE Nil
+   /* browse DBF */
+   METHOD BrowseDBF(...)           INLINE gui_BrowseDBF(...)
+   METHOD BrowseDBFRefresh(...)    INLINE gui_BrowseDBFRefresh(...)
+   METHOD browseDBFkeydown(...)    INLINE Nil // gui_BrowseDBFKeydown(...)
+   METHOD BrowseDBFSetKeyFilter( ... ) INLINE Nil // gui_BrowseDBFSetKeyFilter( ... )
+   METHOD BrowseDBFEnter( ... )    INLINE Nil // gui_BrowseDbfEnter( ... )
+
+   /* browse ADO */
+   METHOD BrowseADO(...)               INLINE ::BrowseDBF(...)
+   METHOD BrowseADORefresh(...)        INLINE ::BrowseDBFRefresh(...)
+   METHOD browseADOkeydown(...)        INLINE ::BrowseDBFKeydown(...)
+   METHOD BrowseADOSetKeyFilter( ... ) INLINE ::BrowseDBFSetKeyFilter( ... )
+   METHOD BrowseADOEnter( ... )        INLINE ::BrowseDbfEnter( ... )
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -134,7 +143,7 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
 
    RETURN Nil
 
-STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
+STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
@@ -171,7 +180,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
          WIDTHS aWidthList ;
          WORKAREA ( workarea ) ;
          FIELDS aFieldList ;
-         ON DBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+         ON DBLCLICK gui_BrowseDBFDblClick( xDlg, xControl, workarea, cField, @xValue )
    ENDIF
    IF Len( aKeyDownList ) != 0
       FOR EACH aThisKey IN aKeyDownList
@@ -214,7 +223,7 @@ STATIC FUNCTION gui_DlgKeyDown( xControl, nKey, oFrmClass )
 
    RETURN .T.
 
-STATIC FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
+STATIC FUNCTION gui_BrowseDBFDblClick( xDlg, xControl, workarea, cField, xValue )
 
    LOCAL nRecNo
 
@@ -227,7 +236,7 @@ STATIC FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseRefresh( xDlg, xControl )
+STATIC FUNCTION gui_BrowseDBFRefresh( xDlg, xControl )
 
    DoMethod( xDlg, xControl, "REFRESH" )
 

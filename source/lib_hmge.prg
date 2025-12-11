@@ -39,10 +39,19 @@ CREATE CLASS HMGEClass
    METHOD StatusCreate(...)     INLINE gui_StatusCreate(...)
    METHOD TextCreate(...)       INLINE gui_TextCreate(...)
 
-   /* browse */
-   METHOD Browse(...)           INLINE gui_Browse(...)
-   METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
-   METHOD SetBrowseKeyFilter(...) INLINE Nil
+   /* browse DBF */
+   METHOD BrowseDBF(...)           INLINE gui_BrowseDBF(...)
+   METHOD BrowseDBFRefresh(...)    INLINE gui_BrowseDBFRefresh(...)
+   METHOD browseDBFkeydown(...)    INLINE Nil // gui_BrowseDBFKeydown(...)
+   METHOD BrowseDBFSetKeyFilter( ... ) INLINE Nil // gui_BrowseDBFSetKeyFilter( ... )
+   METHOD BrowseDBFEnter( ... )    INLINE Nil // gui_BrowseDbfEnter( ... )
+
+   /* browse ADO */
+   METHOD BrowseADO(...)               INLINE ::BrowseDBF(...)
+   METHOD BrowseADORefresh(...)        INLINE ::BrowseDBFRefresh(...)
+   METHOD browseADOkeydown(...)        INLINE ::BrowseDBFKeydown(...)
+   METHOD BrowseADOSetKeyFilter( ... ) INLINE ::BrowseDBFSetKeyFilter( ... )
+   METHOD BrowseADOEnter( ... )        INLINE ::BrowseDbfEnter( ... )
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -172,7 +181,7 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
 
    RETURN Nil
 
-STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
+STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
 
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
@@ -207,7 +216,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
          WIDTH nWidth - 20
          HEIGHT nHeight - 20
          IF Len( aKeyDownList ) == 0
-            ONDBLCLICK gui_BrowseDblClick( xDlg, xControl, workarea, cField, @xValue )
+            ONDBLCLICK gui_BrowseDBFDblClick( xDlg, xControl, workarea, cField, @xValue )
          ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
             ONDBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
          ENDIF
@@ -264,7 +273,7 @@ STATIC FUNCTION gui_DlgKeyDown( xControl, nKey, oFrmClass )
 
    RETURN .T.
 
-STATIC FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
+STATIC FUNCTION gui_BrowseDBFDblClick( xDlg, xControl, workarea, cField, xValue )
 
    IF ! Empty( cField )
       // without browsesync ON
@@ -276,7 +285,7 @@ STATIC FUNCTION gui_BrowseDblClick( xDlg, xControl, workarea, cField, xValue )
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseRefresh( xDlg, xControl )
+STATIC FUNCTION gui_BrowseDBFRefresh( xDlg, xControl )
 
    // on older hmge versions, need to set browse value/recno()
    SetProperty( xDlg, xControl, "VALUE", RecNo() )

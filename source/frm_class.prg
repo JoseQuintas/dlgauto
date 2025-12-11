@@ -419,7 +419,7 @@ METHOD DataLoad() CLASS frm_Class
                   NEXT
                   :xUserData:Execute()
                   :SetArray( Array( :xUserData:RecordCount() ) )
-                  GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+                  GUI():BrowseDBFRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
                ENDWITH
             ENDIF
             IF GUI():LibName() == "HWGUI"
@@ -435,7 +435,7 @@ METHOD DataLoad() CLASS frm_Class
                      ENDIF
                   NEXT
                   :aArray:Execute()
-                  GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+                  GUI():BrowseDBFRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
                ENDWITH
             ENDIF
 #endif
@@ -450,7 +450,7 @@ METHOD DataLoad() CLASS frm_Class
                SET SCOPE TO Str( xScope, nLenScope )
             ENDIF
             GOTO TOP
-            GUI():BrowseRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
+            GUI():BrowseDBFRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
             SELECT ( Select( ::cDataTable ) ) // not all libraries need this
          ENDIF
       CASE aItem[ CFG_SAVEONLY ]

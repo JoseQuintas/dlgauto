@@ -34,11 +34,19 @@ CREATE CLASS HWGUIClass
    METHOD StatusCreate(...)     INLINE gui_StatusCreate(...)
    METHOD TextCreate(...)       INLINE gui_TextCreate(...)
 
-   /* browse */
-   METHOD Browse(...)           INLINE gui_Browse(...)
-   METHOD BrowseRefresh(...)    INLINE gui_BrowseRefresh(...)
-   METHOD browsekeydown(...)    INLINE gui_browsekeydown(...)
-   METHOD BrowseEnter(...)      INLINE gui_BrowseEnter(...)
+   /* browse DBF */
+   METHOD BrowseDBF(...)           INLINE gui_BrowseDBF(...)
+   METHOD BrowseDBFRefresh(...)    INLINE gui_BrowseDBFRefresh(...)
+   METHOD browseDBFkeydown(...)    INLINE gui_BrowseDBFKeydown(...)
+   METHOD BrowseDBFSetKeyFilter( ... ) INLINE Nil // gui_BrowseDBFSetKeyFilter( ... )
+   METHOD BrowseDBFEnter( ... )    INLINE gui_BrowseDbfEnter( ... )
+
+   /* browse ADO */
+   METHOD BrowseADO(...)               INLINE ::BrowseDBF(...)
+   METHOD BrowseADORefresh(...)        INLINE ::BrowseDBFRefresh(...)
+   METHOD browseADOkeydown(...)        INLINE ::BrowseDBFKeydown(...)
+   METHOD BrowseADOSetKeyFilter( ... ) INLINE ::BrowseDBFSetKeyFilter( ... )
+   METHOD BrowseADOEnter( ... )        INLINE ::BrowseDbfEnter( ... )
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -127,17 +135,17 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
 
    RETURN Nil
 
-STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
+STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
 
    LOCAL aItem
 
    IF ValType( aKeyDownList ) != "A"
-      aKeyDownList := { { VK_RETURN, { || GUI():BrowseEnter( cField, @xValue, xDlg, xControl ) } } }
+      aKeyDownList := { { VK_RETURN, { || GUI():BrowseDBFEnter( cField, @xValue, xDlg, xControl ) } } }
    ENDIF
 
    IF oFrmClass:lIsSQL
       @ nCol, nRow BROWSE ARRAY xControl SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
-      ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
+      ON CLICK { |...| GUI():browseDBFenter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
       ON KEYDOWN { | xControl, nKey | (xControl), (nKey), Nil }
 
 #ifdef DLGAUTO_AS_SQL
@@ -162,7 +170,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 #endif
    ELSE
       @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
-      ON CLICK { |...| GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
+      ON CLICK { |...| GUI():browseDBFenter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
       ON KEYDOWN { | xControl, nKey | (xControl), (nKey), Nil }
       // may be not current alias
       xControl:Alias := workarea
@@ -177,9 +185,9 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
    ENDIF
    // xControl:lInFocus := .T. // only if called from frm_browse
 
-   //xControl:bEnter := { || hwg_MsgInfo( "teste"), GUI():browseenter( @cField, @xValue, @xDlg, @xControl ), .F. }
+   //xControl:bEnter := { || hwg_MsgInfo( "teste"), GUI():browseDBFenter( @cField, @xValue, @xDlg, @xControl ), .F. }
    xControl:bKeyDown := { | o, nKey | (o), ;
-      GUI():browsekeydown( xControl, xDlg, nKey, cField, workarea, xvalue, aKeyDownList ) }
+      GUI():browseDBFkeydown( xControl, xDlg, nKey, cField, workarea, xvalue, aKeyDownList ) }
    //xControl:bGetFocus := { | o | o:Refresh(), hwg_SetFocus( o:Handle ), o:Refresh() }
    //xDlg:bGetFocus := { || xDlg:xControl:SetFocus() }
 
@@ -187,7 +195,7 @@ STATIC FUNCTION gui_Browse( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight
 
    RETURN Nil
 
-STATIC FUNCTION gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xValue, aKeyDownList )
+STATIC FUNCTION gui_browseDBFkeydown( xControl, xDlg, nKey, cField, workarea, xValue, aKeyDownList )
 
    LOCAL nPos
 
@@ -201,7 +209,7 @@ STATIC FUNCTION gui_browsekeydown( xControl, xDlg, nKey, cField, workarea, xValu
 
    RETURN .T.
 
-STATIC FUNCTION gui_BrowseEnter( cField, xValue, xDlg )
+STATIC FUNCTION gui_BrowseDBFEnter( cField, xValue, xDlg )
 
    IF ! Empty( cField )
       xValue := FieldGet( FieldNum( cField ) )
@@ -212,7 +220,7 @@ STATIC FUNCTION gui_BrowseEnter( cField, xValue, xDlg )
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseRefresh( xDlg, xControl )
+STATIC FUNCTION gui_BrowseDBFRefresh( xDlg, xControl )
 
    xControl:Refresh()
 

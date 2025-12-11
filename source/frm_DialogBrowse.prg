@@ -61,12 +61,12 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       AAdd( :aControlList, EmptyFrmClassItem() )
       aItem := Atail( :aControlList )
       aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
-      GUI():Browse( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
+      GUI():BrowseDBF( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
          oTbrowse, cField, @xValue, cTable, {}, oThisForm )
       IF GUI():LibName() == "HWGUI"
          aItem[ CFG_FCONTROL ]:lInFocus := .T.
       ELSEIF GUI():LibName() == "FIVEWIN"
-         GUI():SetBrowseKeyFilter( aItem[ CFG_FCONTROL ] )
+         GUI():BrowseDBFSetKeyFilter( aItem[ CFG_FCONTROL ] )
       ENDIF
       // works for hmge from button
       GUI():SetFocus( :xDlg, aItem[ CFG_FCONTROL ] )
