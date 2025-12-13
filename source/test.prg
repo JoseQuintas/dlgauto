@@ -37,6 +37,10 @@ MEMVAR pGenPrg
 
    //GUI():MsgBox( hb_gtInfo( HB_GTI_VERSION ) )
 
+   IF ValType( GUI() ) == "U"
+      Alert( "no library compiled" )
+      QUIT
+   ENDIF
    GUI():Init()
    RddSetDefault( "DBFCDX" )
 

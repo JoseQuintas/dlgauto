@@ -42,11 +42,11 @@ CREATE CLASS HWGUIClass
    METHOD BrowseDBFEnter( ... )    INLINE gui_BrowseDbfEnter( ... )
 
    /* browse ADO */
-   METHOD BrowseADO(...)               INLINE ::BrowseDBF(...)
-   METHOD BrowseADORefresh(...)        INLINE ::BrowseDBFRefresh(...)
-   METHOD browseADOkeydown(...)        INLINE ::BrowseDBFKeydown(...)
-   METHOD BrowseADOSetKeyFilter( ... ) INLINE ::BrowseDBFSetKeyFilter( ... )
-   METHOD BrowseADOEnter( ... )        INLINE ::BrowseDbfEnter( ... )
+   METHOD BrowseADO(...)               INLINE gui_BrowseADO(...)
+   METHOD BrowseADORefresh(...)        INLINE gui_BrowseADORefresh(...)
+   METHOD browseADOkeydown(...)        INLINE gui_BrowseADOKeydown(...)
+   METHOD BrowseADOSetKeyFilter( ... ) INLINE Nil // gui_BrowseADOSetKeyFilter( ... )
+   METHOD BrowseADOEnter( ... )        INLINE gui_BrowseADOEnter( ... )
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -135,20 +135,18 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
+STATIC FUNCTION gui_BrowseADO( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
 
    LOCAL aItem
 
    IF ValType( aKeyDownList ) != "A"
-      aKeyDownList := { { VK_RETURN, { || GUI():BrowseDBFEnter( cField, @xValue, xDlg, xControl ) } } }
+      aKeyDownList := { { VK_RETURN, { || GUI():BrowseADOEnter( cField, @xValue, xDlg, xControl ) } } }
    ENDIF
 
-   IF oFrmClass:lIsSQL
       @ nCol, nRow BROWSE ARRAY xControl SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
-      ON CLICK { |...| GUI():browseDBFenter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
+      ON CLICK { |...| GUI():browseADOEnter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
       ON KEYDOWN { | xControl, nKey | (xControl), (nKey), Nil }
 
-#ifdef DLGAUTO_AS_SQL
       xControl:AArray := ADOLocal()
       xControl:bSkip  := { | o, nSkip | ADOSkipper( o:aArray, nSkip ) }
       xControl:bGotop := { | o | o:aArray:MoveFirst() }
@@ -167,8 +165,59 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
                Len( Transform( xControl:AArray:Value( aItem[2] ), aItem[3] ) ) ) ) );
             JUSTIFY LINE DT_LEFT
       NEXT
-#endif
-   ELSE
+   // xControl:lInFocus := .T. // only if called from frm_browse
+
+   //xControl:bEnter := { || hwg_MsgInfo( "teste"), GUI():browseDBFenter( @cField, @xValue, @xDlg, @xControl ), .F. }
+   xControl:bKeyDown := { | o, nKey | (o), ;
+      GUI():browseADOkeydown( xControl, xDlg, nKey, cField, workarea, xvalue, aKeyDownList ) }
+   //xControl:bGetFocus := { | o | o:Refresh(), hwg_SetFocus( o:Handle ), o:Refresh() }
+   //xDlg:bGetFocus := { || xDlg:xControl:SetFocus() }
+
+   (xDlg); (workarea); (xParent);(oFrmClass)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_browseADOkeydown( xControl, xDlg, nKey, cField, workarea, xValue, aKeyDownList )
+
+   LOCAL nPos
+
+   nPos := hb_AScan( aKeyDownList, { | e | nKey == e[ 1 ] } )
+   IF nPos != 0
+      Eval( aKeyDownList[ nPos ][ 2 ], cField, @xValue, xDlg, xControl )
+   ENDIF
+
+   (workarea)
+   // return value is used by hwgui
+
+   RETURN .T.
+
+STATIC FUNCTION gui_BrowseADOEnter( cField, xValue, xDlg )
+
+   IF ! Empty( cField )
+      xValue := FieldGet( FieldNum( cField ) )
+   ENDIF
+   hwg_EndDialog()
+
+   (xDlg)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_BrowseADORefresh( xDlg, xControl )
+
+   xControl:Refresh()
+
+   (xDlg)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
+
+   LOCAL aItem
+
+   IF ValType( aKeyDownList ) != "A"
+      aKeyDownList := { { VK_RETURN, { || GUI():BrowseDBFEnter( cField, @xValue, xDlg, xControl ) } } }
+   ENDIF
+
       @ nCol, nRow BROWSE xControl DATABASE SIZE nWidth, nHeight STYLE WS_BORDER + WS_VSCROLL + WS_HSCROLL ;
       ON CLICK { |...| GUI():browseDBFenter( @cField, @xValue, @xDlg, @xControl ), .F. } ;
       ON KEYDOWN { | xControl, nKey | (xControl), (nKey), Nil }
@@ -182,7 +231,6 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
                Len( Transform( (workarea)->( FieldGet( FieldNum( aItem[2] ) ) ), aItem[3] ) ) ) ) );
             JUSTIFY LINE DT_LEFT
       NEXT
-   ENDIF
    // xControl:lInFocus := .T. // only if called from frm_browse
 
    //xControl:bEnter := { || hwg_MsgInfo( "teste"), GUI():browseDBFenter( @cField, @xValue, @xDlg, @xControl ), .F. }
@@ -527,3 +575,19 @@ STATIC FUNCTION gui_DlgSetKey( oFrmClass )
    NEXT
 
    RETURN Nil
+
+STATIC FUNCTION ADOSkipper( cnSQL, nSkip )
+
+   LOCAL nRec := cnSQL:AbsolutePosition()
+
+   IF ! cnSQL:Eof()
+      cnSQL:Move( nSkip )
+      IF cnSQL:Eof()
+         cnSQL:MoveLast()
+      ENDIF
+      IF cnSQL:Bof()
+         cnSQL:MoveFirst()
+      ENDIF
+   ENDIF
+
+   RETURN cnSQL:AbsolutePosition() - nRec

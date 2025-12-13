@@ -331,9 +331,7 @@ METHOD DataLoad() CLASS frm_Class
 
    LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
-#ifdef DLGAUTO_AS_SQL
    LOCAL aControl
-#endif
 
    IF Empty( ::cDataTable ) // no data source
       RETURN Nil
@@ -404,7 +402,6 @@ METHOD DataLoad() CLASS frm_Class
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
          IF ::lIsSQL
-#ifdef DLGAUTO_AS_SQL
             IF GUI():LibName() == "FIVEWIN"
                WITH OBJECT aItem[ CFG_FCONTROL ]
                   :xUserData:CloseRecordset()
@@ -438,7 +435,6 @@ METHOD DataLoad() CLASS frm_Class
                   GUI():BrowseDBFRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
                ENDWITH
             ENDIF
-#endif
          ELSE
             SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
             SET ORDER TO ( aItem[ CFG_BRWIDXORD ] )
@@ -488,10 +484,9 @@ METHOD Save_Click() CLASS frm_Class
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
    //LOCAL cTxt := ""
 
-#ifdef DLGAUTO_AS_SQL
    LOCAL cSQL := "", cWhere := ""
    LOCAL cnSQL := ADOLocal()
-#endif
+
    IF Empty( ::cDataTable ) // no data source
       RETURN Nil
    ENDIF
@@ -519,17 +514,16 @@ METHOD Save_Click() CLASS frm_Class
          AAdd( aQueryList, { aItem[ CFG_FNAME ], xValue } )
       CASE hb_AScan( aCommonList, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
       CASE aItem[ CFG_ISKEY ]
-#ifdef DLGAUTO_AS_SQL
-         cWhere += iif( Empty( cWhere ), "", " AND " ) + ;
+         IF ::lIsSQL
+            cWhere += iif( Empty( cWhere ), "", " AND " ) + ;
             aItem[ CFG_FNAME ] + "=" + hb_ValToExp( GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
-#endif
+         ENDIF
       OTHERWISE
          xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
          AAdd( aQueryList, { aItem[ CFG_FNAME ], xValue } )
       ENDCASE
    NEXT
-#ifdef DLGAUTO_AS_SQL
-   IF ! Empty( cWhere )
+   IF ::lIsSQL
       FOR EACH aReplace IN aQueryList
          xValue := aReplace[2]
          DO CASE
@@ -542,16 +536,13 @@ METHOD Save_Click() CLASS frm_Class
       cSQL := "UPDATE " + ::cDataTable + " SET " + cSQL
       cSQL += " WHERE " + cWhere
       cnSQL:Execute( cSQL )
-   ENDIF
-#else
-   IF RLock()
+   ELSEIF RLock()
       FOR EACH aReplace IN aQueryList
          FieldPut( FieldNum( aReplace[ 1 ] ), aReplace[ 2 ] )
       NEXT
       SKIP 0
       UNLOCK
    ENDIF
-#endif
    ::cSelected := "NONE"
 
    RETURN Nil

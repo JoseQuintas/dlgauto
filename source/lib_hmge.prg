@@ -187,9 +187,7 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
    LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}, nPos, cnSQL
 
-   IF ofrmClass:lIsSQL
-      cnSQL := ADOLocal()
-   ENDIF
+   cnSQL := ADOLocal()
    IF Empty( xControl )
       xControl := gui_NewName( "BRW" )
    ENDIF

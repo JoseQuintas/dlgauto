@@ -12,80 +12,75 @@ FUNCTION Test_LoadSetup( lMakeLogin )
    LOCAL aAllSetup, aFile, aStru, cFile, aItem, aDBF, nKeyPos, nSeekPos
    LOCAL cFieldName, aBrowse, nPos, aSetup, aAddOptionList, aButton
 
-#ifdef DLGAUTO_AS_SQL
-   LOCAL cTable, cnSQL := ADOLocal(), aFieldList, cField, xValue
-#endif
+   LOCAL cTable, cnSQL := ADOLocal(), aFieldList, cField, xValue, aList, aField
 
 #ifndef DLGAUTO_NO_TEST
-   LOCAL aList, aField
-
    /* create dbfs */
    test_DBF()
 #endif
 
    aAllSetup := {}
 
+   IF cnSQL == Nil
+      /* retrieve structure */
 
-#ifndef DLGAUTO_NO_TEST
-   /* retrieve structure */
-
-   aList := Directory( "*.dbf" )
-   FOR EACH aFile IN aList
-      aFile[ F_NAME ] := Upper( hb_FNameName( aFile[ F_NAME ] ) )
-      cFile := Upper( aFile[ F_NAME ] )
-      AAdd( aAllSetup, { cFile, {}, Nil } )
-      USE ( cFile )
-      aStru := dbStruct()
-      FOR EACH aField IN aStru
-         aItem := EmptyFrmClassItem()
-         aItem[ CFG_CTLTYPE ]  := TYPE_TEXT
-         aItem[ CFG_FNAME ]    := Upper( aField[ DBS_NAME ] )
-         aItem[ CFG_FTYPE ]    := aField[ DBS_TYPE ]
-         aItem[ CFG_FLEN ]     := aField[ DBS_LEN ]
-         aItem[ CFG_FDEC ]     := aField[ DBS_DEC ]
-         aItem[ CFG_VALUE ]    := FieldGet( aField:__EnumIndex )
-         aItem[ CFG_CAPTION ]  := aItem[ CFG_FNAME ]
-         aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
-         AAdd( Atail( aAllSetup )[ 2 ], aItem )
-      NEXT
-   NEXT
-#endif
-
-#ifdef DLGAUTO_AS_SQL
-
-   WITH OBJECT cnSQL
-      FOR EACH cTable IN :TableList()
-         cTable := Upper( cTable )
-         IF "XML" $ Upper( cTable )
-            LOOP
-         ENDIF
-         AAdd( aAllSetup, { cTable, {}, Nil } )
-         aFieldList := :FieldList( cTable )
-         :Execute( "SELECT * FROM " + cTable + " LIMIT 1" )
-         FOR EACH cField IN aFieldList
-            aStru := :FStru( cField )
+      aList := Directory( "*.dbf" )
+      FOR EACH aFile IN aList
+         aFile[ F_NAME ] := Upper( hb_FNameName( aFile[ F_NAME ] ) )
+         cFile := Upper( aFile[ F_NAME ] )
+         AAdd( aAllSetup, { cFile, {}, Nil } )
+         USE ( cFile )
+         aStru := dbStruct()
+         FOR EACH aField IN aStru
             aItem := EmptyFrmClassItem()
             aItem[ CFG_CTLTYPE ]  := TYPE_TEXT
-            aItem[ CFG_FNAME ]    := Upper( aStru[ 1 ] )
-            aItem[ CFG_FTYPE ]    := aStru[ 2 ]
-            aItem[ CFG_FLEN ]     := aStru[ 3 ]
-            aItem[ CFG_FDEC ]     := aStru[ 4 ]
-            xValue := ""
-            DO CASE
-            CASE aItem[ CFG_FTYPE ] == "M"; xValue := Space(150)
-            CASE aItem[ CFG_FTYPE ] == "N"; xValue := Val( "0" + iif( aItem[ CFG_FDEC ] == 0, "", "." + Replicate( "0", aItem[ CFG_FDEC ] ) ) )
-            CASE aItem[ CFG_FTYPE ] == "C"; xValue := Space( aItem[ CFG_FLEN ] )
-            CASE aItem[ CFG_FTYPE ] == "D"; xValue := Ctod("")
-            ENDCASE
-            aItem[ CFG_VALUE ] := xValue
-            aItem[ CFG_CAPTION ]  := aStru[ 1 ]
+            aItem[ CFG_FNAME ]    := Upper( aField[ DBS_NAME ] )
+            aItem[ CFG_FTYPE ]    := aField[ DBS_TYPE ]
+            aItem[ CFG_FLEN ]     := aField[ DBS_LEN ]
+            aItem[ CFG_FDEC ]     := aField[ DBS_DEC ]
+            aItem[ CFG_VALUE ]    := FieldGet( aField:__EnumIndex )
+            aItem[ CFG_CAPTION ]  := aItem[ CFG_FNAME ]
             aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
             AAdd( Atail( aAllSetup )[ 2 ], aItem )
          NEXT
-         cnSQL:CloseRecordset()
       NEXT
-   ENDWITH
-#endif
+   ENDIF
+
+   IF cnSQL != Nil
+
+      WITH OBJECT cnSQL
+         FOR EACH cTable IN :TableList()
+            cTable := Upper( cTable )
+            IF "XML" $ Upper( cTable )
+               LOOP
+            ENDIF
+            AAdd( aAllSetup, { cTable, {}, Nil } )
+            aFieldList := :FieldList( cTable )
+            :Execute( "SELECT * FROM " + cTable + " LIMIT 1" )
+            FOR EACH cField IN aFieldList
+               aStru := :FStru( cField )
+               aItem := EmptyFrmClassItem()
+               aItem[ CFG_CTLTYPE ]  := TYPE_TEXT
+               aItem[ CFG_FNAME ]    := Upper( aStru[ 1 ] )
+               aItem[ CFG_FTYPE ]    := aStru[ 2 ]
+               aItem[ CFG_FLEN ]     := aStru[ 3 ]
+               aItem[ CFG_FDEC ]     := aStru[ 4 ]
+               xValue := ""
+               DO CASE
+               CASE aItem[ CFG_FTYPE ] == "M"; xValue := Space(150)
+               CASE aItem[ CFG_FTYPE ] == "N"; xValue := Val( "0" + iif( aItem[ CFG_FDEC ] == 0, "", "." + Replicate( "0", aItem[ CFG_FDEC ] ) ) )
+               CASE aItem[ CFG_FTYPE ] == "C"; xValue := Space( aItem[ CFG_FLEN ] )
+               CASE aItem[ CFG_FTYPE ] == "D"; xValue := Ctod("")
+               ENDCASE
+               aItem[ CFG_VALUE ] := xValue
+               aItem[ CFG_CAPTION ]  := aStru[ 1 ]
+               aItem[ CFG_FPICTURE ] := PictureFromValue( aItem )
+               AAdd( Atail( aAllSetup )[ 2 ], aItem )
+            NEXT
+            cnSQL:CloseRecordset()
+         NEXT
+      ENDWITH
+   ENDIF
 
    /* load setup */
 #ifndef DLGAUTO_NO_TEST

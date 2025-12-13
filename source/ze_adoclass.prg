@@ -987,7 +987,11 @@ FUNCTION ADOLocal()
 
    LOCAL cnSQL
 
+#ifdef DLAUTO_AS_SQL
    cnSQL := ADOClass():New( /*     */ )
+#else
+   cnSQL := Nil // -w3 -es2
+#endif
 
    RETURN cnSQL
 

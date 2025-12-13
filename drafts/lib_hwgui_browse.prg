@@ -89,7 +89,7 @@ FUNCTION BrowseSet( oBrowse, oBrowseList )
 
    RETURN Nil
 
-FUNCTION ADOSkipper( cnSQL, nSkip )
+STATIC FUNCTION ADOSkipper( cnSQL, nSkip )
 
    LOCAL nRec := cnSQL:AbsolutePosition()
 

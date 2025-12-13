@@ -61,12 +61,21 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       AAdd( :aControlList, EmptyFrmClassItem() )
       aItem := Atail( :aControlList )
       aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
-      GUI():BrowseDBF( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
-         oTbrowse, cField, @xValue, cTable, {}, oThisForm )
+      IF oThisForm:lIsSQL
+         GUI():BrowseADO( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
+            oTbrowse, cField, @xValue, cTable, {}, oThisForm )
+         IF GUI():LibName() == "FIVEWIN"
+            GUI():BrowseADOSetKeyFilter( aItem[ CFG_FCONTROL ] )
+         ENDIF
+      ELSE
+         GUI():BrowseDBF( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
+            oTbrowse, cField, @xValue, cTable, {}, oThisForm )
+         IF GUI():LibName() == "FIVEWIN"
+            GUI():BrowseDBFSetKeyFilter( aItem[ CFG_FCONTROL ] )
+         ENDIF
+      ENDIF
       IF GUI():LibName() == "HWGUI"
          aItem[ CFG_FCONTROL ]:lInFocus := .T.
-      ELSEIF GUI():LibName() == "FIVEWIN"
-         GUI():BrowseDBFSetKeyFilter( aItem[ CFG_FCONTROL ] )
       ENDIF
       // works for hmge from button
       GUI():SetFocus( :xDlg, aItem[ CFG_FCONTROL ] )
