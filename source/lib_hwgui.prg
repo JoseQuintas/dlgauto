@@ -304,16 +304,6 @@ STATIC FUNCTION gui_DatePickerCreate( xDlg, xParent, xControl, ;
 
    RETURN Nil
 
-STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aList, oFrmClass )
-
-   @ nCol, nRow GET UPDOWN xControl VAR nValue ;
-      RANGE aList[1], aList[2] OF xParent SIZE nWidth, nHeight WIDTH 15 FONT oFont
-   //gui_TextCreate( xDlg, xParent, @xControl, nRow, nCol, nWidth, nHeight, @nValue )
-
-   (aList);(oFrmClass);(xDlg)
-
-   RETURN Nil
-
 STATIC FUNCTION gui_DialogActivate( xDlg, bCode )
 
    IF Empty( bCode )
@@ -437,6 +427,16 @@ STATIC FUNCTION gui_SetFocus( xDlg, xControl )
    ENDIF
 
    (xDlg); (xControl)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_SpinnerCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, nValue, aList, oFrmClass )
+
+   @ nCol, nRow GET UPDOWN xControl VAR nValue ;
+      RANGE aList[1], aList[2] OF xParent SIZE nWidth, nHeight WIDTH 15 FONT oFont
+   //gui_TextCreate( xDlg, xParent, @xControl, nRow, nCol, nWidth, nHeight, @nValue )
+
+   (aList);(oFrmClass);(xDlg)
 
    RETURN Nil
 

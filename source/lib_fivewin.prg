@@ -44,14 +44,12 @@ CREATE CLASS FIVEWINClass
    METHOD BrowseDBFRefresh(...)    INLINE gui_BrowseDBFRefresh(...)
    METHOD browseDBFkeydown(...)    INLINE gui_BrowseDBFKeydown(...)
    METHOD BrowseDBFSetKeyFilter( ... ) INLINE gui_BrowseDBFSetKeyFilter( ... )
-   METHOD BrowseDBFEnter( ... )    INLINE Nil // gui_BrowseDbfEnter( ... )
 
    /* browse ADO */
    METHOD BrowseADO(...)               INLINE gui_BrowseADO(...)
    METHOD BrowseADORefresh(...)        INLINE gui_BrowseADORefresh(...)
    METHOD browseADOkeydown(...)        INLINE gui_BrowseADOKeydown(...)
    METHOD BrowseADOSetKeyFilter( ... ) INLINE gui_BrowseADOSetKeyFilter( ... )
-   METHOD BrowseADOEnter( ... )        INLINE Nil // gui_BrowseADOEnter( ... )
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -195,16 +193,16 @@ STATIC FUNCTION gui_BrowseADO( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
             SIZE nWidth, nHeight PIXEL ;
             ; // LINES AUTOCOL, AUTOSORT ;
             OF xParent ;
-            ON DBLCLICK ( (nRow), (nCol), (nFlags), gui_BrowseADODblClick( xDlg, xControl, workarea, cField, @xValue ) )
+            ON DBLCLICK ( (nRow), (nCol), (nFlags), gui_BrowseADOKeyDown( K_ENTER, {}, xDlg, workarea, cField, @xValue ) )
             //LINES CELL
-         xControl:bKeyChar := { | nKey | GUI():BrowseADOKeyDown( nKey, aKeyDownList, workarea ) }
+         xControl:bKeyChar := { | nKey | GUI():BrowseADOKeyDown( nKey, aKeyDownList, xDlg, workarea, cField, @xValue ) }
       ELSEIF hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) != 0
          @ nRow, nCol XBROWSE xControl ;
             ARRAY Array(10) ;
             ; // LINES AUTOCOL, AUTOSORT ;
             SIZE nWidth, nHeight PIXEL ;
             OF xParent ;
-            ON DBLCLICK ( (nRow), (nCol), (nFlags), GUI():BrowseADOKeyDown( VK_RETURN, aKeyDownList, workarea ) )
+            ON DBLCLICK ( (nRow), (nCol), (nFlags), GUI():BrowseADOKeyDown( VK_RETURN, aKeyDownList, xDlg, workarea, cField, @xValue ) )
             //LINES CELL
       ENDIF
       WITH OBJECT xControl
@@ -288,11 +286,15 @@ STATIC FUNCTION gui_BrowseADO( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseADOKeyDown( nKey, aKeyDownList, workarea )
+STATIC FUNCTION gui_BrowseADOKeyDown( nKey, aKeyDownList, xDlg, workarea, cField, xValue )
 
    LOCAL nPos, nSelect
 
    IF Len( aKeyDownList ) == 0
+      IF ! Empty( cField )
+         xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
+      ENDIF
+      xDlg:End()
    ELSE
       nPos := hb_AScan( aKeyDownList, { | e | e[ 1 ] == nKey } )
       IF nPos != 0
@@ -302,16 +304,6 @@ STATIC FUNCTION gui_BrowseADOKeyDown( nKey, aKeyDownList, workarea )
          SELECT ( nSelect )
       ENDIF
    ENDIF
-
-   RETURN Nil
-
-STATIC FUNCTION gui_BrowseADODblClick( xDlg, xControl, workarea, cField, xValue )
-
-   IF ! Empty( cField )
-      xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
-   ENDIF
-
-   (xControl);(xDlg)
 
    RETURN Nil
 
@@ -375,15 +367,15 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
             SIZE nWidth, nHeight PIXEL ;
             DATASOURCE workarea ;
             OF xParent ;
-            ON DBLCLICK ( (nRow),(nCol),(nFlags),gui_BrowseDBFDblClick( xDlg, xControl, workarea, cField, @xValue ) )
+            ON DBLCLICK ( (nRow),(nCol),(nFlags),gui_BrowseDBFKeyDown( K_ENTER, {}, xDlg, WorkArea, cField, @xValue ) )
             //LINES CELL
-         xControl:bKeyChar := { | nKey | GUI():BrowseDBFKeyDown( nKey, aKeyDownList, workarea ) }
+         xControl:bKeyChar := { | nKey | GUI():BrowseDBFKeyDown( nKey, aKeyDownList, xDlg, workarea, cField, @xValue ) }
       ELSEIF hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) != 0
          @ nRow, nCol XBROWSE xControl ;
             SIZE nWidth, nHeight PIXEL ;
             DATASOURCE workarea ;
             OF xParent ;
-            ON DBLCLICK ( (nRow),(nCol),(nFlags), GUI():BrowseDBFKeyDown( K_ENTER, aKeyDownList, workarea ) )
+            ON DBLCLICK ( (nRow),(nCol),(nFlags), GUI():BrowseDBFKeyDown( K_ENTER, aKeyDownList, xDlg, workarea, cField, @xValue ) )
             //LINES CELL
       ENDIF
       FOR EACH aItem IN oTbrowse
@@ -417,11 +409,17 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
 
    RETURN Nil
 
-STATIC FUNCTION gui_BrowseDBFKeyDown( nKey, aKeyDownList, workarea )
+STATIC FUNCTION gui_BrowseDBFKeyDown( nKey, aKeyDownList, xDlg, workarea, cField, xValue )
 
    LOCAL nPos, nSelect
 
    IF Len( aKeyDownList ) == 0
+      IF nKey == K_ENTER
+         IF ! Empty( cField )
+            xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
+         ENDIF
+         xDlg:End()
+      ENDIF
    ELSE
       nPos := hb_AScan( aKeyDownList, { | e | e[ 1 ] == nKey } )
       IF nPos != 0
@@ -431,16 +429,6 @@ STATIC FUNCTION gui_BrowseDBFKeyDown( nKey, aKeyDownList, workarea )
          SELECT ( nSelect )
       ENDIF
    ENDIF
-
-   RETURN Nil
-
-STATIC FUNCTION gui_BrowseDBFDblClick( xDlg, xControl, workarea, cField, xValue )
-
-   IF ! Empty( cField )
-      xValue := (workarea)->( FieldGet( FieldNum( cField ) ) )
-   ENDIF
-
-   (xControl);(xDlg)
 
    RETURN Nil
 

@@ -40,19 +40,30 @@ CREATE CLASS frm_Class
    VAR aDlgKeyDown     INIT {}
    VAR xParent
 
-   METHOD CreateControls()     INLINE frm_ButtonCreate( Self ), frm_EditCreate( Self )
+   METHOD CreateControls()     INLINE ;
+                                      frm_ButtonCreate( Self ), ;
+                                      frm_EditCreate( Self )
 
    METHOD Move_Click( cMoveTo )
-   METHOD View_Click()         INLINE ::Browse( "", "", ::cDataTable, Nil ), ::DataLoad()
+   METHOD View_Click()         INLINE ;
+                                      frm_DialogBrowse( Self, "", "", ::cDataTable, Nil ), ;
+                                      ; // update key (same way as codes)
+                                      ::DataLoad()
    METHOD Print_Click()        INLINE frm_EventPrint( Self )
    METHOD Exit_Click()
 
    METHOD Delete_Click()
-   METHOD Edit_Click()         INLINE ::cSelected := "EDIT",   ::EditKeyOn()
-   METHOD Insert_Click()       INLINE ::cSelected := "INSERT", ::EditKeyOn()
-   METHOD Cancel_Click()       INLINE ::cSelected := "NONE",   ::EditOff(), ::DataLoad()
+   METHOD Edit_Click()         INLINE ;
+                                      ::cSelected := "EDIT", ;
+                                      ::EditKeyOn()
+   METHOD Insert_Click()       INLINE ;
+                                      ::cSelected := "INSERT", ;
+                                      ::EditKeyOn()
+   METHOD Cancel_Click()       INLINE ;
+                                      ::cSelected := "NONE",   ;
+                                      ::EditOff(), ;
+                                      ::DataLoad()
    METHOD Save_Click()
-   METHOD Browse( ... )               INLINE frm_DialogBrowse( Self, ... )
    METHOD Browse_Click( aItem, nKey ) INLINE frm_EventBrowseClick( Self, aItem, nKey )
 
    METHOD ButtonSaveOn( lSave )
