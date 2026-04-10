@@ -293,9 +293,9 @@ FUNCTION frm_EditCreate( Self )
 
       GUI():TabPageEnd( ::xDlg, xTab )
       //activate later, can see "bug" on lostfocus on table with 2 fields (not all libraries)
-      //IF Len( aPageList ) > 1
+      IF Len( aPageList ) > 1
          GUI():TabNavigate( ::xDlg, xTab, aPageList )
-      //ENDIF
+      ENDIF
       GUI():TabEnd( ::xDlg, xTab, nPageCount )
 
    ENDIF
