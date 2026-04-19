@@ -23,8 +23,7 @@ FUNCTION frm_EventBrowseClick( oFrmOld, aItemOld, nKey )
       :lModal      := .T.
       :nLayout     := oFrmOld:nLayout
       :aAllSetup   := AClone( oFrmOld:aAllSetup )
-      :lIsSQL      := oFrmOld:lIsSQL
-      IF ! :lIsSQL
+      IF ! IsSQL()
          cAliasAnt := Alias()
          SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
          aOrdScope := { OrdScope( 0 ), OrdScope( 1 ) }
@@ -32,12 +31,12 @@ FUNCTION frm_EventBrowseClick( oFrmOld, aItemOld, nKey )
 
       nPos := hb_ASCan( :aAllSetup, { | e | e[ 1 ] == aItemOld[ CFG_BRWTABLE ] } )
       :aEditList   := :aAllSetup[ nPos, 2 ]
-      IF ! :lIsSQL
+      IF ! IsSQL()
          :nInitRecno  := ( aItemOld[ CFG_BRWTABLE ] )->( RecNo() )
          :aInitValue1 := { aItemOld[ CFG_BRWKEYTO ],  ( oFrmOld:cDataTable )->( FieldGet( FieldNum( aItemOld[ CFG_BRWKEYFROM ] ) ) ) }
       ENDIF
       IF nKey == VK_INSERT
-         IF ! :lIsSQL
+         IF ! IsSQL()
             SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
             aOrdScope := { OrdScope( 0 ), OrdScope( 1 ) }
             SET SCOPE TO
@@ -60,7 +59,7 @@ FUNCTION frm_EventBrowseClick( oFrmOld, aItemOld, nKey )
       ENDCASE
       :Execute()
    ENDWITH
-   IF ! oFrm:lIsSQL
+   IF ! IsSQL()
       // return old position
       SELECT ( Select( aItemOld[ CFG_BRWTABLE ] ) )
       SET ORDER TO ( aItemOld[ CFG_BRWIDXORD ] )

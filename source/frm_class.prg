@@ -8,10 +8,8 @@ frm_Class - Class for data and bypass for functions
 CREATE CLASS frm_Class
 
 #ifdef DLGAUTO_AS_SQL
-   VAR lIsSQL          INIT .T.
    VAR cnSQL           INIT ADOLocal()
 #else
-   VAR lIsSQL          INIT .F.
    VAR cnSQL
 #endif
    VAR cDataTable      INIT ""
@@ -85,7 +83,7 @@ METHOD EventInit() CLASS frm_Class
 
    // if subroutine part 1
    IF ::nInitRecno != Nil
-      IF ::lIsSQL
+      IF IsSQL()
          // key
       ELSE
          GOTO ::nInitRecno
@@ -125,7 +123,7 @@ METHOD Move_Click( cMoveTo ) CLASS frm_Class
 
    LOCAL aItem, xValue
 
-   IF ::lIsSQL
+   IF IsSQL()
       IF Empty( ::cDataField )
          RETURN Nil
       ENDIF
@@ -324,7 +322,7 @@ METHOD Delete_Click() CLASS frm_Class
    SELECT ( nSelect )
 
    IF GUI():MsgYesNo( "Delete" )
-      IF ::lIsSQL
+      IF IsSQL()
          // Disabled
          ::cnSQL:ExecuteNoReturn( "DELETE FROM " + ::cDataTable + " WHERE " + ::cDataField + "=" + "NONE" )
       ELSE
@@ -347,7 +345,7 @@ METHOD DataLoad() CLASS frm_Class
    IF Empty( ::cDataTable ) // no data source
       RETURN Nil
    ENDIF
-   IF ::lIsSQL
+   IF IsSQL()
       ::cnSQL:cSQL := "SELECT * FROM " + ::cDataTable
       IF ! Empty( ::cDataField )
          ::cnSQL:cSQL += " WHERE " + ::cDataField + " = "
@@ -372,7 +370,7 @@ METHOD DataLoad() CLASS frm_Class
       CASE Empty( aItem[ CFG_FNAME ] ) // not a field
       CASE aItem[ CFG_SAVEONLY ]
       CASE hb_AScan( aCommonList, aItem[ CFG_CTLTYPE ] ) != 0
-         IF ::lIsSQL
+         IF IsSQL()
             DO CASE
             CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( aItem[ CFG_FNAME ] )
             CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( aItem[ CFG_FNAME ] )
@@ -405,16 +403,19 @@ METHOD DataLoad() CLASS frm_Class
 
       ENDCASE
    NEXT
-   IF ::lIsSQL
+   IF IsSQL()
       ::cnSQL:CloseRecordset()
    ENDIF
    // other data
    FOR EACH aItem IN ::aControlList
       DO CASE
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
-         IF ::lIsSQL
+         IF IsSQL()
             IF GUI():LibName() == "FIVEWIN"
                WITH OBJECT aItem[ CFG_FCONTROL ]
+                  IF ValType( :xUserData ) != "O"
+                     :xUserData := ADOLocal()
+                  ENDIF
                   :xUserData:CloseRecordset()
                   :xUserData:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
                      " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
@@ -463,7 +464,7 @@ METHOD DataLoad() CLASS frm_Class
       CASE aItem[ CFG_SAVEONLY ]
       CASE ! Empty( aItem[ CFG_VTABLE ] ) .AND. ! Empty( aItem[ CFG_VSHOW ] )
          xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
-         IF ::lIsSQL
+         IF IsSQL()
             ::cnSQL:cSQL := "SELECT " + aItem[ CFG_VSHOW ] + ;
                " FROM " + aItem[ CFG_VTABLE ] + ;
                " WHERE " + aItem[ CFG_VFIELD ] + "="
@@ -525,7 +526,7 @@ METHOD Save_Click() CLASS frm_Class
          AAdd( aQueryList, { aItem[ CFG_FNAME ], xValue } )
       CASE hb_AScan( aCommonList, { | e | e == aItem[ CFG_CTLTYPE ] } ) == 0 // not "value"
       CASE aItem[ CFG_ISKEY ]
-         IF ::lIsSQL
+         IF IsSQL()
             cWhere += iif( Empty( cWhere ), "", " AND " ) + ;
             aItem[ CFG_FNAME ] + "=" + hb_ValToExp( GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] ) )
          ENDIF
@@ -534,7 +535,7 @@ METHOD Save_Click() CLASS frm_Class
          AAdd( aQueryList, { aItem[ CFG_FNAME ], xValue } )
       ENDCASE
    NEXT
-   IF ::lIsSQL
+   IF IsSQL()
       FOR EACH aReplace IN aQueryList
          xValue := aReplace[2]
          DO CASE
@@ -562,7 +563,7 @@ METHOD Exit_Click() CLASS frm_Class
 
    LOCAL aItem
 
-   IF ::lIsSQL
+   IF IsSQL()
       FOR EACH aItem IN ::aControlList
          IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
             IF GUI():LibName() == "FIVEWIN"
@@ -615,3 +616,10 @@ FUNCTION EmptyFrmClassItem()
    //aItem[ CFG_SPINNER ]    := Nil
 
    RETURN aItem
+
+FUNCTION IsSQL()
+#ifdef DLGAUTO_AS_SQL
+   RETURN .T.
+#else
+   RETURN .F.
+#endif

@@ -196,7 +196,7 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       aKeyDownList := {}
    ENDIF
 
-   IF oFrmClass:lIsSQL
+   IF IsSQL()
       // TODO: SQL
    ELSE
       FOR EACH aItem IN oTbrowse

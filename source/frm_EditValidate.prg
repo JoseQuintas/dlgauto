@@ -33,7 +33,7 @@ FUNCTION frm_EditValidate( Self, aItem )
    ENDIF
    xValue := GUI():ControlGetValue( ::xDlg, aItem[ CFG_FCONTROL ] )
    IF aItem[ CFG_ISKEY ]
-      IF ::lIsSQL
+      IF IsSQL()
          ::cnSQL:cSQL := "SELECT * FROM " + ::cDataTable + ;
             " WHERE " + ::cDataField + " = " + hb_ValToExp( xValue )
          ::cnSQL:Execute()
@@ -88,7 +88,7 @@ FUNCTION frm_EditValidate( Self, aItem )
       GUI():ControlSetValue( ::xDlg, aItem[ CFG_FCONTROL ], xValue )
       ::EditOn()
    ELSEIF ! Empty( aItem[ CFG_VTABLE ] )
-      IF ::lisSQL
+      IF isSQL()
          ::cnSQL:cSQL := "SELECT 1"
          IF ! Empty( aItem[ CFG_VSHOW ] )
             ::cnSQL:cSQL += ", " + aItem[ CFG_VSHOW ]

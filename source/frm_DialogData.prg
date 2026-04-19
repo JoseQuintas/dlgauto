@@ -10,7 +10,7 @@ FUNCTION frm_DialogData( Self )
 
    LOCAL aItem
 
-   IF ! ::lIsSQL()
+   IF ! IsSQL()
       frm_DialogOpenDbf( Self )
    ENDIF
    FOR EACH aItem IN ::aEditList

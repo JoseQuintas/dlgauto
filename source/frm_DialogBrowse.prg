@@ -9,7 +9,7 @@ FUNCTION frm_DialogBrowse( Self, xDlg, xControl, cTable )
 
    LOCAL oTBrowse := {}, aItem, xValue, cField, nSelect, nPos, nIndexOrd
 
-   IF ! ::lIsSQL
+   IF ! IsSQL()
       nSelect := Select()
       SELECT ( cTable )
       nIndexOrd := IndexOrd()
@@ -18,7 +18,7 @@ FUNCTION frm_DialogBrowse( Self, xDlg, xControl, cTable )
    // check begin if is defined a order to browse
    nPos := hb_Ascan( ::aAllSetup, { | e | e[1] == cTable } )
    IF nPos != 0 .AND. ::aAllSetup[ nPos, 3 ] != Nil
-      IF ! ::lIsSQL
+      IF ! IsSQL()
          SET ORDER TO ( ::aAllSetup[ nPos, 3 ] )
       ENDIF
    ENDIF
@@ -38,7 +38,7 @@ FUNCTION frm_DialogBrowse( Self, xDlg, xControl, cTable )
    IF ! Empty( xValue ) .AND. ! Empty( xControl )
       GUI():ControlSetValue( xDlg, xControl, xValue )
    ENDIF
-   IF ! ::lIsSQL
+   IF ! IsSQL()
       SET ORDER TO ( nIndexOrd )
       SELECT ( nSelect )
    ENDIF
@@ -61,7 +61,7 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       AAdd( :aControlList, EmptyFrmClassItem() )
       aItem := Atail( :aControlList )
       aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
-      IF oThisForm:lIsSQL
+      IF IsSQL()
          GUI():BrowseADO( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
             oTbrowse, cField, @xValue, cTable, {}, oThisForm )
          IF GUI():LibName() == "FIVEWIN"

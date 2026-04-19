@@ -153,10 +153,15 @@ FUNCTION frm_EditCreate( Self )
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
             nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_BRWTITLE ], .F., APP_FONTSIZE_SMALL )
 
-         GUI():BrowseDBF( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], nRow2, 5, ;
-            APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
-            oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
-
+         IF IsSQL()
+            GUI():BrowseADO( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], nRow2, 5, ;
+               APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
+               oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
+         ELSE
+            GUI():BrowseDBF( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], nRow2, 5, ;
+               APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
+               oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
+         ENDIF
          SELECT ( Select( ::cDataTable ) )
          nRow += ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  )
 
