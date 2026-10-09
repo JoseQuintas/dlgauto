@@ -221,7 +221,7 @@ METHOD ExecuteReturnRS( cSQL, lError ) CLASS ADOClass
       RETURN Nil
    ENDIF
    hb_Default( @lError, .T. )
-   cSQL := iif( cSQL == Nil, ::cSQL, cSQL ) // não pode usar hb_Default
+   cSQL := iif( cSQL == Nil, ::cSQL, cSQL ) // can not use hb_Default
    IF ::Cn:State() != AD_STATE_OPEN
       ::Open()
    ENDIF
@@ -414,7 +414,7 @@ METHOD Date( xField ) CLASS ADOClass
 
 METHOD ExecuteReturnValue( cCmd ) CLASS ADOClass
 
-   LOCAL xResultado, oRs
+   LOCAL xResult, oRs
 
    oRs := ::ExecuteReturnRS( cCmd )
    IF oRs == Nil
@@ -424,10 +424,10 @@ METHOD ExecuteReturnValue( cCmd ) CLASS ADOClass
       oRs:Close()
       RETURN Nil
    ENDIF
-   xResultado := oRs:Fields( 0 ):Value
+   xResult := oRs:Fields( 0 ):Value
    oRs:Close()
 
-   RETURN xResultado
+   RETURN xResult
 
 METHOD Value( xField ) CLASS ADOClass
 
@@ -525,9 +525,9 @@ METHOD TableList() CLASS ADOClass
       rs:Close()
    ELSE
       // SHOW TABLES - show view too
-      ::Execute( "SELECT DISTINCT table_name AS TABELA FROM information_schema.TABLES WHERE table_schema=DATABASE()" )
+      ::Execute( "SELECT DISTINCT table_name AS TABLENAME FROM information_schema.TABLES WHERE table_schema=DATABASE()" )
       DO WHILE ! ::Eof()
-         AAdd( acTableList, ::Value( "TABELA" ) )
+         AAdd( acTableList, ::Value( "TABLENAME" ) )
          ::MoveNext()
       ENDDO
       ::CloseRecordset()
@@ -537,13 +537,13 @@ METHOD TableList() CLASS ADOClass
 
 METHOD TableExists( cTable ) CLASS ADOClass
 
-   LOCAL nQtd
+   LOCAL nQty
 
-   nQtd := ::ExecuteReturnValue( "SELECT COUNT(*)" + ;
+   nQty := ::ExecuteReturnValue( "SELECT COUNT(*)" + ;
       " FROM information_schema.TABLES" + ;
       " WHERE table_schema=DATABASE() AND table_name=" + StringSQL( cTable ) )
 
-   RETURN nQtd > 0
+   RETURN nQty > 0
 
 METHOD IndexExists( cIndex, cTable ) CLASS ADOClass
 
@@ -553,11 +553,11 @@ METHOD FieldList( cTable ) CLASS ADOClass
 
    LOCAL acFieldList := {}
 
-   ::cSQL := "SELECT COLUMN_NAME AS CAMPO FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=" + StringSQL( cTable )
+   ::cSQL := "SELECT COLUMN_NAME AS FIELDNAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=" + StringSQL( cTable )
    ::Execute()
 
    DO WHILE ! ::Eof()
-      AAdd( acFieldList, ::Value( "CAMPO" ) )
+      AAdd( acFieldList, ::Value( "FIELDNAME" ) )
       ::MoveNext()
    ENDDO
    ::CloseRecordset()
@@ -566,19 +566,19 @@ METHOD FieldList( cTable ) CLASS ADOClass
 
 METHOD FieldExists( cField, cTable ) CLASS ADOClass
 
-   LOCAL nQtd
+   LOCAL nQty
 
    IF cTable == Nil
       MsgStop( "Field test without table name (field,table) (FieldExists), check log error" )
       Errorsys_WriteErrorLog( "Field test without table name (field,table)", 2 )
    ENDIF
-   nQtd := ::ExecuteReturnValue( "SELECT COUNT(*)" + ;
+   nQty := ::ExecuteReturnValue( "SELECT COUNT(*)" + ;
       " FROM information_schema.COLUMNS" + ;
       " WHERE TABLE_SCHEMA=DATABASE()" + ;
       " AND TABLE_NAME=" + StringSQL( cTable ) + ;
       " AND COLUMN_NAME=" + StringSQL( cField ) )
 
-   RETURN nQtd > 0
+   RETURN nQty > 0
 
 METHOD IndexList( cTable ) CLASS ADOClass
 
@@ -739,7 +739,7 @@ METHOD RsCreate( aStru ) CLASS ADOClass
 
 FUNCTION ExcelConnection( cFileName, cVersion )
 
-   LOCAL oConexao
+   LOCAL oConnection
 
    DO CASE
    CASE ValType( cVersion ) == "C"
@@ -747,13 +747,13 @@ FUNCTION ExcelConnection( cFileName, cVersion )
    //CASE "t00" $ Lower( cFileName )  ; cVersion := "5.0"  // 95 seems no more available
    OTHERWISE                        ; cVersion := "8.0" // 97/2000/XP
    ENDCASE
-   oConexao := win_OleCreateObject( "ADODB.Connection" )
-   oConexao:ConnectionString := ;
+   oConnection := win_OleCreateObject( "ADODB.Connection" )
+   oConnection:ConnectionString := ;
       [Provider=Microsoft.ACE.OLEDB.12.0;Data Source=] + cFileName + ;
       [;Extended Properties="Excel ] + cVersion + [;HDR=YES";]
       /* Allow Formula=true; consider start = as formula or not */
 
-   RETURN oConexao
+   RETURN oConnection
 
 FUNCTION MySQLConnection( cServer, cDatabase, cUser, cPassword, nPort )
 
@@ -774,11 +774,11 @@ FUNCTION MySQLConnection( cServer, cDatabase, cUser, cPassword, nPort )
 
    cnConnection := win_OleCreateObject( "ADODB.Connection" )
    IF ValType( cnConnection ) != "O"
-      MsgStop( "Não foi possível criar a conexão com o banco de dados" + hb_Eol() + ;
-         "Verifique com o administrador do computador" )
+      MsgStop( "Could not create the database connection" + hb_Eol() + ;
+         "Check with the computer administrator" )
       QUIT
    ENDIF
-   cnConnection:ConnectionString  := "" // em caso de erro não aparece senha
+   cnConnection:ConnectionString  := "" // on error, password is not shown
    cnConnection:ConnectionString  := cString
    cnConnection:CursorLocation    := AD_USE_CLIENT
    cnConnection:CommandTimeOut    := 600 // seconds
@@ -788,9 +788,9 @@ FUNCTION MySQLConnection( cServer, cDatabase, cUser, cPassword, nPort )
 
 FUNCTION ADSConnection( cPath )
 
-   LOCAL oConexao := win_OleCreateObject( "ADODB.Connection" )
+   LOCAL oConnection := win_OleCreateObject( "ADODB.Connection" )
 
-   oConexao:ConnectionString := "Provider=Advantage OLE DB Provider;" + ;
+   oConnection:ConnectionString := "Provider=Advantage OLE DB Provider;" + ;
       "Mode=Share Deny None;" + ;
       "Show Deleted Records in DBF Tables with Advantage=False;" + ;
       "Data Source=" + cPath + ";Advantage Server Type=ADS_Local_Server;" + ;
@@ -798,34 +798,34 @@ FUNCTION ADSConnection( cPath )
       "Lock Mode=Compatible;" + ;
       "Use NULL values in DBF Tables with Advantage=True;" + ;
       "Exclusive=No;Deleted=No;"
-   oConexao:CursorLocation := AD_USE_CLIENT
-   oConexao:CommandTimeOut := 20
+   oConnection:CursorLocation := AD_USE_CLIENT
+   oConnection:CommandTimeOut := 20
 
-   RETURN oConexao
+   RETURN oConnection
 
 FUNCTION SQLiteConnection( cFileName )
 
-   LOCAL oConexao := win_OleCreateObject( "ADODB.Connection" )
+   LOCAL oConnection := win_OleCreateObject( "ADODB.Connection" )
 
-   oConexao:ConnectionString := iif( win_OsIs10(), "Provider=MSDASQL;", "" ) + ;
+   oConnection:ConnectionString := iif( win_OsIs10(), "Provider=MSDASQL;", "" ) + ;
       "Driver={SQLite3 ODBC Driver};Database=" + cFileName + ";"
-   oConexao:CursorLocation := AD_USE_CLIENT
-   oConexao:CommandTimeOut := 20
+   oConnection:CursorLocation := AD_USE_CLIENT
+   oConnection:CommandTimeOut := 20
 
-   RETURN oConexao
+   RETURN oConnection
 
 FUNCTION AccessConnection( cFile )
 
-   LOCAL oConexao := win_OleCreateObject( "ADODB.Connection" )
+   LOCAL oConnection := win_OleCreateObject( "ADODB.Connection" )
    LOCAL oCat     := win_OleCreateObject( "ADOX.Catalog" )
 
-   oConexao:ConnectionString := "Provider='Microsoft.Jet.OLEDB.4.0'; Data Source='" + cFile + ";"
+   oConnection:ConnectionString := "Provider='Microsoft.Jet.OLEDB.4.0'; Data Source='" + cFile + ";"
    IF ! File( cFile )
-      oCat:Create( oConexao )
+      oCat:Create( oConnection )
       oCat:Close()
    ENDIF
 
-   RETURN oConexao
+   RETURN oConnection
 
 FUNCTION StringSQL( cString, nLen ); RETURN ValueSQL( cString, "C", nLen )
 
@@ -894,9 +894,9 @@ FUNCTION ADORecCount( cTable, cWhere, cnSQL )
       cnSQL := ADOLocal()
    ENDIF
    WITH OBJECT cnSQL
-      :cSQL := "SELECT COUNT(*) AS QTD FROM " + cTable + iif( cWhere == Nil .OR. Empty( cWhere ), "", " WHERE " + cWhere )
+      :cSQL := "SELECT COUNT(*) AS QTY FROM " + cTable + iif( cWhere == Nil .OR. Empty( cWhere ), "", " WHERE " + cWhere )
       :Execute()
-      nValue := :Number( "QTD" )
+      nValue := :Number( "QTY" )
       :CloseRecordset()
    ENDWITH
 
@@ -987,7 +987,7 @@ FUNCTION ADOLocal()
 
    LOCAL cnSQL
 
-#ifdef DLAUTO_AS_SQL
+#ifdef DLGAUTO_AS_SQL
    cnSQL := ADOClass():New( /*     */ )
 #else
    cnSQL := Nil // -w3 -es2

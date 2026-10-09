@@ -340,7 +340,7 @@ METHOD DataLoad() CLASS frm_Class
 
    LOCAL aItem, nSelect, xValue, cText, xScope, nLenScope, xValueControl
    LOCAL aCommonList := { TYPE_TEXT, TYPE_MLTEXT, TYPE_DATEPICKER, TYPE_SPINNER }
-   LOCAL aControl
+   LOCAL aControl, cnBrowse
 
    IF Empty( ::cDataTable ) // no data source
       RETURN Nil
@@ -446,6 +446,21 @@ METHOD DataLoad() CLASS frm_Class
                   :aArray:Execute()
                   GUI():BrowseDBFRefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
                ENDWITH
+            ENDIF
+            IF GUI():LibName() == "HMGE"
+               cnBrowse := GUI():BrowseADOData( ::xDlg, aItem[ CFG_FCONTROL ] )
+               cnBrowse:CloseRecordset()
+               cnBrowse:cSQL := "SELECT * FROM " + aItem[ CFG_BRWTABLE ] + ;
+                  " WHERE " + aItem[ CFG_BRWKEYTO ] + ;
+                  " = "
+               FOR EACH aControl IN ::aControlList
+                  IF aControl[ CFG_FNAME ] == aItem[ CFG_BRWKEYFROM ]
+                     cnBrowse:cSQL += hb_ValToExp( gui():ControlGetValue( ::xDlg, aControl[ CFG_FCONTROL ] ) )
+                     EXIT
+                  ENDIF
+               NEXT
+               cnBrowse:Execute()
+               GUI():BrowseADORefresh( ::xDlg, aItem[ CFG_FCONTROL ] )
             ENDIF
          ELSE
             SELECT  ( Select( aItem[ CFG_BRWTABLE ] ) )
@@ -568,6 +583,8 @@ METHOD Exit_Click() CLASS frm_Class
          IF aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
             IF GUI():LibName() == "FIVEWIN"
                aItem[ CFG_FCONTROL ]:xUserData:CloseRecordset()
+            ELSEIF GUI():LibName() == "HMGE"
+               GUI():BrowseADOClose( ::xDlg, aItem[ CFG_FCONTROL ] )
             ELSE
                aItem[ CFG_FCONTROL ]:aArray:CloseRecordset()
             ENDIF
