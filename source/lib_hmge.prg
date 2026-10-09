@@ -14,6 +14,7 @@ lib_hmge - HMG Extended source selected by lib.prg
 #endif
 
 THREAD STATIC nWindow := 0
+THREAD STATIC hBrowseADO := { => }
 
 CREATE CLASS HMGEClass
 
@@ -47,11 +48,13 @@ CREATE CLASS HMGEClass
    METHOD BrowseDBFEnter( ... )    INLINE Nil // gui_BrowseDbfEnter( ... )
 
    /* browse ADO */
-   METHOD BrowseADO(...)               INLINE ::BrowseDBF(...)
-   METHOD BrowseADORefresh(...)        INLINE ::BrowseDBFRefresh(...)
-   METHOD browseADOkeydown(...)        INLINE ::BrowseDBFKeydown(...)
-   METHOD BrowseADOSetKeyFilter( ... ) INLINE ::BrowseDBFSetKeyFilter( ... )
-   METHOD BrowseADOEnter( ... )        INLINE ::BrowseDbfEnter( ... )
+   METHOD BrowseADO(...)               INLINE gui_BrowseADO(...)
+   METHOD BrowseADORefresh(...)        INLINE gui_BrowseADORefresh(...)
+   METHOD browseADOkeydown(...)        INLINE Nil
+   METHOD BrowseADOSetKeyFilter( ... ) INLINE Nil
+   METHOD BrowseADOEnter( ... )        INLINE Nil
+   METHOD BrowseADOData(...)           INLINE gui_BrowseADOData(...)
+   METHOD BrowseADOClose(...)          INLINE gui_BrowseADOClose(...)
 
    /* tab */
    METHOD TabCreate(...)        INLINE gui_TabCreate(...)
@@ -184,10 +187,9 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
 STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
    nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
 
-   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem, aThisKey
-   LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}, nPos, cnSQL
+   LOCAL aHeaderList := {}, aWidthList := {}, aFieldList := {}, aItem
+   LOCAL aBrowseBackColor := {}, aBrowseForeColor := {}, nPos
 
-   cnSQL := ADOLocal()
    IF Empty( xControl )
       xControl := gui_NewName( "BRW" )
    ENDIF
@@ -196,56 +198,159 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       aKeyDownList := {}
    ENDIF
 
-   IF IsSQL()
-      // TODO: SQL
-   ELSE
-      FOR EACH aItem IN oTbrowse
-         AAdd( aHeaderList, aItem[1] )
-         AAdd( aFieldList, aItem[2] )
-         AAdd( aWidthList, ( 1 + Max( Len( aItem[3] ), ;
-            Len( Transform( ( workarea )->( FieldGet( FieldNum( aItem[ 1 ] ) ) ), "" ) ) ) ) * 13 )
-         AAdd( aBrowseBackColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 222,222,222 }, { 250,250,250 } ) } )
-         AAdd( aBrowseForeColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 0,0,0 }, { 0,0,0 } ) } )
-      NEXT
-      DEFINE BROWSE ( xControl )
-         PARENT ( xParent )
-         ROW nRow
-         COL nCol
-         WIDTH nWidth - 20
-         HEIGHT nHeight - 20
-         IF Len( aKeyDownList ) == 0
-            ONDBLCLICK gui_BrowseDBFDblClick( xDlg, xControl, workarea, cField, @xValue )
-         ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
-            ONDBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
-         ENDIF
-         HEADERS aHeaderList
-         WIDTHS aWidthList
-         WORKAREA ( workarea )
-         FIELDS aFieldList
-         DYNAMICBACKCOLOR aBrowseBackColor
-         DYNAMICFORECOLOR aBrowseForeColor
-         SET BROWSESYNC ON // if remove, browse action and DLG keydown on wrong record
-      END BROWSE
-   ENDIF
+   FOR EACH aItem IN oTbrowse
+      AAdd( aHeaderList, aItem[1] )
+      AAdd( aFieldList, aItem[2] )
+      AAdd( aWidthList, ( 1 + Max( Len( aItem[3] ), ;
+         Len( Transform( ( workarea )->( FieldGet( FieldNum( aItem[ 1 ] ) ) ), "" ) ) ) ) * 13 )
+      AAdd( aBrowseBackColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 222,222,222 }, { 250,250,250 } ) } )
+      AAdd( aBrowseForeColor, { || iif( OrdKeyNo() / 2 == Int( OrdKeyNo() / 2 ), { 0,0,0 }, { 0,0,0 } ) } )
+   NEXT
+   DEFINE BROWSE ( xControl )
+      PARENT ( xParent )
+      ROW nRow
+      COL nCol
+      WIDTH nWidth - 20
+      HEIGHT nHeight - 20
+      IF Len( aKeyDownList ) == 0
+         ONDBLCLICK gui_BrowseDBFDblClick( xDlg, xControl, workarea, cField, @xValue )
+      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+         ONDBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
+      ENDIF
+      HEADERS aHeaderList
+      WIDTHS aWidthList
+      WORKAREA ( workarea )
+      FIELDS aFieldList
+      DYNAMICBACKCOLOR aBrowseBackColor
+      DYNAMICFORECOLOR aBrowseForeColor
+      SET BROWSESYNC ON // if remove, browse action and DLG keydown on wrong record
+   END BROWSE
+   gui_BrowseKeyList( xDlg, xParent, xControl, nRow, aKeyDownList, oFrmClass )
+
+   (xDlg);(cField);(xValue);(workarea);(aKeyDownList)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_BrowseKeyList( xDlg, xParent, xControl, nRow, aKeyDownList, oFrmClass )
+
+   LOCAL aItem, aThisKey
+
    /* create buttons on browse for defined keys */
-   IF Len( aKeyDownList ) != 0
-      FOR EACH aThisKey IN aKeyDownList
-         AAdd( oFrmClass:aControlList, EmptyFrmClassItem() )
-         Atail( oFrmClass:aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
-         Atail( oFrmClass:aControlList )[ CFG_FCONTROL ] := gui_NewName( "BTNBRW" )
-         gui_ButtonCreate( xDlg, xParent, @Atail( oFrmClass:aControlList )[ CFG_FCONTROL ], ;
-         nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
-         iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
-         iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
-         iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
-      NEXT
-   ENDIF
+   FOR EACH aThisKey IN aKeyDownList
+      AAdd( oFrmClass:aControlList, EmptyFrmClassItem() )
+      Atail( oFrmClass:aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
+      Atail( oFrmClass:aControlList )[ CFG_FCONTROL ] := gui_NewName( "BTNBRW" )
+      gui_ButtonCreate( xDlg, xParent, @Atail( oFrmClass:aControlList )[ CFG_FCONTROL ], ;
+      nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+      iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
+      iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
+      iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
+   NEXT
    /* redefine keys with cumulative actions */
    FOR EACH aItem IN aKeyDownList
       AAdd( oFrmClass:aDlgKeyDown, { xControl, aItem[ 1 ], aItem[ 2 ] } )
    NEXT
 
-   (xDlg);(cField);(xValue);(workarea);(aKeyDownList);(cnSQL)
+   RETURN Nil
+
+/* browse ADO - virtual grid, data from ADOClass */
+
+STATIC FUNCTION gui_BrowseADO( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
+   nHeight, oTbrowse, cField, xValue, workarea, aKeyDownList, oFrmClass )
+
+   LOCAL aHeaderList := {}, aWidthList := {}, aItem, nPos, cnSQL
+
+   IF Empty( xControl )
+      xControl := gui_NewName( "BRW" )
+   ENDIF
+
+   IF ValType( aKeyDownList ) != "A"
+      aKeyDownList := {}
+   ENDIF
+
+   cnSQL := ADOLocal()
+   cnSQL:Execute( "SELECT * FROM " + workarea )
+   hBrowseADO[ xDlg + "." + xControl ] := cnSQL
+
+   FOR EACH aItem IN oTbrowse
+      AAdd( aHeaderList, aItem[1] )
+      AAdd( aWidthList, ( 1 + Max( Len( aItem[1] ), ;
+         iif( Len( aItem ) < 5, 10, Min( 60, aItem[5] ) ) ) ) * 13 )
+   NEXT
+   DEFINE GRID ( xControl )
+      PARENT ( xParent )
+      ROW nRow
+      COL nCol
+      WIDTH nWidth - 20
+      HEIGHT nHeight - 20
+      IF Len( aKeyDownList ) == 0
+         ONDBLCLICK gui_BrowseADODblClick( xDlg, xControl, cField, @xValue )
+      ELSEIF ( nPos := hb_AScan( aKeyDownList, { | e | e[1] == VK_RETURN } ) ) != 0
+         ONDBLCLICK Eval( aKeyDownList[ nPos ][ 2 ] )
+      ENDIF
+      HEADERS aHeaderList
+      WIDTHS aWidthList
+      VIRTUAL .T.
+      ITEMCOUNT cnSQL:RecordCount()
+      ONQUERYDATA gui_BrowseADOQueryData( cnSQL, oTbrowse )
+   END GRID
+   gui_BrowseKeyList( xDlg, xParent, xControl, nRow, aKeyDownList, oFrmClass )
+
+   (workarea)
+
+   RETURN Nil
+
+STATIC FUNCTION gui_BrowseADOQueryData( cnSQL, oTbrowse )
+
+   LOCAL aItem, xData
+
+   aItem := oTbrowse[ This.QueryColIndex ]
+   cnSQL:Move( This.QueryRowIndex - 1, 1 )
+   DO CASE
+   CASE Len( aItem ) < 4;  xData := cnSQL:String( aItem[2] )
+   CASE aItem[4] == "N";   xData := cnSQL:Number( aItem[2] )
+   CASE aItem[4] == "D";   xData := cnSQL:Date( aItem[2] )
+   OTHERWISE;              xData := cnSQL:String( aItem[2] )
+   ENDCASE
+   This.QueryData := iif( Empty( aItem[3] ), hb_ValToStr( xData ), Transform( xData, aItem[3] ) )
+
+   RETURN Nil
+
+STATIC FUNCTION gui_BrowseADODblClick( xDlg, xControl, cField, xValue )
+
+   LOCAL cnSQL, nRow
+
+   IF ! Empty( cField )
+      cnSQL := gui_BrowseADOData( xDlg, xControl )
+      nRow  := GetProperty( xDlg, xControl, "VALUE" )
+      IF nRow > 0
+         cnSQL:Move( nRow - 1, 1 )
+         xValue := cnSQL:Value( cField )
+      ENDIF
+   ENDIF
+   DoMethod( xDlg, "RELEASE" )
+
+   RETURN Nil
+
+STATIC FUNCTION gui_BrowseADORefresh( xDlg, xControl )
+
+   SetProperty( xDlg, xControl, "ITEMCOUNT", gui_BrowseADOData( xDlg, xControl ):RecordCount() )
+   DoMethod( xDlg, xControl, "REFRESH" )
+
+   RETURN Nil
+
+STATIC FUNCTION gui_BrowseADOData( xDlg, xControl )
+
+   RETURN hb_HGetDef( hBrowseADO, xDlg + "." + xControl, Nil )
+
+STATIC FUNCTION gui_BrowseADOClose( xDlg, xControl )
+
+   LOCAL cKey := xDlg + "." + xControl
+
+   IF hb_HHasKey( hBrowseADO, cKey )
+      hBrowseADO[ cKey ]:CloseRecordset()
+      hb_HDel( hBrowseADO, cKey )
+   ENDIF
 
    RETURN Nil
 
