@@ -19,7 +19,7 @@ FUNCTION frm_DialogData( Self )
       ENDIF
    NEXT
 
-   GUI():DialogCreate( Self, @::xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, ::cTitle, { || ::EventInit() }, ::lModal, ::xParent )
+   GUI():DialogCreate( Self, @::xDlg, 0, 0, GUI():FormWidth(), GUI():FormHeight(), ::cTitle, { || ::EventInit() }, ::lModal, ::xParent )
    ::CreateControls()
    GUI():DialogActivate( ::xDlg, { || ::EventInit() }, ::lModal )
 

@@ -12,11 +12,26 @@ Note: Or use name or object, but can't mix on this source code
 
 MEMVAR aGenPrg
 
+THREAD STATIC aFormSize := {} // calculated once per thread, on first gui_FormSize()
+
 CREATE CLASS OOHGClass
 
    /*--- init ---*/
    METHOD LibName()             INLINE "OOHG"
    METHOD Init()                INLINE gui_Init()
+
+   /*--- size ---*/
+   METHOD AppFontName()         INLINE "verdana"
+   METHOD AppFontSizeNormal()   INLINE 12
+   METHOD AppFontSizeSmall()    INLINE 10
+   METHOD AppLineHeight()       INLINE 20
+   METHOD AppLineSpacing()      INLINE 25
+   METHOD AppButtonBetween()    INLINE 3
+   METHOD FormWidth()           INLINE gui_FormWidth()
+   METHOD FormHeight()          INLINE gui_FormHeight()
+   METHOD AppButtonSize()       INLINE ::AppLineSpacing() * 2
+   METHOD AppTabWidth()         INLINE ::FormWidth() - 30
+   METHOD AppTabHeight()        INLINE ::FormHeight() - ( ::AppLineSpacing() * 6 )
 
    /*--- dialog ---*/
    METHOD DialogActivate(...)   INLINE gui_DialogActivate(...)
@@ -70,6 +85,24 @@ CREATE CLASS OOHGClass
 
    ENDCLASS
 
+STATIC FUNCTION gui_FormWidth()
+
+   RETURN gui_FormSize()[ 1 ]
+
+STATIC FUNCTION gui_FormHeight()
+
+   RETURN gui_FormSize()[ 2 ]
+
+STATIC FUNCTION gui_FormSize()
+
+   IF Empty( aFormSize )
+      aFormSize := { ;
+         Int( Min( GetDesktopRealWidth(), 1920 ) * 0.95 ), ;
+         Int( Min( GetDesktopRealHeight(), 1080 ) * 0.90 ) }
+   ENDIF
+
+   RETURN aFormSize
+
 STATIC FUNCTION gui_Init()
 
    //_OOHG_Init()
@@ -82,7 +115,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   GUI():DialogCreate( Nil, @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
+   GUI():DialogCreate( Nil, @xDlg, 0, 0, GUI():FormWidth(), GUI():FormHeight(), cTitle )
 
    DEFINE MAIN MENU OF ( xDlg )
       FOR EACH aGroupList IN aMenuList
@@ -188,8 +221,8 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
          Atail( oFrmClass:aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
          Atail( oFrmClass:aControlList )[ CFG_FCONTROL ] := gui_NewName( "BTNBRW" )
          gui_ButtonCreate( xDlg, xParent, @Atail( oFrmClass:aControlList )[ CFG_FCONTROL ], ;
-            nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
-            APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+            nRow - GUI():AppLineSpacing(), 200 + aThisKey:__EnumIndex() * GUI():AppLineHeight(), ;
+            GUI():AppLineHeight() - 2, GUI():AppLineHeight() - 2, "", ;
             iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
             iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
             iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
@@ -382,8 +415,8 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
 //   WITH OBJECT xDlg := TForm():Define()
 //      :Row := 500
 //      :Col := 1000
-//      :Width := APP_DLG_WIDTH
-//      :Height := APP_DLG_HEIGHT
+//      :Width := GUI():FormWidth()
+//      :Height := GUI():FormHeight()
 //      :Title := oFrmClass:cDataTable
 //      // :Init := oFrmClass:DataLoad()
 //   ENDWITH
@@ -554,7 +587,7 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       COL      nCol
       HEIGHT   nHeight
       WIDTH    nWidth
-      FONTNAME APP_FONTNAME
+      FONTNAME GUI():AppFontName()
       IF ValType( xValue ) == "N"
          NUMERIC .T.
          //INPUTMASK cPicture

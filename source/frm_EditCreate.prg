@@ -15,10 +15,10 @@ FUNCTION frm_EditCreate( Self )
 
    LOCAL nRow, nCol, aItem, xTab, nPageCount := 0, nLen, aPageList := {}
    LOCAL nRow2, nCol2, lFirst := .T., aBrowDbf, aBrowField, oTBrowse
-   LOCAL aKeyDownList, xTabPage, nHeight, nInitRow := APP_BUTTON_SIZE + APP_LINE_SPACING
+   LOCAL aKeyDownList, xTabPage, nHeight, nInitRow := GUI():AppButtonSize() + GUI():AppLineSpacing()
 
    IF ::lWithTab
-      nInitRow := iif( GUI():LibName() == "FIVEWIN", 10, APP_LINE_HEIGHT * 2 )
+      nInitRow := iif( GUI():LibName() == "FIVEWIN", 10, GUI():AppLineHeight() * 2 )
    ENDIF
 
    /* began control list with fields */
@@ -32,7 +32,7 @@ FUNCTION frm_EditCreate( Self )
    /* create tab, if use tab */
    IF ::lWithTab
 
-      GUI():TabCreate( ::xDlg, ::xDlg, @xTab, 70, 5, APP_TAB_WIDTH, APP_TAB_HEIGHT )
+      GUI():TabCreate( ::xDlg, ::xDlg, @xTab, 70, 5, GUI():AppTabWidth(), GUI():AppTabHeight() )
 
       AAdd( ::aControlList, EmptyFrmClassItem() )
       Atail( ::aControlList )[ CFG_CTLTYPE ]  := TYPE_TAB
@@ -54,7 +54,7 @@ FUNCTION frm_EditCreate( Self )
          LOOP
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_BROWSE
-         nLen := APP_DLG_WIDTH - 30
+         nLen := GUI():FormWidth() - 30
          nHeight := 7
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
@@ -81,7 +81,7 @@ FUNCTION frm_EditCreate( Self )
       CASE aItem[ CFG_CTLTYPE ] == TYPE_TEXT
          IF aItem[ CFG_FLEN ] > 100 .OR. aItem[ CFG_FTYPE ] == "M"
             aItem[ CFG_CTLTYPE ] := TYPE_MLTEXT
-            nLen := APP_DLG_WIDTH - 30
+            nLen := GUI():FormWidth() - 30
             nHeight := iif( aItem[ CFG_FTYPE ] == "M", 3, Round( aItem[ CFG_FLEN ] / 100, 0 ) )
          ELSE
             IF ::nLayout == 1 .OR. ::nLayout == 2
@@ -98,15 +98,15 @@ FUNCTION frm_EditCreate( Self )
       ENDCASE
 
       /* check max row and max col */
-      IF ::nLayout == 1 .OR. ( nCol != 10 .AND. nCol + 30 + nLen > APP_DLG_WIDTH - 40 )
+      IF ::nLayout == 1 .OR. ( nCol != 10 .AND. nCol + 30 + nLen > GUI():FormWidth() - 40 )
          IF ! lFirst
-            nRow += ( APP_LINE_SPACING * iif( ::nLayout < 3, 1, 2 ) )
+            nRow += ( GUI():AppLineSpacing() * iif( ::nLayout < 3, 1, 2 ) )
          ENDIF
          nCol := 10
       ENDIF
 
       /* check if create a new tabpage */
-      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  ) > APP_TAB_HEIGHT
+      IF ::lWithTab .AND. nRow + ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * GUI():AppLineSpacing()  ) > GUI():AppTabHeight()
 
          IF nPageCount > 0
             GUI():TabPageEnd( ::xDlg, xTab, xTabPage )
@@ -148,37 +148,37 @@ FUNCTION frm_EditCreate( Self )
          ELSE
             aKeyDownList := {}
          ENDIF
-         nRow2 := nRow + APP_LINE_SPACING
+         nRow2 := nRow + GUI():AppLineSpacing()
 
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_BRWTITLE ], .F., APP_FONTSIZE_SMALL )
+            nRow + 2, nCol, nLen * 12, GUI():AppLineHeight(), aItem[ CFG_BRWTITLE ], .F., GUI():AppFontSizeSmall() )
 
          IF IsSQL()
             GUI():BrowseADO( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], nRow2, 5, ;
-               APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
+               GUI():AppTabWidth() - 30, nHeight * GUI():AppLineHeight(), ;
                oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
          ELSE
             GUI():BrowseDBF( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], nRow2, 5, ;
-               APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, ;
+               GUI():AppTabWidth() - 30, nHeight * GUI():AppLineHeight(), ;
                oTbrowse, Nil, Nil, aItem[ CFG_BRWTABLE ], aKeyDownList, Self )
          ENDIF
          SELECT ( Select( ::cDataTable ) )
-         nRow += ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  )
+         nRow += ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * GUI():AppLineSpacing()  )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_COMBOBOX
          IF ::nLayout == 1 .OR. ::nLayout == 2
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
          ELSE
-            nRow2 := nRow + APP_LINE_SPACING
+            nRow2 := nRow + GUI():AppLineSpacing()
             nCol2 := nCol
          ENDIF
 
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12, GUI():AppLineHeight(), aItem[ CFG_CAPTION ], .F., GUI():AppFontSizeSmall() )
 
          GUI():ComboCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, Max( 10, Len( aItem[ CFG_CAPTION ] ) ) * 12, APP_LINE_HEIGHT, aItem[ CFG_COMBOLIST ], aItem[ CFG_VALUE ] )
+            nRow2, nCol2, Max( 10, Len( aItem[ CFG_CAPTION ] ) ) * 12, GUI():AppLineHeight(), aItem[ CFG_COMBOLIST ], aItem[ CFG_VALUE ] )
 
          nCol += nLen
 
@@ -187,15 +187,15 @@ FUNCTION frm_EditCreate( Self )
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
          ELSE
-            nRow2 := nRow + APP_LINE_SPACING
+            nRow2 := nRow + GUI():AppLineSpacing()
             nCol2 := nCol
          ENDIF
 
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 30, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 30, GUI():AppLineHeight(), aItem[ CFG_CAPTION ], .F., GUI():AppFontSizeSmall() )
 
          GUI():CheckboxCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, 5 * 12, APP_LINE_HEIGHT )
+            nRow2, nCol2, 5 * 12, GUI():AppLineHeight() )
 
          nCol += nLen
 
@@ -204,15 +204,15 @@ FUNCTION frm_EditCreate( Self )
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
          ELSE
-            nRow2 := nRow + APP_LINE_SPACING
+            nRow2 := nRow + GUI():AppLineSpacing()
             nCol2 := nCol
          ENDIF
 
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 30, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 30, GUI():AppLineHeight(), aItem[ CFG_CAPTION ], .F., GUI():AppFontSizeSmall() )
 
          GUI():DatePickerCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, 10 * 12, APP_LINE_HEIGHT, aItem[ CFG_VALUE ] ) // aItem[ CFG_FPICTURE ] )
+            nRow2, nCol2, 10 * 12, GUI():AppLineHeight(), aItem[ CFG_VALUE ] ) // aItem[ CFG_FPICTURE ] )
 
          nCol += nLen
 
@@ -221,47 +221,47 @@ FUNCTION frm_EditCreate( Self )
             nRow2 := nRow
             nCol2 := nCol + ( Len( aItem[ CFG_CAPTION ] ) * 12 + 30 )
          ELSE
-            nRow2 := nRow + APP_LINE_SPACING
+            nRow2 := nRow + GUI():AppLineSpacing()
             nCol2 := nCol
          ENDIF
 
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12, GUI():AppLineHeight(), aItem[ CFG_CAPTION ], .F., GUI():AppFontSizeSmall() )
 
          GUI():SpinnerCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, Max( 6, Len( aItem[ CFG_CAPTION ] ) ) * 12, APP_LINE_HEIGHT, @aItem[ CFG_VALUE ], ;
+            nRow2, nCol2, Max( 6, Len( aItem[ CFG_CAPTION ] ) ) * 12, GUI():AppLineHeight(), @aItem[ CFG_VALUE ], ;
             aItem[ CFG_SPINNER ], Self )
 
          nCol += nLen
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_MLTEXT // multiline
-         nRow2 := nRow + APP_LINE_SPACING
+         nRow2 := nRow + GUI():AppLineSpacing()
 
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, nLen * 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
+            nRow + 2, nCol, nLen * 12, GUI():AppLineHeight(), aItem[ CFG_CAPTION ], .F., GUI():AppFontSizeSmall() )
 
          GUI():MLTextCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, 5, APP_TAB_WIDTH - 30, nHeight * APP_LINE_HEIGHT, @aItem[ CFG_VALUE ] )
+            nRow2, 5, GUI():AppTabWidth() - 30, nHeight * GUI():AppLineHeight(), @aItem[ CFG_VALUE ] )
 
-         nRow += ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * APP_LINE_SPACING  )
+         nRow += ( ( nHeight + iif( ::nLayout < 3, 1, 2 ) ) * GUI():AppLineSpacing()  )
 
       CASE aItem[ CFG_CTLTYPE ] == TYPE_TEXT
          IF ::nLayout == 1 .OR. ::nLayout == 2
             nRow2 := nRow
             nCol2 := nCol + ( Max( Len( aItem[ CFG_CAPTION ] ), 5 ) * 12 )
          ELSE
-            nRow2 := nRow + APP_LINE_SPACING
+            nRow2 := nRow + GUI():AppLineSpacing()
             nCol2 := nCol
          ENDIF
 
          GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_CCONTROL ], ;
-            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 12, APP_LINE_HEIGHT, aItem[ CFG_CAPTION ], .F., APP_FONTSIZE_SMALL )
+            nRow + 2, nCol, Len( aItem[ CFG_CAPTION ] ) * 12 + 12, GUI():AppLineHeight(), aItem[ CFG_CAPTION ], .F., GUI():AppFontSizeSmall() )
 
          //aItem[ CFG_ACTION ] := { || ::Browse( ::xDlg, @aItem[ CFG_FCONTROL ], iif( aItem[ CFG_ISKEY ], ::cDataTable, aItem[ CFG_VTABLE ] ) ) }
          aItem[ CFG_ACTION ] := { || frm_DialogBrowse( Self, ::xDlg, @aItem[ CFG_FCONTROL ], iif( aItem[ CFG_ISKEY ], ::cDataTable, aItem[ CFG_VTABLE ] ) ) }
 
          GUI():TextCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_FCONTROL ], ;
-            nRow2, nCol2, Max( aItem[ CFG_FLEN ], 5 ) * 12 + 12, APP_LINE_HEIGHT, ;
+            nRow2, nCol2, Max( aItem[ CFG_FLEN ], 5 ) * 12 + 12, GUI():AppLineHeight(), ;
             @aItem[ CFG_VALUE ], aItem[ CFG_FPICTURE ], aitem[ CFG_FLEN ], ;
             { || ::EditValidate( aItem ) }, ;
             iif( aItem[ CFG_ISKEY ] .OR. ! Empty( aItem[ CFG_VTABLE ] ), aItem[ CFG_ACTION ], Nil ), ;
@@ -272,7 +272,7 @@ FUNCTION frm_EditCreate( Self )
 
             GUI():LabelCreate( ::xDlg, iif( ::lWithTab, xTabPage, ::xDlg ), @aItem[ CFG_VCONTROL ], ;
                nRow2, nCol2 + ( Max( aItem[ CFG_FLEN ], 5 ) * 12 + 42 ), aItem[ CFG_VLEN ] * 12, ;
-               APP_LINE_HEIGHT, Space( aItem[ CFG_VLEN ] ), .T., APP_FONTSIZE_SMALL )
+               GUI():AppLineHeight(), Space( aItem[ CFG_VLEN ] ), .T., GUI():AppFontSizeSmall() )
 
          ENDIF
          nCol := nCol + nLen + 30
@@ -290,7 +290,7 @@ FUNCTION frm_EditCreate( Self )
       Atail( ::aControlList )[ CFG_CTLTYPE ] := TYPE_BUG_GET
 
       GUI():TextCreate( ::xDlg, ::xDlg, @Atail( ::aControlList )[ CFG_FCONTROL ], ;
-         APP_DLG_HEIGHT - 40, 20, 0, 0, " ", "", 0, { || .T. },,,Atail( ::aControlList ), Self )
+         GUI():FormHeight() - 40, 20, 0, 0, " ", "", 0, { || .T. },,,Atail( ::aControlList ), Self )
 
    ENDIF
 

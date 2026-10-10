@@ -49,15 +49,15 @@ FUNCTION frm_ButtonCreate( Self )
       IF aItem[ CFG_CTLTYPE ] != TYPE_BUTTON
          LOOP
       ENDIF
-      GUI():ButtonCreate( ::xDlg, ::xDlg, @aItem[ CFG_FCONTROL ], nRow, nCol, APP_BUTTON_SIZE, APP_BUTTON_SIZE, ;
+      GUI():ButtonCreate( ::xDlg, ::xDlg, @aItem[ CFG_FCONTROL ], nRow, nCol, GUI():AppButtonSize(), GUI():AppButtonSize(), ;
          aItem[ CFG_CAPTION ], IconFromCaption( aItem[ CFG_CAPTION ] ), aItem[ CFG_ACTION ] )
 
-      IF nCol > APP_DLG_WIDTH - ( APP_BUTTON_SIZE - APP_BUTTON_BETWEEN ) * 2
+      IF nCol > GUI():FormWidth() - ( GUI():AppButtonSize() - GUI():AppButtonBetween() ) * 2
          nRowLine += 1
-         nRow += APP_BUTTON_SIZE + APP_BUTTON_BETWEEN
-         nCol := APP_DLG_WIDTH - APP_BUTTON_SIZE - APP_BUTTON_BETWEEN
+         nRow += GUI():AppButtonSize() + GUI():AppButtonBetween()
+         nCol := GUI():FormWidth() - GUI():AppButtonSize() - GUI():AppButtonBetween()
       ENDIF
-      nCol += iif( nRowLine == 1, 1, -1 ) * ( APP_BUTTON_SIZE + APP_BUTTON_BETWEEN )
+      nCol += iif( nRowLine == 1, 1, -1 ) * ( GUI():AppButtonSize() + GUI():AppButtonBetween() )
    NEXT
 
    RETURN Nil
