@@ -14,11 +14,26 @@ lib_fivewin- fivewin source selected by lib.prg
 
 MEMVAR pGenPrg
 
+THREAD STATIC aFormSize := {} // calculated once per thread, on first gui_FormSize()
+
 CREATE CLASS FIVEWINClass
 
    /*--- init ---*/
    METHOD LibName()             INLINE "FIVEWIN"
    METHOD Init()                INLINE gui_Init()
+
+   /*--- size ---*/
+   METHOD AppFontName()         INLINE "verdana"
+   METHOD AppFontSizeNormal()   INLINE 12
+   METHOD AppFontSizeSmall()    INLINE 10
+   METHOD AppLineHeight()       INLINE 20
+   METHOD AppLineSpacing()      INLINE 25
+   METHOD AppButtonBetween()    INLINE 3
+   METHOD FormWidth()           INLINE gui_FormWidth()
+   METHOD FormHeight()          INLINE gui_FormHeight()
+   METHOD AppButtonSize()       INLINE ::AppLineSpacing() * 2
+   METHOD AppTabWidth()         INLINE ::FormWidth() - 30
+   METHOD AppTabHeight()        INLINE ::FormHeight() - ( ::AppLineSpacing() * 6 )
 
    /*--- dialog ---*/
    METHOD DialogActivate(...)   INLINE gui_DialogActivate(...)
@@ -72,9 +87,30 @@ CREATE CLASS FIVEWINClass
 
    ENDCLASS
 
+STATIC FUNCTION gui_FormWidth()
+
+   RETURN gui_FormSize()[ 1 ]
+
+STATIC FUNCTION gui_FormHeight()
+
+   RETURN gui_FormSize()[ 2 ]
+
+STATIC FUNCTION gui_FormSize()
+
+   LOCAL aArea
+
+   IF Empty( aFormSize )
+      aArea := GetDesktopArea() // work area { nTop, nLeft, nBottom, nRight }
+      aFormSize := { ;
+         Int( Min( aArea[ 4 ] - aArea[ 2 ], 1920 ) * 0.95 ), ;
+         Int( Min( aArea[ 3 ] - aArea[ 1 ], 1080 ) * 0.90 ) }
+   ENDIF
+
+   RETURN aFormSize
+
 STATIC FUNCTION gui_Init()
 
-   //DEFINE FONT oFont NAME APP_FONTNAME SIZE 0, -APP_FONTSIZE_NORMAL
+   //DEFINE FONT oFont NAME GUI():AppFontName() SIZE 0, -GUI():AppFontSizeNormal()
    SetGetColorFocus( COLOR_YELLOW )
    fw_SetTruePixel( .T. )
 
@@ -82,7 +118,7 @@ STATIC FUNCTION gui_Init()
 
 STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
-   gui_DialogCreate( Nil, @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
+   gui_DialogCreate( Nil, @xDlg, 0, 0, GUI():FormWidth(), GUI():FormHeight(), cTitle )
    IF xDlg:ClassName() == "TDIALOG"
       gui_DialogActivate( xDlg, { || gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle ) }, .T. )
    ELSE
@@ -97,7 +133,7 @@ STATIC FUNCTION gui_DlgMenu2( xDlg, aMenuList, aAllSetup, cTitle )
    LOCAL oMenu, aGroupList, cDBF, dDate := Date(), oCalendar
    LOCAL oFontMenu
 
-   DEFINE FONT oFontMenu NAME APP_FONTNAME SIZE 0, -APP_FONTSIZE_NORMAL WEIGHT 300
+   DEFINE FONT oFontMenu NAME GUI():AppFontName() SIZE 0, -GUI():AppFontSizeNormal() WEIGHT 300
 
    MENU oMenu OF xDlg FONT oFontMenu
       FOR EACH aGroupList IN aMenuList
@@ -272,8 +308,8 @@ STATIC FUNCTION gui_BrowseADO( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
          AAdd( oFrmClass:aControlList, EmptyFrmClassItem() )
          Atail( oFrmClass:aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
          gui_ButtonCreate( xDlg, xParent, @Atail( oFrmClass:aControlList )[ CFG_FCONTROL ], ;
-            nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
-            APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+            nRow - GUI():AppLineSpacing(), 200 + aThisKey:__EnumIndex() * GUI():AppLineHeight(), ;
+            GUI():AppLineHeight() - 2, GUI():AppLineHeight() - 2, "", ;
             iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
             iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
             iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
@@ -395,8 +431,8 @@ STATIC FUNCTION gui_BrowseDBF( xDlg, xParent, xControl, nRow, nCol, nWidth, nHei
          AAdd( oFrmClass:aControlList, EmptyFrmClassItem() )
          Atail( oFrmClass:aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
          gui_ButtonCreate( xDlg, xParent, @Atail( oFrmClass:aControlList )[ CFG_FCONTROL ], ;
-            nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, ;
-            APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+            nRow - GUI():AppLineSpacing(), 200 + aThisKey:__EnumIndex() * GUI():AppLineHeight(), ;
+            GUI():AppLineHeight() - 2, GUI():AppLineHeight() - 2, "", ;
             iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
             iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
             iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )

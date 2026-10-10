@@ -16,11 +16,26 @@ lib_hmge - HMG Extended source selected by lib.prg
 THREAD STATIC nWindow := 0
 THREAD STATIC hBrowseADO := { => }
 
+THREAD STATIC aFormSize := {} // calculated once per thread, on first gui_FormSize()
+
 CREATE CLASS HMGEClass
 
    /*--- init ---*/
    METHOD LibName()             INLINE "HMGE"
    METHOD Init()                INLINE gui_Init()
+
+   /*--- size ---*/
+   METHOD AppFontName()         INLINE "verdana"
+   METHOD AppFontSizeNormal()   INLINE 12
+   METHOD AppFontSizeSmall()    INLINE 10
+   METHOD AppLineHeight()       INLINE 20
+   METHOD AppLineSpacing()      INLINE 25
+   METHOD AppButtonBetween()    INLINE 3
+   METHOD FormWidth()           INLINE gui_FormWidth()
+   METHOD FormHeight()          INLINE gui_FormHeight()
+   METHOD AppButtonSize()       INLINE ::AppLineSpacing() * 2
+   METHOD AppTabWidth()         INLINE ::FormWidth() - 30
+   METHOD AppTabHeight()        INLINE ::FormHeight() - ( ::AppLineSpacing() * 6 )
 
    /*--- dialog ---*/
    METHOD DialogActivate(...)   INLINE gui_DialogActivate(...)
@@ -76,6 +91,24 @@ CREATE CLASS HMGEClass
 
    ENDCLASS
 
+STATIC FUNCTION gui_FormWidth()
+
+   RETURN gui_FormSize()[ 1 ]
+
+STATIC FUNCTION gui_FormHeight()
+
+   RETURN gui_FormSize()[ 2 ]
+
+STATIC FUNCTION gui_FormSize()
+
+   IF Empty( aFormSize )
+      aFormSize := { ;
+         Int( Min( GetDesktopRealWidth(), 1920 ) * 0.95 ), ;
+         Int( Min( GetDesktopRealHeight(), 1080 ) * 0.90 ) }
+   ENDIF
+
+   RETURN aFormSize
+
 STATIC FUNCTION gui_Init()
 
    PUBLIC _HMG_SYSDATA
@@ -98,7 +131,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   gui_DialogCreate( Nil, @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle,,,.T. )
+   gui_DialogCreate( Nil, @xDlg, 0, 0, GUI():FormWidth(), GUI():FormHeight(), cTitle,,,.T. )
 
    DEFINE MAIN MENU OF ( xDlg )
       FOR EACH aGroupList IN aMenuList
@@ -147,7 +180,7 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       IMAGEHEIGHT -1
       CAPTION     cCaption
       ACTION      Eval( bAction )
-      FONTNAME    APP_FONTNAME
+      FONTNAME    GUI():AppFontName()
       FONTSIZE    7
       FONTBOLD    .T.
       FONTCOLOR   COLOR_BLACK
@@ -169,7 +202,7 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, ;
       [      IMAGEHEIGHT -1] + hb_Eol() + ;
       [      CAPTION      ] + hb_ValToExp( cCaption ) + hb_Eol() + ;
       [      ACTION      Eval( ] + hb_ValToExp( bAction ) + hb_Eol() + ;
-      [      FONTNAME     ] + hb_ValToExp( APP_FONTNAME ) + hb_Eol() + ;
+      [      FONTNAME     ] + hb_ValToExp( GUI():AppFontName() ) + hb_Eol() + ;
       [      FONTSIZE     7] + hb_Eol() + ;
       [      FONTBOLD     .T.] + hb_Eol() + ;
       [      FONTCOLOR    ] + hb_ValToExp( COLOR_BLACK ) + hb_Eol() + ;
@@ -241,7 +274,7 @@ STATIC FUNCTION gui_BrowseKeyList( xDlg, xParent, xControl, nRow, aKeyDownList, 
       Atail( oFrmClass:aControlList )[ CFG_CTLTYPE ] := TYPE_BUTTON_BRW
       Atail( oFrmClass:aControlList )[ CFG_FCONTROL ] := gui_NewName( "BTNBRW" )
       gui_ButtonCreate( xDlg, xParent, @Atail( oFrmClass:aControlList )[ CFG_FCONTROL ], ;
-      nRow - APP_LINE_SPACING, 200 + aThisKey:__EnumIndex() * APP_LINE_HEIGHT, APP_LINE_HEIGHT - 2, APP_LINE_HEIGHT - 2, "", ;
+      nRow - GUI():AppLineSpacing(), 200 + aThisKey:__EnumIndex() * GUI():AppLineHeight(), GUI():AppLineHeight() - 2, GUI():AppLineHeight() - 2, "", ;
       iif( aThisKey[1] == VK_INSERT, "ICOPLUS", ;
       iif( aThisKey[1] == VK_DELETE, "ICOTRASH", ;
       iif( aThiskey[1] == VK_RETURN, "ICOEDIT", Nil ) ) ), aThisKey[2] )
@@ -540,7 +573,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          HEIGHT nHeight ;
          TITLE cTitle ;
          ICON "APPICON" ;
-         FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
+         FONT GUI():AppFontName() SIZE GUI():AppFontSizeNormal() ;
          MAIN ;
          ON INIT Eval( bInit )
          gui_StatusCreate( xDlg, "" )
@@ -553,8 +586,8 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          [      HEIGHT ] + hb_ValToExp( nHeight ) + [ ;] + hb_Eol() + ;
          [      TITLE ] + hb_ValToExp( cTitle ) + [ ;] + hb_Eol() + ;
          [      ICON "APPICON" ;] + hb_Eol() + ;
-         [      FONT ] + hb_ValToExp( APP_FONTNAME ) + [ SIZE ] + ;
-         hb_ValToExp( APP_FONTSIZE_NORMAL ) + [ ;] + hb_Eol() + ;
+         [      FONT ] + hb_ValToExp( GUI():AppFontName() ) + [ SIZE ] + ;
+         hb_ValToExp( GUI():AppFontSizeNormal() ) + [ ;] + hb_Eol() + ;
          [      MAIN ;] + hb_Eol() + ;
          [      ON INIT Eval( ] + hb_ValToExp( bInit ) + [ )] + hb_Eol() + ;
          [   END WINDOW]       + hb_Eol() + ;
@@ -567,7 +600,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          HEIGHT nHeight ;
          TITLE cTitle ;
          ICON "APPICON" ;
-         FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
+         FONT GUI():AppFontName() SIZE GUI():AppFontSizeNormal() ;
          MODAL ;
          ON INIT Eval( bInit )
          gui_StatusCreate( xDlg, "" )
@@ -579,7 +612,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
          HEIGHT nHeight ;
          TITLE cTitle ;
          ICON "APPICON" ;
-         FONT APP_FONTNAME SIZE APP_FONTSIZE_NORMAL ;
+         FONT GUI():AppFontName() SIZE GUI():AppFontSizeNormal() ;
          ON INIT Eval( bInit )
          // BACKCOLOR { 226, 220, 213 } ;
          // MODAL ; // bad using WINDOW MAIN OFF
@@ -614,7 +647,7 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
    ENDIF
 
    hb_Default( @lBorder, .F. )
-   hb_Default( @nFontSize, APP_FONTSIZE_SMALL )
+   hb_Default( @nFontSize, GUI():AppFontSizeSmall() )
 
    DEFINE LABEL ( xControl )
       PARENT ( xParent )
@@ -623,7 +656,7 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
       WIDTH nWidth
       HEIGHT nHeight
       VALUE xValue
-      FONTNAME APP_FONTNAME
+      FONTNAME GUI():AppFontName()
       FONTSIZE nFontSize
       IF lBorder
          BORDER lBorder
@@ -670,7 +703,7 @@ STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
       HEIGHT nHeight
       VALUE xValue
       FONTNAME PREVIEW_FONTNAME
-      FONTSIZE APP_FONTSIZE_SMALL
+      FONTSIZE GUI():AppFontSizeSmall()
       TOOLTIP 'EditBox'
    END EDITBOX
 
@@ -775,8 +808,8 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       COL nCol
       HEIGHT nHeight
       WIDTH nWidth
-      FONTNAME APP_FONTNAME
-      FONTSIZE APP_FONTSIZE_NORMAL - 3
+      FONTNAME GUI():AppFontName()
+      FONTSIZE GUI():AppFontSizeNormal() - 3
       IF ValType( xValue ) == "N"
          NUMERIC .T.
          INPUTMASK cPicture
@@ -819,8 +852,8 @@ STATIC FUNCTION gui_TextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHe
       [      COL       ] + hb_ValToExp( nCol ) + hb_Eol() + ;
       [      HEIGHT    ] + hb_ValToExp( nHeight ) + hb_Eol() + ;
       [      WIDTH     ] + hb_ValToExp( nWidth ) + hb_Eol() + ;
-      [      FONTNAME  ] + hb_ValToExp( APP_FONTNAME ) + hb_Eol() + ;
-      [      FONTSIZE  ] + hb_ValToExp( APP_FONTSIZE_NORMAL - 3 ) + hb_Eol()
+      [      FONTNAME  ] + hb_ValToExp( GUI():AppFontName() ) + hb_Eol() + ;
+      [      FONTSIZE  ] + hb_ValToExp( GUI():AppFontSizeNormal() - 3 ) + hb_Eol()
    IF ValType( xValue ) == "N"
       pGenPrg += ;
          [      NUMERIC   .T.] + hb_Eol() + ;

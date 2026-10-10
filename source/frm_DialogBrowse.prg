@@ -56,19 +56,19 @@ FUNCTION DialogBrowse( oTBrowse, cTable, cField, xValue )
       :lNavigate := .F.
       AAdd( :aOptionList, { "Filter", { || GUI():MsgBox( "Filter" ) } } )
       :cTitle := "BROWSE " + cTable
-      GUI():DialogCreate( oThisForm, @:xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, :cTitle,, .T. )
+      GUI():DialogCreate( oThisForm, @:xDlg, 0, 0, GUI():FormWidth(), GUI():FormHeight(), :cTitle,, .T. )
       frm_ButtonCreate( oThisForm, .F. )
       AAdd( :aControlList, EmptyFrmClassItem() )
       aItem := Atail( :aControlList )
       aItem[ CFG_CTLTYPE ] := TYPE_BROWSE
       IF IsSQL()
-         GUI():BrowseADO( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
+         GUI():BrowseADO( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, GUI():FormWidth() - 10, GUI():FormHeight() - 115, ;
             oTbrowse, cField, @xValue, cTable, {}, oThisForm )
          IF GUI():LibName() == "FIVEWIN"
             GUI():BrowseADOSetKeyFilter( aItem[ CFG_FCONTROL ] )
          ENDIF
       ELSE
-         GUI():BrowseDBF( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, APP_DLG_WIDTH - 10, APP_DLG_HEIGHT - 115, ;
+         GUI():BrowseDBF( :xDlg, :xDlg, @aItem[ CFG_FCONTROL ], 70, 5, GUI():FormWidth() - 10, GUI():FormHeight() - 115, ;
             oTbrowse, cField, @xValue, cTable, {}, oThisForm )
          IF GUI():LibName() == "FIVEWIN"
             GUI():BrowseDBFSetKeyFilter( aItem[ CFG_FCONTROL ] )

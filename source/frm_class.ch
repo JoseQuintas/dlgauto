@@ -58,15 +58,4 @@
 #define COLOR_LIGHTGRAY     RGB2N( 250, 250, 250 )
 #define COLOR_GREEN         12507070
 #define COLOR_ICE           RGB2N( 224, 222, 207 )
-#define APP_FONTNAME        "verdana"
-#define APP_FONTSIZE_NORMAL 12
-#define APP_FONTSIZE_SMALL  10
-#define APP_LINE_HEIGHT     20
-#define APP_LINE_SPACING    25
-#define APP_BUTTON_BETWEEN  3
-#define APP_DLG_WIDTH       1024
-#define APP_DLG_HEIGHT      700 // 768
 #define PREVIEW_FONTNAME    "Courier New"
-#define APP_BUTTON_SIZE     ( APP_LINE_SPACING * 2 )
-#define APP_TAB_WIDTH       ( APP_DLG_WIDTH - 30 )
-#define APP_TAB_HEIGHT      ( APP_DLG_HEIGHT - ( APP_LINE_SPACING * 6 ) )

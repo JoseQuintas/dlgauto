@@ -6,13 +6,29 @@ Note: Only to show on screen
 
 #include "hbclass.ch"
 #include "inkey.ch"
+#include "hbgtinfo.ch"
 #include "frm_class.ch"
+
+THREAD STATIC aFormSize := {} // calculated once per thread, on first gui_FormSize()
 
 CREATE CLASS GTWVGClass
 
    /*--- init ---*/
    METHOD LibName()             INLINE "GTWVG"
    METHOD Init()                INLINE gui_Init()
+
+   /*--- size ---*/
+   METHOD AppFontName()         INLINE "verdana"
+   METHOD AppFontSizeNormal()   INLINE 12
+   METHOD AppFontSizeSmall()    INLINE 10
+   METHOD AppLineHeight()       INLINE 20
+   METHOD AppLineSpacing()      INLINE 25
+   METHOD AppButtonBetween()    INLINE 3
+   METHOD FormWidth()           INLINE gui_FormWidth()
+   METHOD FormHeight()          INLINE gui_FormHeight()
+   METHOD AppButtonSize()       INLINE ::AppLineSpacing() * 2
+   METHOD AppTabWidth()         INLINE ::FormWidth() - 30
+   METHOD AppTabHeight()        INLINE ::FormHeight() - ( ::AppLineSpacing() * 6 )
 
    /*--- dialog ---*/
    METHOD DialogActivate(...)   INLINE gui_DialogActivate(...)
@@ -54,6 +70,24 @@ CREATE CLASS GTWVGClass
    METHOD ControlSetValue(...)  INLINE gui_ControlSetValue(...)
 
    ENDCLASS
+
+STATIC FUNCTION gui_FormWidth()
+
+   RETURN gui_FormSize()[ 1 ]
+
+STATIC FUNCTION gui_FormHeight()
+
+   RETURN gui_FormSize()[ 2 ]
+
+STATIC FUNCTION gui_FormSize()
+
+   IF Empty( aFormSize )
+      aFormSize := { ;
+         Int( Min( hb_gtInfo( HB_GTI_DESKTOPWIDTH ), 1920 ) * 0.95 ), ;
+         Int( Min( hb_gtInfo( HB_GTI_DESKTOPHEIGHT ), 1080 ) * 0.90 ) }
+   ENDIF
+
+   RETURN aFormSize
 
 STATIC FUNCTION gui_Init()
 

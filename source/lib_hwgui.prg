@@ -10,11 +10,26 @@ THREAD STATIC oFont
 
 MEMVAR aGenName
 
+THREAD STATIC aFormSize := {} // calculated once per thread, on first gui_FormSize()
+
 CREATE CLASS HWGUIClass
 
    /*--- init ---*/
    METHOD LibName()             INLINE "HWGUI"
    METHOD Init()                INLINE gui_Init()
+
+   /*--- size ---*/
+   METHOD AppFontName()         INLINE "verdana"
+   METHOD AppFontSizeNormal()   INLINE 12
+   METHOD AppFontSizeSmall()    INLINE 10
+   METHOD AppLineHeight()       INLINE 20
+   METHOD AppLineSpacing()      INLINE 25
+   METHOD AppButtonBetween()    INLINE 3
+   METHOD FormWidth()           INLINE gui_FormWidth()
+   METHOD FormHeight()          INLINE gui_FormHeight()
+   METHOD AppButtonSize()       INLINE ::AppLineSpacing() * 2
+   METHOD AppTabWidth()         INLINE ::FormWidth() - 30
+   METHOD AppTabHeight()        INLINE ::FormHeight() - ( ::AppLineSpacing() * 6 )
 
    /*--- dialog ---*/
    METHOD DialogActivate(...)   INLINE gui_DialogActivate(...)
@@ -66,20 +81,30 @@ CREATE CLASS HWGUIClass
    METHOD ControlEnable(...)    INLINE gui_ControlEnable(...)
    METHOD ControlGetValue(...)  INLINE gui_ControlGetValue(...)
    METHOD ControlSetValue(...)  INLINE gui_ControlSetValue(...)
-   METHOD IsDrawBoard( lValue ) INLINE IsDrawBoard( lValue )
    METHOD BtnSetImageText(...)  INLINE BtnSetImageText(...)
 
    ENDCLASS
 
-STATIC FUNCTION IsDrawBoard( lValue )
+STATIC FUNCTION gui_FormWidth()
 
-   STATIC lDrawBoard := .F.
+   RETURN gui_FormSize()[ 1 ]
 
-   IF lValue != Nil
-      lDrawboard := lValue
+STATIC FUNCTION gui_FormHeight()
+
+   RETURN gui_FormSize()[ 2 ]
+
+STATIC FUNCTION gui_FormSize()
+
+   LOCAL aArea
+
+   IF Empty( aFormSize )
+      aArea := hwg_GetWorkArea() // work area { nLeft, nTop, nRight, nBottom }
+      aFormSize := { ;
+         Int( Min( aArea[ 3 ] - aArea[ 1 ], 1920 ) * 0.95 ), ;
+         Int( Min( aArea[ 4 ] - aArea[ 2 ], 1080 ) * 0.90 ) }
    ENDIF
 
-   RETURN lDrawboard
+   RETURN aFormSize
 
 STATIC FUNCTION gui_Init()
 
@@ -87,7 +112,8 @@ STATIC FUNCTION gui_Init()
    hwg_InitProc()
 #endif
    hwg_SetColorInFocus( .T., COLOR_BLACK,COLOR_YELLOW )
-   oFont := HFont():Add( APP_FONTNAME, 0, -11 )
+   // TODO: Init() runs inside New(), oGUI is not assigned yet, GUI() here creates a new object again (infinite loop)
+   oFont := HFont():Add( "verdana", 0, -11 )
 
    RETURN Nil
 
@@ -95,7 +121,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   GUI():DialogCreate( Nil, @xDlg, 0, 0, APP_DLG_WIDTH, APP_DLG_HEIGHT, cTitle )
+   GUI():DialogCreate( Nil, @xDlg, 0, 0, GUI():FormWidth(), GUI():FormHeight(), cTitle )
    MENU OF xDlg
       FOR EACH aGroupList IN aMenuList
          MENU TITLE "Data" + Ltrim( Str( aGroupList:__EnumIndex ) )
@@ -374,28 +400,6 @@ STATIC FUNCTION gui_LabelCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nH
 
    RETURN Nil
 
-//   @ nCol, nRow BOARD xControl SIZE nWidth, nHeight ON PAINT { | o, h | LabelPaint( o, h, lBorder ) }
-//   xControl:Title := xValue
-
-//   RETURN Nil
-
-//STATIC FUNCTION LabelPaint( o, h, lBorder )
-
-//   IF o:oFont != Nil
-//      hwg_SelectObject( h, o:oFont:Handle )
-//   ENDIF
-//   IF o:TColor != Nil
-//      hwg_SetTextColor( h, o:TColor )
-//   ENDIF
-//   IF ! Empty( lBorder ) .AND. lBorder
-//      hwg_Rectangle( h, 0, 0, o:nWidth - 1, o:nHeight - 1 )
-//   ENDIF
-//   hwg_SetTransparentMode( h, .T. )
-//   hwg_DrawText( h, o:Title, 2, 2, o:nWidth - 2, o:nHeight - 2 )
-//   hwg_SetTransparentMode( h, .F. )
-
-//   RETURN Nil
-
 STATIC FUNCTION gui_MLTextCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, nHeight, xValue )
 
    LOCAL oFont := HFont():Add( PREVIEW_FONTNAME, 0, -11 )
@@ -544,7 +548,7 @@ STATIC FUNCTION gui_ControlSetValue( xDlg, xControl, xValue )
 
    DO CASE
    CASE xControl:WinClass $ "STATIC,BUTTON"; xControl:SetText( xValue )
-   CASE xControl:WinClass $ "EDIT,COMBOBOX,HBOARD"; xControl:Value := xValue
+   CASE xControl:WinClass $ "EDIT,COMBOBOX"; xControl:Value := xValue
    OTHERWISE
       gui_MsgBox( "no ControlSetValue to " + hb_ValToExp( xControl:WinClass ) )
    ENDCASE

@@ -27,12 +27,12 @@ FUNCTION frm_DialogLogin()
 
       GUI():DialogCreate( Nil, @:xDlg, 0, 0, 300, 200, "Login",, .T. )
 
-      GUI():LabelCreate(  :xDlg, :xDlg, @:aControlList[1][ CFG_FCONTROL ], APP_LINE_SPACING, 20, 80, APP_LINE_HEIGHT, "User" )
-      GUI():TextCreate(   :xDlg, :xDlg, @:aControlList[2][ CFG_FCONTROL ], APP_LINE_SPACING, 90, 170, APP_LINE_HEIGHT, cUser,,,,,, :aControlList[2] )
-      GUI():LabelCreate(  :xDlg, :xDlg, @:aControlList[3][ CFG_FCONTROL ], 2 * APP_LINE_SPACING, 20, 80, APP_LINE_HEIGHT, "Password" )
-      GUI():TextCreate(   :xDlg, :xDlg, @:aControlList[4][ CFG_FCONTROL ], 2 * APP_LINE_SPACING, 90, 170, APP_LINE_HEIGHT, cPass,,,,,, :aControlList[4],,.T. )
-      GUI():ButtonCreate( :xDlg, :xDlg, @:aControlList[5][ CFG_FCONTROL ], 4 * APP_LINE_SPACING, 85, 50, APP_LINE_SPACING, "Login",, { || Login_Click( :xDlg ) } )
-      GUI():ButtonCreate( :xDlg, :xDlg, @:aControlList[6][ CFG_FCONTROL ], 4 * APP_LINE_SPACING, 155, 50, APP_LINE_SPACING, "Cancel",, { || Cancel_Click( :xDlg ) } )
+      GUI():LabelCreate(  :xDlg, :xDlg, @:aControlList[1][ CFG_FCONTROL ], GUI():AppLineSpacing(), 20, 80, GUI():AppLineHeight(), "User" )
+      GUI():TextCreate(   :xDlg, :xDlg, @:aControlList[2][ CFG_FCONTROL ], GUI():AppLineSpacing(), 90, 170, GUI():AppLineHeight(), cUser,,,,,, :aControlList[2] )
+      GUI():LabelCreate(  :xDlg, :xDlg, @:aControlList[3][ CFG_FCONTROL ], 2 * GUI():AppLineSpacing(), 20, 80, GUI():AppLineHeight(), "Password" )
+      GUI():TextCreate(   :xDlg, :xDlg, @:aControlList[4][ CFG_FCONTROL ], 2 * GUI():AppLineSpacing(), 90, 170, GUI():AppLineHeight(), cPass,,,,,, :aControlList[4],,.T. )
+      GUI():ButtonCreate( :xDlg, :xDlg, @:aControlList[5][ CFG_FCONTROL ], 4 * GUI():AppLineSpacing(), 85, 50, GUI():AppLineSpacing(), "Login",, { || Login_Click( :xDlg ) } )
+      GUI():ButtonCreate( :xDlg, :xDlg, @:aControlList[6][ CFG_FCONTROL ], 4 * GUI():AppLineSpacing(), 155, 50, GUI():AppLineSpacing(), "Cancel",, { || Cancel_Click( :xDlg ) } )
       GUI():SetFocus( :xDlg, :aControlList[ 2 ][ CFG_FCONTROL ] )
 
       GUI():DialogActivate( :xDlg,, .T. )
