@@ -10,7 +10,7 @@ THREAD STATIC oFont
 
 MEMVAR aGenName
 
-THREAD STATIC aFormSize := {} // calculated once per thread, on first gui_FormSize()
+THREAD STATIC aFormSize := {} // { width, height, line spacing, line height, font normal, font small }, once per thread
 
 CREATE CLASS HWGUIClass
 
@@ -20,10 +20,10 @@ CREATE CLASS HWGUIClass
 
    /*--- size ---*/
    METHOD AppFontName()         INLINE "verdana"
-   METHOD AppFontSizeNormal()   INLINE 12
-   METHOD AppFontSizeSmall()    INLINE 10
-   METHOD AppLineHeight()       INLINE 20
-   METHOD AppLineSpacing()      INLINE 25
+   METHOD AppFontSizeNormal()   INLINE gui_FormSize()[ 5 ]
+   METHOD AppFontSizeSmall()    INLINE gui_FormSize()[ 6 ]
+   METHOD AppLineHeight()       INLINE gui_FormSize()[ 4 ]
+   METHOD AppLineSpacing()      INLINE gui_FormSize()[ 3 ]
    METHOD AppButtonBetween()    INLINE 3
    METHOD FormWidth()           INLINE gui_FormWidth()
    METHOD FormHeight()          INLINE gui_FormHeight()
@@ -102,6 +102,10 @@ STATIC FUNCTION gui_FormSize()
       aFormSize := { ;
          Int( Min( aArea[ 3 ] - aArea[ 1 ], 1920 ) * 0.95 ), ;
          Int( Min( aArea[ 4 ] - aArea[ 2 ], 1080 ) * 0.90 ) }
+      AAdd( aFormSize, Int( aFormSize[ 2 ] / 35 ) )   // 3 line spacing (row size)
+      AAdd( aFormSize, Int( aFormSize[ 3 ] * 0.8 ) )  // 4 line height
+      AAdd( aFormSize, Int( aFormSize[ 4 ] * 0.8 ) )  // 5 font size normal, a little less than line
+      AAdd( aFormSize, Int( aFormSize[ 5 ] / 1.5 ) )  // 6 font size small
    ENDIF
 
    RETURN aFormSize
@@ -112,8 +116,8 @@ STATIC FUNCTION gui_Init()
    hwg_InitProc()
 #endif
    hwg_SetColorInFocus( .T., COLOR_BLACK,COLOR_YELLOW )
-   // TODO: Init() runs inside New(), oGUI is not assigned yet, GUI() here creates a new object again (infinite loop)
-   oFont := HFont():Add( "verdana", 0, -11 )
+   // Init() runs inside New(), GUI() here creates a new object again (infinite loop), use statics
+   oFont := HFont():Add( "verdana", 0, -gui_FormSize()[ 5 ] )
 
    RETURN Nil
 
