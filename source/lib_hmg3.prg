@@ -16,7 +16,7 @@ MEMVAR _HMG_MainWindowFirst
    MEMVAR pGenPrg
 #endif
 
-THREAD STATIC aFormSize := {} // calculated once per thread, on first gui_FormSize()
+THREAD STATIC aFormSize := {} // { width, height, line spacing, line height, font normal, font small }, once per thread
 
 CREATE CLASS HMG3Class
 
@@ -26,10 +26,10 @@ CREATE CLASS HMG3Class
 
    /*--- size ---*/
    METHOD AppFontName()         INLINE "verdana"
-   METHOD AppFontSizeNormal()   INLINE 12
-   METHOD AppFontSizeSmall()    INLINE 10
-   METHOD AppLineHeight()       INLINE 20
-   METHOD AppLineSpacing()      INLINE 25
+   METHOD AppFontSizeNormal()   INLINE gui_FormSize()[ 5 ]
+   METHOD AppFontSizeSmall()    INLINE gui_FormSize()[ 6 ]
+   METHOD AppLineHeight()       INLINE gui_FormSize()[ 4 ]
+   METHOD AppLineSpacing()      INLINE gui_FormSize()[ 3 ]
    METHOD AppButtonBetween()    INLINE 3
    METHOD FormWidth()           INLINE gui_FormWidth()
    METHOD FormHeight()          INLINE gui_FormHeight()
@@ -105,6 +105,10 @@ STATIC FUNCTION gui_FormSize()
       aFormSize := { ;
          Int( Min( GetDesktopRealWidth(), 1920 ) * 0.95 ), ;
          Int( Min( GetDesktopRealHeight(), 1080 ) * 0.90 ) }
+      AAdd( aFormSize, Int( aFormSize[ 2 ] / 35 ) )   // 3 line spacing (row size)
+      AAdd( aFormSize, Int( aFormSize[ 3 ] * 0.8 ) )  // 4 line height
+      AAdd( aFormSize, Int( aFormSize[ 4 ] * 0.8 ) )  // 5 font size normal, a little less than line
+      AAdd( aFormSize, Int( aFormSize[ 5 ] / 1.5 ) )  // 6 font size small
    ENDIF
 
    RETURN aFormSize
@@ -126,7 +130,7 @@ STATIC FUNCTION gui_DlgMenu( xDlg, aMenuList, aAllSetup, cTitle )
 
    LOCAL aGroupList, cDBF
 
-   GUI():DialogCreate( Nil, @xDlg, 0, 0, 1024, 768, cTitle, , .T. )
+   GUI():DialogCreate( Nil, @xDlg, 0, 0, GUI():FormWidth(), GUI():FormHeight(), cTitle, , .T. )
 
    DEFINE MAIN MENU OF ( xDlg )
       FOR EACH aGroupList IN aMenuList
@@ -169,7 +173,6 @@ STATIC FUNCTION gui_ButtonCreate( xDlg, xParent, xControl, nRow, nCol, nWidth, n
       WIDTH         nWidth
       HEIGHT        nHeight
       CAPTION       cCaption
-      // do not show ico ??
       PICTURE       cResName
       // default // PICTALIGNMENT TOP
       ACTION         Eval( bAction )
