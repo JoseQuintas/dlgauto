@@ -8,7 +8,7 @@ It uses DBF structure to construct dialogs and others.
 It uses an array, that begins with DBF structure, and adds more needed information/elements.
 
 LIB defined by variables created by HBMK when use HBC
-At momment HBMK_HAS_HWGUI, HBMK_HAS_HMGE, HBMK_HAS_OOHG, HBMK_HAS_GTWVG, HBMK_HAS_FIVEWIN
+At momment HBMK_HAS_HWGUI, HBMK_HAS_HMGE, HBMK_HAS_OOHG, HBMK_HAS_GTWVG, HBMK_HAS_FIVEWIN, HBMK_HAS_HBBUILDER
 
 -----
 Array
@@ -50,7 +50,7 @@ frm_EventPrint.prg       - generate report for database table
 frm_FuncMain.prg         - main class execute
 
 lib.prg                  - select a library class, include lib_xxxx as part of it
-lib_xxxx.prg             - class of specific library (hmg3, hmg extended, oohg, fivewin, gtwvg)
+lib_xxxx.prg             - class of specific library (hmg3, hmg extended, oohg, fivewin, gtwvg, hbbuilder)
 
 test.prg            - main procedure, load setup
 test_dbf.prg        - create default DBFs

@@ -30,6 +30,10 @@ THREAD STATIC oGUI
    #include "lib_fivewin.prg"
 #endif
 
+#ifdef HBMK_HAS_HBBUILDER
+   #include "lib_hbbuilder.prg"
+#endif
+
 FUNCTION GUI( xValue )
 
    IF xValue != Nil
@@ -50,6 +54,9 @@ FUNCTION GUI( xValue )
 #endif
 #ifdef HBMK_HAS_FIVEWIN
       oGUI := FIVEWINClass():New()
+#endif
+#ifdef HBMK_HAS_HBBUILDER
+      oGUI := HBBUILDERClass():New()
 #endif
    ENDIF
 
