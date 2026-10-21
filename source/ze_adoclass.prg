@@ -309,12 +309,12 @@ METHOD FStru( xField ) CLASS ADOClass
    CASE hb_AScan( { AD_BSTR, AD_CHAR, AD_VARCHAR, AD_LONGVARCHAR, AD_WCHAR, AD_VARWCHAR, AD_LONGVARWCHAR }, nType ) > 0
       cType := "C"
       nLen := ::Rs:Fields( xField ):DefinedSize
-      IF nLen > 255
+      IF nLen > 255 .OR. nLen < 1
          cType := "M"
          nLen := 10
       ENDIF
       nDec := 0
-   CASE hb_AScan( { AD_BINARY, AD_VARBINARY, AD_LONGVARBINARY }, xField ) != 0
+   CASE hb_AScan( { AD_BINARY, AD_VARBINARY, AD_LONGVARBINARY }, nType ) != 0
       cType := "M"
       nLen  := 10
       nDec  := 0

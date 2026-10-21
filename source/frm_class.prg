@@ -374,6 +374,7 @@ METHOD DataLoad() CLASS frm_Class
             DO CASE
             CASE aItem[ CFG_FTYPE ] == "N"; xValue := ::cnSQL:Number( aItem[ CFG_FNAME ] )
             CASE aItem[ CFG_FTYPE ] == "D"; xValue := ::cnSQL:Date( aItem[ CFG_FNAME ] )
+            CASE aItem[ CFG_FTYPE ] == "M"; xValue := ::cnSQL:String( aItem[ CFG_FNAME ] )
             OTHERWISE ; xValue := ::cnSQL:String( aItem[ CFG_FNAME ], aItem[ CFG_FLEN ] )
             ENDCASE
          ELSE
@@ -556,6 +557,7 @@ METHOD Save_Click() CLASS frm_Class
          DO CASE
          CASE ValType( xValue ) == "N"; xValue := hb_ValToExp( xValue )
          CASE ValType( xValue ) == "D"; xValue := iif( Empty( xValue ), "NULL", hb_ValToExp( hb_Dtoc( xValue, "YYYY-MM-DD" ) ) )
+         CASE ValType( xValue ) == "C"; xValue := ValueSQL( xValue )
          OTHERWISE                    ; xValue := hb_ValToExp( AllTrim( xValue ) )
          ENDCASE
          cSQL += iif( Len( cSql ) == 0, "", ", " ) + aReplace[ 1 ] + "=" + xValue
