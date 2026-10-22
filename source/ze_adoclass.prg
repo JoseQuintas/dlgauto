@@ -5,6 +5,7 @@ ZE_ADOCLASS - ADO ROUTINES
 
 #require "hbwin.hbc"
 #include "hbclass.ch"
+#include "error.ch"
 #include "inkey.ch"
 #include "dbstruct.ch"
 #include "ze_adoclass.ch"
@@ -178,7 +179,7 @@ METHOD ExecuteProcedure( ... ) CLASS ADOClass
 
 METHOD ExecuteNoReturn( cSQL, lError ) CLASS ADOClass
 
-   LOCAL lOk := .F.
+   LOCAL lOk := .F., oError
 
    IF ::Cn == Nil
       RETURN Nil
@@ -205,7 +206,13 @@ METHOD ExecuteNoReturn( cSQL, lError ) CLASS ADOClass
       ENDIF
       IF ! lOk
          IF lError
-            Eval( ErrorBlock() )
+            oError := ErrorNew()
+            oError:Severity    := ES_ERROR
+            oError:GenCode     := EG_ARG
+            oError:SubSystem   := "ADO"
+            oError:Description := ::Cn:Errors( 0 ):Description()
+            oError:Operation   := cSQL
+            Eval( ErrorBlock(), oError )
             QUIT
          ENDIF
       ENDIF
@@ -215,7 +222,7 @@ METHOD ExecuteNoReturn( cSQL, lError ) CLASS ADOClass
 
 METHOD ExecuteReturnRS( cSQL, lError ) CLASS ADOClass
 
-   LOCAL lOk := .F., Rs //, nKey
+   LOCAL lOk := .F., Rs, oError //, nKey
 
    IF ::Cn == Nil
       RETURN Nil
@@ -242,7 +249,13 @@ METHOD ExecuteReturnRS( cSQL, lError ) CLASS ADOClass
       ENDIF
       IF ! lOk
          IF lError
-            Eval( ErrorBlock() )
+            oError := ErrorNew()
+            oError:Severity    := ES_ERROR
+            oError:GenCode     := EG_ARG
+            oError:SubSystem   := "ADO"
+            oError:Description := ::Cn:Errors( 0 ):Description()
+            oError:Operation   := cSQL
+            Eval( ErrorBlock(), oError )
             QUIT
          ENDIF
       ENDIF
