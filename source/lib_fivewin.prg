@@ -15,6 +15,7 @@ lib_fivewin- fivewin source selected by lib.prg
 MEMVAR pGenPrg
 
 THREAD STATIC aFormSize := {} // { width, height, line spacing, line height, font normal, font small }, once per thread
+STATIC oFont
 
 CREATE CLASS FIVEWINClass
 
@@ -114,7 +115,7 @@ STATIC FUNCTION gui_FormSize()
 
 STATIC FUNCTION gui_Init()
 
-   //DEFINE FONT oFont NAME GUI():AppFontName() SIZE 0, -GUI():AppFontSizeNormal()
+   DEFINE FONT oFont NAME GUI():AppFontName() SIZE 0, -GUI():AppFontSizeNormal()
    SetGetColorFocus( COLOR_YELLOW )
    fw_SetTruePixel( .T. )
 
@@ -643,7 +644,7 @@ STATIC FUNCTION gui_DialogCreate( oFrm, xDlg, nRow, nCol, nWidth, nHeight, cTitl
    //   SET MESSAGE OF xDlg TO "This is a message" NOINSET CLOCK DATE KEYBOARD
    //CASE lModal
       DEFINE DIALOG xDlg FROM nRow, nCol TO nRow + nHeight, nCol + nWidth ;
-         PIXEL OF xParent /* FONT oFont */ TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
+         PIXEL OF xParent FONT oFont TITLE cTitle + " (" + GUI():LibName() + ")" ICON "ICOWINDOW" ;
          COLOR COLOR_LIGHTGRAY
 
    //IF ! Empty( bInit )
