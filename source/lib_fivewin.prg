@@ -115,7 +115,8 @@ STATIC FUNCTION gui_FormSize()
 
 STATIC FUNCTION gui_Init()
 
-   DEFINE FONT oFont NAME GUI():AppFontName() SIZE 0, -GUI():AppFontSizeNormal()
+   // no GUI() here: New() calls Init() before GUI() stores the object, GUI() would loop
+   DEFINE FONT oFont NAME "verdana" SIZE 0, -gui_FormSize()[ 5 ]
    SetGetColorFocus( COLOR_YELLOW )
    fw_SetTruePixel( .T. )
 
